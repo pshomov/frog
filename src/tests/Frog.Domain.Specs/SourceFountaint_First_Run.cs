@@ -27,8 +27,6 @@ namespace Frog.Domain.Specs
 
     public class SourceFountaint_No_Change_In_Src_Revision_Run : SourceFountaintSpec
     {
-        private static bool splash_exists;
-
         private Establish context = () =>
                                         {
                                             fountain = new SourceFountain(repo, bus);
