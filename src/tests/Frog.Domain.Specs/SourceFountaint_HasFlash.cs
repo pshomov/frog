@@ -41,8 +41,14 @@ namespace Frog.Domain.Specs
     public class SourceFountaintSpec
     {
         public static SourceFountain fountain;
-        public static MessageBus bus = MockRepository.GenerateMock<MessageBus>();
-        public static SourceRepo repo = MockRepository.GenerateMock<SourceRepo>();
+        public static MessageBus bus;
+        public static SourceRepo repo;
+
+        Establish context = () =>
+                                {
+                                    bus = MockRepository.GenerateMock<MessageBus>();
+                                    repo = MockRepository.GenerateMock<SourceRepo>();
+                                };
     }
 }
 

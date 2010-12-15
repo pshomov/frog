@@ -44,7 +44,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SourceFountaint_First_Run.cs" />
+    <Compile Include="Streams_Specs.cs" />
+    <Compile Include="SourceFountaint_HasFlash.cs" />
     <Compile Include="AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
