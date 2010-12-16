@@ -5,20 +5,29 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frog.Domain", "src\app\Frog
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frog.Domain.Specs", "src\tests\Frog.Domain.Specs\Frog.Domain.Specs.csproj", "{67C6B4A8-D6A7-46EB-B618-3F48A8478EE5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frog.System.Specs", "src\tests\Frog.System.Specs\Frog.System.Specs.csproj", "{D7DC578F-0A08-4681-9486-ACC898785829}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{67C6B4A8-D6A7-46EB-B618-3F48A8478EE5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{67C6B4A8-D6A7-46EB-B618-3F48A8478EE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{67C6B4A8-D6A7-46EB-B618-3F48A8478EE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{67C6B4A8-D6A7-46EB-B618-3F48A8478EE5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8A446F8C-6B38-4153-A996-CC162DACF795}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8A446F8C-6B38-4153-A996-CC162DACF795}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8A446F8C-6B38-4153-A996-CC162DACF795}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8A446F8C-6B38-4153-A996-CC162DACF795}.Release|Any CPU.Build.0 = Release|Any CPU
+		{67C6B4A8-D6A7-46EB-B618-3F48A8478EE5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67C6B4A8-D6A7-46EB-B618-3F48A8478EE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67C6B4A8-D6A7-46EB-B618-3F48A8478EE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67C6B4A8-D6A7-46EB-B618-3F48A8478EE5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7DC578F-0A08-4681-9486-ACC898785829}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7DC578F-0A08-4681-9486-ACC898785829}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7DC578F-0A08-4681-9486-ACC898785829}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7DC578F-0A08-4681-9486-ACC898785829}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = src\app\Frog.Domain\Frog.Domain.csproj
