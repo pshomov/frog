@@ -2,6 +2,7 @@ using System;
 using Machine.Specifications;
 using NHamcrest;
 using NHamcrest.Core;
+using Rhino.Mocks;
 using xray;
 
 namespace Frog.System.Specs
@@ -32,30 +33,37 @@ namespace Frog.System.Specs
             throw new NotImplementedException();
         }
     }
-    public class SpecsHelper<T, V> 
-    {
-        public static IMatcher<T> Has(NHamcrest.Func<T,V> checker,  IMatcher<V> matcher)
-        {
-            return new NestedMatcher<T,V>(checker, matcher);
-        }
-    }
-    internal class ValueMatchingProbe : Probe
-    {
-        readonly IMatcher<bool> matcher;
 
-        public ValueMatchingProbe(IMatcher<bool> matcher)
+    internal class ValueMatchingProbe<T> : Probe
+    {
+        private readonly Func<T> Snapshot;
+        readonly IMatcher<T> matcher;
+
+        public ValueMatchingProbe(Func<T> snapshot, IMatcher<T> matcher)
         {
+            Snapshot = snapshot;
             this.matcher = matcher;
         }
 
         public bool probeAndMatch()
         {
-            return matcher.Matches(true);
+            return matcher.Matches(Snapshot());
         }
     }
+
+    public class Spec
+    {
+        public static IMatcher<T> Has<T,V>(NHamcrest.Func<T, V> checker, IMatcher<V> matcher)
+        {
+            return new NestedMatcher<T, V>(checker, matcher);
+        }
+    }
+
     public class Attempting_a_system_test_on_my_own
     {
         static TestDriver _theDriver;
+
+        private static PollingProber Prober = new PollingProber(10000, 100);
 
         Establish context = () =>
                                 {
@@ -65,10 +73,15 @@ namespace Frog.System.Specs
         Because of = () => _theDriver.SourceFontain.HasSplash();
 
         It should_start_the_pipeline =
-            () => new PollingProber(5000, 100).check(new ValueMatchingProbe(SpecsHelper<bool,bool>.Has(arg => _theDriver.Stream1.GotWater, Is.True())));
-        public void Test()
+            () => Prober.check(valueProbe(() => _theDriver.Stream1, has<FakeStream, bool>(x => x.GotWater, Is.EqualTo(true))));
+
+        static Probe valueProbe<T>(Func<T> query, IMatcher<T> matcher)
         {
-            
+            return new ValueMatchingProbe<T>(query, matcher);
+        }
+        static IMatcher<T> has<T,V>(NHamcrest.Func<T,V> query, IMatcher<V> matcher)
+        {
+            return Spec.Has(query, matcher);
         }
     }
 
