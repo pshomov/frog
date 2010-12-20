@@ -6,8 +6,8 @@ namespace Frog.Domain.Specs
 {
     public class SourceFountaint_First_Run : SourceFountaintSpec
     {
-        Establish context = () => fountain = new SourceFountain(repo, bus);
-        Because of = () => fountain.HasSplash();
+        Establish context = () => fountain = new Repository(repo, bus);
+        Because of = () => fountain.CheckForUpdates();
         It should_check_source_repo = () => repo.AssertWasCalled(x => x.LatestRevisionNumber);
         It should_send_message = () => bus.AssertWasCalled(x => x.PostTopic("src_new_revision"));
     }
@@ -16,11 +16,11 @@ namespace Frog.Domain.Specs
     {
         private Establish context = () =>
                                         {
-                                            fountain = new SourceFountain(repo, bus);
+                                            fountain = new Repository(repo, bus);
                                             repo.Stub(x => x.LatestRevisionNumber).Return(1).Return(2);
-                                            fountain.HasSplash();
+                                            fountain.CheckForUpdates();
                                         };
-        Because of = () => fountain.HasSplash();
+        Because of = () => fountain.CheckForUpdates();
         It should_check_source_repo_twice = () => repo.AssertWasCalled(x => x.LatestRevisionNumber, options => options.Repeat.Twice());
         It should_send_message = () => bus.AssertWasCalled(x => x.PostTopic("src_new_revision"));
     }
@@ -29,18 +29,18 @@ namespace Frog.Domain.Specs
     {
         private Establish context = () =>
                                         {
-                                            fountain = new SourceFountain(repo, bus);
+                                            fountain = new Repository(repo, bus);
                                             repo.Stub(x => x.LatestRevisionNumber).Return(1).Repeat.Any();
-                                            fountain.HasSplash();
+                                            fountain.CheckForUpdates();
                                         };
 
-        Because of = () => fountain.HasSplash();
+        Because of = () => fountain.CheckForUpdates();
         It should_not_send_message = () => bus.AssertWasCalled(x => x.PostTopic("src_new_revision"), options => options.Repeat.Once());
     }
 
     public class SourceFountaintSpec
     {
-        public static SourceFountain fountain;
+        public static Repository fountain;
         public static MessageBus bus;
         public static SourceRepo repo;
 

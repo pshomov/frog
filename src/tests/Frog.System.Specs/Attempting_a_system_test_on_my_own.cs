@@ -17,7 +17,7 @@ namespace Frog.System.Specs
 
         private Establish context = () => { _theDriver = new TestDriver(); };
 
-        private Because of = () => _theDriver.SourceFontain.HasSplash();
+        private Because of = () => _theDriver.SourceFontain.CheckForUpdates();
 
         private It should_do_one_more = () => Test();
 

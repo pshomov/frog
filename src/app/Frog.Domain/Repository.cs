@@ -1,21 +1,21 @@
 using System;
 namespace Frog.Domain
 {
-	public class SourceFountain
+	public class Repository
 	{
 		MessageBus bus;
-		SourceRepo repo;
+		SourceRepo repoDriver;
 	    private Int64 currentRevisionNumber;
 		
-		public SourceFountain(SourceRepo repo, MessageBus bus){
+		public Repository(SourceRepo repo, MessageBus bus){
 			this.bus = bus;
-			this.repo = repo;
+			this.repoDriver = repo;
 		    currentRevisionNumber = Int64.MinValue;
 		}
 
-	    public void HasSplash()
+	    public void CheckForUpdates()
 	    {
-	        var latestRevisionNumber = repo.LatestRevisionNumber;
+	        var latestRevisionNumber = repoDriver.LatestRevisionNumber;
 	        if (latestRevisionNumber != currentRevisionNumber)
             {
                 currentRevisionNumber = latestRevisionNumber;

@@ -8,15 +8,15 @@ namespace Frog.System.Specs
 {
     public class TestDriver
     {
-        public SourceFountain SourceFontain;
-        public FakeStream Stream1;
+        public Repository SourceFontain;
+        public FakePipeline Stream1;
     }
 
-    public class FakeStream : Stream
+    public class FakePipeline : Pipeline
     {
         public bool GotWater;
 
-        public void Water(string waterID, int revision, string path)
+        public void Process(SourceDrop sourceDrop)
         {
             GotWater = true;
         }
