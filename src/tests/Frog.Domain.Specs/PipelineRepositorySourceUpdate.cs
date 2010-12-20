@@ -4,7 +4,7 @@ using Rhino.Mocks;
 
 namespace Frog.Domain.Specs
 {
-    public class PipelineRepository_Specs
+    public class PipelineRepositorySourceUpdate
     {
         public static PipelineRepository PipelineRepository;
         public static Pipeline Pipeline1 = MockRepository.GenerateMock<Pipeline>();

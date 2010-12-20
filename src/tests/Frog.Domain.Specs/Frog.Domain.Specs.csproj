@@ -42,11 +42,14 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Streams_Specs.cs" />
-    <Compile Include="SourceFountaint_HasFlash.cs" />
+    <Compile Include="PipelineRepositorySourceUpdate.cs" />
+    <Compile Include="RepositoryChecksForUpdates.cs" />
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="PipelineProcessSourceDrop.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\app\Frog.Domain\Frog.Domain.csproj">

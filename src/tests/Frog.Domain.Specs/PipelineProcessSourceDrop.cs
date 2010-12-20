@@ -7,7 +7,7 @@ using Rhino.Mocks;
 
 namespace Frog.Domain.Specs
 {
-    public class Pipeline_Specs
+    public class PipelineProcessSourceDrop
     {
         private static Pipeline _pipeline;
         private static Task _task1;

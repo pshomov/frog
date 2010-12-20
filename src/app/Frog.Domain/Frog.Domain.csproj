@@ -39,9 +39,9 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="MessageBus.cs" />
     <Compile Include="SourceRepo.cs" />
-    <Compile Include="SourceFountain.cs" />
-    <Compile Include="Stream.cs" />
-    <Compile Include="StreamsRepository.cs" />
+    <Compile Include="Repository.cs" />
+    <Compile Include="Pipeline.cs" />
+    <Compile Include="PipelineRepository.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
