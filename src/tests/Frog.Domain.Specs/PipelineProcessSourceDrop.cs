@@ -14,13 +14,13 @@ namespace Frog.Domain.Specs
         private static Task _task2;
         private static readonly SourceDrop SourceDrop = new SourceDrop("src_id", 1, "/asdfasdf/asfdasdf");
 
-        private Establish context = () =>
+        Establish context = () =>
                                         {
                                             _task1 = MockRepository.GenerateMock<Task>();
                                             _task2 = MockRepository.GenerateMock<Task>();
                                             _pipeline = new PipelineOfTasks(_task1, _task2);
                                         };
         Because of = () => _pipeline.Process(SourceDrop);
-        private It should_flow_downstream = () => _task1.AssertWasCalled(task => task.Perform(SourceDrop));
+        It should_flow_downstream = () => _task1.AssertWasCalled(task => task.Perform(SourceDrop));
     }
 }
