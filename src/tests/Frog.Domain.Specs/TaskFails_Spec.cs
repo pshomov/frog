@@ -95,7 +95,7 @@ namespace Frog.Domain.Specs
                 process = Process.Start(_app);
                 process.WaitForExit(3000);
             }
-            catch (Win32Exception e)
+            catch (Win32Exception)
             {
                 return new ExecTaskResult(ExecutionStatus.Failure, -1);
             }
