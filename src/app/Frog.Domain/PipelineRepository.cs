@@ -12,9 +12,9 @@ namespace Frog.Domain
             streams = new List<Pipeline>(pipeline);
         }
 
-        public void SourceUpdate(string waterID, int revision, string path)
+        public void SourceUpdate(SourceDrop sourceDrop)
         {
-            streams.ForEach(stream1 => stream1.Process(new SourceDrop(waterID, revision, path)));
+            streams.ForEach(stream1 => stream1.Process(sourceDrop));
         }
     }
 }

@@ -42,6 +42,7 @@
     <Compile Include="Repository.cs" />
     <Compile Include="Pipeline.cs" />
     <Compile Include="PipelineRepository.cs" />
+    <Compile Include="Task.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

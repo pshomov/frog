@@ -36,11 +36,18 @@ namespace Frog.Domain
         void Process(SourceDrop sourceDrop);
     }
 
-    public class River : Pipeline
+    public class PipelineOfTasks : Pipeline
     {
+        private readonly Task[] _tasks;
+
+        public PipelineOfTasks(params Task[] tasks)
+        {
+            _tasks = tasks;
+        }
+
         public void Process(SourceDrop sourceDrop)
         {
-            throw new NotImplementedException();
+            _tasks[0].Perform(sourceDrop);
         }
     }
 }
