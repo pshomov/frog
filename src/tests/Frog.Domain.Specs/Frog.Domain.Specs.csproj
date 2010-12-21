@@ -50,12 +50,19 @@
     <Compile Include="RepositoryChecksForUpdates.cs" />
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="PipelineProcessSourceDrop.cs" />
+    <Compile Include="TaskFails_Spec.cs" />
+    <Compile Include="Underware.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\app\Frog.Domain\Frog.Domain.csproj">
       <Project>{8A446F8C-6B38-4153-A996-CC162DACF795}</Project>
       <Name>Frog.Domain</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="callme.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -48,7 +48,7 @@ namespace Frog.Domain
 
         public void Process(SourceDrop sourceDrop)
         {
-            _tasks.ToList().Find(task => task.Perform(sourceDrop) != TaskResult.Success);
+            _tasks.ToList().Find(task => task.Perform(sourceDrop).status != TaskResult.Status.Success);
         }
     }
 }

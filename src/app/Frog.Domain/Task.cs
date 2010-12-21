@@ -1,10 +1,16 @@
 namespace Frog.Domain
 {
-    public enum TaskResult
+    public class TaskResult
     {
-        Success,
-        Error
+        public enum Status
+        {
+            Success,
+            Error
+        };
+
+        public Status status;
     }
+
     public interface Task
     {
         TaskResult Perform(SourceDrop sourceDrop);
