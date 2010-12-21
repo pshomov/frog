@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 
 namespace Frog.Domain
 {
@@ -47,7 +48,7 @@ namespace Frog.Domain
 
         public void Process(SourceDrop sourceDrop)
         {
-            _tasks[0].Perform(sourceDrop);
+            _tasks.ToList().Find(task => task.Perform(sourceDrop) != TaskResult.Success);
         }
     }
 }

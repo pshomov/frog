@@ -4,7 +4,7 @@ using Rhino.Mocks;
 
 namespace Frog.Domain.Specs
 {
-    public class Repository_First_Run : RepositorySpec
+    public class Repository_First_Run : RepositorySpecBase
     {
         Establish context = () => repository = new Repository(repo, bus);
         Because of = () => repository.CheckForUpdates();
@@ -12,7 +12,7 @@ namespace Frog.Domain.Specs
         It should_send_message = () => bus.AssertWasCalled(x => x.PostTopic("src_new_revision"));
     }
 
-    public class Repository_Later_Run : RepositorySpec
+    public class Repository_Later_Run : RepositorySpecBase
     {
         private Establish context = () =>
                                         {
@@ -25,7 +25,7 @@ namespace Frog.Domain.Specs
         It should_send_message = () => bus.AssertWasCalled(x => x.PostTopic("src_new_revision"));
     }
 
-    public class Repository_No_Change_In_Src_Revision_Run : RepositorySpec
+    public class Repository_No_Change_In_Src_Revision_Run : RepositorySpecBase
     {
         private Establish context = () =>
                                         {
@@ -38,7 +38,7 @@ namespace Frog.Domain.Specs
         It should_not_send_message = () => bus.AssertWasCalled(x => x.PostTopic("src_new_revision"), options => options.Repeat.Once());
     }
 
-    public class RepositorySpec
+    public class RepositorySpecBase
     {
         public static Repository repository;
         public static MessageBus bus;

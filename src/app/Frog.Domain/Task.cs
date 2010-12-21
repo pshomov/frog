@@ -1,7 +1,12 @@
 namespace Frog.Domain
 {
+    public enum TaskResult
+    {
+        Success,
+        Error
+    }
     public interface Task
     {
-        void Perform(SourceDrop sourceDrop);
+        TaskResult Perform(SourceDrop sourceDrop);
     }
 }
