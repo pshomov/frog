@@ -40,7 +40,7 @@ namespace Frog.Domain.Specs
 
         Because of = () => _taskResult = _task.Perform(new SourceDrop("", 1, ""));
         It should_report_task_execution_status = () => _taskResult.IsExecuted.ShouldBeTrue();
-        It should_throw_an_exception_when_trying_to_access_exitcode_value = () => _taskResult.ExitCode.ShouldEqual(4);
+        It should_match_exit_code_value_from_program = () => _taskResult.ExitCode.ShouldEqual(4);
     }
 
 
@@ -94,6 +94,7 @@ namespace Frog.Domain.Specs
             {
                 process = Process.Start(_app);
                 process.WaitForExit(3000);
+				if (process.HasExited && process.ExitCode == 1) throw new Win32Exception();
             }
             catch (Win32Exception)
             {
