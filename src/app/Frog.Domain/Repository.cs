@@ -4,18 +4,18 @@ namespace Frog.Domain
 	public class Repository
 	{
 		MessageBus bus;
-		SourceRepo repoDriver;
+		SourceRepositoryDriver _repositoryDriverDriver;
 	    private Int64 currentRevisionNumber;
 		
-		public Repository(SourceRepo repo, MessageBus bus){
+		public Repository(SourceRepositoryDriver repositoryDriver, MessageBus bus){
 			this.bus = bus;
-			this.repoDriver = repo;
+			this._repositoryDriverDriver = repositoryDriver;
 		    currentRevisionNumber = Int64.MinValue;
 		}
 
 	    public void CheckForUpdates()
 	    {
-	        var latestRevisionNumber = repoDriver.LatestRevisionNumber;
+	        var latestRevisionNumber = _repositoryDriverDriver.LatestRevisionNumber;
 	        if (latestRevisionNumber != currentRevisionNumber)
             {
                 currentRevisionNumber = latestRevisionNumber;

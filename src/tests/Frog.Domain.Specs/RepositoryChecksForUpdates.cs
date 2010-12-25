@@ -6,9 +6,9 @@ namespace Frog.Domain.Specs
 {
     public class Repository_First_Run : RepositorySpecBase
     {
-        Establish context = () => repository = new Repository(repo, bus);
+        Establish context = () => repository = new Repository(repositoryDriver, bus);
         Because of = () => repository.CheckForUpdates();
-        It should_check_source_repo = () => repo.AssertWasCalled(x => x.LatestRevisionNumber);
+        It should_check_source_repo = () => repositoryDriver.AssertWasCalled(x => x.LatestRevisionNumber);
         It should_send_message = () => bus.AssertWasCalled(x => x.PostTopic("src_new_revision"));
     }
 
@@ -16,12 +16,12 @@ namespace Frog.Domain.Specs
     {
         private Establish context = () =>
                                         {
-                                            repository = new Repository(repo, bus);
-                                            repo.Stub(x => x.LatestRevisionNumber).Return(1).Return(2);
+                                            repository = new Repository(repositoryDriver, bus);
+                                            repositoryDriver.Stub(x => x.LatestRevisionNumber).Return(1).Return(2);
                                             repository.CheckForUpdates();
                                         };
         Because of = () => repository.CheckForUpdates();
-        It should_check_source_repo_twice = () => repo.AssertWasCalled(x => x.LatestRevisionNumber, options => options.Repeat.Twice());
+        It should_check_source_repo_twice = () => repositoryDriver.AssertWasCalled(x => x.LatestRevisionNumber, options => options.Repeat.Twice());
         It should_send_message = () => bus.AssertWasCalled(x => x.PostTopic("src_new_revision"));
     }
 
@@ -29,8 +29,8 @@ namespace Frog.Domain.Specs
     {
         private Establish context = () =>
                                         {
-                                            repository = new Repository(repo, bus);
-                                            repo.Stub(x => x.LatestRevisionNumber).Return(1).Repeat.Any();
+                                            repository = new Repository(repositoryDriver, bus);
+                                            repositoryDriver.Stub(x => x.LatestRevisionNumber).Return(1).Repeat.Any();
                                             repository.CheckForUpdates();
                                         };
 
@@ -42,12 +42,12 @@ namespace Frog.Domain.Specs
     {
         public static Repository repository;
         public static MessageBus bus;
-        public static SourceRepo repo;
+        public static SourceRepositoryDriver repositoryDriver;
 
         Establish context = () =>
                                 {
                                     bus = MockRepository.GenerateMock<MessageBus>();
-                                    repo = MockRepository.GenerateMock<SourceRepo>();
+                                    repositoryDriver = MockRepository.GenerateMock<SourceRepositoryDriver>();
                                 };
     }
 }
