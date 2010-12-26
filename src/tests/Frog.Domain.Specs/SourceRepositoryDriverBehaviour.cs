@@ -1,5 +1,3 @@
-using System;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using NUnit.Framework;
@@ -22,38 +20,33 @@ namespace Frog.Domain.Specs
         public void Given()
         {
             _testAssemblyPath = Path.GetDirectoryName(GetType().Assembly.Location);
-            _driver = new GitDriver(_testAssemblyPath, "tmp_folder", "git://github.com/pshomov/xray.git");
+            var repo = CreateDummyRepo(_testAssemblyPath, "dummy_repo");
+            _driver = new GitDriver(_testAssemblyPath, "tmp_folder", repo);
         }
 
         public void When()
         {
             _driver.InitialCheckout();
         }
+
         [Test]
         public void should_create_repo_folder()
         {
-            Assert.That(System.IO.Directory.Exists(_testAssemblyPath+"\\tmp_folder"));
-        }
-    }
-
-    public class GitDriver
-    {
-        readonly string _codeBase;
-        readonly string _repoFolder;
-        readonly string _repoUrl;
-
-        public GitDriver(string codeBase, string repoFolder, string repoUrl)
-        {
-            _codeBase = codeBase;
-            _repoFolder = repoFolder;
-            _repoUrl = repoUrl;
+            Assert.That(Directory.Exists(_testAssemblyPath+"\\tmp_folder"));
         }
 
-        public void InitialCheckout()
+        [Test]
+        public void should_have_the_repo_contents_checked_out()
         {
-            var path = _codeBase + "\\git_scripts\\git_initial_fetch.bat";
-            var process = Process.Start(path, _codeBase + " " + _repoFolder + " " + _repoUrl);
+            Assert.That(File.Exists(_testAssemblyPath + "\\tmp_folder\\test.txt"));
+        }
+
+        string CreateDummyRepo(string basePath, string repoName)
+        {
+            var path = basePath + "\\git_support_scripts\\git_create_dummy_repo.bat";
+            var process = Process.Start(path, basePath + " " + repoName);
             process.WaitForExit();
+            return basePath + "\\" + repoName;
         }
     }
 }
