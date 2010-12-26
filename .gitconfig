@@ -3,3 +3,4 @@ obj/
 *.sln
 _ReShraper*/
 *.user
+*.suo
