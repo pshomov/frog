@@ -5,26 +5,19 @@ using NUnit.Framework;
 namespace Frog.Domain.Specs
 {
     [TestFixture]
-    public class SourceRepositoryDriverBehaviour
+    public class SourceRepositoryDriverBehaviour : BDD
     {
         GitDriver _driver;
         string _testAssemblyPath;
 
-        [SetUp]
-        public void Setup()
-        {
-            Given();
-            When();
-        }
-
-        public void Given()
+        public override void Given()
         {
             _testAssemblyPath = Path.GetDirectoryName(GetType().Assembly.Location);
             var repo = CreateDummyRepo(_testAssemblyPath, "dummy_repo");
             _driver = new GitDriver(_testAssemblyPath, "tmp_folder", repo);
         }
 
-        public void When()
+        public override void When()
         {
             _driver.InitialCheckout();
         }

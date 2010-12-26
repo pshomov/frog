@@ -50,6 +50,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BDD.cs" />
+    <Compile Include="GitRepositoryDriverCheckingForUpdates.cs" />
     <Compile Include="PipelineRepositorySourceUpdate.cs" />
     <Compile Include="RepositoryChecksForUpdates.cs" />
     <Compile Include="AssemblyInfo.cs" />
