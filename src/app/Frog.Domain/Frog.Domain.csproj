@@ -46,7 +46,9 @@
     <Compile Include="Task.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="git_scripts\git_check_for_updates.bat" />
+    <None Include="git_scripts\git_check_for_updates.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="git_scripts\git_initial_fetch.bat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

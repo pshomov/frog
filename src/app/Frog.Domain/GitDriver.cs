@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics;
 
 namespace Frog.Domain
@@ -20,6 +21,14 @@ namespace Frog.Domain
             var path = _codeBase + "\\git_scripts\\git_initial_fetch.bat";
             var process = Process.Start(path, _codeBase + " " + _repoFolder + " " + _repoUrl);
             process.WaitForExit();
+        }
+
+        public bool CheckForUpdates()
+        {
+            var path = _codeBase + "\\git_scripts\\git_check_for_updates.bat";
+            var process = Process.Start(path, _codeBase + " " + _repoFolder + " " + _repoUrl);
+            process.WaitForExit();
+            return process.ExitCode == 1;
         }
     }
 }

@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="BDD.cs" />
     <Compile Include="GitRepositoryDriverCheckingForUpdates.cs" />
+    <Compile Include="GitTestSupport.cs" />
     <Compile Include="PipelineRepositorySourceUpdate.cs" />
     <Compile Include="RepositoryChecksForUpdates.cs" />
     <Compile Include="AssemblyInfo.cs" />
@@ -71,6 +72,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="callme.sh">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="git_support_scripts\git_commit_change.bat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="git_support_scripts\git_create_dummy_repo.bat">
