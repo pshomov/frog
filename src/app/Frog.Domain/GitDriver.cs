@@ -1,5 +1,7 @@
 using System;
 using System.Diagnostics;
+using System.IO;
+using Frog.Domain.Underware;
 
 namespace Frog.Domain
 {
@@ -18,17 +20,26 @@ namespace Frog.Domain
 
         public void InitialCheckout()
         {
-            var path = _codeBase + "\\git_scripts\\git_initial_fetch.bat";
-            var process = Process.Start(path, _codeBase + " " + _repoFolder + " " + _repoUrl);
+            var scriptPath = GitScriptsLocation + "\\git_initial_fetch.bat";
+            var process = ProcessHelpers.Start(scriptPath, _codeBase + " " + _repoFolder + " " + _repoUrl);
+            Console.WriteLine(process.StandardOutput.ReadToEnd());
             process.WaitForExit();
+            if (process.ExitCode != 0) {throw new InvalidProgramException("script failed, see log for details");}
         }
 
         public bool CheckForUpdates()
         {
-            var path = _codeBase + "\\git_scripts\\git_check_for_updates.bat";
-            var process = Process.Start(path, _codeBase + " " + _repoFolder + " " + _repoUrl);
+            var scriptPath = GitScriptsLocation + "\\git_check_for_updates.bat";
+            var process = ProcessHelpers.Start(scriptPath, _codeBase + " " + _repoFolder + " " + _repoUrl);
             process.WaitForExit();
-            return process.ExitCode == 1;
+            Console.WriteLine(process.StandardOutput.ReadToEnd()); 
+            if (process.ExitCode != 0 && process.ExitCode != 201) throw new InvalidProgramException("script failed, see log for details");
+            return process.ExitCode == 201;
+        }
+
+        string GitScriptsLocation
+        {
+            get { return Path.GetDirectoryName(GetType().Assembly.Location)+"\\git_scripts"; }
         }
     }
 }

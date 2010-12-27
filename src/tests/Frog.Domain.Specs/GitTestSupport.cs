@@ -1,5 +1,7 @@
 using System;
 using System.Diagnostics;
+using System.IO;
+using Frog.Domain.Underware;
 
 namespace Frog.Domain.Specs
 {
@@ -7,16 +9,19 @@ namespace Frog.Domain.Specs
     {
         public static string CreateDummyRepo(string basePath, string repoName)
         {
-            var path = basePath + "\\git_support_scripts\\git_create_dummy_repo.bat";
-            var process = Process.Start(path, basePath + " " + repoName);
+            var path = Path.GetDirectoryName(typeof(GitTestSupport).Assembly.Location) + "\\git_support_scripts\\git_create_dummy_repo.bat";
+            Process process = ProcessHelpers.Start(path, basePath + " " + repoName);
+            Console.WriteLine(process.StandardOutput.ReadToEnd());
+            Console.WriteLine("Error out:\n"+process.StandardError.ReadToEnd());
             process.WaitForExit();
             return basePath + "\\" + repoName;
         }
 
         public static void CommitChange(string basePath, string repoName)
         {
-            var path = basePath + "\\git_support_scripts\\git_commit_change.bat";
-            var process = Process.Start(path, basePath + " " + repoName);
+            var path = Path.GetDirectoryName(typeof(GitTestSupport).Assembly.Location) + "\\git_support_scripts\\git_commit_change.bat";
+            var process = ProcessHelpers.Start(path, basePath + " " + repoName);
+            Console.WriteLine(process.StandardOutput.ReadToEnd());
             process.WaitForExit();
         }
     }

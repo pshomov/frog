@@ -51,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BDD.cs" />
+    <Compile Include="GitRepositoryDriverCheckingForUpdatesWhenNoUpdates.cs" />
     <Compile Include="GitRepositoryDriverCheckingForUpdates.cs" />
     <Compile Include="GitTestSupport.cs" />
     <Compile Include="PipelineRepositorySourceUpdate.cs" />

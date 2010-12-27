@@ -4,7 +4,7 @@ using NUnit.Framework;
 namespace Frog.Domain.Specs
 {
     [TestFixture]
-    public class GitRepositoryDriverCheckingForUpdates : BDD
+    public class GitRepositoryDriverCheckingForUpdatesWhenNoUpdates : BDD
     {
         GitDriver _driver;
         string _testAssemblyPath;
@@ -12,11 +12,11 @@ namespace Frog.Domain.Specs
 
         public override void Given()
         {
-            _testAssemblyPath = Path.GetDirectoryName(GetType().Assembly.Location);
+            _testAssemblyPath = Path.GetTempPath() + "\\"+Path.GetRandomFileName();
+            Directory.CreateDirectory(_testAssemblyPath);
             var repo = GitTestSupport.CreateDummyRepo(_testAssemblyPath, "dummy_repo");
             _driver = new GitDriver(_testAssemblyPath, "tmp_folder", repo);
             _driver.InitialCheckout();
-            GitTestSupport.CommitChange(_testAssemblyPath, "dummy_repo");
         }
 
         public override void When()
@@ -25,9 +25,9 @@ namespace Frog.Domain.Specs
         }
 
         [Test]
-        public void should_report_that_there_are_updates()
+        public void should_report_that_there_are_no_updates()
         {
-            Assert.That(_updates);
+            Assert.That(!_updates);
         }
     }
 }
