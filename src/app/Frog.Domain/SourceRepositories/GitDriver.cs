@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using Frog.Domain.Underware;
 
-namespace Frog.Domain
+namespace Frog.Domain.SourceRepositories
 {
     public class GitDriver
     {

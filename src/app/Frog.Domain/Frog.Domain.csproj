@@ -36,8 +36,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="GitDriver.cs" />
+    <Compile Include="Crap\AssemblyInfo.cs" />
+    <Compile Include="SourceRepositories\GitDriver.cs" />
     <Compile Include="MessageBus.cs" />
     <Compile Include="SourceRepositoryDriver.cs" />
     <Compile Include="Repository.cs" />
@@ -53,9 +53,6 @@
     <None Include="git_scripts\git_initial_fetch.bat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="src_drivers\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

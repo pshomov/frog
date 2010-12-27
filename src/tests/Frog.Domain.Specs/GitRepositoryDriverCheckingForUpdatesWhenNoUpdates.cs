@@ -1,4 +1,5 @@
 using System.IO;
+using Frog.Domain.SourceRepositories;
 using NUnit.Framework;
 
 namespace Frog.Domain.Specs
