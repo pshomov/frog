@@ -1,3 +1,4 @@
+%~d1
 cd %1
 if EXIST %2 RMDIR /S/Q %2
 mkdir %2
