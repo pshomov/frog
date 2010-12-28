@@ -38,9 +38,6 @@
   <ItemGroup>
     <Compile Include="Crap\AssemblyInfo.cs" />
     <Compile Include="SourceRepositories\GitDriver.cs" />
-    <Compile Include="MessageBus.cs" />
-    <Compile Include="SourceRepositoryDriver.cs" />
-    <Compile Include="Repository.cs" />
     <Compile Include="Pipeline.cs" />
     <Compile Include="PipelineRepository.cs" />
     <Compile Include="Task.cs" />

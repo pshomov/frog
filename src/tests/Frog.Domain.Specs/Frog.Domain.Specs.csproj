@@ -55,12 +55,11 @@
     <Compile Include="GitRepositoryDriverCheckingForUpdates.cs" />
     <Compile Include="GitTestSupport.cs" />
     <Compile Include="PipelineRepositorySourceUpdate.cs" />
-    <Compile Include="RepositoryChecksForUpdates.cs" />
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="PipelineProcessSourceDrop.cs" />
     <Compile Include="SourceRepositoryDriverBehaviour.cs" />
     <Compile Include="TaskFails_Spec.cs" />
-    <Compile Include="Underware.cs" />
+    <Compile Include="Underware\Underware.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\app\Frog.Domain\Frog.Domain.csproj">
