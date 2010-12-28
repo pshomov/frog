@@ -6,7 +6,7 @@ using NUnit.Framework;
 namespace Frog.Domain.Specs
 {
     [TestFixture]
-    public class SourceRepositoryDriverBehaviour : BDD
+    public class GitRepositoryDriverInitialCheckout : BDD
     {
         GitDriver _driver;
         string _testAssemblyPath;
