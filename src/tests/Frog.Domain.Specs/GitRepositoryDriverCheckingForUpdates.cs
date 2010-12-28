@@ -16,7 +16,7 @@ namespace Frog.Domain.Specs
             _testAssemblyPath = Path.GetDirectoryName(GetType().Assembly.Location);
             var repo = GitTestSupport.CreateDummyRepo(_testAssemblyPath, "dummy_repo");
             _driver = new GitDriver(_testAssemblyPath, "tmp_folder", repo);
-            _driver.InitialCheckout();
+            _driver.CheckForUpdates();
             GitTestSupport.CommitChange(_testAssemblyPath, "dummy_repo");
         }
 

@@ -60,6 +60,7 @@
     <Compile Include="SourceRepositoryDriverBehaviour.cs" />
     <Compile Include="TaskFails_Spec.cs" />
     <Compile Include="Underware\Underware.cs" />
+    <Compile Include="ValveSpec.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\app\Frog.Domain\Frog.Domain.csproj">

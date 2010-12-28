@@ -17,7 +17,7 @@ namespace Frog.Domain.Specs
             Directory.CreateDirectory(_testAssemblyPath);
             var repo = GitTestSupport.CreateDummyRepo(_testAssemblyPath, "dummy_repo");
             _driver = new GitDriver(_testAssemblyPath, "tmp_folder", repo);
-            _driver.InitialCheckout();
+            _driver.CheckForUpdates();
         }
 
         public override void When()

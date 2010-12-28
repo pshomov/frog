@@ -5,7 +5,12 @@ using Frog.Domain.Underware;
 
 namespace Frog.Domain.SourceRepositories
 {
-    public class GitDriver
+    public interface SourceRepoDriver
+    {
+        bool CheckForUpdates();
+    }
+
+    public class GitDriver : SourceRepoDriver
     {
         readonly string _codeBase;
         readonly string _repoFolder;
@@ -18,7 +23,7 @@ namespace Frog.Domain.SourceRepositories
             _repoUrl = repoUrl;
         }
 
-        public void InitialCheckout()
+        private void InitialCheckout()
         {
             var scriptPath = GitScriptsLocation + "\\git_initial_fetch.bat";
             var process = ProcessHelpers.Start(scriptPath, _codeBase + " " + _repoFolder + " " + _repoUrl);
@@ -29,12 +34,19 @@ namespace Frog.Domain.SourceRepositories
 
         public bool CheckForUpdates()
         {
-            var scriptPath = GitScriptsLocation + "\\git_check_for_updates.bat";
-            var process = ProcessHelpers.Start(scriptPath, _codeBase + " " + _repoFolder + " " + _repoUrl);
-            process.WaitForExit();
-            Console.WriteLine(process.StandardOutput.ReadToEnd()); 
-            if (process.ExitCode != 0 && process.ExitCode != 201) throw new InvalidProgramException("script failed, see log for details");
-            return process.ExitCode == 201;
+            if (Directory.Exists(_codeBase+"\\"+_repoFolder+"\\.git"))
+            {
+                var scriptPath = GitScriptsLocation + "\\git_check_for_updates.bat";
+                var process = ProcessHelpers.Start(scriptPath, _codeBase + " " + _repoFolder + " " + _repoUrl);
+                process.WaitForExit();
+                Console.WriteLine(process.StandardOutput.ReadToEnd());
+                if (process.ExitCode != 0 && process.ExitCode != 201) throw new InvalidProgramException("script failed, see log for details");
+                return process.ExitCode == 201;
+            } else
+            {
+                InitialCheckout();
+                return true;
+            }
         }
 
         string GitScriptsLocation

@@ -21,7 +21,7 @@ namespace Frog.Domain.Specs
 
         public override void When()
         {
-            _driver.InitialCheckout();
+            _driver.CheckForUpdates();
         }
 
         [Test]
