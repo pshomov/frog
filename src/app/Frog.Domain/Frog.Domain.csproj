@@ -42,6 +42,7 @@
     <Compile Include="PipelineRepository.cs" />
     <Compile Include="Task.cs" />
     <Compile Include="Underware\ProcessHelpers.cs" />
+    <Compile Include="Valve.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="git_scripts\git_check_for_updates.bat">

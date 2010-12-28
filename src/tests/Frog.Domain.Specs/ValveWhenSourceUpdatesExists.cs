@@ -7,7 +7,7 @@ using Rhino.Mocks.Constraints;
 namespace Frog.Domain.Specs
 {
     [TestFixture]
-    public class ValveSpec : BDD
+    public class ValveWhenSourceUpdatesExists : BDD
     {
         SourceRepoDriver _sourceRepoDriver;
         Pipeline pipeline;
@@ -17,6 +17,7 @@ namespace Frog.Domain.Specs
         {
             pipeline = MockRepository.GenerateMock<Pipeline>();
             _sourceRepoDriver = MockRepository.GenerateMock<SourceRepoDriver>();
+            _sourceRepoDriver.Expect(driver => driver.CheckForUpdates()).Return(true);
             valve = new Valve(_sourceRepoDriver, pipeline);
         }
 
@@ -37,23 +38,5 @@ namespace Frog.Domain.Specs
             pipeline.AssertWasCalled(pipeline1 => pipeline1.Process(Arg<SourceDrop>.Is.Anything));
         }
 
-    }
-
-    public class Valve
-    {
-        readonly SourceRepoDriver _sourceRepoDriver;
-        readonly Pipeline _pipeline;
-
-        public Valve(SourceRepoDriver sourceRepoDriver, Pipeline pipeline)
-        {
-            _sourceRepoDriver = sourceRepoDriver;
-            _pipeline = pipeline;
-        }
-
-        public void Check()
-        {
-            _sourceRepoDriver.CheckForUpdates();
-            _pipeline.Process(null);
-        }
     }
 }

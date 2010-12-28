@@ -51,16 +51,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BDD.cs" />
+    <Compile Include="ValveWhenSourceUpdatesExists.cs" />
     <Compile Include="GitRepositoryDriverCheckingForUpdatesWhenNoUpdates.cs" />
     <Compile Include="GitRepositoryDriverCheckingForUpdates.cs" />
     <Compile Include="GitTestSupport.cs" />
     <Compile Include="PipelineRepositorySourceUpdate.cs" />
-    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Crap\AssemblyInfo.cs" />
     <Compile Include="PipelineProcessSourceDrop.cs" />
     <Compile Include="SourceRepositoryDriverBehaviour.cs" />
     <Compile Include="TaskFails_Spec.cs" />
     <Compile Include="Underware\Underware.cs" />
-    <Compile Include="ValveSpec.cs" />
+    <Compile Include="ValveWhenNoUpdates.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\app\Frog.Domain\Frog.Domain.csproj">
