@@ -7,7 +7,7 @@ using Rhino.Mocks.Constraints;
 namespace Frog.Domain.Specs
 {
     [TestFixture]
-    public class ValveWhenNoUpdates : BDD
+    public class ValveWhenNoSourceUpdates : BDD
     {
         SourceRepoDriver _sourceRepoDriver;
         Pipeline pipeline;
