@@ -1,9 +1,8 @@
 using System;
 using System.IO;
-using Frog.Domain.SourceRepositories;
 using NUnit.Framework;
 
-namespace Frog.Domain.Specs
+namespace Frog.Domain.Specs.Git
 {
     [TestFixture]
     public class GitRepositoryDriverCheckingForUpdates : GitRepositoryDriverCheckBase
@@ -14,7 +13,7 @@ namespace Frog.Domain.Specs
         {
             base.Given();
             _driver.CheckForUpdates();
-            GitTestSupport.CommitChange(_workPlace, "dummy_repo");
+            GitTestSupport.CommitChange(_workPlace, _repoFolder);
         }
 
         public override void When()

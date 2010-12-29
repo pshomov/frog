@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using Frog.Domain.Underware;
 
-namespace Frog.Domain.SourceRepositories
+namespace Frog.Domain
 {
     public interface SourceRepoDriver
     {

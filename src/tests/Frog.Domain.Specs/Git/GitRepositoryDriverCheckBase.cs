@@ -1,10 +1,11 @@
 using System.IO;
-using Frog.Domain.SourceRepositories;
 
-namespace Frog.Domain.Specs
+namespace Frog.Domain.Specs.Git
 {
     public abstract class GitRepositoryDriverCheckBase : BDD
     {
+        protected const string _repoFolder = "dummy_repo";
+        protected const string _cloneFolder = "tmp_folder";
         protected GitDriver _driver;
         protected string _workPlace;
 
@@ -12,8 +13,8 @@ namespace Frog.Domain.Specs
         {
             _workPlace = Path.GetTempPath() + "\\" + Path.GetRandomFileName();
             Directory.CreateDirectory(_workPlace);
-            var repo = GitTestSupport.CreateDummyRepo(_workPlace, "dummy_repo");
-            _driver = new GitDriver(_workPlace, "tmp_folder", repo);
+            var repo = GitTestSupport.CreateDummyRepo(_workPlace, _repoFolder);
+            _driver = new GitDriver(_workPlace, _cloneFolder, repo);
         }
 
         public void Cleanup()

@@ -1,8 +1,7 @@
 using System.IO;
-using Frog.Domain.SourceRepositories;
 using NUnit.Framework;
 
-namespace Frog.Domain.Specs
+namespace Frog.Domain.Specs.Git
 {
     [TestFixture]
     public class GitRepositoryDriverCheckingForUpdatesWhenNoUpdates : GitRepositoryDriverCheckBase

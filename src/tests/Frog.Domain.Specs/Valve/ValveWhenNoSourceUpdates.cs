@@ -1,8 +1,8 @@
 using System;
-using Frog.Domain.SourceRepositories;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Rhino.Mocks.Constraints;
+using Frog.Domain;
 
 namespace Frog.Domain.Specs
 {

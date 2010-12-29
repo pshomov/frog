@@ -1,5 +1,4 @@
 using System;
-using Frog.Domain.SourceRepositories;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Rhino.Mocks.Constraints;
@@ -11,14 +10,14 @@ namespace Frog.Domain.Specs
     {
         SourceRepoDriver _sourceRepoDriver;
         Pipeline pipeline;
-        Valve valve;
+        Domain.Valve valve;
 
         public override void Given()
         {
             pipeline = MockRepository.GenerateMock<Pipeline>();
             _sourceRepoDriver = MockRepository.GenerateMock<SourceRepoDriver>();
             _sourceRepoDriver.Expect(driver => driver.CheckForUpdates()).Return(true);
-            valve = new Valve(_sourceRepoDriver, pipeline);
+            valve = new Domain.Valve(_sourceRepoDriver, pipeline);
         }
 
         public override void When()

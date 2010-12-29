@@ -1,5 +1,4 @@
 using System.IO;
-using Frog.Domain.SourceRepositories;
 using NUnit.Framework;
 
 namespace Frog.Domain.Specs.Git
@@ -34,7 +33,5 @@ namespace Frog.Domain.Specs.Git
         {
             Assert.That(!Directory.Exists(_srcDropLocation+"\\.git"));
         }
-
-
     }
 }
