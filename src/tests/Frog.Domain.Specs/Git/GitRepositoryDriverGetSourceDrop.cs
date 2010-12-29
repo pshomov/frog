@@ -12,7 +12,7 @@ namespace Frog.Domain.Specs.Git
         public override void Given()
         {
             base.Given();
-            _checkoutLocation = _testAssemblyPath + "\\" + "srcDrop";
+            _checkoutLocation = _workPlace + "\\" + "srcDrop";
             Directory.CreateDirectory(_checkoutLocation);
             _driver.CheckForUpdates();
         }

@@ -16,13 +16,13 @@ namespace Frog.Domain.Specs
         [Test]
         public void should_create_repo_folder()
         {
-            Assert.That(Directory.Exists(_testAssemblyPath+"\\tmp_folder"));
+            Assert.That(Directory.Exists(_workPlace+"\\tmp_folder"));
         }
 
         [Test]
         public void should_have_the_repo_contents_checked_out()
         {
-            Assert.That(File.Exists(_testAssemblyPath + "\\tmp_folder\\test.txt"));
+            Assert.That(File.Exists(_workPlace + "\\tmp_folder\\test.txt"));
         }
 
     }

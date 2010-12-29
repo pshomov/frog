@@ -14,7 +14,7 @@ namespace Frog.Domain.Specs
         {
             base.Given();
             _driver.CheckForUpdates();
-            GitTestSupport.CommitChange(_testAssemblyPath, "dummy_repo");
+            GitTestSupport.CommitChange(_workPlace, "dummy_repo");
         }
 
         public override void When()
