@@ -7,27 +7,34 @@ namespace Frog.Domain.Specs.Git
     [TestFixture]
     public class GitRepositoryDriverGetSourceDrop : GitRepositoryDriverCheckBase
     {
-        string _checkoutLocation;
+        string _srcDropLocation;
 
         public override void Given()
         {
             base.Given();
-            _checkoutLocation = _workPlace + "\\" + "srcDrop";
-            Directory.CreateDirectory(_checkoutLocation);
+            _srcDropLocation = _workPlace + "\\" + "srcDrop";
+            Directory.CreateDirectory(_srcDropLocation);
             _driver.CheckForUpdates();
         }
 
         public override void When()
         {
-            _driver.GetLatestSourceDrop(_checkoutLocation);
+            _driver.GetLatestSourceDrop(_srcDropLocation);
         }
 
         [Test]
         public void should_place_source_code_in_specified_location()
         {
-            Assert.That(Directory.Exists(_checkoutLocation));
-            Assert.That(File.Exists(_checkoutLocation+"\\test.txt"));
+            Assert.That(Directory.Exists(_srcDropLocation));
+            Assert.That(File.Exists(_srcDropLocation+"\\test.txt"));
         }
+
+        [Test]
+        public void should_not_copy_over_dotgit_folder()
+        {
+            Assert.That(!Directory.Exists(_srcDropLocation+"\\.git"));
+        }
+
 
     }
 }
