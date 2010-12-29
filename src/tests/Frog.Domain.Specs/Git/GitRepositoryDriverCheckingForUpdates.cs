@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using Frog.Domain.SourceRepositories;
 using NUnit.Framework;
@@ -5,17 +6,13 @@ using NUnit.Framework;
 namespace Frog.Domain.Specs
 {
     [TestFixture]
-    public class GitRepositoryDriverCheckingForUpdates : BDD
+    public class GitRepositoryDriverCheckingForUpdates : GitRepositoryDriverCheckBase
     {
-        GitDriver _driver;
-        string _testAssemblyPath;
         bool _updates;
 
         public override void Given()
         {
-            _testAssemblyPath = Path.GetDirectoryName(GetType().Assembly.Location);
-            var repo = GitTestSupport.CreateDummyRepo(_testAssemblyPath, "dummy_repo");
-            _driver = new GitDriver(_testAssemblyPath, "tmp_folder", repo);
+            base.Given();
             _driver.CheckForUpdates();
             GitTestSupport.CommitChange(_testAssemblyPath, "dummy_repo");
         }

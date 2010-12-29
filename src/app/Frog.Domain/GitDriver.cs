@@ -53,5 +53,18 @@ namespace Frog.Domain.SourceRepositories
         {
             get { return Path.GetDirectoryName(GetType().Assembly.Location)+"\\git_scripts"; }
         }
+
+        public void GetLatestSourceDrop(string sourceDropLocation)
+        {
+            CopyFolder(new DirectoryInfo(_codeBase+"\\"+_repoFolder),new DirectoryInfo(sourceDropLocation));
+        }
+
+        public static void CopyFolder(DirectoryInfo source, DirectoryInfo target)
+        {
+            foreach (DirectoryInfo dir in source.GetDirectories())
+                CopyFolder(dir, target.CreateSubdirectory(dir.Name));
+            foreach (FileInfo file in source.GetFiles())
+                file.CopyTo(Path.Combine(target.FullName, file.Name));
+        }
     }
 }

@@ -50,6 +50,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Git\GitRepositoryDriverCheckBase.cs" />
+    <Compile Include="Git\GitRepositoryDriverGetSourceDrop.cs" />
     <Compile Include="Underware\BDD.cs" />
     <Compile Include="Valve\ValveWhenSourceUpdatesExists.cs" />
     <Compile Include="Git\GitRepositoryDriverCheckingForUpdatesWhenNoUpdates.cs" />
