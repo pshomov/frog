@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frog.Domain.Specs", "src\te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frog.System.Specs", "src\tests\Frog.System.Specs\Frog.System.Specs.csproj", "{D7DC578F-0A08-4681-9486-ACC898785829}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frog.Specs.Support", "src\tests\Frog.Specs.Support\Frog.Specs.Support.csproj", "{B4CE2703-09EF-4BF5-B933-EF8BB4E68389}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +27,10 @@ Global
 		{D7DC578F-0A08-4681-9486-ACC898785829}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D7DC578F-0A08-4681-9486-ACC898785829}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D7DC578F-0A08-4681-9486-ACC898785829}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4CE2703-09EF-4BF5-B933-EF8BB4E68389}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4CE2703-09EF-4BF5-B933-EF8BB4E68389}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4CE2703-09EF-4BF5-B933-EF8BB4E68389}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4CE2703-09EF-4BF5-B933-EF8BB4E68389}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
