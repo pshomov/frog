@@ -7,9 +7,9 @@ namespace Frog.Domain.Specs
     {
         Establish context = () =>
                                         {
-                                            _task1 = MockRepository.GenerateMock<Task>();
+                                            _task1 = MockRepository.GenerateMock<ExecTask>("");
                                             _task1.Expect(task => task.Perform(null)).IgnoreArguments().Return(
-                                                new TaskResult());
+                                                new ExecTaskResult(ExecTask.ExecutionStatus.Success, 0));
                                             _pipeline = new PipelineOfTasks(_task1);
                                         };
         Because of = () => _pipeline.Process(SourceDrop);
@@ -20,11 +20,11 @@ namespace Frog.Domain.Specs
     {
         Establish context = () =>
                                         {
-                                            _task1 = MockRepository.GenerateStub<Task>();
-                                            _task1.Expect(task => task.Perform(null)).IgnoreArguments().Return(new TaskResult(){status = TaskResult.Status.Success});
-                                            _task2 = MockRepository.GenerateMock<Task>();
+                                            _task1 = MockRepository.GenerateStub<ExecTask>("");
+                                            _task1.Expect(task => task.Perform(null)).IgnoreArguments().Return(new ExecTaskResult(ExecTask.ExecutionStatus.Success, 0));
+                                            _task2 = MockRepository.GenerateMock<ExecTask>("");
                                             _task2.Expect(task => task.Perform(null)).IgnoreArguments().Return(
-                                                new TaskResult());
+                                                new ExecTaskResult(ExecTask.ExecutionStatus.Success, 0));
                                             _pipeline = new PipelineOfTasks(_task1, _task2);
                                         };
         Because of = () => _pipeline.Process(SourceDrop);
@@ -35,9 +35,9 @@ namespace Frog.Domain.Specs
     {
         Establish context = () =>
                                         {
-                                            _task1 = MockRepository.GenerateStub<Task>();
-                                            _task1.Expect(task => task.Perform(null)).IgnoreArguments().Return(new TaskResult(){status = TaskResult.Status.Error});
-                                            _task2 = MockRepository.GenerateMock<Task>();
+                                            _task1 = MockRepository.GenerateStub<ExecTask>("");
+                                            _task1.Expect(task => task.Perform(null)).IgnoreArguments().Return(new ExecTaskResult(ExecTask.ExecutionStatus.Failure, 2));
+                                            _task2 = MockRepository.GenerateMock<ExecTask>("");
                                             _pipeline = new PipelineOfTasks(_task1, _task2);
                                         };
         Because of = () => _pipeline.Process(SourceDrop);
@@ -47,8 +47,8 @@ namespace Frog.Domain.Specs
     public class PipelineProcessSourceDropBase
     {
         protected static Pipeline _pipeline;
-        protected static Task _task1;
-        protected static Task _task2;
+        protected static ExecTask _task1;
+        protected static ExecTask _task2;
         protected static readonly SourceDrop SourceDrop = new SourceDrop("");
     }
 }

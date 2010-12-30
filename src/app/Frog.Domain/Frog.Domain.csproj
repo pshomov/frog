@@ -37,10 +37,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Crap\AssemblyInfo.cs" />
+    <Compile Include="ExecTask.cs" />
     <Compile Include="GitDriver.cs" />
     <Compile Include="Pipeline.cs" />
     <Compile Include="PipelineRepository.cs" />
-    <Compile Include="Task.cs" />
     <Compile Include="Underware\ProcessHelpers.cs" />
     <Compile Include="Valve.cs" />
   </ItemGroup>

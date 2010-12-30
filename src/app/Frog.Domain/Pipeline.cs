@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Frog.Domain.Specs;
 
 namespace Frog.Domain
 {
@@ -25,16 +26,16 @@ namespace Frog.Domain
 
     public class PipelineOfTasks : Pipeline
     {
-        private readonly Task[] _tasks;
+        private readonly ExecTask[] _tasks;
 
-        public PipelineOfTasks(params Task[] tasks)
+        public PipelineOfTasks(params ExecTask[] tasks)
         {
             _tasks = tasks;
         }
 
         public void Process(SourceDrop sourceDrop)
         {
-            _tasks.ToList().Find(task => task.Perform(sourceDrop).status != TaskResult.Status.Success);
+            _tasks.ToList().Find(task => task.Perform(sourceDrop).ExecStatus != ExecTaskResult.Status.Success);
         }
     }
 }
