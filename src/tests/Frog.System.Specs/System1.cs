@@ -15,7 +15,7 @@ namespace Frog.System.Specs
         public override void Given()
         {
             driver = new GitDriver("c:\\test_repos", "test", "http://github.com/pshomov/xray.git");
-            pipeline = new PipelineOfTasks(new ExecTask(@"C:\Windows\Microsoft.NET\Framework\v3.5\msbuild.exe xray.sln"));
+            pipeline = new PipelineOfTasks(new ExecTask(@"C:\Windows\Microsoft.NET\Framework\v3.5\msbuild.exe", @"xray.sln"));
             area = new SubfolderWorkingArea("c:\\working_area");
             valve = new Valve(driver, pipeline, area);
         }

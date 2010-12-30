@@ -48,10 +48,12 @@ namespace Frog.Domain.Specs
         }
 
         readonly string _app;
+        private readonly string _arguments;
 
-        public ExecTask(string app)
+        public ExecTask(string app, string arguments)
         {
             _app = app;
+            _arguments = arguments;
         }
 
         public virtual ExecTaskResult Perform(SourceDrop sourceDrop)
@@ -59,12 +61,12 @@ namespace Frog.Domain.Specs
             Process process;
             try
             {
-                var psi = new ProcessStartInfo(_app);
+                var psi = new ProcessStartInfo(_app, _arguments);
                 psi.WorkingDirectory = sourceDrop.SourceDropLocation;
-                psi.UseShellExecute = false;
-                psi.RedirectStandardOutput = true;
+//                psi.UseShellExecute = false;
+//                psi.RedirectStandardOutput = true;
                 process = Process.Start(psi);
-                Console.WriteLine(process.StandardOutput.ReadToEnd());
+//                Console.WriteLine(process.StandardOutput.ReadToEnd());
                 process.WaitForExit(30000);
                 if (process.HasExited && process.ExitCode == 1) throw new Win32Exception();
             }

@@ -12,7 +12,7 @@ namespace Frog.Domain.Specs
                                     string _app = "adasdasd";
                                     if (Underware.IsWindows) _app = "callme_wrong.bat";
                                     if (Underware.IsUnix) _app = "./callme_wrong.sh";
-                                    _task = new ExecTask(_app);
+                                    _task = new ExecTask(_app, "");
                                 };
 
         Because of = () => _taskResult = _task.Perform(new SourceDrop(""));
@@ -32,7 +32,7 @@ namespace Frog.Domain.Specs
                                     string _app = "adasdasd";
                                     if (Underware.IsWindows) _app = "callme.bat";
                                     if (Underware.IsUnix) _app = "./callme.sh";
-                                    _task = new ExecTask(_app);
+                                    _task = new ExecTask(_app, "");
                                 };
 
         Because of = () => _taskResult = _task.Perform(new SourceDrop(""));

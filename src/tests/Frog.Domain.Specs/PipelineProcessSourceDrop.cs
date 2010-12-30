@@ -7,7 +7,7 @@ namespace Frog.Domain.Specs
     {
         Establish context = () =>
                                 {
-                                    _task1 = MockRepository.GenerateMock<ExecTask>("");
+                                    _task1 = MockRepository.GenerateMock<ExecTask>("", "");
                                     _task1.Expect(task => task.Perform(null)).IgnoreArguments().Return(
                                         new ExecTaskResult(ExecTask.ExecutionStatus.Success, 0));
                                     _pipeline = new PipelineOfTasks(_task1);
@@ -21,10 +21,10 @@ namespace Frog.Domain.Specs
     {
         Establish context = () =>
                                 {
-                                    _task1 = MockRepository.GenerateStub<ExecTask>("");
+                                    _task1 = MockRepository.GenerateStub<ExecTask>("", "");
                                     _task1.Expect(task => task.Perform(null)).IgnoreArguments().Return(
                                         new ExecTaskResult(ExecTask.ExecutionStatus.Success, 0));
-                                    _task2 = MockRepository.GenerateMock<ExecTask>("");
+                                    _task2 = MockRepository.GenerateMock<ExecTask>("", "");
                                     _task2.Expect(task => task.Perform(null)).IgnoreArguments().Return(
                                         new ExecTaskResult(ExecTask.ExecutionStatus.Success, 0));
                                     _pipeline = new PipelineOfTasks(_task1, _task2);
@@ -38,10 +38,10 @@ namespace Frog.Domain.Specs
     {
         Establish context = () =>
                                 {
-                                    _task1 = MockRepository.GenerateStub<ExecTask>("");
+                                    _task1 = MockRepository.GenerateStub<ExecTask>("", "");
                                     _task1.Expect(task => task.Perform(null)).IgnoreArguments().Return(
                                         new ExecTaskResult(ExecTask.ExecutionStatus.Failure, 2));
-                                    _task2 = MockRepository.GenerateMock<ExecTask>("");
+                                    _task2 = MockRepository.GenerateMock<ExecTask>("", "");
                                     _pipeline = new PipelineOfTasks(_task1, _task2);
                                 };
 

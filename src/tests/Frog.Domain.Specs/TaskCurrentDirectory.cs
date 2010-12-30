@@ -7,13 +7,14 @@ namespace Frog.Domain.Specs
     {
         ExecTask _task;
         ExecTaskResult taskResult;
+        private string _arguments;
 
         public override void Given()
         {
             string _app = "adasdasd";
-            if (Underware.IsWindows) _app = @"cmd.exe /c if %CD%==""c:\temp"" exit /b 41";
+            if (Underware.IsWindows) {_app = @"cmd.exe"; _arguments=@"/c if %CD%==c:\temp exit /b 41";}
             if (Underware.IsUnix) _app = "./currentdir.sh";
-            _task = new ExecTask(_app);
+            _task = new ExecTask(_app, _arguments);
         }
 
         public override void When()
