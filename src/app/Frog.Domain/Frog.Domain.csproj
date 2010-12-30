@@ -36,11 +36,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Crap\AssemblyInfo.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ExecTask.cs" />
     <Compile Include="GitDriver.cs" />
     <Compile Include="Pipeline.cs" />
     <Compile Include="PipelineRepository.cs" />
+    <Compile Include="SubfolderWorkingArea.cs" />
     <Compile Include="Underware\ProcessHelpers.cs" />
     <Compile Include="Valve.cs" />
   </ItemGroup>

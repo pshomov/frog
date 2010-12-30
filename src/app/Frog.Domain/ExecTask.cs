@@ -59,8 +59,13 @@ namespace Frog.Domain.Specs
             Process process;
             try
             {
-                process = Process.Start(_app);
-                process.WaitForExit(3000);
+                var psi = new ProcessStartInfo(_app);
+                psi.WorkingDirectory = sourceDrop.SourceDropLocation;
+                psi.UseShellExecute = false;
+                psi.RedirectStandardOutput = true;
+                process = Process.Start(psi);
+                Console.WriteLine(process.StandardOutput.ReadToEnd());
+                process.WaitForExit(30000);
                 if (process.HasExited && process.ExitCode == 1) throw new Win32Exception();
             }
             catch (Win32Exception)

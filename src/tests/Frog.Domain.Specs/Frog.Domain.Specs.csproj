@@ -50,11 +50,12 @@
   <ItemGroup>
     <Compile Include="Git\GitRepositoryDriverCheckBase.cs" />
     <Compile Include="Git\GitRepositoryDriverGetSourceDrop.cs" />
+    <Compile Include="TaskCurrentDirectory.cs" />
     <Compile Include="Valve\ValveWhenSourceUpdatesExists.cs" />
     <Compile Include="Git\GitRepositoryDriverCheckingForUpdatesWhenNoUpdates.cs" />
     <Compile Include="Git\GitRepositoryDriverCheckingForUpdates.cs" />
     <Compile Include="PipelineRepositorySourceUpdate.cs" />
-    <Compile Include="Crap\AssemblyInfo.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PipelineProcessSourceDrop.cs" />
     <Compile Include="Git\GitRepositoryDriverInitialCheckout.cs" />
     <Compile Include="TaskFails_Spec.cs" />
@@ -77,6 +78,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="callme.sh">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="currentdir.bat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
