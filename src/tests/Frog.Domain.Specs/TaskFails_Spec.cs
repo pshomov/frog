@@ -18,7 +18,7 @@ namespace Frog.Domain.Specs
                                     _task = new ExecTask(_app);
                                 };
 
-        Because of = () => _taskResult = _task.Perform(new SourceDrop("", 1, ""));
+        Because of = () => _taskResult = _task.Perform(new SourceDrop(""));
         It should_report_task_execution_status = () => _taskResult.IsExecuted.ShouldBeFalse();
 
         It should_throw_an_exception_when_trying_to_access_exitcode_value =
@@ -38,7 +38,7 @@ namespace Frog.Domain.Specs
                                     _task = new ExecTask(_app);
                                 };
 
-        Because of = () => _taskResult = _task.Perform(new SourceDrop("", 1, ""));
+        Because of = () => _taskResult = _task.Perform(new SourceDrop(""));
         It should_report_task_execution_status = () => _taskResult.IsExecuted.ShouldBeTrue();
         It should_match_exit_code_value_from_program = () => _taskResult.ExitCode.ShouldEqual(4);
     }

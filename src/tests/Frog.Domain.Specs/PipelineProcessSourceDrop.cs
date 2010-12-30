@@ -49,6 +49,6 @@ namespace Frog.Domain.Specs
         protected static Pipeline _pipeline;
         protected static Task _task1;
         protected static Task _task2;
-        protected static readonly SourceDrop SourceDrop = new SourceDrop("src_id", 1, "/asdfasdf/asfdasdf");
+        protected static readonly SourceDrop SourceDrop = new SourceDrop("");
     }
 }

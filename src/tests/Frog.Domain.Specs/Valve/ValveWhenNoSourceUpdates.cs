@@ -9,16 +9,16 @@ namespace Frog.Domain.Specs
     [TestFixture]
     public class ValveWhenNoSourceUpdates : BDD
     {
-        SourceRepoDriver _sourceRepoDriver;
+        SourceRepoDriver sourceRepoDriver;
         Pipeline pipeline;
         Valve valve;
 
         public override void Given()
         {
             pipeline = MockRepository.GenerateMock<Pipeline>();
-            _sourceRepoDriver = MockRepository.GenerateMock<SourceRepoDriver>();
-            _sourceRepoDriver.Expect(driver => driver.CheckForUpdates()).Return(false);
-            valve = new Valve(_sourceRepoDriver, pipeline);
+            sourceRepoDriver = MockRepository.GenerateMock<SourceRepoDriver>();
+            sourceRepoDriver.Expect(driver => driver.CheckForUpdates()).Return(false);
+            valve = new Valve(sourceRepoDriver, pipeline, MockRepository.GenerateMock<WorkingArea>());
         }
 
         public override void When()
@@ -29,7 +29,7 @@ namespace Frog.Domain.Specs
         [Test]
         public void should_ask_repository_about_updates_in_the_repo()
         {
-            _sourceRepoDriver.AssertWasCalled(driver => driver.CheckForUpdates());
+            sourceRepoDriver.AssertWasCalled(driver => driver.CheckForUpdates());
         }
 
         [Test]

@@ -8,6 +8,7 @@ namespace Frog.Domain
     public interface SourceRepoDriver
     {
         bool CheckForUpdates();
+        SourceDrop GetLatestSourceDrop(string sourceDropLocation);
     }
 
     public class GitDriver : SourceRepoDriver
@@ -54,9 +55,10 @@ namespace Frog.Domain
             get { return Path.GetDirectoryName(GetType().Assembly.Location)+"\\git_scripts"; }
         }
 
-        public void GetLatestSourceDrop(string sourceDropLocation)
+        public SourceDrop GetLatestSourceDrop(string sourceDropLocation)
         {
             CopyFolder(new DirectoryInfo(_codeBase+"\\"+_repoFolder),new DirectoryInfo(sourceDropLocation));
+            return new SourceDrop(sourceDropLocation);
         }
 
         public static void CopyFolder(DirectoryInfo source, DirectoryInfo target)

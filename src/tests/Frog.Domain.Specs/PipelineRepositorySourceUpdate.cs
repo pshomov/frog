@@ -8,7 +8,7 @@ namespace Frog.Domain.Specs
     {
         public static PipelineRepository PipelineRepository;
         public static Pipeline Pipeline1 = MockRepository.GenerateMock<Pipeline>();
-        private static SourceDrop _srcDrop = new SourceDrop("water_id", 123456, "path");
+        private static SourceDrop _srcDrop = new SourceDrop("");
         public static Pipeline Pipeline2 = MockRepository.GenerateMock<Pipeline>();
 
         Establish context = () => PipelineRepository = new PipelineRepository(Pipeline1, Pipeline2);

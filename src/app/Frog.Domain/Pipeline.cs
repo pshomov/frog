@@ -5,30 +5,16 @@ namespace Frog.Domain
 {
     public class SourceDrop
     {
-        private string _sourceId;
-        private int _revision;
-        private string _path;
+        readonly string _sourceDropLocation;
 
-        public SourceDrop(string sourceId, int revision, string path)
+        public SourceDrop(string sourceDropLocation)
         {
-            _sourceId = sourceId;
-            _revision = revision;
-            _path = path;
+            _sourceDropLocation = sourceDropLocation;
         }
 
-        public string SourceID
+        public string SourceDropLocation
         {
-            get { return _sourceId; }
-        }
-
-        public int Revision
-        {
-            get { return _revision; }
-        }
-
-        public string Path
-        {
-            get { return _path; }
+            get { return _sourceDropLocation; }
         }
     }
 
