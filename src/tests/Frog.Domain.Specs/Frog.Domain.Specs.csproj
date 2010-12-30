@@ -65,6 +65,7 @@
     <Compile Include="Underware\Underware.cs" />
     <Compile Include="Valve\ValveWhenNoSourceUpdates.cs" />
     <Compile Include="Valve\ValveWhenUpdateSpecsBase.cs" />
+    <Compile Include="WorkingAreaSpecs.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\app\Frog.Domain\Frog.Domain.csproj">
