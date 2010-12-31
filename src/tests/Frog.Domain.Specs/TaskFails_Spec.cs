@@ -29,10 +29,8 @@ namespace Frog.Domain.Specs
 
         Establish context = () =>
                                 {
-                                    string _app = "adasdasd";
-                                    if (Underware.IsWindows) _app = "callme.bat";
-                                    if (Underware.IsUnix) _app = "./callme.sh";
-                                    _task = new ExecTask(_app, "");
+                                    if (Underware.IsWindows) _task = new ExecTask("cmd.exe", @"/c exit /b 4");
+                                    if (Underware.IsUnix) _task = new ExecTask("./callme.sh", "");
                                 };
 
         Because of = () => _taskResult = _task.Perform(new SourceDrop(""));
