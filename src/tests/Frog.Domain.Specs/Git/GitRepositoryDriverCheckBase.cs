@@ -11,7 +11,7 @@ namespace Frog.Domain.Specs.Git
 
         public override void Given()
         {
-            _workPlace = Path.GetTempPath() + "\\" + Path.GetRandomFileName();
+            _workPlace = Path.Combine(Path.GetTempPath() ,Path.GetRandomFileName());
             Directory.CreateDirectory(_workPlace);
             var repo = GitTestSupport.CreateDummyRepo(_workPlace, _repoFolder);
             _driver = new GitDriver(_workPlace, _cloneFolder, repo);

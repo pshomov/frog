@@ -26,7 +26,7 @@ namespace Frog.Domain
 
         private void InitialCheckout()
         {
-            var scriptPath = GitScriptsLocation + "\\git_initial_fetch.bat";
+            var scriptPath = Path.Combine(GitScriptsLocation, "git_initial_fetch.bat");
             var process = ProcessHelpers.Start(scriptPath, _codeBase + " " + _repoFolder + " " + _repoUrl);
             Console.WriteLine(process.StandardOutput.ReadToEnd());
             process.WaitForExit();
@@ -35,9 +35,9 @@ namespace Frog.Domain
 
         public bool CheckForUpdates()
         {
-            if (Directory.Exists(_codeBase+"\\"+_repoFolder+"\\.git"))
+            if (Directory.Exists(Path.Combine(Path.Combine(_codeBase,_repoFolder), ".git")))
             {
-                var scriptPath = GitScriptsLocation + "\\git_check_for_updates.bat";
+                var scriptPath = Path.Combine(GitScriptsLocation, "git_check_for_updates.bat");
                 var process = ProcessHelpers.Start(scriptPath, _codeBase + " " + _repoFolder + " " + _repoUrl);
                 process.WaitForExit();
                 Console.WriteLine(process.StandardOutput.ReadToEnd());
@@ -52,12 +52,12 @@ namespace Frog.Domain
 
         string GitScriptsLocation
         {
-            get { return Path.GetDirectoryName(GetType().Assembly.Location)+"\\git_scripts"; }
+            get { return Path.Combine(Path.GetDirectoryName(GetType().Assembly.Location), "git_scripts"); }
         }
 
         public SourceDrop GetLatestSourceDrop(string sourceDropLocation)
         {
-            CopyFolder(new DirectoryInfo(_codeBase+"\\"+_repoFolder),new DirectoryInfo(sourceDropLocation));
+            CopyFolder(new DirectoryInfo(Path.Combine(_codeBase, _repoFolder)),new DirectoryInfo(sourceDropLocation));
             return new SourceDrop(sourceDropLocation);
         }
 

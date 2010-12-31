@@ -15,13 +15,13 @@ namespace Frog.Domain.Specs.Git
         [Test]
         public void should_create_repo_folder()
         {
-            Assert.That(Directory.Exists(_workPlace+"\\"+_cloneFolder));
+            Assert.That(Directory.Exists(Path.Combine(_workPlace, _cloneFolder)));
         }
 
         [Test]
         public void should_have_the_repo_contents_checked_out()
         {
-            Assert.That(File.Exists(_workPlace + "\\"+_cloneFolder+"\\test.txt"));
+            Assert.That(File.Exists(Path.Combine(Path.Combine(_workPlace, _cloneFolder), "test.txt")));
         }
 
     }
