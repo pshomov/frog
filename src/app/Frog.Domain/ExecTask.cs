@@ -63,10 +63,7 @@ namespace Frog.Domain.Specs
             {
                 var psi = new ProcessStartInfo(_app, _arguments);
                 psi.WorkingDirectory = sourceDrop.SourceDropLocation;
-//                psi.UseShellExecute = false;
-//                psi.RedirectStandardOutput = true;
                 process = Process.Start(psi);
-//                Console.WriteLine(process.StandardOutput.ReadToEnd());
                 process.WaitForExit(30000);
                 if (process.HasExited && process.ExitCode == 1) throw new Win32Exception();
             }
