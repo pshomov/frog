@@ -26,7 +26,7 @@ namespace Frog.Domain
 
         private void InitialCheckout()
         {
-            var scriptPath = Path.Combine(GitScriptsLocation, "git_initial_fetch.bat");
+            var scriptPath = Path.Combine(GitScriptsLocation, "git_initial_fetch.rb");
             var process = ProcessHelpers.Start(scriptPath, _codeBase + " " + _repoFolder + " " + _repoUrl);
             Console.WriteLine(process.StandardOutput.ReadToEnd());
             process.WaitForExit();
@@ -37,10 +37,11 @@ namespace Frog.Domain
         {
             if (Directory.Exists(Path.Combine(Path.Combine(_codeBase,_repoFolder), ".git")))
             {
-                var scriptPath = Path.Combine(GitScriptsLocation, "git_check_for_updates.bat");
+                var scriptPath = Path.Combine(GitScriptsLocation, "git_check_for_updates.rb");
                 var process = ProcessHelpers.Start(scriptPath, _codeBase + " " + _repoFolder + " " + _repoUrl);
-                process.WaitForExit();
                 Console.WriteLine(process.StandardOutput.ReadToEnd());
+                Console.WriteLine("Errors: " + process.StandardError.ReadToEnd());
+                process.WaitForExit();
                 if (process.ExitCode != 0 && process.ExitCode != 201) throw new InvalidProgramException("script failed, see log for details");
                 return process.ExitCode == 201;
             } else

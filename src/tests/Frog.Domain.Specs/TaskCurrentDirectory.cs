@@ -13,13 +13,14 @@ namespace Frog.Domain.Specs
         {
             string _app = "adasdasd";
             if (Underware.IsWindows) {_app = @"cmd.exe"; _arguments=@"/c if %CD%==c:\temp exit /b 41";}
-            if (Underware.IsUnix) _app = "./currentdir.sh";
+            if (Underware.IsUnix) {_app = "/bin/bash"; _arguments = @"-c ""test `pwd` == '/usr/bin' && (echo 'matches'; exit 41)""";}
             _task = new ExecTask(_app, _arguments);
         }
 
         public override void When()
         {
-            taskResult = _task.Perform(new SourceDrop(@"c:\temp"));
+            if (Underware.IsWindows) taskResult = _task.Perform(new SourceDrop(@"c:\temp"));
+            if (Underware.IsUnix) taskResult = _task.Perform(new SourceDrop(@"/usr/bin"));
         }
 
         [Test]

@@ -13,5 +13,8 @@ namespace Frog.Domain.Specs
 
         public abstract void Given();
         public abstract void When();
+		
+		[TearDown]
+		public virtual void Cleanup() {}
     }
 }

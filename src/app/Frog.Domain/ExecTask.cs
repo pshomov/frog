@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using Frog.Domain.Underware;
 
 namespace Frog.Domain.Specs
 {
@@ -61,9 +62,9 @@ namespace Frog.Domain.Specs
             Process process;
             try
             {
-                var psi = new ProcessStartInfo(_app, _arguments);
-                psi.WorkingDirectory = sourceDrop.SourceDropLocation;
-                process = Process.Start(psi);
+                process = ProcessHelpers.Start(_app, _arguments, sourceDrop.SourceDropLocation);
+				Console.WriteLine(process.StandardOutput.ReadToEnd());
+				Console.WriteLine("Error: " + process.StandardError.ReadToEnd());
                 process.WaitForExit(30000);
                 if (process.HasExited && process.ExitCode == 1) throw new Win32Exception();
             }

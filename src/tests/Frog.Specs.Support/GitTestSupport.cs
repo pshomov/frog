@@ -9,7 +9,11 @@ namespace Frog.Domain.Specs
     {
         public static string CreateDummyRepo(string basePath, string repoName)
         {
-            var path = Path.Combine(Path.GetDirectoryName(typeof(GitTestSupport).Assembly.Location), "git_support_scripts\\git_create_dummy_repo.bat");
+			string path;
+			if (Underware.IsWindows)
+            	path = Path.Combine(Path.GetDirectoryName(typeof(GitTestSupport).Assembly.Location), "git_support_scripts\\git_create_dummy_repo.bat");
+			else
+            	path = Path.Combine(Path.GetDirectoryName(typeof(GitTestSupport).Assembly.Location), "git_support_scripts/git_create_dummy_repo.rb");
             Process process = ProcessHelpers.Start(path, basePath + " " + repoName);
             Console.WriteLine(process.StandardOutput.ReadToEnd());
             Console.WriteLine("Error out:\n"+process.StandardError.ReadToEnd());
@@ -19,7 +23,11 @@ namespace Frog.Domain.Specs
 
         public static void CommitChange(string basePath, string repoName)
         {
-            var path = Path.Combine(Path.GetDirectoryName(typeof(GitTestSupport).Assembly.Location), "git_support_scripts\\git_commit_change.bat");
+			string path;
+			if (Underware.IsWindows)
+            	path = Path.Combine(Path.GetDirectoryName(typeof(GitTestSupport).Assembly.Location), "git_support_scripts\\git_commit_change.bat");
+			else
+            	path = Path.Combine(Path.GetDirectoryName(typeof(GitTestSupport).Assembly.Location), "git_support_scripts/git_commit_change.rb");
             var process = ProcessHelpers.Start(path, basePath + " " + repoName);
             Console.WriteLine(process.StandardOutput.ReadToEnd());
             process.WaitForExit();

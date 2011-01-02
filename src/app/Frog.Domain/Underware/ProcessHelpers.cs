@@ -12,5 +12,14 @@ namespace Frog.Domain.Underware
             psi.UseShellExecute = false;
             return Process.Start(psi);
         }
+        public static Process Start(string path, string arguments, string startupDir)
+        {
+            var psi = new ProcessStartInfo(path, arguments);
+            psi.RedirectStandardOutput = true;
+            psi.RedirectStandardError = true;
+            psi.UseShellExecute = false;
+			psi.WorkingDirectory = startupDir;
+            return Process.Start(psi);
+        }
     }
 }
