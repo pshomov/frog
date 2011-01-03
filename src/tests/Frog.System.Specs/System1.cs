@@ -8,8 +8,8 @@ namespace Frog.System.Specs
     [TestFixture]
     public class System1 : BDD
     {
-        private const string workingAreaPath = @"c:\working_area";
-        private const string repoArea = @"c:\test_repos";
+        private string workingAreaPath;
+        private string repoArea;
         Valve valve;
         GitDriver driver;
         PipelineOfTasks pipeline;
@@ -17,11 +17,15 @@ namespace Frog.System.Specs
 
         public override void Given()
         {
-            TearDown();
+			workingAreaPath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+			repoArea = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
             Directory.CreateDirectory(repoArea);
             Directory.CreateDirectory(workingAreaPath);
             driver = new GitDriver(repoArea, "test", "http://github.com/pshomov/xray.git");
-            pipeline = new PipelineOfTasks(new ExecTask(@"cmd.exe", @"/c %SystemRoot%\Microsoft.NET\Framework\v3.5\msbuild.exe xray.sln"));
+			if (Underware.IsWindows)
+            	pipeline = new PipelineOfTasks(new ExecTask(@"cmd.exe", @"/c %SystemRoot%\Microsoft.NET\Framework\v3.5\msbuild.exe xray.sln"));
+			else
+            	pipeline = new PipelineOfTasks(new ExecTask(@"xbuild", @"xray.sln"));
             area = new SubfolderWorkingArea(workingAreaPath);
             valve = new Valve(driver, pipeline, area);
         }
