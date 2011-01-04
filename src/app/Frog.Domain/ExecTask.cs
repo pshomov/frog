@@ -40,8 +40,16 @@ namespace Frog.Domain.Specs
         public Status ExecStatus { get {return IsExecuted && ExitCode == 0 ? Status.Success : Status.Error;} }
     }
 
+    public interface TaskReporter
+    {
+        void TaskStarted(int pid);
+    }
+
+
     public class ExecTask
     {
+        readonly TaskReporter taskReporter;
+
         public enum ExecutionStatus
         {
             Success,
@@ -57,12 +65,18 @@ namespace Frog.Domain.Specs
             _arguments = arguments;
         }
 
+        public ExecTask(string app, string arguments, TaskReporter taskReporter) : this(app, arguments)
+        {
+            this.taskReporter = taskReporter;
+        }
+
         public virtual ExecTaskResult Perform(SourceDrop sourceDrop)
         {
             Process process;
             try
             {
                 process = ProcessHelpers.Start(_app, _arguments, sourceDrop.SourceDropLocation);
+                if (taskReporter != null) taskReporter.TaskStarted(process.Id);
 				Console.WriteLine(process.StandardOutput.ReadToEnd());
 				Console.WriteLine("Error: " + process.StandardError.ReadToEnd());
                 process.WaitForExit(30000);
