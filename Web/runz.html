@@ -2,18 +2,30 @@
         "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-    <title></title>
+    <title>... But does it Runz?</title>
+    <link media="screen" type="text/css" rel="stylesheet" href="reset.css" />
     <style type="text/css">
         body {
-            background-color:#2E2828;
+            background-color:#101315;
+            font-family: 'Helvetica Neue', Helvetica, Arial, Verdana, sans-serif;
+            color: white;
         }
-        .header {
-            color: #D40D0D;
-            font-family: "Trebuchet MS", Helvetica, sans-serif;
+        strong {
+            text-decoration:underline;
         }
-        #whatisthis {
-            font-size: 28pt;
-            color: #D40D0D;
+        h1 {
+            font-size: 72px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+        h3 {
+            font-size: 48px;
+            margin-top: 0px;
+        }
+        p {
+            font-size: 35px;
+            letter-spacing: -0.5px;
+            line-height: 1.8;            
         }
         #betasignup {
                 
@@ -21,20 +33,20 @@
     </style>
 </head>
 <body>
-<table width="900px" border="1" align="center">
+<table width="960px" align="center">
     <tr>
         <td>
             <div align="right" class="header">
-            <h1>Runz</h1><br>
+            <h1 style="margin-top: 40px">Runz</h1><br>
             <h3>Does it Runz?</h3>
             </div>
         </td>
     </tr>
     <tr>
         <td>
-            <div id="whatisthis" style="text-align:justify;">
-            Runz is a continuous integration system that you <strong>don't have</strong> to setup and run. All you have to do is give us the URL to your source code repository and the commands that you would like to execute every time someone changes the code.
-            </div>
+            <p id="whatisthis" style="text-align:justify;">
+            Runz is a continuous integration system that you <strong>don't have</strong> to setup and run. All you have to do is give us the URL to your source code repository and the commands that you would like to execute every time someone changes the code*.
+            </p>
         </td>
     </tr>
     <tr>
