@@ -31,6 +31,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="NHamcrest, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31c3ea0b6fcf8c4a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\libs\NHamcrest\NHamcrest.dll</HintPath>
+    </Reference>
+    <Reference Include="NSubstitute, Version=1.0.0.0, Culture=neutral, PublicKeyToken=92dd2e9066daa5ca, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\libs\NSubstitute\NSubstitute.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework, Version=2.5.6.10205, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\libs\NUnit\nunit.framework.dll</HintPath>
@@ -39,20 +47,14 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="Machine.Specifications, Version=0.3.0.0, Culture=neutral, PublicKeyToken=5c474de7a495cff1">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\libs\mspec\Machine.Specifications.dll</HintPath>
-    </Reference>
-    <Reference Include="NHamcrest, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31c3ea0b6fcf8c4a">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\libs\NHamcrest\NHamcrest.dll</HintPath>
-    </Reference>
-    <Reference Include="xray, Version=1.0.4002.108, Culture=neutral, PublicKeyToken=null">
+    <Reference Include="xray, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\libs\Xray\xray.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FleSpecs1.cs" />
+    <Compile Include="System2.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="System1.cs" />
   </ItemGroup>
