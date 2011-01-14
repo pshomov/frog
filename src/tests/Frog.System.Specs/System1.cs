@@ -41,14 +41,13 @@ namespace Frog.System.Specs
             Assert.That(true);
         }
 
-        [TearDown]
-        public void TearDown()
+        public override void Cleanup()
         {
             if (Directory.Exists(workingAreaPath)) {ClearAttributes(workingAreaPath); Directory.Delete(workingAreaPath, true);}
             if (Directory.Exists(repoArea)) {ClearAttributes(repoArea); Directory.Delete(repoArea, true);}
         }
 
-        public static void ClearAttributes(string currentDir)
+        static void ClearAttributes(string currentDir)
         {
             if (Directory.Exists(currentDir))
             {
