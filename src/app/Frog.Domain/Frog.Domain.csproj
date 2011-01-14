@@ -53,5 +53,11 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SimpleCQRS\SimpleCQRS.csproj">
+      <Project>{9FAA6168-F131-420F-81C1-2228FD151BC7}</Project>
+      <Name>SimpleCQRS</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
