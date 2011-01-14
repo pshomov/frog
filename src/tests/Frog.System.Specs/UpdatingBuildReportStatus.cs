@@ -1,12 +1,17 @@
+using System;
 using System.IO;
+using System.Threading;
 using Frog.Domain;
 using Frog.Domain.Specs;
 using NUnit.Framework;
+using SimpleCQRS;
+using xray;
+using It = NHamcrest.Core;
 
 namespace Frog.System.Specs
 {
     [TestFixture]
-    public class System1 : BDD
+    public class UpdatingBuildReportStatus : BDD
     {
         private string workingAreaPath;
         private string repoArea;
@@ -14,31 +19,44 @@ namespace Frog.System.Specs
         GitDriver driver;
         PipelineOfTasks pipeline;
         SubfolderWorkingArea area;
+        BuildStatus report;
 
         public override void Given()
         {
+            var bus = new FakeBus();
+            report = new BuildStatus();
+            var statusView = new PipelineStatusView(report);
+            bus.RegisterHandler<BuildStarted>(statusView.Handle);
+            bus.RegisterHandler<BuildEnded>(statusView.Handle);
+
 			workingAreaPath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
 			repoArea = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
             Directory.CreateDirectory(repoArea);
             Directory.CreateDirectory(workingAreaPath);
             driver = new GitDriver(repoArea, "test", "http://github.com/pshomov/xray.git");
 			if (Underware.IsWindows)
-            	pipeline = new PipelineOfTasks(new ExecTask(@"cmd.exe", @"/c %SystemRoot%\Microsoft.NET\Framework\v3.5\msbuild.exe xray.sln"));
+            	pipeline = new PipelineOfTasks(bus, new ExecTask(@"cmd.exe", @"/c %SystemRoot%\Microsoft.NET\Framework\v3.5\msbuild.exe xray.sln"));
 			else
-            	pipeline = new PipelineOfTasks(new ExecTask(@"xbuild", @"xray.sln"));
+            	pipeline = new PipelineOfTasks(bus, new ExecTask(@"xbuild", @"xray.sln"));
             area = new SubfolderWorkingArea(workingAreaPath);
             valve = new Valve(driver, pipeline, area);
         }
 
         public override void When()
         {
-            valve.Check();
+            ThreadPool.QueueUserWorkItem(state => valve.Check());
         }
 
         [Test]
-        public void should_checkout_and_build_project()
+        public void should_receive_build_started_event()
         {
-            Assert.That(true);
+            var prober = new PollingProber(10000, 100);
+            Assert.True(prober.check(Take.Snapshot(() => report.Current).
+                Has(x => x, It.Is.EqualTo(BuildStatus.Status.Started))
+                ));
+            Assert.True(prober.check(Take.Snapshot(() => report.Current).
+                Has(x => x, It.Is.EqualTo(BuildStatus.Status.Complete))
+                ));
         }
 
         public override void Cleanup()
@@ -62,5 +80,31 @@ namespace Frog.System.Specs
                     File.SetAttributes(file, FileAttributes.Normal);
             }
         }
+    }
+
+    public class PipelineStatusView : Handles<BuildStarted>, Handles<BuildEnded>
+    {
+        readonly BuildStatus report;
+
+        public PipelineStatusView(BuildStatus report)
+        {
+            this.report = report;
+        }
+
+        public void Handle(BuildStarted message)
+        {
+            report.Current = BuildStatus.Status.Started;
+        }
+
+        public void Handle(BuildEnded message)
+        {
+            report.Current = BuildStatus.Status.Complete;
+        }
+    }
+
+    public class BuildStatus
+    {
+        public enum Status {Started, NotStarted, Complete}
+        public Status Current { get; set; }
     }
 }

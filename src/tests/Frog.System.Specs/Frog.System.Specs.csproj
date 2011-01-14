@@ -53,10 +53,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FleSpecs1.cs" />
-    <Compile Include="System2.cs" />
+    <Compile Include="UpdatingBuildReportStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="System1.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\app\Frog.Domain\Frog.Domain.csproj">
