@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frog.Specs.Support", "src\t
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleCQRS", "src\app\SimpleCQRS\SimpleCQRS.csproj", "{9FAA6168-F131-420F-81C1-2228FD151BC7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frog.UI.Web", "src\app\Frog.UI.Web\Frog.UI.Web.csproj", "{D018DD2D-AB25-49D0-B7BE-484711AE60CA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -71,6 +73,16 @@ Global
 		{9FAA6168-F131-420F-81C1-2228FD151BC7}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{9FAA6168-F131-420F-81C1-2228FD151BC7}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{9FAA6168-F131-420F-81C1-2228FD151BC7}.Release|x86.ActiveCfg = Release|Any CPU
+		{D018DD2D-AB25-49D0-B7BE-484711AE60CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D018DD2D-AB25-49D0-B7BE-484711AE60CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D018DD2D-AB25-49D0-B7BE-484711AE60CA}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{D018DD2D-AB25-49D0-B7BE-484711AE60CA}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{D018DD2D-AB25-49D0-B7BE-484711AE60CA}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D018DD2D-AB25-49D0-B7BE-484711AE60CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D018DD2D-AB25-49D0-B7BE-484711AE60CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D018DD2D-AB25-49D0-B7BE-484711AE60CA}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{D018DD2D-AB25-49D0-B7BE-484711AE60CA}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{D018DD2D-AB25-49D0-B7BE-484711AE60CA}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
