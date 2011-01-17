@@ -7,7 +7,13 @@ namespace Frog.UI.Web.Controllers
     {
         public ActionResult Index()
         {
-            return Json(new {name = "Petar"}, JsonRequestBehavior.AllowGet);
+            return Json(new {status = ServiceLocator.Report.Current}, JsonRequestBehavior.AllowGet);
+        }
+
+        [AcceptVerbs(HttpVerbs.Post)]
+        public void Check()
+        {
+            ServiceLocator.Valve.Check();
         }
     }
 }
