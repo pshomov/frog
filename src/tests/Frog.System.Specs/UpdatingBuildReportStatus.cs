@@ -61,8 +61,8 @@ namespace Frog.System.Specs
 
         public override void Cleanup()
         {
-            if (Directory.Exists(workingAreaPath)) {ClearAttributes(workingAreaPath); Directory.Delete(workingAreaPath, true);}
-            if (Directory.Exists(repoArea)) {ClearAttributes(repoArea); Directory.Delete(repoArea, true);}
+//            if (Directory.Exists(workingAreaPath)) {ClearAttributes(workingAreaPath); Directory.Delete(workingAreaPath, true);}
+//            if (Directory.Exists(repoArea)) {ClearAttributes(repoArea); Directory.Delete(repoArea, true);}
         }
 
         static void ClearAttributes(string currentDir)
@@ -75,7 +75,7 @@ namespace Frog.System.Specs
                     ClearAttributes(dir);
                     File.SetAttributes(dir,FileAttributes.Directory);
                 }
-                string[] files = files = Directory.GetFiles(currentDir);
+                string[] files = Directory.GetFiles(currentDir);
                 foreach (string file in files)
                     File.SetAttributes(file, FileAttributes.Normal);
             }
@@ -94,11 +94,13 @@ namespace Frog.System.Specs
         public void Handle(BuildStarted message)
         {
             report.Current = BuildStatus.Status.Started;
+			Console.WriteLine("---- started");
         }
 
         public void Handle(BuildEnded message)
         {
             report.Current = BuildStatus.Status.Complete;
+			Console.WriteLine("---- completed");
         }
     }
 
