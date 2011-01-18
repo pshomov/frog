@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using Frog.Domain.Underware;
 
 namespace Frog.Domain
@@ -51,9 +52,14 @@ namespace Frog.Domain
             }
         }
 
-        string GitScriptsLocation
+        static bool IsWebApp()
         {
-            get { return Path.Combine(Path.GetDirectoryName(GetType().Assembly.Location), "git_scripts"); }
+            return AppDomain.CurrentDomain.GetAssemblies().Any(assembly => assembly.FullName == "System.Web.Mvc");
+        }
+
+        static string GitScriptsLocation
+        {
+            get { return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, (IsWebApp() ? "bin\\" : "") + "git_scripts"); }
         }
 
         public SourceDrop GetLatestSourceDrop(string sourceDropLocation)

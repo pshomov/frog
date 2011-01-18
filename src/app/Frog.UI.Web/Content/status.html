@@ -1,0 +1,36 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+    <title>Check status</title>
+    <script type="text/javascript" src="../Scripts/jquery-1.4.1.js"></script>
+    <script type="text/javascript" language="javascript">
+        $(
+            function() {
+                setInterval("update_status()", 30000);
+                update_status();
+            }
+        );
+
+        function update_status() {
+            $.get("/status/index", function data(msg) {
+                switch (msg.status) {
+                    case 0: set_status("started", "yellow");
+                        break;
+                    case 1: set_status("Not started", "gray");
+                        break;
+                    case 2: set_status("Complete", "green");
+                        break;
+                    default:
+                        set_status("Unknown build status", "cyan");
+                }
+            });
+        }
+        function set_status(msg, color) {
+            $("#status").text(msg).attr("style", "color : " + color + ";");
+        } 
+    </script>
+    </head>
+    <body>
+        <div id="status"></div>
+    </body>
+</html>

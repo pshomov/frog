@@ -10,7 +10,7 @@ namespace Frog.UI.Web.Controllers
             return Json(new {status = ServiceLocator.Report.Current}, JsonRequestBehavior.AllowGet);
         }
 
-        [AcceptVerbs(HttpVerbs.Post)]
+        [AcceptVerbs(HttpVerbs.Get)]
         public void Check()
         {
             ServiceLocator.Valve.Check();
