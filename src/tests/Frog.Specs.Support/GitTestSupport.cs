@@ -10,7 +10,8 @@ namespace Frog.Domain.Specs
     {
         static bool IsWebApp()
         {
-            return AppDomain.CurrentDomain.GetAssemblies().Any(assembly => assembly.FullName == "System.Web.Mvc");
+            return AppDomain.CurrentDomain.GetAssemblies().Any(
+                assembly => assembly.FullName.StartsWith("System.Web.Mvc,"));
         }
 
         static string GitScriptsLocation
