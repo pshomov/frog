@@ -1,7 +1,6 @@
 using System;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using Frog.Support;
 
 namespace Frog.Domain
@@ -27,7 +26,11 @@ namespace Frog.Domain
 
         static string GitScriptsLocation
         {
-            get { return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, (ProcessHelpers.IsWebApp() ? "bin\\" : "") + "git_scripts"); }
+            get
+            {
+                return Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                                    (ProcessHelpers.IsWebApp() ? "bin\\" : "") + "git_scripts");
+            }
         }
 
         public bool CheckForUpdates()
