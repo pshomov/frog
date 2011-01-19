@@ -7,15 +7,9 @@ namespace Frog.Domain.Specs
 {
     public class GitTestSupport
     {
-        static bool IsWebApp()
-        {
-            return AppDomain.CurrentDomain.GetAssemblies().Any(
-                assembly => assembly.FullName.StartsWith("System.Web.Mvc,"));
-        }
-
         static string GitScriptsLocation
         {
-            get { return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, (IsWebApp() ? "bin\\" : "") + "git_support_scripts"); }
+            get { return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, (ProcessHelpers.IsWebApp() ? "bin\\" : "") + "git_support_scripts"); }
         }
 
         public static string CreateDummyRepo(string basePath, string repoName)

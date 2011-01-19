@@ -1,9 +1,17 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
+using System.Linq;
 
 namespace Frog.Support
 {
-    public class ProcessHelpers
+    public static class ProcessHelpers
     {
+        public static bool IsWebApp()
+        {
+            return AppDomain.CurrentDomain.GetAssemblies().Any(
+                assembly => assembly.FullName.StartsWith("System.Web.Mvc,"));
+        }
+
         public static Process Start(string path, string arguments)
         {
             var psi = new ProcessStartInfo(path, arguments);

@@ -27,10 +27,8 @@ namespace Frog.Domain
 
         static string GitScriptsLocation
         {
-            get { return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, (IsWebApp() ? "bin\\" : "") + "git_scripts"); }
+            get { return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, (ProcessHelpers.IsWebApp() ? "bin\\" : "") + "git_scripts"); }
         }
-
-        #region SourceRepoDriver Members
 
         public bool CheckForUpdates()
         {
@@ -59,8 +57,6 @@ namespace Frog.Domain
             return new SourceDrop(sourceDropLocation);
         }
 
-        #endregion
-
         void InitialCheckout()
         {
             string scriptPath = Path.Combine(GitScriptsLocation, "git_initial_fetch.rb");
@@ -75,12 +71,6 @@ namespace Frog.Domain
             {
                 throw new InvalidProgramException("script failed, see log for details");
             }
-        }
-
-        static bool IsWebApp()
-        {
-            return AppDomain.CurrentDomain.GetAssemblies().Any(
-                assembly => assembly.FullName.StartsWith("System.Web.Mvc,"));
         }
 
         public static void CopyFolder(DirectoryInfo source, DirectoryInfo target)
