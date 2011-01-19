@@ -65,6 +65,10 @@
       <Project>{8A446F8C-6B38-4153-A996-CC162DACF795}</Project>
       <Name>Frog.Domain</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\app\Frog.Support\Frog.Support.csproj">
+      <Project>{893935D3-935A-418F-A656-5D6A203D87ED}</Project>
+      <Name>Frog.Support</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\app\SimpleCQRS\SimpleCQRS.csproj">
       <Project>{9FAA6168-F131-420F-81C1-2228FD151BC7}</Project>
       <Name>SimpleCQRS</Name>

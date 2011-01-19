@@ -3,19 +3,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{B4CE2703-09EF-4BF5-B933-EF8BB4E68389}</ProjectGuid>
+    <ProjectGuid>{893935D3-935A-418F-A656-5D6A203D87ED}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Frog.Specs.Support</RootNamespace>
-    <AssemblyName>Frog.Specs.Support</AssemblyName>
+    <RootNamespace>Frog.Support</RootNamespace>
+    <AssemblyName>Frog.Support</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <FileUpgradeFlags>
-    </FileUpgradeFlags>
-    <OldToolsVersion>3.5</OldToolsVersion>
-    <UpgradeBackupLocation />
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -36,39 +33,14 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="nunit.framework, Version=2.5.6.10205, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\libs\NUnit\nunit.framework.dll</HintPath>
-    </Reference>
+    <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BDD.cs" />
-    <Compile Include="GitTestSupport.cs" />
+    <Compile Include="Process.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="git_support_scripts\git_commit_change.rb">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="git_support_scripts\git_create_dummy_repo.rb">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\app\Frog.Domain\Frog.Domain.csproj">
-      <Project>{8A446F8C-6B38-4153-A996-CC162DACF795}</Project>
-      <Name>Frog.Domain</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\app\Frog.Support\Frog.Support.csproj">
-      <Project>{893935D3-935A-418F-A656-5D6A203D87ED}</Project>
-      <Name>Frog.Support</Name>
-    </ProjectReference>
+    <Compile Include="Underware.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

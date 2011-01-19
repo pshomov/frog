@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleCQRS", "src\app\Simpl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frog.UI.Web", "src\app\Frog.UI.Web\Frog.UI.Web.csproj", "{D018DD2D-AB25-49D0-B7BE-484711AE60CA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frog.Support", "src\app\Frog.Support\Frog.Support.csproj", "{893935D3-935A-418F-A656-5D6A203D87ED}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -83,6 +85,16 @@ Global
 		{D018DD2D-AB25-49D0-B7BE-484711AE60CA}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{D018DD2D-AB25-49D0-B7BE-484711AE60CA}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{D018DD2D-AB25-49D0-B7BE-484711AE60CA}.Release|x86.ActiveCfg = Release|Any CPU
+		{893935D3-935A-418F-A656-5D6A203D87ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{893935D3-935A-418F-A656-5D6A203D87ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{893935D3-935A-418F-A656-5D6A203D87ED}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{893935D3-935A-418F-A656-5D6A203D87ED}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{893935D3-935A-418F-A656-5D6A203D87ED}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{893935D3-935A-418F-A656-5D6A203D87ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{893935D3-935A-418F-A656-5D6A203D87ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{893935D3-935A-418F-A656-5D6A203D87ED}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{893935D3-935A-418F-A656-5D6A203D87ED}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{893935D3-935A-418F-A656-5D6A203D87ED}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

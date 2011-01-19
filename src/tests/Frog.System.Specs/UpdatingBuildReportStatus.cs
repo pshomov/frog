@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading;
 using Frog.Domain;
 using Frog.Domain.Specs;
+using Frog.Support;
 using NUnit.Framework;
 using SimpleCQRS;
 using xray;

@@ -1,7 +1,7 @@
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
-using Frog.Domain.Underware;
+using Frog.Support;
 
 namespace Frog.Domain.Specs
 {

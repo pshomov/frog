@@ -1,3 +1,4 @@
+using Frog.Support;
 using Machine.Specifications;
 
 namespace Frog.Domain.Specs

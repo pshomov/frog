@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Frog.Domain.Specs
+namespace Frog.Support
 {
     public class Underware
     {
