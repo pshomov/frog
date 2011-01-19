@@ -29,11 +29,15 @@ namespace Frog.System.Specs
             bus.RegisterHandler<BuildStarted>(statusView.Handle);
             bus.RegisterHandler<BuildEnded>(statusView.Handle);
 
-			workingAreaPath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+            var original_repo = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+            Directory.CreateDirectory(original_repo);
+            string dummyRepo = GitTestSupport.CreateDummyRepo(original_repo, "test_repo");
+
+            workingAreaPath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
 			repoArea = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
             Directory.CreateDirectory(repoArea);
             Directory.CreateDirectory(workingAreaPath);
-            driver = new GitDriver(repoArea, "test", "http://github.com/pshomov/xray.git");
+            driver = new GitDriver(repoArea, "test", dummyRepo);
 			if (Underware.IsWindows)
             	pipeline = new PipelineOfTasks(bus, new ExecTask(@"cmd.exe", @"/c %SystemRoot%\Microsoft.NET\Framework\v3.5\msbuild.exe xray.sln"));
 			else
@@ -50,7 +54,7 @@ namespace Frog.System.Specs
         [Test]
         public void should_receive_build_started_event()
         {
-            var prober = new PollingProber(10000, 100);
+            var prober = new PollingProber(3000, 100);
             Assert.True(prober.check(Take.Snapshot(() => report.Current).
                 Has(x => x, It.Is.EqualTo(BuildStatus.Status.Started))
                 ));
@@ -61,8 +65,8 @@ namespace Frog.System.Specs
 
         public override void Cleanup()
         {
-//            if (Directory.Exists(workingAreaPath)) {ClearAttributes(workingAreaPath); Directory.Delete(workingAreaPath, true);}
-//            if (Directory.Exists(repoArea)) {ClearAttributes(repoArea); Directory.Delete(repoArea, true);}
+            if (Directory.Exists(workingAreaPath)) {ClearAttributes(workingAreaPath); Directory.Delete(workingAreaPath, true);}
+            if (Directory.Exists(repoArea)) {ClearAttributes(repoArea); Directory.Delete(repoArea, true);}
         }
 
         static void ClearAttributes(string currentDir)
@@ -94,13 +98,11 @@ namespace Frog.System.Specs
         public void Handle(BuildStarted message)
         {
             report.Current = BuildStatus.Status.Started;
-			Console.WriteLine("---- started");
         }
 
         public void Handle(BuildEnded message)
         {
             report.Current = BuildStatus.Status.Complete;
-			Console.WriteLine("---- completed");
         }
     }
 

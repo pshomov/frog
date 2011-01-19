@@ -66,7 +66,10 @@ namespace Frog.Domain
             string scriptPath = Path.Combine(GitScriptsLocation, "git_initial_fetch.rb");
             Process process = ProcessHelpers.Start("ruby",
                                                    scriptPath + " " + _codeBase + " " + _repoFolder + " " + _repoUrl);
-            Console.WriteLine(process.StandardOutput.ReadToEnd());
+            string stdout_buffer = process.StandardOutput.ReadToEnd();
+            Console.WriteLine(stdout_buffer);
+            string stderr_buffer = process.StandardError.ReadToEnd();
+            Console.WriteLine(stderr_buffer);
             process.WaitForExit();
             if (process.ExitCode != 0)
             {
