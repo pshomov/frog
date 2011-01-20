@@ -72,24 +72,23 @@ namespace Frog.Domain.Specs
 
         public virtual ExecTaskResult Perform(SourceDrop sourceDrop)
         {
-            Process process;
+            ProcessWrapper process;
             try
             {
-                process = ProcessHelpers.Start(_app, _arguments, sourceDrop.SourceDropLocation);
-                if (taskReporter != null) taskReporter.TaskStarted(process.Id);
-				Console.WriteLine(process.StandardOutput.ReadToEnd());
-				Console.WriteLine("Error: " + process.StandardError.ReadToEnd());
-                process.WaitForExit(30000);
-                if (process.HasExited && process.ExitCode == 1) throw new Win32Exception();
+                process = new ProcessWrapper(_app, _arguments, sourceDrop.SourceDropLocation);
+                process.Execute();
+                if (taskReporter != null) taskReporter.TaskStarted(process.ProcessInfo.Id);
+                var exitcode = process.WaitForProcess(30000);
+                if (exitcode == 1) throw new Win32Exception();
             }
             catch (Win32Exception)
             {
                 return new ExecTaskResult(ExecutionStatus.Failure, -1);
             }
 
-            if (process.HasExited)
+            if (process.ProcessInfo.HasExited)
             {
-                return new ExecTaskResult(ExecutionStatus.Success, process.ExitCode);
+                return new ExecTaskResult(ExecutionStatus.Success, process.ProcessInfo.ExitCode);
             }
             return new ExecTaskResult(ExecutionStatus.Failure, -1);
         }

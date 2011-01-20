@@ -8,10 +8,20 @@ namespace Frog.Support
         public event Action<string> OnErrorOutput = s => Console.WriteLine(String.Format("E>{0}", s));
         public event Action<String> OnStdOutput = s => Console.WriteLine(String.Format("S>{0}", s));
 
-        public ProcessWrapper(string cmdExe, string arguments)
+        public ProcessWrapper(string cmdExe, string arguments) : this(cmdExe, arguments, System.IO.Directory.GetCurrentDirectory())
+        {
+        }
+
+        public ProcessWrapper(string cmdExe, string arguments, string workingDirectory)
         {
             this.cmdExe = cmdExe;
             this.arguments = arguments;
+            this.workingDirectory = workingDirectory;
+        }
+
+        public Process ProcessInfo  
+        {
+            get { return process; }
         }
 
         public void Execute()
@@ -20,7 +30,8 @@ namespace Frog.Support
             {
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
-                UseShellExecute = false
+                UseShellExecute = false,
+                WorkingDirectory = workingDirectory
             };
 
             process = Process.Start(psi);
@@ -38,7 +49,17 @@ namespace Frog.Support
         }
 
         readonly string cmdExe;
+
         readonly string arguments;
+
+        readonly string workingDirectory;
+
         Process process;
+
+        public int WaitForProcess(int timeoutMilliseconds)
+        {
+            process.WaitForExit(timeoutMilliseconds);
+            return process.ExitCode;
+        }
     }
 }
