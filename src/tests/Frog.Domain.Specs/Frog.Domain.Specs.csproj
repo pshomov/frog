@@ -56,10 +56,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ProcessHandlerSpecs.cs" />
     <Compile Include="Git\GitRepositoryDriverCheckBase.cs" />
     <Compile Include="Git\GitRepositoryDriverGetSourceDrop.cs" />
     <Compile Include="Pipeline\PipelineFailsNotificationsSpecs.cs" />
+    <Compile Include="ProcessHandlerSpecs.cs" />
     <Compile Include="TaskCurrentDirectory.cs" />
     <Compile Include="TaskReporting.cs" />
     <Compile Include="Valve\ValveWhenSourceUpdatesExists.cs" />
