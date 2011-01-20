@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Frog.Support
 {
@@ -29,6 +30,12 @@ namespace Frog.Support
                 var win = As.ListOf(PlatformID.Win32NT, PlatformID.Win32S, PlatformID.Win32Windows);
                 return win.Contains(Environment.OSVersion.Platform); 
             }
+        }
+
+        public static bool IsWebApp()
+        {
+            return AppDomain.CurrentDomain.GetAssemblies().Any(
+                assembly => assembly.FullName.StartsWith("System.Web.Mvc,"));
         }
     }
 }

@@ -29,7 +29,7 @@ namespace Frog.Domain
             get
             {
                 return Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-                                    (ProcessHelpers.IsWebApp() ? "bin\\" : "") + "git_scripts");
+                                    (Underware.IsWebApp() ? "bin\\" : "") + "git_scripts");
             }
         }
 

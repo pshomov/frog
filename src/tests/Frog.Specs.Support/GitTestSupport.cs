@@ -9,7 +9,7 @@ namespace Frog.Domain.Specs
     {
         static string GitScriptsLocation
         {
-            get { return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, (ProcessHelpers.IsWebApp() ? "bin\\" : "") + "git_support_scripts"); }
+            get { return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, (Underware.IsWebApp() ? "bin\\" : "") + "git_support_scripts"); }
         }
 
         public static string CreateDummyRepo(string basePath, string repoName)
