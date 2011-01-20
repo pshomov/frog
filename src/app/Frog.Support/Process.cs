@@ -12,22 +12,16 @@ namespace Frog.Support
                 assembly => assembly.FullName.StartsWith("System.Web.Mvc,"));
         }
 
-        public static Process Start(string path, string arguments)
-        {
-            var psi = new ProcessStartInfo(path, arguments);
-            psi.RedirectStandardOutput = true;
-            psi.RedirectStandardError = true;
-            psi.UseShellExecute = false;
-            return Process.Start(psi);
-        }
 
         public static Process Start(string path, string arguments, string startupDir)
         {
-            var psi = new ProcessStartInfo(path, arguments);
-            psi.RedirectStandardOutput = true;
-            psi.RedirectStandardError = true;
-            psi.UseShellExecute = false;
-            psi.WorkingDirectory = startupDir;
+            var psi = new ProcessStartInfo(path, arguments)
+                          {
+                              RedirectStandardOutput = true,
+                              RedirectStandardError = true,
+                              UseShellExecute = false,
+                              WorkingDirectory = startupDir
+                          };
             return Process.Start(psi);
         }
     }

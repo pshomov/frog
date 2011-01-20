@@ -32,5 +32,14 @@ namespace Frog.Domain.Specs
             pw.WaitForProcess();
             Assert.That(err.ToString(), Is.Not.Empty);
         }
+
+        [Test]
+        public void should_run_when_no_std_error_output_is_captured()
+        {
+            var err = new StringBuilder();
+            var pw = new ProcessWrapper("ruby", "-e asdfasdfddd@!#!11fasfasdf.asdfasdf");
+            pw.Execute();
+            pw.WaitForProcess();
+        }
     }
 }

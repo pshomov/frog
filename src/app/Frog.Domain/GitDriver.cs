@@ -38,14 +38,13 @@ namespace Frog.Domain
             if (Directory.Exists(Path.Combine(Path.Combine(_codeBase, _repoFolder), ".git")))
             {
                 string scriptPath = Path.Combine(GitScriptsLocation, "git_check_for_updates.rb");
-                Process process = ProcessHelpers.Start("ruby",
+                var process = new ProcessWrapper("ruby",
                                                        scriptPath + " " + _codeBase + " " + _repoFolder + " " + _repoUrl);
-                Console.WriteLine(process.StandardOutput.ReadToEnd());
-                Console.WriteLine("Errors: " + process.StandardError.ReadToEnd());
-                process.WaitForExit();
-                if (process.ExitCode != 0 && process.ExitCode != 201)
+                process.Execute();
+                var exitcode = process.WaitForProcess();
+                if (exitcode != 0 && exitcode != 201)
                     throw new InvalidProgramException("script failed, see log for details");
-                return process.ExitCode == 201;
+                return exitcode == 201;
             }
             else
             {
@@ -63,14 +62,11 @@ namespace Frog.Domain
         void InitialCheckout()
         {
             string scriptPath = Path.Combine(GitScriptsLocation, "git_initial_fetch.rb");
-            Process process = ProcessHelpers.Start("ruby",
+            var process = new ProcessWrapper("ruby",
                                                    scriptPath + " " + _codeBase + " " + _repoFolder + " " + _repoUrl);
-            string stdout_buffer = process.StandardOutput.ReadToEnd();
-            Console.WriteLine(stdout_buffer);
-            string stderr_buffer = process.StandardError.ReadToEnd();
-            Console.WriteLine(stderr_buffer);
-            process.WaitForExit();
-            if (process.ExitCode != 0)
+            process.Execute();
+            var exitcode = process.WaitForProcess();
+            if (exitcode != 0)
             {
                 throw new InvalidProgramException("script failed, see log for details");
             }

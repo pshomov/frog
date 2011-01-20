@@ -5,11 +5,9 @@ namespace Frog.Support
 {
     public class ProcessWrapper
     {
-        public delegate void OutputCallback(string output);
-        readonly string cmdExe;
-        readonly string arguments;
-        Process process;
-        public event OutputCallback OnErrorOutput; 
+        public event Action<string> OnErrorOutput = s => Console.WriteLine(String.Format("E>{0}", s));
+        public event Action<String> OnStdOutput = s => Console.WriteLine(String.Format("S>{0}", s));
+
         public ProcessWrapper(string cmdExe, string arguments)
         {
             this.cmdExe = cmdExe;
@@ -18,18 +16,29 @@ namespace Frog.Support
 
         public void Execute()
         {
-            process = ProcessHelpers.Start(cmdExe, arguments);
+            var psi = new ProcessStartInfo(cmdExe, arguments)
+            {
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                UseShellExecute = false
+            };
+
+            process = Process.Start(psi);
             process.ErrorDataReceived += (sender, args) => OnErrorOutput(args.Data);
             process.OutputDataReceived += (sender, args) => OnStdOutput(args.Data);
+
             process.BeginErrorReadLine();
             process.BeginOutputReadLine();
         }
 
-        public void WaitForProcess()
+        public int WaitForProcess()
         {
             process.WaitForExit();
+            return process.ExitCode;
         }
 
-        public event Action<String> OnStdOutput;
+        readonly string cmdExe;
+        readonly string arguments;
+        Process process;
     }
 }
