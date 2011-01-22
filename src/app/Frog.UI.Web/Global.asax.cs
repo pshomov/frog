@@ -45,12 +45,16 @@ namespace Frog.UI.Web
             var repoArea = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
             Directory.CreateDirectory(repoArea);
             Directory.CreateDirectory(workingAreaPath);
-            var driver = new GitDriver(repoArea, "test", "http://github.com/pshomov/xray.git");
+
+            string git_username = Environment.GetEnvironmentVariable("MY_GIT_USERNAME");
+            string git_password = Environment.GetEnvironmentVariable("MY_GIT_PASSWORD");
+
+            var driver = new GitDriver(repoArea, "test", String.Format("https://{0}:{1}@github.com/pshomov/frog.git", git_username, git_password));
             PipelineOfTasks pipeline;
             if (Underware.IsWindows)
-                pipeline = new PipelineOfTasks(bus, new ExecTask(@"cmd.exe", @"/c %SystemRoot%\Microsoft.NET\Framework\v3.5\msbuild.exe xray.sln"));
+                pipeline = new PipelineOfTasks(bus, new ExecTask(@"cmd.exe", @"/c %SystemRoot%\Microsoft.NET\Framework\v3.5\msbuild.exe Frog.Net.sln"));
             else
-                pipeline = new PipelineOfTasks(bus, new ExecTask(@"xbuild", @"xray.sln"));
+                pipeline = new PipelineOfTasks(bus, new ExecTask(@"xbuild", @"Frog.Net.sln"));
             var area = new SubfolderWorkingArea(workingAreaPath);
             ServiceLocator.Valve = new Valve(driver, pipeline, area);
         }
