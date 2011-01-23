@@ -46,6 +46,8 @@
     <Compile Include="Pipeline.cs" />
     <Compile Include="PipelineRepository.cs" />
     <Compile Include="SubfolderWorkingArea.cs" />
+    <Compile Include="TaskDetector.cs" />
+    <Compile Include="TaskFactory.cs" />
     <Compile Include="Valve.cs" />
   </ItemGroup>
   <ItemGroup>
