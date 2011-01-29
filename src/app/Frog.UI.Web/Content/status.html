@@ -12,7 +12,7 @@
         );
 
         function update_status() {
-            $.get("/status/index", function data(msg) {
+            $.get("../status/index", function data(msg) {
                 switch (msg.status) {
                     case 0: set_status("started", "yellow");
                         break;

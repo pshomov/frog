@@ -20,6 +20,8 @@ cp_r "../src/app/Frog.UI.Web", "../output/web"
 rm Dir.glob('../output/web/**/*.cs')
 rm Dir.glob('../output/web/**/*.csproj')
 rm Dir.glob('../output/web/**/*.pidb')
+rm Dir.glob('../output/web/**/*vsdoc.js')
+rm Dir.glob('../output/web/**/*.user')
 rm_r Dir.glob('../output/web/**/obj/*'), :force => true, :secure => true
 
 puts green "Build Runz!"
