@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frog.Domain", "src\app\Frog.Domain\Frog.Domain.csproj", "{8A446F8C-6B38-4153-A996-CC162DACF795}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frog.Domain.Specs", "src\tests\Frog.Domain.Specs\Frog.Domain.Specs.csproj", "{67C6B4A8-D6A7-46EB-B618-3F48A8478EE5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frog.Domain.Tests", "src\tests\Frog.Domain.Specs\Frog.Domain.Tests.csproj", "{67C6B4A8-D6A7-46EB-B618-3F48A8478EE5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frog.System.Specs", "src\tests\Frog.System.Specs\Frog.System.Specs.csproj", "{D7DC578F-0A08-4681-9486-ACC898785829}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frog.System.Tests", "src\tests\Frog.System.Specs\Frog.System.Tests.csproj", "{D7DC578F-0A08-4681-9486-ACC898785829}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frog.Specs.Support", "src\tests\Frog.Specs.Support\Frog.Specs.Support.csproj", "{B4CE2703-09EF-4BF5-B933-EF8BB4E68389}"
 EndProject
