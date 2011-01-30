@@ -78,7 +78,7 @@ namespace Frog.Domain.Specs
                 process = new ProcessWrapper(_app, _arguments, sourceDrop.SourceDropLocation);
                 process.Execute();
                 if (taskReporter != null) taskReporter.TaskStarted(process.ProcessInfo.Id);
-                var exitcode = process.WaitForProcess(30000);
+                var exitcode = process.WaitForProcess(60000);
                 if (exitcode == 1) throw new Win32Exception();
             }
             catch (Win32Exception)
