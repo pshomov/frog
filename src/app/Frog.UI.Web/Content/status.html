@@ -6,7 +6,7 @@
     <script type="text/javascript" language="javascript">
         $(
             function() {
-                setInterval("update_status()", 30000);
+                setInterval("update_status()", 5000);
                 update_status();
             }
         );
@@ -26,7 +26,8 @@
             });
         }
         function set_status(msg, color) {
-            $("#status").text(msg).attr("style", "color : " + color + ";");
+            $("#status").text(msg);
+            $("body").attr("style", "background : " + color + ";");
         } 
     </script>
     </head>
