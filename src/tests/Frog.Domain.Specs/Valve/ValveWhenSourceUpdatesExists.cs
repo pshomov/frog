@@ -1,4 +1,5 @@
 using System;
+using Frog.Domain.Specs.Valve;
 using NUnit.Framework;
 using Rhino.Mocks;
 
@@ -16,7 +17,7 @@ namespace Frog.Domain.Specs
             sourceDrop = new SourceDrop("");
             sourceRepoDriver.Expect(driver => driver.GetLatestSourceDrop("")).Return(sourceDrop);
             workingArea.Stub(area => area.AllocateWorkingArea()).Return("");
-            valve = new Valve(sourceRepoDriver, pipeline, workingArea);
+            valve = new Domain.Valve(sourceRepoDriver, pipeline, workingArea);
         }
 
         public override void When()

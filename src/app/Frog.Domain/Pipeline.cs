@@ -33,7 +33,9 @@ namespace Frog.Domain
     {
         public enum BuildStatus
         {
-            Fail
+            Fail,
+            Error,
+            Success
         }
         public readonly BuildStatus Status;
 
@@ -67,8 +69,10 @@ namespace Frog.Domain
         public void Process(SourceDrop sourceDrop)
         {
             eventPublisher.Publish(new BuildStarted());
-            _tasks.ToList().Find(task => task.Perform(sourceDrop).ExecStatus != ExecTaskResult.Status.Success);
-            eventPublisher.Publish(new BuildEnded(BuildEnded.BuildStatus.Fail));
+            if (_tasks.ToList().Exists(task => task.Perform(sourceDrop).ExecStatus != ExecTaskResult.Status.Success))
+                eventPublisher.Publish(new BuildEnded(BuildEnded.BuildStatus.Fail));
+            else 
+                eventPublisher.Publish(new BuildEnded(BuildEnded.BuildStatus.Success));
         }
     }
 }

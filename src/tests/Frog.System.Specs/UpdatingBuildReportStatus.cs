@@ -3,7 +3,6 @@ using System.IO;
 using System.Threading;
 using Frog.Domain;
 using Frog.Domain.Specs;
-using Frog.Support;
 using NUnit.Framework;
 using SimpleCQRS;
 using xray;
@@ -39,10 +38,7 @@ namespace Frog.System.Specs
             Directory.CreateDirectory(repoArea);
             Directory.CreateDirectory(workingAreaPath);
             driver = new GitDriver(repoArea, "test", dummyRepo);
-			if (Underware.IsWindows)
-            	pipeline = new PipelineOfTasks(bus, new ExecTask(@"cmd.exe", @"/c %SystemRoot%\Microsoft.NET\Framework\v3.5\msbuild.exe xray.sln"));
-			else
-            	pipeline = new PipelineOfTasks(bus, new ExecTask(@"xbuild", @"xray.sln"));
+            pipeline = new PipelineOfTasks(bus, new ExecTask(@"xbuild", @"xray.sln"));
             area = new SubfolderWorkingArea(workingAreaPath);
             valve = new Valve(driver, pipeline, area);
         }
@@ -53,7 +49,7 @@ namespace Frog.System.Specs
         }
 
         [Test]
-        public void should_receive_build_started_event()
+        public void should_receive_build_started_event_followed_by_build_complete()
         {
             var prober = new PollingProber(3000, 100);
             Assert.True(prober.check(Take.Snapshot(() => report.Current).
@@ -61,6 +57,16 @@ namespace Frog.System.Specs
                 ));
             Assert.True(prober.check(Take.Snapshot(() => report.Current).
                 Has(x => x, It.Is.EqualTo(BuildStatus.Status.Complete))
+                ));
+        }
+
+        [Test]
+        public void should_have_build_result_in_build_complete_event()
+        {
+            var prober = new PollingProber(3000, 100);
+            Assert.True(prober.check(Take.Snapshot(() => report).
+                Has(x => x.Current, It.Is.EqualTo(BuildStatus.Status.Complete)).
+                Has(x => x.Completion, It.Is.EqualTo(BuildStatus.TaskExit.Error))
                 ));
         }
 
@@ -104,12 +110,28 @@ namespace Frog.System.Specs
         public void Handle(BuildEnded message)
         {
             report.Current = BuildStatus.Status.Complete;
+            switch (message.Status)
+            {
+                case BuildEnded.BuildStatus.Fail:
+                    report.Completion = BuildStatus.TaskExit.Fail;
+                    break;
+                case BuildEnded.BuildStatus.Error:
+                    report.Completion = BuildStatus.TaskExit.Error;
+                    break;
+                case BuildEnded.BuildStatus.Success:
+                    report.Completion = BuildStatus.TaskExit.Success;
+                    break;
+                default:
+                    throw new ArgumentException("Build status argument not handled correctly, please report this error.");
+            }
         }
     }
 
     public class BuildStatus
     {
         public enum Status {Started, NotStarted, Complete}
+        public enum TaskExit {Dugh, Success, Error, Fail}
         public Status Current { get; set; }
+        public TaskExit Completion { get; set; }
     }
 }

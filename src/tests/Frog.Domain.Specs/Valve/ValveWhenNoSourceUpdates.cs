@@ -1,24 +1,21 @@
-using System;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Rhino.Mocks.Constraints;
-using Frog.Domain;
 
-namespace Frog.Domain.Specs
+namespace Frog.Domain.Specs.Valve
 {
     [TestFixture]
     public class ValveWhenNoSourceUpdates : BDD
     {
         SourceRepoDriver sourceRepoDriver;
-        Pipeline pipeline;
-        Valve valve;
+        Domain.Pipeline pipeline;
+        Domain.Valve valve;
 
         public override void Given()
         {
-            pipeline = MockRepository.GenerateMock<Pipeline>();
+            pipeline = MockRepository.GenerateMock<Domain.Pipeline>();
             sourceRepoDriver = MockRepository.GenerateMock<SourceRepoDriver>();
             sourceRepoDriver.Expect(driver => driver.CheckForUpdates()).Return(false);
-            valve = new Valve(sourceRepoDriver, pipeline, MockRepository.GenerateMock<WorkingArea>());
+            valve = new Domain.Valve(sourceRepoDriver, pipeline, MockRepository.GenerateMock<WorkingArea>());
         }
 
         public override void When()

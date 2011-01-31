@@ -1,7 +1,7 @@
 ﻿using Machine.Specifications;
 using Rhino.Mocks;
 
-namespace Frog.Domain.Specs
+namespace Frog.Domain.Specs.Pipeline
 {
     public class Pipeline_processes_sourceDrop : PipelineProcessSourceDropBase
     {
@@ -51,7 +51,7 @@ namespace Frog.Domain.Specs
 
     public class PipelineProcessSourceDropBase
     {
-        protected static Pipeline _pipeline;
+        protected static Domain.Pipeline _pipeline;
         protected static ExecTask _task1;
         protected static ExecTask _task2;
         protected static readonly SourceDrop SourceDrop = new SourceDrop("");

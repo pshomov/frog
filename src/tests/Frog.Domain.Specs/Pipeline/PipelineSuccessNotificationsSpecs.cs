@@ -1,13 +1,12 @@
 using NSubstitute;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SimpleCQRS;
 using Arg = NSubstitute.Arg;
 
-namespace Frog.Domain.Specs
+namespace Frog.Domain.Specs.Pipeline
 {
     [TestFixture]
-    public class PipelineFailsNotificationsSpecs : BDD
+    public class PipelineSuccessNotificationsSpecs : BDD
     {
         readonly ExecTask task1 = Substitute.For<ExecTask>("", "");
         readonly ExecTask task2 = Substitute.For<ExecTask>("", "");
@@ -17,7 +16,8 @@ namespace Frog.Domain.Specs
 
         public override void Given()
         {
-            task1.Perform(Arg.Any<SourceDrop>()).Returns(new ExecTaskResult(ExecTask.ExecutionStatus.Failure, -1));
+            task1.Perform(Arg.Any<SourceDrop>()).Returns(new ExecTaskResult(ExecTask.ExecutionStatus.Success, 0));
+            task2.Perform(Arg.Any<SourceDrop>()).Returns(new ExecTaskResult(ExecTask.ExecutionStatus.Success, 0));
             pipeline = new PipelineOfTasks(bus, task1, task2);
         }
 
@@ -34,15 +34,15 @@ namespace Frog.Domain.Specs
         }
 
         [Test]
-        public void should_not_start_second_task()
+        public void should_start_second_task_too()
         {
-            task2.DidNotReceive().Perform(Arg.Any<SourceDrop>());
+            task2.Received().Perform(Arg.Any<SourceDrop>());
         }
 
         [Test]
-        public void should_have_build_finished_message_with_failure_result()
+        public void should_send_pipeline_ended_message_with_status_success()
         {
-            bus.Received().Publish(Arg.Is<BuildEnded>(obj => obj.Status == BuildEnded.BuildStatus.Fail));
+            bus.Received().Publish(Arg.Is<BuildEnded>(obj => obj.Status == BuildEnded.BuildStatus.Success));
         }
 
     }
