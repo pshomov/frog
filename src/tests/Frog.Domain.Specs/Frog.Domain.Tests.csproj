@@ -58,6 +58,7 @@
   <ItemGroup>
     <Compile Include="Git\GitRepositoryDriverCheckBase.cs" />
     <Compile Include="Git\GitRepositoryDriverGetSourceDrop.cs" />
+    <Compile Include="Pipeline\PipelineErrorNotificationsSpecs.cs" />
     <Compile Include="Pipeline\PipelineSuccessNotificationsSpecs.cs" />
     <Compile Include="Pipeline\PipelineFailsNotificationsSpecs.cs" />
     <Compile Include="ProcessHandlerSpecs.cs" />

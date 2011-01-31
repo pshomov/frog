@@ -1,6 +1,5 @@
 using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using Frog.Support;
 
 namespace Frog.Domain.Specs
@@ -10,7 +9,8 @@ namespace Frog.Domain.Specs
         public enum Status
         {
             Success,
-            Error
+            Error,
+            Fail
         };
 
         readonly ExecTask.ExecutionStatus _executionStatus;
@@ -53,7 +53,8 @@ namespace Frog.Domain.Specs
         public enum ExecutionStatus
         {
             Success,
-            Failure
+            Failure,
+            Error
         }
 
         readonly string _app;
