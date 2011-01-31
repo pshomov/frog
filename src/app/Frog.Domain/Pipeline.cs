@@ -73,8 +73,8 @@ namespace Frog.Domain
             if (_tasks.ToList().Exists(task => (lastTaskStatus = task.Perform(sourceDrop).ExecStatus) != ExecTaskResult.Status.Success))
                 if (lastTaskStatus == ExecTaskResult.Status.Error)
                     eventPublisher.Publish(new BuildEnded(BuildEnded.BuildStatus.Error));
-                if (lastTaskStatus == ExecTaskResult.Status.Fail)
-                    eventPublisher.Publish(new BuildEnded(BuildEnded.BuildStatus.Fail));
+//                if (lastTaskStatus == ExecTaskResult.Status.Fail)
+//                    eventPublisher.Publish(new BuildEnded(BuildEnded.BuildStatus.Fail));
             else 
                 eventPublisher.Publish(new BuildEnded(BuildEnded.BuildStatus.Success));
         }

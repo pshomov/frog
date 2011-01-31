@@ -9,8 +9,7 @@ namespace Frog.Domain.Specs
         public enum Status
         {
             Success,
-            Error,
-            Fail
+            Error
         };
 
         readonly ExecTask.ExecutionStatus _executionStatus;
@@ -32,12 +31,12 @@ namespace Frog.Domain.Specs
             }
         }
 
-        public bool IsExecuted
+        public bool HasExecuted
         {
             get { return _executionStatus == ExecTask.ExecutionStatus.Success; }
         }
 
-        public Status ExecStatus { get {return IsExecuted && ExitCode == 0 ? Status.Success : Status.Error;} }
+        public Status ExecStatus { get {return HasExecuted && ExitCode == 0 ? Status.Success : Status.Error;} }
     }
 
     public interface TaskReporter
