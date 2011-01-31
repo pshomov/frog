@@ -71,7 +71,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Pipeline\PipelineProcessSourceDrop.cs" />
     <Compile Include="Git\GitRepositoryDriverInitialCheckout.cs" />
-    <Compile Include="Task\TaskFails_Spec.cs" />
+    <Compile Include="Task\TaskSpec.cs" />
     <Compile Include="Valve\ValveWhenNoSourceUpdates.cs" />
     <Compile Include="Valve\ValveWhenUpdateSpecsBase.cs" />
     <Compile Include="WorkingAreaSpecs.cs" />
