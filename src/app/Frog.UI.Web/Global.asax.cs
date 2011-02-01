@@ -36,7 +36,7 @@ namespace Frog.UI.Web
             RegisterRoutes(RouteTable.Routes);
 
             var bus = new FakeBus();
-            ServiceLocator.Report = new BuildStatus();
+            ServiceLocator.Report = new PipelineStatusView.BuildStatus();
             var statusView = new PipelineStatusView(ServiceLocator.Report);
             bus.RegisterHandler<BuildStarted>(statusView.Handle);
             bus.RegisterHandler<BuildEnded>(statusView.Handle);
@@ -57,32 +57,6 @@ namespace Frog.UI.Web
                 pipeline = new PipelineOfTasks(bus, new ExecTask(@"xbuild", @"Frog.Net.sln"));
             var area = new SubfolderWorkingArea(workingAreaPath);
             ServiceLocator.Valve = new Valve(driver, pipeline, area);
-        }
-
-        public class PipelineStatusView : Handles<BuildStarted>, Handles<BuildEnded>
-        {
-            readonly BuildStatus report;
-
-            public PipelineStatusView(BuildStatus report)
-            {
-                this.report = report;
-            }
-
-            public void Handle(BuildStarted message)
-            {
-                report.Current = BuildStatus.Status.Started;
-            }
-
-            public void Handle(BuildEnded message)
-            {
-                report.Current = BuildStatus.Status.Complete;
-            }
-        }
-
-        public class BuildStatus
-        {
-            public enum Status { Started, NotStarted, Complete }
-            public Status Current { get; set; }
         }
     }
 }

@@ -5,7 +5,7 @@ namespace Frog.UI.Web
 {
     public static class ServiceLocator
     {
-        public static MvcApplication.BuildStatus Report { get; set; }
+        public static PipelineStatusView.BuildStatus Report { get; set; }
 
         public static Valve Valve { get; set; }
     }
