@@ -71,12 +71,13 @@ namespace Frog.Domain
             eventPublisher.Publish(new BuildStarted());
             ExecTaskResult.Status lastTaskStatus = ExecTaskResult.Status.Success;
             if (_tasks.ToList().Exists(task => (lastTaskStatus = task.Perform(sourceDrop).ExecStatus) != ExecTaskResult.Status.Success))
+            {
                 if (lastTaskStatus == ExecTaskResult.Status.Error)
                     eventPublisher.Publish(new BuildEnded(BuildEnded.BuildStatus.Error));
-//                if (lastTaskStatus == ExecTaskResult.Status.Fail)
-//                    eventPublisher.Publish(new BuildEnded(BuildEnded.BuildStatus.Fail));
-            else 
+            } else
+            {
                 eventPublisher.Publish(new BuildEnded(BuildEnded.BuildStatus.Success));
+            }
         }
     }
 }

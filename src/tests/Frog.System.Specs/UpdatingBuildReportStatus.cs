@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading;
 using Frog.Domain;
 using Frog.Domain.Specs;
+using Frog.Specs.Support;
 using NUnit.Framework;
 using SimpleCQRS;
 using xray;
@@ -13,34 +14,20 @@ namespace Frog.System.Specs
     [TestFixture]
     public class UpdatingBuildReportStatus : BDD
     {
-        private string workingAreaPath;
-        private string repoArea;
         Valve valve;
-        GitDriver driver;
         PipelineOfTasks pipeline;
-        SubfolderWorkingArea area;
         BuildStatus report;
 
         public override void Given()
         {
-            var bus = new FakeBus();
+            TestSystem.CleanTestSystem();
             report = new BuildStatus();
             var statusView = new PipelineStatusView(report);
-            bus.RegisterHandler<BuildStarted>(statusView.Handle);
-            bus.RegisterHandler<BuildEnded>(statusView.Handle);
+            TestSystem.theBus.RegisterHandler<BuildStarted>(statusView.Handle);
+            TestSystem.theBus.RegisterHandler<BuildEnded>(statusView.Handle);
 
-            var original_repo = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
-            Directory.CreateDirectory(original_repo);
-            string dummyRepo = GitTestSupport.CreateDummyRepo(original_repo, "test_repo");
-
-            workingAreaPath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
-			repoArea = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
-            Directory.CreateDirectory(repoArea);
-            Directory.CreateDirectory(workingAreaPath);
-            driver = new GitDriver(repoArea, "test", dummyRepo);
-            pipeline = new PipelineOfTasks(bus, new ExecTask(@"xbuild", @"xray.sln"));
-            area = new SubfolderWorkingArea(workingAreaPath);
-            valve = new Valve(driver, pipeline, area);
+            pipeline = new PipelineOfTasks(TestSystem.theBus, new ExecTask(@"ruby", @"-e 'exit 2'"));
+            valve = new Valve(TestSystem.driver, pipeline, TestSystem.area);
         }
 
         public override void When()
@@ -72,24 +59,7 @@ namespace Frog.System.Specs
 
         public override void Cleanup()
         {
-            if (Directory.Exists(workingAreaPath)) {ClearAttributes(workingAreaPath); Directory.Delete(workingAreaPath, true);}
-            if (Directory.Exists(repoArea)) {ClearAttributes(repoArea); Directory.Delete(repoArea, true);}
-        }
-
-        static void ClearAttributes(string currentDir)
-        {
-            if (Directory.Exists(currentDir))
-            {
-                string[] subDirs = Directory.GetDirectories(currentDir);
-                foreach (string dir in subDirs)
-                {
-                    ClearAttributes(dir);
-                    File.SetAttributes(dir,FileAttributes.Directory);
-                }
-                string[] files = Directory.GetFiles(currentDir);
-                foreach (string file in files)
-                    File.SetAttributes(file, FileAttributes.Normal);
-            }
+            TestSystem.CleanTestSystem();
         }
     }
 

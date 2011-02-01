@@ -42,7 +42,7 @@ namespace Frog.Domain.Specs
         [Test]
         public void should_have_build_finished_message_with_failure_result()
         {
-            bus.Received().Publish(Arg.Is<BuildEnded>(obj => obj.Status == BuildEnded.BuildStatus.Fail));
+            bus.Received().Publish(Arg.Is<BuildEnded>(obj => obj.Status == BuildEnded.BuildStatus.Error));
         }
 
     }

@@ -52,8 +52,7 @@ namespace Frog.Domain.Specs
         public enum ExecutionStatus
         {
             Success,
-            Failure,
-            Error
+            Failure
         }
 
         readonly string _app;
