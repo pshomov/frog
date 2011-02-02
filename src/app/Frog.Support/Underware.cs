@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace Frog.Support
@@ -36,6 +37,20 @@ namespace Frog.Support
         {
             return AppDomain.CurrentDomain.GetAssemblies().Any(
                 assembly => assembly.FullName.StartsWith("System.Web.Mvc,"));
+        }
+        static string GitScriptsLocation(string subfolder)
+        {
+            return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, (Underware.IsWebApp() ? "bin" + Path.DirectorySeparatorChar : "") + subfolder);
+        }
+
+        public static string GitProductionScriptsLocation
+        {
+            get { return GitScriptsLocation("git_scripts"); }
+        }
+
+        public static string GitSupportScriptsLocation
+        {
+            get { return GitScriptsLocation("git_support_scripts"); }
         }
     }
 }

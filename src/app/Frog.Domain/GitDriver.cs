@@ -24,20 +24,11 @@ namespace Frog.Domain
             _repoUrl = repoUrl;
         }
 
-        static string GitScriptsLocation
-        {
-            get
-            {
-                return Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-                                    (Underware.IsWebApp() ? "bin"+Path.DirectorySeparatorChar : "") + "git_scripts");
-            }
-        }
-
         public bool CheckForUpdates()
         {
             if (Directory.Exists(Path.Combine(Path.Combine(_codeBase, _repoFolder), ".git")))
             {
-                string scriptPath = Path.Combine(GitScriptsLocation, "git_check_for_updates.rb");
+                string scriptPath = Path.Combine(Underware.GitProductionScriptsLocation, "git_check_for_updates.rb");
                 var process = new ProcessWrapper("ruby",
                                                        scriptPath + " " + _codeBase + " " + _repoFolder + " " + _repoUrl);
                 process.Execute();
@@ -61,7 +52,7 @@ namespace Frog.Domain
 
         void InitialCheckout()
         {
-            string scriptPath = Path.Combine(GitScriptsLocation, "git_initial_fetch.rb");
+            string scriptPath = Path.Combine(Underware.GitProductionScriptsLocation, "git_initial_fetch.rb");
             var process = new ProcessWrapper("ruby",
                                                    scriptPath + " " + _codeBase + " " + _repoFolder + " " + _repoUrl);
             process.Execute();
