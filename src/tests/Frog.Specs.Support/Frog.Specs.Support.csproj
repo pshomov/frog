@@ -51,7 +51,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="git_support_scripts\git_commit_change.rb">
+    <None Include="git_support_scripts\git_commit_files.rb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="git_support_scripts\git_create_dummy_repo.rb">
@@ -67,6 +67,11 @@
       <Project>{893935D3-935A-418F-A656-5D6A203D87ED}</Project>
       <Name>Frog.Support</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="git_support_scripts\test.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

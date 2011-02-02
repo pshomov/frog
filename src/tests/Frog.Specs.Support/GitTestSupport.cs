@@ -7,7 +7,7 @@ namespace Frog.Domain.Specs
 {
     public class GitTestSupport
     {
-        static string GitScriptsLocation
+        public static string GitScriptsLocation
         {
             get { return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, (Underware.IsWebApp() ? "bin"+Path.DirectorySeparatorChar : "") + "git_support_scripts"); }
         }
@@ -21,10 +21,10 @@ namespace Frog.Domain.Specs
             return Path.Combine(basePath, repoName);
         }
 
-        public static void CommitChange(string basePath, string repoName)
+        public static void CommitChangeFiles(string repo, string fileset)
         {
-            var path = Path.Combine(GitScriptsLocation, "git_commit_change.rb");
-            var process = new ProcessWrapper("ruby", path + " " + basePath + " " + repoName);
+            var path = Path.Combine(GitScriptsLocation, "git_commit_files.rb");
+            var process = new ProcessWrapper("ruby", path + " " + repo + " " + fileset);
             process.Execute();
             process.WaitForProcess();
         }

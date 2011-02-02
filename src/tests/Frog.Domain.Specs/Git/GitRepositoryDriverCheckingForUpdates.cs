@@ -13,7 +13,7 @@ namespace Frog.Domain.Specs.Git
         {
             base.Given();
             _driver.CheckForUpdates();
-            GitTestSupport.CommitChange(_workPlace, _repoFolder);
+            GitTestSupport.CommitChangeFiles(repoUrl, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "TestFixtures\\test.txt"));
         }
 
         public override void When()
