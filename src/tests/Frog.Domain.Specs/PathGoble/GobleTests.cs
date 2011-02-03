@@ -10,19 +10,58 @@ namespace Frog.Domain.Specs.PathGoble
     public class GobleTests
     {
         [Test]
-        public void should_accept_single_asterisk_surrounded_by_slashes_and_interpret_it_as_one_level_folder_wide_card()
+        public void should_find_file_down_a_folder_hieararchy()
         {
             var list = new List<string>();
             var pathFinder =
-                new PathFinder(AppDomain.CurrentDomain.BaseDirectory, "*l1f1.txt");
+                new PathFinder(AppDomain.CurrentDomain.BaseDirectory, "l1f1.txt");
 
-            pathFinder.apply(f => list.Add(f));
+            pathFinder.apply(list.Add);
 
             Assert.That(list.Count, Is.EqualTo(1));
             Assert.That(list[0], Is.EqualTo(string.Format("{1}{0}TestFixtures{0}Goble{0}level1{0}l1f1.txt", Path.DirectorySeparatorChar,
                                              AppDomain.CurrentDomain.BaseDirectory)));
         }
 
+        [Test]
+        public void should_find_multiple_files_at_the_same_level_down_the_hierarchy()
+        {
+            var list = new List<string>();
+            var pathFinder =
+                new PathFinder(AppDomain.CurrentDomain.BaseDirectory, "l2*.txt");
+
+            pathFinder.apply(list.Add);
+
+            Assert.That(list.Count, Is.EqualTo(2));
+            Assert.That(list[0], Is.EqualTo(string.Format("{1}{0}TestFixtures{0}Goble{0}level1{0}level2{0}l2f1.txt", Path.DirectorySeparatorChar,
+                                             AppDomain.CurrentDomain.BaseDirectory)));
+            Assert.That(list[1], Is.EqualTo(string.Format("{1}{0}TestFixtures{0}Goble{0}level1{0}level2{0}l2f2.txt", Path.DirectorySeparatorChar,
+                                             AppDomain.CurrentDomain.BaseDirectory)));
+        }
+
+        [Test]
+        public void should_find_multiple_files_at_different_levels_down_the_hierarchy()
+        {
+            var list = new List<string>();
+            var pathFinder =
+                new PathFinder(AppDomain.CurrentDomain.BaseDirectory, "l?f*.txt");
+
+            pathFinder.apply(list.Add);
+
+            Assert.That(list.Count, Is.EqualTo(6));
+            Assert.That(list[0], Is.EqualTo(string.Format("{1}{0}TestFixtures{0}Goble{0}level1{0}level2{0}l2f1.txt", Path.DirectorySeparatorChar,
+                                             AppDomain.CurrentDomain.BaseDirectory)));
+            Assert.That(list[1], Is.EqualTo(string.Format("{1}{0}TestFixtures{0}Goble{0}level1{0}level2{0}l2f2.txt", Path.DirectorySeparatorChar,
+                                             AppDomain.CurrentDomain.BaseDirectory)));
+            Assert.That(list[2], Is.EqualTo(string.Format("{1}{0}TestFixtures{0}Goble{0}level1{0}l1f1.txt", Path.DirectorySeparatorChar,
+                                             AppDomain.CurrentDomain.BaseDirectory)));
+            Assert.That(list[3], Is.EqualTo(string.Format("{1}{0}TestFixtures{0}Goble{0}level1{0}l1f2.txt", Path.DirectorySeparatorChar,
+                                             AppDomain.CurrentDomain.BaseDirectory)));
+            Assert.That(list[4], Is.EqualTo(string.Format("{1}{0}TestFixtures{0}Goble{0}l0f1.txt", Path.DirectorySeparatorChar,
+                                             AppDomain.CurrentDomain.BaseDirectory)));
+            Assert.That(list[5], Is.EqualTo(string.Format("{1}{0}TestFixtures{0}Goble{0}l0f2.txt", Path.DirectorySeparatorChar,
+                                             AppDomain.CurrentDomain.BaseDirectory)));
+        }
     }
 
     public class PathFinder
