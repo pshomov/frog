@@ -58,6 +58,7 @@
   <ItemGroup>
     <Compile Include="Git\GitRepositoryDriverCheckBase.cs" />
     <Compile Include="Git\GitRepositoryDriverGetSourceDrop.cs" />
+    <Compile Include="PathGoble\GobleTests.cs" />
     <Compile Include="Pipeline\PipelineSuccessNotificationsSpecs.cs" />
     <Compile Include="Pipeline\PipelineFailsNotificationsSpecs.cs" />
     <Compile Include="ProcessHandlerSpecs.cs" />
@@ -100,6 +101,29 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="TestFixtures\test.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <None Include="TestFixtures\Goble\l0f1.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="TestFixtures\Goble\l0f2.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestFixtures\Goble\level1\l1f1.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestFixtures\Goble\level1\l1f2.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestFixtures\Goble\level1\level2\l2f1.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestFixtures\Goble\level1\level2\l2f2.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
