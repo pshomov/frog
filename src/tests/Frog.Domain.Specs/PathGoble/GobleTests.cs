@@ -66,7 +66,7 @@ namespace Frog.Domain.Specs.PathGoble
 
     public class PathFinder
     {
-        string start;
+        readonly string start;
         readonly string pattern;
 
         public PathFinder(string start, string pattern)
