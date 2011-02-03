@@ -40,13 +40,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FileFinder.cs" />
+    <Compile Include="CustomTasks\ITask.cs" />
+    <Compile Include="CustomTasks\NUnitTask.cs" />
+    <Compile Include="CustomTasks\NUnitTaskDetctor.cs" />
+    <Compile Include="PathFinder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ExecTask.cs" />
     <Compile Include="GitDriver.cs" />
     <Compile Include="Pipeline.cs" />
     <Compile Include="SubfolderWorkingArea.cs" />
-    <Compile Include="TaskDetector.cs" />
-    <Compile Include="TaskFactory.cs" />
     <Compile Include="Valve.cs" />
   </ItemGroup>
   <ItemGroup>

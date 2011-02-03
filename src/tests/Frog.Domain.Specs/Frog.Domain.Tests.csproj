@@ -63,8 +63,8 @@
     <Compile Include="Pipeline\PipelineFailsNotificationsSpecs.cs" />
     <Compile Include="ProcessHandlerSpecs.cs" />
     <Compile Include="Task\TaskCurrentDirectory.cs" />
-    <Compile Include="TaskFactorySpecs.cs" />
     <Compile Include="Task\TaskReporting.cs" />
+    <Compile Include="UnitTestTaskDetectorSpecs.cs" />
     <Compile Include="Valve\ValveWhenSourceUpdatesExists.cs" />
     <Compile Include="Git\GitRepositoryDriverCheckingForUpdatesWhenNoUpdates.cs" />
     <Compile Include="Git\GitRepositoryDriverCheckingForUpdates.cs" />

@@ -18,7 +18,7 @@ namespace Frog.Domain.Specs.Git
             _driver = new GitDriver(_workPlace, _cloneFolder, repoUrl);
         }
 
-        public void Cleanup()
+        public override void Cleanup()
         {
             Directory.Delete(_workPlace, true);
         }

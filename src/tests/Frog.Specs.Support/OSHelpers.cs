@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
+﻿using System.IO;
 
 namespace Frog.Specs.Support
 {
@@ -16,7 +12,7 @@ namespace Frog.Specs.Support
                 foreach (string dir in subDirs)
                 {
                     ClearAttributes(dir);
-                    File.SetAttributes(dir,FileAttributes.Directory);
+                    File.SetAttributes(dir, FileAttributes.Directory);
                 }
                 string[] files = Directory.GetFiles(currentDir);
                 foreach (string file in files)
