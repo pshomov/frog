@@ -12,7 +12,7 @@ namespace Frog.Domain.Specs.Git
 
         public override void Given()
         {
-            _workPlace = Path.Combine(Path.GetTempPath() ,Path.GetRandomFileName());
+            _workPlace = Path.Combine(GitTestSupport.GetTempPath() ,Path.GetRandomFileName());
             Directory.CreateDirectory(_workPlace);
             repoUrl = GitTestSupport.CreateDummyRepo(_workPlace, _repoFolder);
             _driver = new GitDriver(_workPlace, _cloneFolder, repoUrl);

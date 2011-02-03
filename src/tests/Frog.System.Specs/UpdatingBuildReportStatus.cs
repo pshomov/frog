@@ -13,18 +13,14 @@ namespace Frog.System.Specs
     {
         Valve valve;
         PipelineOfTasks pipeline;
-        PipelineStatusView.BuildStatus report;
+        SystemDriver system;
 
         public override void Given()
         {
-            TestSystem.CleanTestSystem();
-            report = new PipelineStatusView.BuildStatus();
-            var statusView = new PipelineStatusView(report);
-            TestSystem.theBus.RegisterHandler<BuildStarted>(statusView.Handle);
-            TestSystem.theBus.RegisterHandler<BuildEnded>(statusView.Handle);
+            system = SystemDriver.GetCleanSystem();
 
-            pipeline = new PipelineOfTasks(TestSystem.theBus, new ExecTask(@"ruby", @"-e 'exit 2'"));
-            valve = new Valve(TestSystem.driver, pipeline, TestSystem.area);
+            pipeline = new PipelineOfTasks(system.Bus, new ExecTask(@"ruby", @"-e 'exit 2'"));
+            valve = new Valve(system.Git, pipeline, system.WorkingArea);
         }
 
         public override void When()
@@ -36,11 +32,11 @@ namespace Frog.System.Specs
         public void should_receive_build_started_event_followed_by_build_complete()
         {
             var prober = new PollingProber(3000, 100);
-            Assert.True(prober.check(Take.Snapshot(() => report.Current).
-                Has(x => x, It.Is.EqualTo(PipelineStatusView.BuildStatus.Status.Started))
+            Assert.True(prober.check(Take.Snapshot(() => system.CurrentReport).
+                Has(x => x.Current, It.Is.EqualTo(PipelineStatusView.BuildStatus.Status.Started))
                 ));
-            Assert.True(prober.check(Take.Snapshot(() => report.Current).
-                Has(x => x, It.Is.EqualTo(PipelineStatusView.BuildStatus.Status.Complete))
+            Assert.True(prober.check(Take.Snapshot(() => system.CurrentReport).
+                Has(x => x.Current, It.Is.EqualTo(PipelineStatusView.BuildStatus.Status.Complete))
                 ));
         }
 
@@ -48,7 +44,7 @@ namespace Frog.System.Specs
         public void should_have_build_result_in_build_complete_event()
         {
             var prober = new PollingProber(3000, 100);
-            Assert.True(prober.check(Take.Snapshot(() => report).
+            Assert.True(prober.check(Take.Snapshot(() => system.CurrentReport).
                 Has(x => x.Current, It.Is.EqualTo(PipelineStatusView.BuildStatus.Status.Complete)).
                 Has(x => x.Completion, It.Is.EqualTo(PipelineStatusView.BuildStatus.TaskExit.Error))
                 ));
@@ -56,7 +52,7 @@ namespace Frog.System.Specs
 
         public override void Cleanup()
         {
-            TestSystem.CleanTestSystem();
+            system.ResetSystem();
         }
     }
 }

@@ -7,6 +7,11 @@ namespace Frog.Domain.Specs
 {
     public class GitTestSupport
     {
+        public static string GetTempPath()
+        {
+            return "F:\\TEMP";
+        }
+
         public static string CreateDummyRepo(string basePath, string repoName)
         {
             var path = Path.Combine(Underware.GitSupportScriptsLocation, "git_create_dummy_repo.rb");

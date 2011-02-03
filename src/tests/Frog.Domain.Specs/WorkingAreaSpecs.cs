@@ -13,7 +13,7 @@ namespace Frog.Domain.Specs
 
         public override void Given()
         {
-            allocationRoot = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+            allocationRoot = Path.Combine(GitTestSupport.GetTempPath(), Path.GetRandomFileName());
             Directory.CreateDirectory(allocationRoot);
             workingArea = new SubfolderWorkingArea(allocationRoot);
         }
