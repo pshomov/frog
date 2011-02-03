@@ -77,17 +77,17 @@ namespace Frog.Domain.Specs.PathGoble
 
         public void apply(Action<string> action)
         {
-            Diver(start, pattern,  action); 
+            Diver(start,  action); 
         }
 
-        void Diver(string currentDir, string pattern, Action<string> action)
+        void Diver(string currentDir, Action<string> action)
         {
             if (Directory.Exists(currentDir))
             {
                 string[] subDirs = Directory.GetDirectories(currentDir);
                 foreach (string dir in subDirs)
                 {
-                    Diver(dir, pattern, action);
+                    Diver(dir, action);
                 }
                 string[] files = Directory.GetFiles(currentDir, pattern);
                 foreach (string file in files)
