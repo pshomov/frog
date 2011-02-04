@@ -2,7 +2,7 @@ using System;
 using System.ComponentModel;
 using Frog.Support;
 
-namespace Frog.Domain.Specs
+namespace Frog.Domain
 {
     public class ExecTaskResult
     {

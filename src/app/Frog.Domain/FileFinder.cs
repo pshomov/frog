@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using Frog.Domain.Specs.PathGoble;
 
 namespace Frog.Domain
 {
     public interface FileFinder
     {
-        IList<string> FindAllNUnitAssemblies();
+        List<string> FindAllNUnitAssemblies();
     }
 
     public class DefaultFileFinder : FileFinder
@@ -18,7 +17,7 @@ namespace Frog.Domain
             this.pathFinder = pathFinder;
         }
 
-        public IList<string> FindAllNUnitAssemblies()
+        public List<string> FindAllNUnitAssemblies()
         {
             var dlls = new List<string>();
             pathFinder.apply(dlls.Add, "*.TEST.DLL");

@@ -1,6 +1,6 @@
 using System.IO;
 
-namespace Frog.Domain.Specs
+namespace Frog.Domain
 {
     public class SubfolderWorkingArea : WorkingArea
     {

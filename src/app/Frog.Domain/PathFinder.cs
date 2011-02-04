@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace Frog.Domain.Specs.PathGoble
+namespace Frog.Domain
 {
     public class PathFinder
     {

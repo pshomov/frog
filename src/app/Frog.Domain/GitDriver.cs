@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 using System.IO;
 using Frog.Support;
 
@@ -30,7 +29,7 @@ namespace Frog.Domain
             {
                 string scriptPath = Path.Combine(Underware.GitProductionScriptsLocation, "git_check_for_updates.rb");
                 var process = new ProcessWrapper("ruby",
-                                                       scriptPath + " " + _codeBase + " " + _repoFolder + " " + _repoUrl);
+                                                 scriptPath + " " + _codeBase + " " + _repoFolder + " " + _repoUrl);
                 process.Execute();
                 var exitcode = process.WaitForProcess();
                 if (exitcode != 0 && exitcode != 201)
@@ -54,7 +53,7 @@ namespace Frog.Domain
         {
             string scriptPath = Path.Combine(Underware.GitProductionScriptsLocation, "git_initial_fetch.rb");
             var process = new ProcessWrapper("ruby",
-                                                   scriptPath + " " + _codeBase + " " + _repoFolder + " " + _repoUrl);
+                                             scriptPath + " " + _codeBase + " " + _repoFolder + " " + _repoUrl);
             process.Execute();
             var exitcode = process.WaitForProcess();
             if (exitcode != 0)
