@@ -7,7 +7,7 @@ using NUnit.Framework;
 namespace Frog.Domain.Specs
 {
     [TestFixture]
-    public class UnitTestTaskDetectorSpecs : BDD
+    public class NUnitTaskDetectorSpecs : BDD
     {
         FileFinder projectFileRepo;
         NUnitTaskDetctor nunitTaskDetecttor;

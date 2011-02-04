@@ -13,9 +13,9 @@ namespace Frog.Domain.Specs.PathGoble
         {
             var list = new List<string>();
             var pathFinder =
-                new PathFinder(AppDomain.CurrentDomain.BaseDirectory, "l1f1.txt");
+                new PathFinder(AppDomain.CurrentDomain.BaseDirectory);
 
-            pathFinder.apply(list.Add);
+            pathFinder.apply(list.Add, "l1f1.txt");
 
             Assert.That(list.Count, Is.EqualTo(1));
             Assert.That(list[0], Is.EqualTo(string.Format("{1}{0}TestFixtures{0}Goble{0}level1{0}l1f1.txt", Path.DirectorySeparatorChar,
@@ -27,9 +27,9 @@ namespace Frog.Domain.Specs.PathGoble
         {
             var list = new List<string>();
             var pathFinder =
-                new PathFinder(AppDomain.CurrentDomain.BaseDirectory, "l2*.txt");
+                new PathFinder(AppDomain.CurrentDomain.BaseDirectory);
 
-            pathFinder.apply(list.Add);
+            pathFinder.apply(list.Add, "l2*.txt");
 
             Assert.That(list.Count, Is.EqualTo(2));
             Assert.That(list[0], Is.EqualTo(string.Format("{1}{0}TestFixtures{0}Goble{0}level1{0}level2{0}l2f1.txt", Path.DirectorySeparatorChar,
@@ -43,9 +43,9 @@ namespace Frog.Domain.Specs.PathGoble
         {
             var list = new List<string>();
             var pathFinder =
-                new PathFinder(AppDomain.CurrentDomain.BaseDirectory, "l?f*.txt");
+                new PathFinder(AppDomain.CurrentDomain.BaseDirectory);
 
-            pathFinder.apply(list.Add);
+            pathFinder.apply(list.Add, "l?f*.txt");
 
             Assert.That(list.Count, Is.EqualTo(6));
             Assert.That(list[0], Is.EqualTo(string.Format("{1}{0}TestFixtures{0}Goble{0}level1{0}level2{0}l2f1.txt", Path.DirectorySeparatorChar,

@@ -6,17 +6,17 @@ namespace Frog.Domain.Specs.PathGoble
     public class PathFinder
     {
         readonly string start;
-        readonly string pattern;
+        private string pattern;
 
-        public PathFinder(string start, string pattern)
+        public PathFinder(string start)
         {
             this.start = start;
-            this.pattern = pattern;
         }
 
-        public void apply(Action<string> action)
+        public virtual void apply(Action<string> action, string pattern)
         {
-            Diver(start,  action); 
+            this.pattern = pattern;
+            Diver(start, action); 
         }
 
         void Diver(string currentDir, Action<string> action)

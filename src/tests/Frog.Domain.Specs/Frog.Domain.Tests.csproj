@@ -56,6 +56,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FileFinderSpecs.cs" />
     <Compile Include="Git\GitRepositoryDriverCheckBase.cs" />
     <Compile Include="Git\GitRepositoryDriverGetSourceDrop.cs" />
     <Compile Include="PathGoble\GobleTests.cs" />
@@ -64,7 +65,7 @@
     <Compile Include="ProcessHandlerSpecs.cs" />
     <Compile Include="Task\TaskCurrentDirectory.cs" />
     <Compile Include="Task\TaskReporting.cs" />
-    <Compile Include="UnitTestTaskDetectorSpecs.cs" />
+    <Compile Include="NUnitTaskDetectorSpecs.cs" />
     <Compile Include="Valve\ValveWhenSourceUpdatesExists.cs" />
     <Compile Include="Git\GitRepositoryDriverCheckingForUpdatesWhenNoUpdates.cs" />
     <Compile Include="Git\GitRepositoryDriverCheckingForUpdates.cs" />
