@@ -1,4 +1,4 @@
-﻿namespace Frog.Domain
+﻿namespace Frog.Domain.CustomTasks
 {
     public interface ITask
     {

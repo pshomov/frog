@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace Frog.Domain
+namespace Frog.Domain.CustomTasks
 {
     public class NUnitTaskDetctor
     {
