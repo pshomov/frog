@@ -1,4 +1,6 @@
 using System.IO;
+using System.Threading;
+using Frog.Specs.Support;
 
 namespace Frog.Domain.Specs.Git
 {
@@ -20,6 +22,7 @@ namespace Frog.Domain.Specs.Git
 
         public override void Cleanup()
         {
+            OSHelpers.ClearAttributes(_workPlace);
             Directory.Delete(_workPlace, true);
         }
     }
