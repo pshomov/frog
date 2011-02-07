@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Frog.Support;
 
 namespace Frog.Domain.CustomTasks
 {
@@ -16,18 +18,14 @@ namespace Frog.Domain.CustomTasks
         public IList<NUnitTask> Detect()
         {
             var items =  projectFileRepo.FindAllNUnitAssemblies();
-            RemoveAllDuplicatingAssemblies(items);
-            return items.Select(s => new NUnitTask(s)).ToList();
+            return items.Select(s => new NUnitTask(ProjectPathToAssemblyPath(s))).ToList();
         }
 
-        void RemoveAllDuplicatingAssemblies(List<string> items)
+        private string ProjectPathToAssemblyPath(string projectPath)
         {
-            var fileNames = items.Select(s1 => Path.GetFileName(s1).ToUpperInvariant());
-            var distinctFileNames = fileNames.Distinct();
-            var duplicates = fileNames.ToList();
-            distinctFileNames.ToList().ForEach(s4 => duplicates.Remove(s4));
-            duplicates = duplicates.Distinct().ToList();
-            items.RemoveAll(s2 => duplicates.Contains(Path.GetFileName(s2).ToUpperInvariant()));
+            var projectName = Path.GetFileNameWithoutExtension(projectPath);
+            var assemblyPojectFolder = Path.GetDirectoryName(projectPath);
+            return Path.Combine(Path.Combine(assemblyPojectFolder, Os.DirChars("bin/Debug")), projectName+".dll");
         }
     }
 }

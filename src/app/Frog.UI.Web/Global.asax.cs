@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
@@ -14,7 +12,7 @@ namespace Frog.UI.Web
     // Note: For instructions on enabling IIS6 or IIS7 classic mode, 
     // visit http://go.microsoft.com/?LinkId=9394801
 
-    public class MvcApplication : System.Web.HttpApplication
+    public class MvcApplication : HttpApplication
     {
         public static void RegisterRoutes(RouteCollection routes)
         {
@@ -23,9 +21,8 @@ namespace Frog.UI.Web
             routes.MapRoute(
                 "Default", // Route name
                 "{controller}/{action}/{id}", // URL with parameters
-                new { controller = "Status", action = "Index", id = UrlParameter.Optional } // Parameter defaults
-            );
-
+                new {controller = "Status", action = "Index", id = UrlParameter.Optional} // Parameter defaults
+                );
         }
 
         protected void Application_Start()
@@ -48,10 +45,14 @@ namespace Frog.UI.Web
             string git_username = Environment.GetEnvironmentVariable("MY_GIT_USERNAME");
             string git_password = Environment.GetEnvironmentVariable("MY_GIT_PASSWORD");
 
-            var driver = new GitDriver(repoArea, "test", String.Format("https://{0}:{1}@github.com/pshomov/frog.git", git_username, git_password));
+            var driver = new GitDriver(repoArea, "test",
+                                       String.Format("https://{0}:{1}@github.com/pshomov/frog.git", git_username,
+                                                     git_password));
             PipelineOfTasks pipeline;
-            if (Underware.IsWindows)
-                pipeline = new PipelineOfTasks(bus, new ExecTask(@"cmd.exe", @"/c %SystemRoot%\Microsoft.NET\Framework\v3.5\msbuild.exe Frog.Net.sln"));
+            if (Os.IsWindows)
+                pipeline = new PipelineOfTasks(bus,
+                                               new ExecTask(@"cmd.exe",
+                                                            @"/c %SystemRoot%\Microsoft.NET\Framework\v3.5\msbuild.exe Frog.Net.sln"));
             else
                 pipeline = new PipelineOfTasks(bus, new ExecTask(@"xbuild", @"Frog.Net.sln"));
             var area = new SubfolderWorkingArea(workingAreaPath);

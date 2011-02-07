@@ -15,9 +15,9 @@ namespace Frog.Domain.Specs.TaskDetection
         public override void Given()
         {
             msbuildTaskDetecttor = new MSBuildDetector(projectFileRepo);
-            projectFileRepo.FindAllSolutionFiles().Returns(Underware.As.List(Underware.DirChars("a1.sln"),
-                                                                             Underware.DirChars("a1\\a2.sln"),
-                                                                             Underware.DirChars("a2\\asdas\\asd\\b.sln")));
+            projectFileRepo.FindAllSolutionFiles().Returns(As.List(Os.DirChars("a1.sln"),
+                                                                             Os.DirChars("a1\\a2.sln"),
+                                                                             Os.DirChars("a2\\asdas\\asd\\b.sln")));
         }
 
         public override void When()
@@ -42,9 +42,9 @@ namespace Frog.Domain.Specs.TaskDetection
         public override void Given()
         {
             msbuildTaskDetecttor = new MSBuildDetector(projectFileRepo);
-            projectFileRepo.FindAllSolutionFiles().Returns(Underware.As.List(Underware.DirChars("a1.sln"),
-                                                                             Underware.DirChars("a2.sln"),
-                                                                             Underware.DirChars(
+            projectFileRepo.FindAllSolutionFiles().Returns(As.List(Os.DirChars("a1.sln"),
+                                                                             Os.DirChars("a2.sln"),
+                                                                             Os.DirChars(
                                                                                  "a2\\asdas\\asd\\build.sln")));
         }
 
@@ -69,10 +69,10 @@ namespace Frog.Domain.Specs.TaskDetection
         public override void Given()
         {
             msbuildTaskDetecttor = new MSBuildDetector(projectFileRepo);
-            projectFileRepo.FindAllSolutionFiles().Returns(Underware.As.List(Underware.DirChars("a1.sln"),
-                                                                             Underware.DirChars("a2.sln"),
-                                                                             Underware.DirChars("Build.sln"),
-                                                                             Underware.DirChars(
+            projectFileRepo.FindAllSolutionFiles().Returns(As.List(Os.DirChars("a1.sln"),
+                                                                             Os.DirChars("a2.sln"),
+                                                                             Os.DirChars("Build.sln"),
+                                                                             Os.DirChars(
                                                                                  "a2\\asdas\\asd\\build.sln")));
         }
 

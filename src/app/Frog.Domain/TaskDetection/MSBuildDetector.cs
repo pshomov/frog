@@ -26,9 +26,9 @@ namespace Frog.Domain.TaskDetection
                     rootFolderSolutions.FindIndex(
                         s => s.Equals("build.sln", StringComparison.InvariantCultureIgnoreCase));
                 if (rootBuildSlnIdx > -1)
-                    return Underware.As.List(new MSBuildTaskDescriptions(rootFolderSolutions[rootBuildSlnIdx]));
+                    return As.List(new MSBuildTaskDescriptions(rootFolderSolutions[rootBuildSlnIdx]));
                 if (rootFolderSolutions.Count > 1) return new List<MSBuildTaskDescriptions>();
-                return Underware.As.List(new MSBuildTaskDescriptions(rootFolderSolutions[0]));
+                return As.List(new MSBuildTaskDescriptions(rootFolderSolutions[0]));
             }
 
             return new List<MSBuildTaskDescriptions>();

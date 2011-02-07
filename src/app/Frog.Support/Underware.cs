@@ -7,16 +7,34 @@ namespace Frog.Support
 {
     public class Underware
     {
-        public class As
+        static string GitScriptsLocation(string subfolder)
         {
-            public static List<T> List<T>(params T[] items)
-            {
-                var result = new List<T>();
-                result.AddRange(items);
-                return result;
-            }
+            return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, (Os.IsWebApp() ? "bin" + Path.DirectorySeparatorChar : "") + subfolder);
         }
 
+        public static string GitProductionScriptsLocation
+        {
+            get { return GitScriptsLocation("git_scripts"); }
+        }
+
+        public static string GitSupportScriptsLocation
+        {
+            get { return GitScriptsLocation("git_support_scripts"); }
+        }
+    }
+
+    public class As
+    {
+        public static List<T> List<T>(params T[] items)
+        {
+            var result = new List<T>();
+            result.AddRange(items);
+            return result;
+        }
+    }
+
+    public class Os
+    {
         public static bool IsUnix
         {
             get
@@ -25,6 +43,7 @@ namespace Frog.Support
                 return unix.Contains(Environment.OSVersion.Platform); 
             }
         }
+
         public static bool IsWindows        {
             get
             {
@@ -37,20 +56,6 @@ namespace Frog.Support
         {
             return AppDomain.CurrentDomain.GetAssemblies().Any(
                 assembly => assembly.FullName.StartsWith("System.Web.Mvc,"));
-        }
-        static string GitScriptsLocation(string subfolder)
-        {
-            return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, (Underware.IsWebApp() ? "bin" + Path.DirectorySeparatorChar : "") + subfolder);
-        }
-
-        public static string GitProductionScriptsLocation
-        {
-            get { return GitScriptsLocation("git_scripts"); }
-        }
-
-        public static string GitSupportScriptsLocation
-        {
-            get { return GitScriptsLocation("git_support_scripts"); }
         }
 
         public static string DirChars(string path)
@@ -65,7 +70,7 @@ namespace Frog.Support
                 return path.Replace('/', Path.DirectorySeparatorChar);
             }
 
-            throw new PlatformNotSupportedException(" Not sure how t handle the path on this platform, please report this error");
+            throw new PlatformNotSupportedException(" Not sure how to handle the path on this platform, please report this error");
         }
     }
 }
