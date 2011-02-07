@@ -3,6 +3,7 @@ using Frog.Domain;
 using Frog.Domain.Specs;
 using Frog.UI.Web;
 using NUnit.Framework;
+using SimpleCQRS;
 using xray;
 using It = NHamcrest.Core;
 
@@ -19,7 +20,7 @@ namespace Frog.System.Specs
         {
             system = SystemDriver.GetCleanSystem();
 
-            pipeline = new PipelineOfTasks(system.Bus, new ExecTask(@"ruby", @"-e 'exit 2'"));
+            pipeline = new PipelineOfTasks(system.Bus, new FixedTasksDispencer(new ExecTask(@"ruby", @"-e 'exit 2'")));
             valve = new Valve(system.Git, pipeline, system.WorkingArea);
         }
 

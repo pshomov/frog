@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using SimpleCQRS;
 
@@ -21,6 +23,26 @@ namespace Frog.Domain
     public interface Pipeline
     {
         void Process(SourceDrop sourceDrop);
+    }
+
+    public interface TaskDispencer
+    {
+        List<ExecTask> GimeTasks();
+    }
+
+    public class FixedTasksDispencer : TaskDispencer
+    {
+        readonly ExecTask[] tasks;
+
+        public FixedTasksDispencer(params ExecTask[] tasks)
+        {
+            this.tasks = tasks;
+        }
+
+        public List<ExecTask> GimeTasks()
+        {
+            return new List<ExecTask>(tasks);
+        }
     }
 
     public class BuildStarted : Event
@@ -54,15 +76,15 @@ namespace Frog.Domain
         }
 
         readonly IEventPublisher eventPublisher;
-        readonly ExecTask[] _tasks;
+        readonly TaskDispencer tasksDispencer;
 
-        public PipelineOfTasks(IEventPublisher eventPublisher, params ExecTask[] tasks)
+        public PipelineOfTasks(IEventPublisher eventPublisher, TaskDispencer tasksDispencer)
         {
             this.eventPublisher = eventPublisher;
-            _tasks = tasks;
+            this.tasksDispencer = tasksDispencer;
         }
 
-        public PipelineOfTasks(params ExecTask[] tasks) : this(new FakeBus(), tasks)
+        public PipelineOfTasks(TaskDispencer taskDispencer) : this((IEventPublisher) new FakeBus(), taskDispencer)
         {
         }
 
@@ -71,7 +93,7 @@ namespace Frog.Domain
             eventPublisher.Publish(new BuildStarted());
             ExecTaskResult.Status lastTaskStatus = ExecTaskResult.Status.Success;
             if (
-                _tasks.ToList().Exists(
+                tasksDispencer.GimeTasks().Exists(
                     task => (lastTaskStatus = task.Perform(sourceDrop).ExecStatus) != ExecTaskResult.Status.Success))
             {
                 if (lastTaskStatus == ExecTaskResult.Status.Error)
