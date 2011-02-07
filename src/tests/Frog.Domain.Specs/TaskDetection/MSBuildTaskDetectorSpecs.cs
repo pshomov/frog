@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -6,7 +5,7 @@ using Frog.Support;
 using NSubstitute;
 using NUnit.Framework;
 
-namespace Frog.Domain.Specs
+namespace Frog.Domain.Specs.TaskDetection
 {
     [TestFixture]
     public class MSBuildTaskDetectorSpecs : MSBuildTaskDetectorSpecsBase
@@ -17,8 +16,8 @@ namespace Frog.Domain.Specs
         public override void Given()
         {
             msbuildTaskDetecttor = new MSBuildDetector(projectFileRepo);
-            projectFileRepo.FindAllSolutionFiles().Returns(Underware.As.List("a1.sln", "a1\\a2.sln",
-                                                                             "a2\\asdas\\asd\\b.sln"));
+            projectFileRepo.FindAllSolutionFiles().Returns(Underware.As.List(Underware.DirChars("a1.sln"),Underware.DirChars("a1\\a2.sln"),
+                                                                             Underware.DirChars("a2\\asdas\\asd\\b.sln")));
         }
 
         public override void When()

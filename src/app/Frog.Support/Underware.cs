@@ -52,5 +52,20 @@ namespace Frog.Support
         {
             get { return GitScriptsLocation("git_support_scripts"); }
         }
+
+        public static string DirChars(string path)
+        {
+            if (IsUnix)
+            {
+                return path.Replace('\\', Path.DirectorySeparatorChar);
+            }
+
+            if (IsWindows)
+            {
+                return path.Replace('/', Path.DirectorySeparatorChar);
+            }
+
+            throw new PlatformNotSupportedException(" Not sure how t handle the path on this platform, please report this error");
+        }
     }
 }
