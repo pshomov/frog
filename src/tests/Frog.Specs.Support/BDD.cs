@@ -7,10 +7,12 @@ namespace Frog.Domain.Specs
         [SetUp]
         public void Setup()
         {
+            SetupDependencies();
             Given();
             When();
         }
 
+        public virtual void SetupDependencies(){}
         public abstract void Given();
         public abstract void When();
 		

@@ -59,13 +59,15 @@
     <Compile Include="FileFinderSpecs.cs" />
     <Compile Include="Git\GitRepositoryDriverCheckBase.cs" />
     <Compile Include="Git\GitRepositoryDriverGetSourceDrop.cs" />
+    <Compile Include="TaskDetection\MSBuildTaskDetectorSpecs.cs" />
+    <Compile Include="TaskDetection\MSBuildTaskDetectorSpecsBase.cs" />
     <Compile Include="PathGoble\GobleTests.cs" />
     <Compile Include="Pipeline\PipelineSuccessNotificationsSpecs.cs" />
     <Compile Include="Pipeline\PipelineFailsNotificationsSpecs.cs" />
     <Compile Include="ProcessHandlerSpecs.cs" />
     <Compile Include="Task\TaskCurrentDirectory.cs" />
     <Compile Include="Task\TaskReporting.cs" />
-    <Compile Include="NUnitTaskDetectorSpecs.cs" />
+    <Compile Include="TaskDetection\NUnitTaskDetectorSpecs.cs" />
     <Compile Include="Valve\ValveWhenSourceUpdatesExists.cs" />
     <Compile Include="Git\GitRepositoryDriverCheckingForUpdatesWhenNoUpdates.cs" />
     <Compile Include="Git\GitRepositoryDriverCheckingForUpdates.cs" />

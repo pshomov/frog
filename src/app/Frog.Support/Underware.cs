@@ -9,7 +9,7 @@ namespace Frog.Support
     {
         public class As
         {
-            public static List<T> ListOf<T>(params T[] items)
+            public static List<T> List<T>(params T[] items)
             {
                 var result = new List<T>();
                 result.AddRange(items);
@@ -21,14 +21,14 @@ namespace Frog.Support
         {
             get
             {
-                var unix = As.ListOf(PlatformID.MacOSX, PlatformID.Unix);
+                var unix = As.List(PlatformID.MacOSX, PlatformID.Unix);
                 return unix.Contains(Environment.OSVersion.Platform); 
             }
         }
         public static bool IsWindows        {
             get
             {
-                var win = As.ListOf(PlatformID.Win32NT, PlatformID.Win32S, PlatformID.Win32Windows);
+                var win = As.List(PlatformID.Win32NT, PlatformID.Win32S, PlatformID.Win32Windows);
                 return win.Contains(Environment.OSVersion.Platform); 
             }
         }

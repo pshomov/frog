@@ -18,7 +18,7 @@ namespace Frog.Domain.Specs
         {
             projectFileRepo = Substitute.For<FileFinder>();
             nunitTaskDetecttor = new NUnitTaskDetctor(projectFileRepo);
-            projectFileRepo.FindAllNUnitAssemblies().Returns(Underware.As.ListOf("a1"));
+            projectFileRepo.FindAllNUnitAssemblies().Returns(Underware.As.List("a1"));
         }
 
         public override void When()
@@ -56,7 +56,7 @@ namespace Frog.Domain.Specs
         {
             projectFileRepo = Substitute.For<FileFinder>();
             nunitTaskDetecttor = new NUnitTaskDetctor(projectFileRepo);
-            projectFileRepo.FindAllNUnitAssemblies().Returns(Underware.As.ListOf("\\l1\\l2\\l3\\fle.test.dll", "\\l1\\l2\\l4\\fle.test.dll", "\\l1\\l2\\l3\\flo.test.dll"));
+            projectFileRepo.FindAllNUnitAssemblies().Returns(Underware.As.List("\\l1\\l2\\l3\\fle.test.dll", "\\l1\\l2\\l4\\fle.test.dll", "\\l1\\l2\\l3\\flo.test.dll"));
         }
 
         public override void When()
