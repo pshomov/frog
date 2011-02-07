@@ -50,6 +50,8 @@
     <Compile Include="GitDriver.cs" />
     <Compile Include="Pipeline.cs" />
     <Compile Include="SubfolderWorkingArea.cs" />
+    <Compile Include="TaskDetection\MSBuildDetector.cs" />
+    <Compile Include="TaskDetection\MSBuildTaskDescriptions.cs" />
     <Compile Include="Valve.cs" />
   </ItemGroup>
   <ItemGroup>

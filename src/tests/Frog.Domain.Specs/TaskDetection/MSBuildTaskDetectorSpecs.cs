@@ -1,6 +1,5 @@
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+using Frog.Domain.TaskDetection;
 using Frog.Support;
 using NSubstitute;
 using NUnit.Framework;
@@ -16,7 +15,8 @@ namespace Frog.Domain.Specs.TaskDetection
         public override void Given()
         {
             msbuildTaskDetecttor = new MSBuildDetector(projectFileRepo);
-            projectFileRepo.FindAllSolutionFiles().Returns(Underware.As.List(Underware.DirChars("a1.sln"),Underware.DirChars("a1\\a2.sln"),
+            projectFileRepo.FindAllSolutionFiles().Returns(Underware.As.List(Underware.DirChars("a1.sln"),
+                                                                             Underware.DirChars("a1\\a2.sln"),
                                                                              Underware.DirChars("a2\\asdas\\asd\\b.sln")));
         }
 
@@ -33,31 +33,83 @@ namespace Frog.Domain.Specs.TaskDetection
         }
     }
 
-    public struct MSBuildTaskDescriptions
+    [TestFixture]
+    public class MSBuildTaskDetectorMultipleSolutionsAtTheRootSpecs : MSBuildTaskDetectorSpecsBase
     {
-        public readonly string solutionFile;
+        MSBuildDetector msbuildTaskDetecttor;
+        IList<MSBuildTaskDescriptions> items;
 
-        public MSBuildTaskDescriptions(string solutionFile)
+        public override void Given()
         {
-            this.solutionFile = solutionFile;
+            msbuildTaskDetecttor = new MSBuildDetector(projectFileRepo);
+            projectFileRepo.FindAllSolutionFiles().Returns(Underware.As.List(Underware.DirChars("a1.sln"),
+                                                                             Underware.DirChars("a2.sln"),
+                                                                             Underware.DirChars(
+                                                                                 "a2\\asdas\\asd\\build.sln")));
+        }
+
+        public override void When()
+        {
+            items = msbuildTaskDetecttor.Detect();
+        }
+
+        [Test]
+        public void should_not_build_anything_if_it_looks_confusing()
+        {
+            Assert.That(items.Count, Is.EqualTo(0));
         }
     }
 
-    public class MSBuildDetector
+    [TestFixture]
+    public class MSBuildTaskDetectorMultipleSolutionsAtTheRootWithBuildOneSpecs : MSBuildTaskDetectorSpecsBase
     {
-        readonly FileFinder fileFinder;
+        MSBuildDetector msbuildTaskDetecttor;
+        IList<MSBuildTaskDescriptions> items;
 
-        public MSBuildDetector(FileFinder fileFinder)
+        public override void Given()
         {
-            this.fileFinder = fileFinder;
+            msbuildTaskDetecttor = new MSBuildDetector(projectFileRepo);
+            projectFileRepo.FindAllSolutionFiles().Returns(Underware.As.List(Underware.DirChars("a1.sln"),
+                                                                             Underware.DirChars("a2.sln"),
+                                                                             Underware.DirChars("Build.sln"),
+                                                                             Underware.DirChars(
+                                                                                 "a2\\asdas\\asd\\build.sln")));
         }
 
-        public IList<MSBuildTaskDescriptions> Detect()
+        public override void When()
         {
-            var allSolutionFiles = fileFinder.FindAllSolutionFiles();
-            var rootFolderSolutions =
-                allSolutionFiles.Where(slnPath => slnPath.IndexOf(Path.DirectorySeparatorChar) == -1).ToList();
-            return Underware.As.List(new MSBuildTaskDescriptions(rootFolderSolutions[0]));
+            items = msbuildTaskDetecttor.Detect();
+        }
+
+        [Test]
+        public void should_always_prefer_the_solution_called_BUILD()
+        {
+            Assert.That(items.Count, Is.EqualTo(1));
+            Assert.That(items[0].solutionFile, Is.EqualTo("Build.sln"));
+        }
+    }
+
+    [TestFixture]
+    public class NoSolutionsAtAllSpecs : MSBuildTaskDetectorSpecsBase
+    {
+        MSBuildDetector msbuildTaskDetecttor;
+        IList<MSBuildTaskDescriptions> items;
+
+        public override void Given()
+        {
+            msbuildTaskDetecttor = new MSBuildDetector(projectFileRepo);
+            projectFileRepo.FindAllSolutionFiles().Returns(new List<string>());
+        }
+
+        public override void When()
+        {
+            items = msbuildTaskDetecttor.Detect();
+        }
+
+        [Test]
+        public void should_always_prefer_the_solution_called_BUILD()
+        {
+            Assert.That(items.Count, Is.EqualTo(0));
         }
     }
 }
