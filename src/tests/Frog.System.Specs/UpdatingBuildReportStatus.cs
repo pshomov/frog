@@ -3,9 +3,8 @@ using Frog.Domain;
 using Frog.Domain.Specs;
 using Frog.UI.Web;
 using NUnit.Framework;
-using SimpleCQRS;
 using xray;
-using It = NHamcrest.Core;
+using Is = NHamcrest.Core.Is;
 
 namespace Frog.System.Specs
 {
@@ -34,11 +33,11 @@ namespace Frog.System.Specs
         {
             var prober = new PollingProber(3000, 100);
             Assert.True(prober.check(Take.Snapshot(() => system.CurrentReport).
-                Has(x => x.Current, It.Is.EqualTo(PipelineStatusView.BuildStatus.Status.Started))
-                ));
+                                         Has(x => x.Current, Is.EqualTo(PipelineStatusView.BuildStatus.Status.PipelineStarted))
+                            ));
             Assert.True(prober.check(Take.Snapshot(() => system.CurrentReport).
-                Has(x => x.Current, It.Is.EqualTo(PipelineStatusView.BuildStatus.Status.Complete))
-                ));
+                                         Has(x => x.Current, Is.EqualTo(PipelineStatusView.BuildStatus.Status.PipelineComplete))
+                            ));
         }
 
         [Test]
@@ -46,9 +45,11 @@ namespace Frog.System.Specs
         {
             var prober = new PollingProber(3000, 100);
             Assert.True(prober.check(Take.Snapshot(() => system.CurrentReport).
-                Has(x => x.Current, It.Is.EqualTo(PipelineStatusView.BuildStatus.Status.Complete)).
-                Has(x => x.Completion, It.Is.EqualTo(PipelineStatusView.BuildStatus.TaskExit.Error))
-                ));
+                                         Has(x => x.Current, Is.EqualTo(PipelineStatusView.BuildStatus.Status.PipelineComplete))
+                                         .
+                                         Has(x => x.Completion,
+                                             Is.EqualTo(PipelineStatusView.BuildStatus.TaskExit.Error))
+                            ));
         }
 
         public override void Cleanup()

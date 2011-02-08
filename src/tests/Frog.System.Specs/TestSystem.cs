@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using Frog.Domain;
 using Frog.Domain.Specs;
 using Frog.Specs.Support;
@@ -35,6 +34,7 @@ namespace Frog.System.Specs
             var statusView = new PipelineStatusView(report);
             theBus.RegisterHandler<BuildStarted>(statusView.Handle);
             theBus.RegisterHandler<BuildEnded>(statusView.Handle);
+            theBus.RegisterHandler<TaskStarted>(statusView.Handle);
         }
 
         public void CleanupTestSystem()

@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using SimpleCQRS;
 
 namespace Frog.Domain
@@ -49,6 +47,10 @@ namespace Frog.Domain
     {
     }
 
+    public class TaskStarted : Event
+    {
+    }
+
     public class BuildEnded : Event
     {
         public enum BuildStatus
@@ -84,7 +86,7 @@ namespace Frog.Domain
             this.tasksDispencer = tasksDispencer;
         }
 
-        public PipelineOfTasks(TaskDispencer taskDispencer) : this((IEventPublisher) new FakeBus(), taskDispencer)
+        public PipelineOfTasks(TaskDispencer taskDispencer) : this(new FakeBus(), taskDispencer)
         {
         }
 
@@ -92,17 +94,21 @@ namespace Frog.Domain
         {
             eventPublisher.Publish(new BuildStarted());
             ExecTaskResult.Status lastTaskStatus = ExecTaskResult.Status.Success;
-            if (
-                tasksDispencer.GimeTasks().Exists(
-                    task => (lastTaskStatus = task.Perform(sourceDrop).ExecStatus) != ExecTaskResult.Status.Success))
+            foreach (var task in tasksDispencer.GimeTasks())
             {
-                if (lastTaskStatus == ExecTaskResult.Status.Error)
-                    eventPublisher.Publish(new BuildEnded(BuildEnded.BuildStatus.Error));
+                eventPublisher.Publish(new TaskStarted());
+                lastTaskStatus = task.Perform(sourceDrop).ExecStatus;
+                eventPublisher.Publish(new TaskFinished());
+                if (lastTaskStatus != ExecTaskResult.Status.Success) break;
             }
-            else
-            {
-                eventPublisher.Publish(new BuildEnded(BuildEnded.BuildStatus.Success));
-            }
+
+            eventPublisher.Publish(lastTaskStatus == ExecTaskResult.Status.Error
+                                       ? new BuildEnded(BuildEnded.BuildStatus.Error)
+                                       : new BuildEnded(BuildEnded.BuildStatus.Success));
         }
+    }
+
+    public class TaskFinished : Event
+    {
     }
 }

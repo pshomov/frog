@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using Frog.Domain;
 using SimpleCQRS;
 
@@ -15,12 +16,18 @@ namespace Frog.UI.Web
 
         public void Handle(BuildStarted message)
         {
-            report.Current = BuildStatus.Status.Started;
+            report.Current = BuildStatus.Status.PipelineStarted;
+        }
+
+        public void Handle(TaskStarted message)
+        {
+            report.Current =
+                BuildStatus.Status.TaskStarted;
         }
 
         public void Handle(BuildEnded message)
         {
-            report.Current = BuildStatus.Status.Complete;
+            report.Current = BuildStatus.Status.PipelineComplete;
             switch (message.Status)
             {
                 case BuildEnded.BuildStatus.Fail:
@@ -39,7 +46,9 @@ namespace Frog.UI.Web
 
         public class BuildStatus
         {
-            public enum Status { Started, NotStarted, Complete }
+            public enum Status { PipelineStarted, NotStarted, PipelineComplete,
+                TaskStarted
+            }
             public enum TaskExit { Dugh, Success, Error, Fail }
             public Status Current { get; set; }
             public TaskExit Completion { get; set; }

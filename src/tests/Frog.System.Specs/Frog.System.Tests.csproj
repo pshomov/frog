@@ -57,6 +57,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EventedProber.cs" />
+    <Compile Include="TaskFulfilment.cs" />
     <Compile Include="TestSystem.cs" />
     <Compile Include="UpdatingBuildReportStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
