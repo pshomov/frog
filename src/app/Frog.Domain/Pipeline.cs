@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading;
 using SimpleCQRS;
 
 namespace Frog.Domain
@@ -98,6 +99,7 @@ namespace Frog.Domain
             {
                 eventPublisher.Publish(new TaskStarted());
                 lastTaskStatus = task.Perform(sourceDrop).ExecStatus;
+                Thread.Sleep(500);
                 eventPublisher.Publish(new TaskFinished());
                 if (lastTaskStatus != ExecTaskResult.Status.Success) break;
             }

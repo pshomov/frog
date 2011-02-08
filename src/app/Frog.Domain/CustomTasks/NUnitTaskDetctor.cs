@@ -6,7 +6,7 @@ using Frog.Support;
 
 namespace Frog.Domain.CustomTasks
 {
-    public class NUnitTaskDetctor
+    public class NUnitTaskDetctor : TaskSource
     {
         readonly FileFinder projectFileRepo;
 
@@ -15,10 +15,10 @@ namespace Frog.Domain.CustomTasks
             this.projectFileRepo = projectFileRepo;
         }
 
-        public IList<NUnitTask> Detect()
+        public IList<ITask> Detect()
         {
             var items =  projectFileRepo.FindAllNUnitAssemblies();
-            return items.Select(s => new NUnitTask(ProjectPathToAssemblyPath(s))).ToList();
+            return items.Select(s => (ITask)new NUnitTask(ProjectPathToAssemblyPath(s))).ToList();
         }
 
         private string ProjectPathToAssemblyPath(string projectPath)

@@ -11,7 +11,7 @@ namespace Frog.Domain.Specs.TaskDetection
     {
         FileFinder projectFileRepo;
         NUnitTaskDetctor nunitTaskDetecttor;
-        IList<NUnitTask> items;
+        IList<ITask> items;
 
         public override void Given()
         {
@@ -36,9 +36,9 @@ namespace Frog.Domain.Specs.TaskDetection
         [Test]
         public void should_have_project_path_as_arg0_of_the_task()
         {
-            Assert.That(items[0].Assembly, Is.EqualTo(Os.DirChars("l1\\l2\\l3\\bin\\Debug\\fle.test.dll")));
-            Assert.That(items[1].Assembly, Is.EqualTo(Os.DirChars("l1\\l2\\l4\\bin\\Debug\\fle.test.dll")));
-            Assert.That(items[2].Assembly, Is.EqualTo(Os.DirChars("l1\\l2\\l3\\bin\\Debug\\flo.test.dll")));
+            Assert.That((items[0] as NUnitTask).Assembly, Is.EqualTo(Os.DirChars("l1\\l2\\l3\\bin\\Debug\\fle.test.dll")));
+            Assert.That((items[1] as NUnitTask).Assembly, Is.EqualTo(Os.DirChars("l1\\l2\\l4\\bin\\Debug\\fle.test.dll")));
+            Assert.That((items[2] as NUnitTask).Assembly, Is.EqualTo(Os.DirChars("l1\\l2\\l3\\bin\\Debug\\flo.test.dll")));
         }
     }
 }

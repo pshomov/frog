@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Frog.Domain.CustomTasks;
 using Frog.Support;
 
 namespace Frog.Domain.TaskDetection
 {
-    public class MSBuildDetector
+    public class MSBuildDetector : TaskSource
     {
         readonly FileFinder fileFinder;
 
@@ -15,7 +16,7 @@ namespace Frog.Domain.TaskDetection
             this.fileFinder = fileFinder;
         }
 
-        public IList<MSBuildTaskDescriptions> Detect()
+        public IList<ITask> Detect()
         {
             var allSolutionFiles = fileFinder.FindAllSolutionFiles();
             if (allSolutionFiles.Count > 0)
@@ -26,12 +27,12 @@ namespace Frog.Domain.TaskDetection
                     rootFolderSolutions.FindIndex(
                         s => s.Equals("build.sln", StringComparison.InvariantCultureIgnoreCase));
                 if (rootBuildSlnIdx > -1)
-                    return As.List(new MSBuildTaskDescriptions(rootFolderSolutions[rootBuildSlnIdx]));
-                if (rootFolderSolutions.Count > 1) return new List<MSBuildTaskDescriptions>();
-                return As.List(new MSBuildTaskDescriptions(rootFolderSolutions[0]));
+                    return As.List<ITask>(new MSBuildTaskDescriptions(rootFolderSolutions[rootBuildSlnIdx]));
+                if (rootFolderSolutions.Count > 1) return new List<ITask>();
+                return As.List<ITask>(new MSBuildTaskDescriptions(rootFolderSolutions[0]));
             }
 
-            return new List<MSBuildTaskDescriptions>();
+            return new List<ITask>();
         }
     }
 }

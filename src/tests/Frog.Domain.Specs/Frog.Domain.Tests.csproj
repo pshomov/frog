@@ -9,11 +9,12 @@
     <OutputType>Library</OutputType>
     <RootNamespace>Frog.Domain.Specs</RootNamespace>
     <AssemblyName>Frog.Domain.Tests</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
     <UpgradeBackupLocation />
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -56,6 +57,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExecTaskGeneratorSpec.cs" />
     <Compile Include="FileFinderSpecs.cs" />
     <Compile Include="Git\GitRepositoryDriverCheckBase.cs" />
     <Compile Include="Git\GitRepositoryDriverGetSourceDrop.cs" />

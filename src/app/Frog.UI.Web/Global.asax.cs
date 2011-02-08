@@ -4,7 +4,6 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using Frog.Domain;
-using Frog.Support;
 using SimpleCQRS;
 
 namespace Frog.UI.Web
@@ -42,19 +41,15 @@ namespace Frog.UI.Web
             Directory.CreateDirectory(repoArea);
             Directory.CreateDirectory(workingAreaPath);
 
-            string git_username = Environment.GetEnvironmentVariable("MY_GIT_USERNAME");
-            string git_password = Environment.GetEnvironmentVariable("MY_GIT_PASSWORD");
+            var git_username = Environment.GetEnvironmentVariable("MY_GIT_USERNAME");
+            var git_password = Environment.GetEnvironmentVariable("MY_GIT_PASSWORD");
 
             var driver = new GitDriver(repoArea, "test",
                                        String.Format("https://{0}:{1}@github.com/pshomov/frog.git", git_username,
                                                      git_password));
-            PipelineOfTasks pipeline;
-            if (Os.IsWindows)
-                pipeline = new PipelineOfTasks((IEventPublisher) bus,
-                                               (TaskDispenser) new ExecTask(@"cmd.exe",
-                                                                            @"/c %SystemRoot%\Microsoft.NET\Framework\v3.5\msbuild.exe Frog.Net.sln"));
-            else
-                pipeline = new PipelineOfTasks((IEventPublisher) bus, (TaskDispenser) new ExecTask(@"xbuild", @"Frog.Net.sln"));
+            var pipeline = new PipelineOfTasks(bus,
+                                               new FixedTasksDispenser(new ExecTask(@"xbuild",
+                                                                                    @"Frog.Net.sln")));
             var area = new SubfolderWorkingArea(workingAreaPath);
             ServiceLocator.Valve = new Valve(driver, pipeline, area);
         }

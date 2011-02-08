@@ -1,6 +1,8 @@
-﻿namespace Frog.Domain.TaskDetection
+﻿using Frog.Domain.CustomTasks;
+
+namespace Frog.Domain.TaskDetection
 {
-    public struct MSBuildTaskDescriptions
+    public class MSBuildTaskDescriptions : ITask
     {
         public readonly string solutionFile;
 

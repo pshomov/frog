@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Frog.Domain.CustomTasks;
 using Frog.Domain.TaskDetection;
 using Frog.Support;
 using NSubstitute;
@@ -10,7 +11,7 @@ namespace Frog.Domain.Specs.TaskDetection
     public class MSBuildTaskDetectorSpecs : MSBuildTaskDetectorSpecsBase
     {
         MSBuildDetector msbuildTaskDetecttor;
-        IList<MSBuildTaskDescriptions> items;
+        IList<ITask> items;
 
         public override void Given()
         {
@@ -29,7 +30,7 @@ namespace Frog.Domain.Specs.TaskDetection
         public void should_prefer_root_file_sln_over_any_other_down_the_hierarchy()
         {
             Assert.That(items.Count, Is.EqualTo(1));
-            Assert.That(items[0].solutionFile, Is.EqualTo("a1.sln"));
+            Assert.That((items[0] as MSBuildTaskDescriptions).solutionFile, Is.EqualTo("a1.sln"));
         }
     }
 
@@ -37,7 +38,7 @@ namespace Frog.Domain.Specs.TaskDetection
     public class MSBuildTaskDetectorMultipleSolutionsAtTheRootSpecs : MSBuildTaskDetectorSpecsBase
     {
         MSBuildDetector msbuildTaskDetecttor;
-        IList<MSBuildTaskDescriptions> items;
+        IList<ITask> items;
 
         public override void Given()
         {
@@ -64,7 +65,7 @@ namespace Frog.Domain.Specs.TaskDetection
     public class MSBuildTaskDetectorMultipleSolutionsAtTheRootWithBuildOneSpecs : MSBuildTaskDetectorSpecsBase
     {
         MSBuildDetector msbuildTaskDetecttor;
-        IList<MSBuildTaskDescriptions> items;
+        IList<ITask> items;
 
         public override void Given()
         {
@@ -85,7 +86,7 @@ namespace Frog.Domain.Specs.TaskDetection
         public void should_always_prefer_the_solution_called_BUILD()
         {
             Assert.That(items.Count, Is.EqualTo(1));
-            Assert.That(items[0].solutionFile, Is.EqualTo("Build.sln"));
+            Assert.That((items[0] as MSBuildTaskDescriptions).solutionFile, Is.EqualTo("Build.sln"));
         }
     }
 
@@ -93,7 +94,7 @@ namespace Frog.Domain.Specs.TaskDetection
     public class NoSolutionsAtAllSpecs : MSBuildTaskDetectorSpecsBase
     {
         MSBuildDetector msbuildTaskDetecttor;
-        IList<MSBuildTaskDescriptions> items;
+        IList<ITask> items;
 
         public override void Given()
         {
