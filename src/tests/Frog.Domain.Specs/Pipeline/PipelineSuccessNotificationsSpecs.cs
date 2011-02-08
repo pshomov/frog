@@ -18,7 +18,7 @@ namespace Frog.Domain.Specs.Pipeline
         {
             task1.Perform(Arg.Any<SourceDrop>()).Returns(new ExecTaskResult(ExecTask.ExecutionStatus.Success, 0));
             task2.Perform(Arg.Any<SourceDrop>()).Returns(new ExecTaskResult(ExecTask.ExecutionStatus.Success, 0));
-            pipeline = new PipelineOfTasks(bus, new FixedTasksDispencer(task1, task2));
+            pipeline = new PipelineOfTasks(bus, new FixedTasksDispenser(task1, task2));
         }
 
         public override void When()

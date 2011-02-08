@@ -22,7 +22,7 @@ namespace Frog.System.Specs
             var task1 = Substitute.For<ExecTask>(null, null);
             var task2 = Substitute.For<ExecTask>(null, null);
             pipeline = new PipelineOfTasks(system.Bus,
-                                           new FixedTasksDispencer(task1, task2));
+                                           new FixedTasksDispenser(task1, task2));
             valve = new Valve(system.Git, pipeline, system.WorkingArea);
 
             task1.Perform(Arg.Any<SourceDrop>()).Returns(new ExecTaskResult(ExecTask.ExecutionStatus.Failure, 23));

@@ -51,10 +51,10 @@ namespace Frog.UI.Web
             PipelineOfTasks pipeline;
             if (Os.IsWindows)
                 pipeline = new PipelineOfTasks((IEventPublisher) bus,
-                                               (TaskDispencer) new ExecTask(@"cmd.exe",
+                                               (TaskDispenser) new ExecTask(@"cmd.exe",
                                                                             @"/c %SystemRoot%\Microsoft.NET\Framework\v3.5\msbuild.exe Frog.Net.sln"));
             else
-                pipeline = new PipelineOfTasks((IEventPublisher) bus, (TaskDispencer) new ExecTask(@"xbuild", @"Frog.Net.sln"));
+                pipeline = new PipelineOfTasks((IEventPublisher) bus, (TaskDispenser) new ExecTask(@"xbuild", @"Frog.Net.sln"));
             var area = new SubfolderWorkingArea(workingAreaPath);
             ServiceLocator.Valve = new Valve(driver, pipeline, area);
         }

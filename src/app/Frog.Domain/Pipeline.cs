@@ -23,16 +23,16 @@ namespace Frog.Domain
         void Process(SourceDrop sourceDrop);
     }
 
-    public interface TaskDispencer
+    public interface TaskDispenser
     {
         List<ExecTask> GimeTasks();
     }
 
-    public class FixedTasksDispencer : TaskDispencer
+    public class FixedTasksDispenser : TaskDispenser
     {
         readonly ExecTask[] tasks;
 
-        public FixedTasksDispencer(params ExecTask[] tasks)
+        public FixedTasksDispenser(params ExecTask[] tasks)
         {
             this.tasks = tasks;
         }
@@ -78,15 +78,15 @@ namespace Frog.Domain
         }
 
         readonly IEventPublisher eventPublisher;
-        readonly TaskDispencer tasksDispencer;
+        readonly TaskDispenser tasksDispenser;
 
-        public PipelineOfTasks(IEventPublisher eventPublisher, TaskDispencer tasksDispencer)
+        public PipelineOfTasks(IEventPublisher eventPublisher, TaskDispenser tasksDispenser)
         {
             this.eventPublisher = eventPublisher;
-            this.tasksDispencer = tasksDispencer;
+            this.tasksDispenser = tasksDispenser;
         }
 
-        public PipelineOfTasks(TaskDispencer taskDispencer) : this(new FakeBus(), taskDispencer)
+        public PipelineOfTasks(TaskDispenser taskDispenser) : this(new FakeBus(), taskDispenser)
         {
         }
 
@@ -94,7 +94,7 @@ namespace Frog.Domain
         {
             eventPublisher.Publish(new BuildStarted());
             ExecTaskResult.Status lastTaskStatus = ExecTaskResult.Status.Success;
-            foreach (var task in tasksDispencer.GimeTasks())
+            foreach (var task in tasksDispenser.GimeTasks())
             {
                 eventPublisher.Publish(new TaskStarted());
                 lastTaskStatus = task.Perform(sourceDrop).ExecStatus;

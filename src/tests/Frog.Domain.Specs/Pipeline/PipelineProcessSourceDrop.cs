@@ -10,7 +10,7 @@ namespace Frog.Domain.Specs.Pipeline
                                     _task1 = MockRepository.GenerateMock<ExecTask>("", "");
                                     _task1.Expect(task => task.Perform(null)).IgnoreArguments().Return(
                                         new ExecTaskResult(ExecTask.ExecutionStatus.Success, 0));
-                                    _pipeline = new PipelineOfTasks(new FixedTasksDispencer(_task1));
+                                    _pipeline = new PipelineOfTasks(new FixedTasksDispenser(_task1));
                                 };
 
         Because of = () => _pipeline.Process(SourceDrop);
@@ -27,7 +27,7 @@ namespace Frog.Domain.Specs.Pipeline
                                     _task2 = MockRepository.GenerateMock<ExecTask>("", "");
                                     _task2.Expect(task => task.Perform(null)).IgnoreArguments().Return(
                                         new ExecTaskResult(ExecTask.ExecutionStatus.Success, 0));
-                                    _pipeline = new PipelineOfTasks(new FixedTasksDispencer(_task1, _task2));
+                                    _pipeline = new PipelineOfTasks(new FixedTasksDispenser(_task1, _task2));
                                 };
 
         Because of = () => _pipeline.Process(SourceDrop);
@@ -42,7 +42,7 @@ namespace Frog.Domain.Specs.Pipeline
                                     _task1.Expect(task => task.Perform(null)).IgnoreArguments().Return(
                                         new ExecTaskResult(ExecTask.ExecutionStatus.Failure, 2));
                                     _task2 = MockRepository.GenerateMock<ExecTask>("", "");
-                                    _pipeline = new PipelineOfTasks(new FixedTasksDispencer(_task1, _task2));
+                                    _pipeline = new PipelineOfTasks(new FixedTasksDispenser(_task1, _task2));
                                 };
 
         Because of = () => _pipeline.Process(SourceDrop);

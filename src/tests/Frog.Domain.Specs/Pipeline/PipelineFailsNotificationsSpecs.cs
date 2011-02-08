@@ -18,7 +18,7 @@ namespace Frog.Domain.Specs
         public override void Given()
         {
             task1.Perform(Arg.Any<SourceDrop>()).Returns(new ExecTaskResult(ExecTask.ExecutionStatus.Failure, -1));
-            pipeline = new PipelineOfTasks(bus, new FixedTasksDispencer(task1, task2));
+            pipeline = new PipelineOfTasks(bus, new FixedTasksDispenser(task1, task2));
         }
 
         public override void When()
