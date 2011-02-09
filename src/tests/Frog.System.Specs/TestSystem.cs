@@ -24,23 +24,47 @@ namespace Frog.System.Specs
         {
             events = new List<Event>();
             theBus = new FakeBus();
-            var original_repo = Path.Combine(GitTestSupport.GetTempPath(), Path.GetRandomFileName());
-            Directory.CreateDirectory(original_repo);
-            string dummyRepo = GitTestSupport.CreateDummyRepo(original_repo, "test_repo");
+            string dummyRepo = SetupDummyRepo();
 
-            workingAreaPath = Path.Combine(GitTestSupport.GetTempPath(), Path.GetRandomFileName());
+            SetupRepoClone(dummyRepo);
+            SetupWorkingArea();
+
+            SetupView();
+            SetupAllEventLogging();
+        }
+
+        void SetupRepoClone(string dummyRepo)
+        {
             repoArea = Path.Combine(GitTestSupport.GetTempPath(), Path.GetRandomFileName());
             Directory.CreateDirectory(repoArea);
-            Directory.CreateDirectory(workingAreaPath);
             driver = new GitDriver(repoArea, "test", dummyRepo);
-            area = new SubfolderWorkingArea(workingAreaPath);
+        }
 
+        void SetupWorkingArea()
+        {
+            workingAreaPath = Path.Combine(GitTestSupport.GetTempPath(), Path.GetRandomFileName());
+            Directory.CreateDirectory(workingAreaPath);
+            area = new SubfolderWorkingArea(workingAreaPath);
+        }
+
+        string SetupDummyRepo()
+        {
+            var original_repo = Path.Combine(GitTestSupport.GetTempPath(), Path.GetRandomFileName());
+            Directory.CreateDirectory(original_repo);
+            return GitTestSupport.CreateDummyRepo(original_repo, "test_repo");
+        }
+
+        void SetupView()
+        {
             report = new PipelineStatusView.BuildStatus();
             var statusView = new PipelineStatusView(report);
             theBus.RegisterHandler<BuildStarted>(statusView.Handle);
             theBus.RegisterHandler<BuildEnded>(statusView.Handle);
             theBus.RegisterHandler<TaskStarted>(statusView.Handle);
+        }
 
+        void SetupAllEventLogging()
+        {
             var allmessages = AppDomain.CurrentDomain.GetAssemblies().ToList()
                 .SelectMany(s => s.GetTypes()).Where(type => typeof (Event).IsAssignableFrom(type));
             var mthd = theBus.GetType().GetMethod("RegisterHandler");
