@@ -41,25 +41,24 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CompoundTaskSource.cs" />
-    <Compile Include="ExecTaskFactory.cs" />
+    <Compile Include="TaskSources\CompoundTaskSource.cs" />
     <Compile Include="ExecTaskGenerator.cs" />
     <Compile Include="FileFinder.cs" />
     <Compile Include="CustomTasks\ITask.cs" />
     <Compile Include="CustomTasks\NUnitTask.cs" />
-    <Compile Include="CustomTasks\NUnitTaskDetctor.cs" />
-    <Compile Include="MSBuildTaskConverter.cs" />
+    <Compile Include="TaskSources\NUnitTaskDetctor.cs" />
+    <Compile Include="CustomTasks\MSBuildTaskConverter.cs" />
     <Compile Include="PathFinder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ExecTask.cs" />
     <Compile Include="GitDriver.cs" />
     <Compile Include="Pipeline.cs" />
-    <Compile Include="SimpleExecTaskFactory.cs" />
+    <Compile Include="ExecTaskFactory.cs" />
     <Compile Include="SubfolderWorkingArea.cs" />
     <Compile Include="TaskConvertor.cs" />
-    <Compile Include="TaskDetection\MSBuildDetector.cs" />
-    <Compile Include="TaskDetection\MSBuildTaskDescriptions.cs" />
-    <Compile Include="TaskSource.cs" />
+    <Compile Include="TaskSources\MSBuildDetector.cs" />
+    <Compile Include="CustomTasks\MSBuildTaskDescriptions.cs" />
+    <Compile Include="TaskSources\TaskSource.cs" />
     <Compile Include="Valve.cs" />
   </ItemGroup>
   <ItemGroup>

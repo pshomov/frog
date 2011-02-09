@@ -1,7 +1,10 @@
 ﻿namespace Frog.Domain
 {
-    public interface ExecTaskFactory
+    public class ExecTaskFactory
     {
-        ExecTask CreateTask(string app, string args);
+        public virtual ExecTask CreateTask(string app, string args)
+        {
+            return new ExecTask(app, args);
+        }
     }
 }
