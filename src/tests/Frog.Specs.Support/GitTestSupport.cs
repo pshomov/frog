@@ -9,7 +9,7 @@ namespace Frog.Domain.Specs
     {
         public static string GetTempPath()
         {
-            return "F:\\TEMP";
+            return Path.GetTempPath();
         }
 
         public static string CreateDummyRepo(string basePath, string repoName)
