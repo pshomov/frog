@@ -1,3 +1,4 @@
+using System;
 using NUnit.Framework;
 
 namespace Frog.Domain.Specs
@@ -8,15 +9,34 @@ namespace Frog.Domain.Specs
         public void Setup()
         {
             SetupDependencies();
-            Given();
-            When();
+            try
+            {
+                Given();
+            }
+            catch (Exception e)
+            {
+                GivenCleanup();
+                throw;
+            }
+            try
+            {
+                When();
+            }
+            catch (Exception e)
+            {
+                GivenCleanup();
+                WhenCleanup();
+                throw;
+            }
         }
 
         public virtual void SetupDependencies(){}
         public abstract void Given();
         public abstract void When();
-		
-		[TearDown]
-		public virtual void Cleanup() {}
+
+        protected virtual void GivenCleanup(){}
+        protected virtual void WhenCleanup(){}
+        [TearDown]
+        void CaseCleanup() {GivenCleanup(); WhenCleanup();}
     }
 }

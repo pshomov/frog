@@ -1,10 +1,10 @@
-using System;
 using System.Threading;
 using Frog.Domain;
 using Frog.Domain.Specs;
-using Frog.UI.Web;
 using NSubstitute;
 using NUnit.Framework;
+using xray;
+using Is = NHamcrest.Core.Is;
 
 namespace Frog.System.Specs
 {
@@ -36,20 +36,22 @@ namespace Frog.System.Specs
         [Test]
         public void should_have_build_result_in_build_complete_event()
         {
-            var prober = new EventedProber(3000, system.Bus);   
-            Assert.True(prober.check<TaskStarted>());
+            var prober = new PollingProber(3000, 50);
+            Assert.True(prober.check(Take.Snapshot(() => system.GetEventsSnapshot()).Has(list => list.FindAll(@event => @event.GetType() == typeof(TaskStarted)).Count, Is.EqualTo(1))));
+            Assert.True(prober.check(Take.Snapshot(() => system.GetEventsSnapshot()).Has(list => list.FindAll(@event => @event.GetType() == typeof(TaskFinished)).Count, Is.EqualTo(1))));
             makeSureAllProcessesAreDone(prober);
         }
 
-        void makeSureAllProcessesAreDone(EventedProber prober)
+        void makeSureAllProcessesAreDone(PollingProber prober)
         {
             // we do this to make sure the processes that operate on the system have exited so that the cleanup can proceed safely
-            Assert.True(prober.check<BuildEnded>());
+            Assert.True(prober.check(Take.Snapshot(() => system.GetEventsSnapshot()).Has(list => list.FindAll(@event => @event.GetType() == typeof(BuildEnded)).Count, Is.EqualTo(1))));
         }
 
-        public override void Cleanup()
+        protected override void GivenCleanup()
         {
             system.ResetSystem();
         }
     }
+
 }

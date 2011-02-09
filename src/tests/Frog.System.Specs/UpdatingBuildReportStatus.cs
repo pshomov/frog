@@ -1,7 +1,7 @@
 using System.Threading;
 using Frog.Domain;
 using Frog.Domain.Specs;
-using Frog.UI.Web;
+using Frog.Domain.UI;
 using NUnit.Framework;
 using xray;
 using Is = NHamcrest.Core.Is;
@@ -52,7 +52,7 @@ namespace Frog.System.Specs
                             ));
         }
 
-        public override void Cleanup()
+        protected override void GivenCleanup()
         {
             system.ResetSystem();
         }

@@ -4,6 +4,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using Frog.Domain;
+using Frog.Domain.UI;
 using SimpleCQRS;
 
 namespace Frog.UI.Web

@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Threading;
-using Frog.Domain;
 using SimpleCQRS;
 
-namespace Frog.UI.Web
+namespace Frog.Domain.UI
 {
     public class PipelineStatusView : Handles<BuildStarted>, Handles<BuildEnded>
     {

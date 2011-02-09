@@ -1,8 +1,11 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using Frog.Domain;
 using Frog.Domain.Specs;
+using Frog.Domain.UI;
 using Frog.Specs.Support;
-using Frog.UI.Web;
 using SimpleCQRS;
 
 namespace Frog.System.Specs
@@ -10,14 +13,16 @@ namespace Frog.System.Specs
     public class TestSystem
     {
         public FakeBus theBus;
-        string workingAreaPath;
-        string repoArea;
+        readonly string workingAreaPath;
+        readonly string repoArea;
         public GitDriver driver;
         public SubfolderWorkingArea area;
         public PipelineStatusView.BuildStatus report;
+        public List<Event> events;
 
         public TestSystem()
         {
+            events = new List<Event>();
             theBus = new FakeBus();
             var original_repo = Path.Combine(GitTestSupport.GetTempPath(), Path.GetRandomFileName());
             Directory.CreateDirectory(original_repo);
@@ -35,24 +40,50 @@ namespace Frog.System.Specs
             theBus.RegisterHandler<BuildStarted>(statusView.Handle);
             theBus.RegisterHandler<BuildEnded>(statusView.Handle);
             theBus.RegisterHandler<TaskStarted>(statusView.Handle);
+
+            var allmessages = AppDomain.CurrentDomain.GetAssemblies().ToList()
+                .SelectMany(s => s.GetTypes()).Where(type => typeof (Event).IsAssignableFrom(type));
+            var mthd = theBus.GetType().GetMethod("RegisterHandler");
+            Action<Event> event_logger = @event => events.Add(@event);
+            foreach (var msg in allmessages)
+            {
+                mthd.MakeGenericMethod(msg).Invoke(theBus, new object[] {event_logger});
+            }
+        }
+
+        public List<Event> GetEventsSoFar()
+        {
+            return new List<Event>(events);
         }
 
         public void CleanupTestSystem()
         {
-            if (Directory.Exists(workingAreaPath)) { OSHelpers.ClearAttributes(workingAreaPath); Directory.Delete(workingAreaPath, true); }
-            if (Directory.Exists(repoArea)) { OSHelpers.ClearAttributes(repoArea); Directory.Delete(repoArea, true); }            
+            events.Clear();
+            if (Directory.Exists(workingAreaPath))
+            {
+                OSHelpers.ClearAttributes(workingAreaPath);
+                Directory.Delete(workingAreaPath, true);
+            }
+            if (Directory.Exists(repoArea))
+            {
+                OSHelpers.ClearAttributes(repoArea);
+                Directory.Delete(repoArea, true);
+            }
         }
-    
-        static TestSystem theTestSystem = new TestSystem();
 
-        public static TestSystem TheTestSystem { get { return theTestSystem; } }
+        static readonly TestSystem theTestSystem = new TestSystem();
 
+        public static TestSystem TheTestSystem
+        {
+            get { return theTestSystem; }
+        }
     }
 
     public class SystemDriver
     {
-        TestSystem theTestSystem;
-        private SystemDriver()
+        readonly TestSystem theTestSystem;
+
+        SystemDriver()
         {
             theTestSystem = new TestSystem();
         }
@@ -85,6 +116,11 @@ namespace Frog.System.Specs
         public void ResetSystem()
         {
             theTestSystem.CleanupTestSystem();
+        }
+
+        public List<Event> GetEventsSnapshot()
+        {
+            return theTestSystem.GetEventsSoFar();
         }
     }
 }

@@ -52,6 +52,10 @@ namespace Frog.Domain
     {
     }
 
+    public class TaskFinished : Event
+    {
+    }
+
     public class BuildEnded : Event
     {
         public enum BuildStatus
@@ -71,7 +75,7 @@ namespace Frog.Domain
 
     public class PipelineOfTasks : Pipeline
     {
-        class FakeBus : IEventPublisher
+        class DummyBus : IEventPublisher
         {
             public void Publish<T>(T @event) where T : Event
             {
@@ -87,7 +91,7 @@ namespace Frog.Domain
             this.tasksDispenser = tasksDispenser;
         }
 
-        public PipelineOfTasks(TaskDispenser taskDispenser) : this(new FakeBus(), taskDispenser)
+        public PipelineOfTasks(TaskDispenser taskDispenser) : this(new DummyBus(), taskDispenser)
         {
         }
 
@@ -99,7 +103,6 @@ namespace Frog.Domain
             {
                 eventPublisher.Publish(new TaskStarted());
                 lastTaskStatus = task.Perform(sourceDrop).ExecStatus;
-                Thread.Sleep(500);
                 eventPublisher.Publish(new TaskFinished());
                 if (lastTaskStatus != ExecTaskResult.Status.Success) break;
             }
@@ -110,7 +113,4 @@ namespace Frog.Domain
         }
     }
 
-    public class TaskFinished : Event
-    {
-    }
 }
