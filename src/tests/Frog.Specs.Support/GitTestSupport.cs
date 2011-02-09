@@ -23,8 +23,8 @@ namespace Frog.Domain.Specs
 
         public static void CommitChangeFiles(string repo, string fileset)
         {
-            var path = Path.Combine(Underware.GitSupportScriptsLocation, "git_commit_files.rb");
-            var process = new ProcessWrapper("ruby", path + " " + repo + " " + fileset);
+            var scriptPath = Path.Combine(Underware.GitSupportScriptsLocation, "git_commit_files.rb");
+            var process = new ProcessWrapper("ruby", scriptPath + " " + repo + " " + fileset+"/.");
             process.Execute();
             process.WaitForProcess();
         }

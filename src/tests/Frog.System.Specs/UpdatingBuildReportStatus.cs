@@ -14,12 +14,14 @@ namespace Frog.System.Specs
         Valve valve;
         PipelineOfTasks pipeline;
         SystemDriver system;
+        RepositoryDriver repo;
 
         public override void Given()
         {
             system = SystemDriver.GetCleanSystem();
-
+            repo = RepositoryDriver.GetNewRepository();
             pipeline = new PipelineOfTasks(system.Bus, new FixedTasksDispenser(new ExecTask(@"ruby", @"-e 'exit 2'")));
+            system.MonitorRepository(repo.Url);
             valve = new Valve(system.Git, pipeline, system.WorkingArea);
         }
 

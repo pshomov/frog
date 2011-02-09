@@ -24,16 +24,14 @@ namespace Frog.System.Specs
         {
             events = new List<Event>();
             theBus = new FakeBus();
-            string dummyRepo = SetupDummyRepo();
 
-            SetupRepoClone(dummyRepo);
             SetupWorkingArea();
 
             SetupView();
             SetupAllEventLogging();
         }
 
-        void SetupRepoClone(string dummyRepo)
+        public void SetupRepoClone(string dummyRepo)
         {
             repoArea = Path.Combine(GitTestSupport.GetTempPath(), Path.GetRandomFileName());
             Directory.CreateDirectory(repoArea);
@@ -45,13 +43,6 @@ namespace Frog.System.Specs
             workingAreaPath = Path.Combine(GitTestSupport.GetTempPath(), Path.GetRandomFileName());
             Directory.CreateDirectory(workingAreaPath);
             area = new SubfolderWorkingArea(workingAreaPath);
-        }
-
-        string SetupDummyRepo()
-        {
-            var original_repo = Path.Combine(GitTestSupport.GetTempPath(), Path.GetRandomFileName());
-            Directory.CreateDirectory(original_repo);
-            return GitTestSupport.CreateDummyRepo(original_repo, "test_repo");
         }
 
         void SetupView()
@@ -103,6 +94,46 @@ namespace Frog.System.Specs
         }
     }
 
+    public class RepositoryDriver
+    {
+        readonly string repoPath;
+
+        RepositoryDriver(string repoPath)
+        {
+            this.repoPath = repoPath;
+        }
+
+        public string Url
+        {
+            get {
+                return repoPath;
+            }
+        }
+
+        public static RepositoryDriver GetNewRepository()
+        {
+            return new RepositoryDriver(SetupDummyRepo());
+        }
+
+        public void CommitDirectoryTree(string treeRoot)
+        {
+            GitTestSupport.CommitChangeFiles(repoPath, treeRoot);
+        }
+
+        static string SetupDummyRepo()
+        {
+            var original_repo = Path.Combine(GitTestSupport.GetTempPath(), Path.GetRandomFileName());
+            Directory.CreateDirectory(original_repo);
+            return GitTestSupport.CreateDummyRepo(original_repo, "test_repo");
+        }
+
+        public void Cleanup()
+        {
+            OSHelpers.ClearAttributes(repoPath);
+            Directory.Delete(repoPath, true);
+        }
+    }
+
     public class SystemDriver
     {
         readonly TestSystem theTestSystem;
@@ -145,6 +176,11 @@ namespace Frog.System.Specs
         public List<Event> GetEventsSnapshot()
         {
             return theTestSystem.GetEventsSoFar();
+        }
+
+        public void MonitorRepository(string repoUrl)
+        {
+            theTestSystem.SetupRepoClone(repoUrl);
         }
     }
 }

@@ -3,7 +3,7 @@ using Frog.Domain.CustomTasks;
 
 namespace Frog.Domain
 {
-    class CompoundTaskSource : TaskSource
+    public class CompoundTaskSource : TaskSource
     {
         readonly TaskSource[] srcs;
 
@@ -12,12 +12,12 @@ namespace Frog.Domain
             this.srcs = srcs;
         }
 
-        public IList<ITask> Detect()
+        public IList<ITask> Detect(string projectFolder)
         {
-            var result = new List<ITask>(0);
+            var result = new List<ITask>();
             foreach (var taskSource in srcs)
             {
-                result.AddRange(taskSource.Detect());
+                result.AddRange(taskSource.Detect(projectFolder));
             }
             return result;
         }

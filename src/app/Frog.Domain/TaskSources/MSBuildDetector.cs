@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Frog.Domain.CustomTasks;
+using Frog.Domain.TaskDetection;
 using Frog.Support;
 
-namespace Frog.Domain.TaskDetection
+namespace Frog.Domain.TaskSources
 {
     public class MSBuildDetector : TaskSource
     {
@@ -16,9 +17,10 @@ namespace Frog.Domain.TaskDetection
             this.fileFinder = fileFinder;
         }
 
-        public IList<ITask> Detect()
+        public IList<ITask> Detect(string projectFolder)
         {
-            var allSolutionFiles = fileFinder.FindAllSolutionFiles();
+            var allSolutionFiles = fileFinder.FindAllSolutionFiles(projectFolder);
+            if (allSolutionFiles.Count == 1) return As.List<ITask>(new MSBuildTaskDescriptions(allSolutionFiles[0]));
             if (allSolutionFiles.Count > 0)
             {
                 var rootFolderSolutions =

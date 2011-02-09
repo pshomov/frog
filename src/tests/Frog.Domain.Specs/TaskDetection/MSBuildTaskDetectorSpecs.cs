@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Frog.Domain.CustomTasks;
 using Frog.Domain.TaskDetection;
+using Frog.Domain.TaskSources;
 using Frog.Support;
 using NSubstitute;
 using NUnit.Framework;
@@ -16,14 +17,14 @@ namespace Frog.Domain.Specs.TaskDetection
         public override void Given()
         {
             msbuildTaskDetecttor = new MSBuildDetector(projectFileRepo);
-            projectFileRepo.FindAllSolutionFiles().Returns(As.List(Os.DirChars("a1.sln"),
+            projectFileRepo.FindAllSolutionFiles("basefolder").Returns(As.List(Os.DirChars("a1.sln"),
                                                                              Os.DirChars("a1\\a2.sln"),
                                                                              Os.DirChars("a2\\asdas\\asd\\b.sln")));
         }
 
         public override void When()
         {
-            items = msbuildTaskDetecttor.Detect();
+            items = msbuildTaskDetecttor.Detect("basefolder");
         }
 
         [Test]
@@ -43,7 +44,7 @@ namespace Frog.Domain.Specs.TaskDetection
         public override void Given()
         {
             msbuildTaskDetecttor = new MSBuildDetector(projectFileRepo);
-            projectFileRepo.FindAllSolutionFiles().Returns(As.List(Os.DirChars("a1.sln"),
+            projectFileRepo.FindAllSolutionFiles("basefolder").Returns(As.List(Os.DirChars("a1.sln"),
                                                                              Os.DirChars("a2.sln"),
                                                                              Os.DirChars(
                                                                                  "a2\\asdas\\asd\\build.sln")));
@@ -51,7 +52,7 @@ namespace Frog.Domain.Specs.TaskDetection
 
         public override void When()
         {
-            items = msbuildTaskDetecttor.Detect();
+            items = msbuildTaskDetecttor.Detect("basefolder");
         }
 
         [Test]
@@ -70,7 +71,7 @@ namespace Frog.Domain.Specs.TaskDetection
         public override void Given()
         {
             msbuildTaskDetecttor = new MSBuildDetector(projectFileRepo);
-            projectFileRepo.FindAllSolutionFiles().Returns(As.List(Os.DirChars("a1.sln"),
+            projectFileRepo.FindAllSolutionFiles("basefolder").Returns(As.List(Os.DirChars("a1.sln"),
                                                                              Os.DirChars("a2.sln"),
                                                                              Os.DirChars("Build.sln"),
                                                                              Os.DirChars(
@@ -79,7 +80,7 @@ namespace Frog.Domain.Specs.TaskDetection
 
         public override void When()
         {
-            items = msbuildTaskDetecttor.Detect();
+            items = msbuildTaskDetecttor.Detect("basefolder");
         }
 
         [Test]
@@ -99,18 +100,43 @@ namespace Frog.Domain.Specs.TaskDetection
         public override void Given()
         {
             msbuildTaskDetecttor = new MSBuildDetector(projectFileRepo);
-            projectFileRepo.FindAllSolutionFiles().Returns(new List<string>());
+            projectFileRepo.FindAllSolutionFiles("basefolder").Returns(new List<string>());
         }
 
         public override void When()
         {
-            items = msbuildTaskDetecttor.Detect();
+            items = msbuildTaskDetecttor.Detect("basefolder");
         }
 
         [Test]
         public void should_always_prefer_the_solution_called_BUILD()
         {
             Assert.That(items.Count, Is.EqualTo(0));
+        }
+    }
+
+    [TestFixture]
+    public class OneSolutionAnywhereGetsSelectedForBuildSpecs : MSBuildTaskDetectorSpecsBase
+    {
+        MSBuildDetector msbuildTaskDetecttor;
+        IList<ITask> items;
+
+        public override void Given()
+        {
+            msbuildTaskDetecttor = new MSBuildDetector(projectFileRepo);
+            projectFileRepo.FindAllSolutionFiles("basefolder").Returns(As.List(Os.DirChars("fle\\flo\\a.sln")));
+        }
+
+        public override void When()
+        {
+            items = msbuildTaskDetecttor.Detect("basefolder");
+        }
+
+        [Test]
+        public void should_always_select_the_only_solution_file()
+        {
+            Assert.That(items.Count, Is.EqualTo(1));
+            Assert.That((items[0] as MSBuildTaskDescriptions).solutionFile, Is.EqualTo(Os.DirChars("fle\\flo\\a.sln")));
         }
     }
 }

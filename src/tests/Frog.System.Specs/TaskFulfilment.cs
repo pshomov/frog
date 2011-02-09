@@ -14,15 +14,19 @@ namespace Frog.System.Specs
         Valve valve;
         PipelineOfTasks pipeline;
         SystemDriver system;
+        RepositoryDriver repo;
 
         public override void Given()
         {
             system = SystemDriver.GetCleanSystem();
+            repo = RepositoryDriver.GetNewRepository();
 
             var task1 = Substitute.For<ExecTask>(null, null);
             var task2 = Substitute.For<ExecTask>(null, null);
+
             pipeline = new PipelineOfTasks(system.Bus,
                                            new FixedTasksDispenser(task1, task2));
+            system.MonitorRepository(repo.Url);
             valve = new Valve(system.Git, pipeline, system.WorkingArea);
 
             task1.Perform(Arg.Any<SourceDrop>()).Returns(new ExecTaskResult(ExecTask.ExecutionStatus.Failure, 23));
@@ -30,7 +34,7 @@ namespace Frog.System.Specs
 
         public override void When()
         {
-            ThreadPool.QueueUserWorkItem(state => valve.Check());
+            valve.Check();
         }
 
         [Test]
@@ -39,13 +43,6 @@ namespace Frog.System.Specs
             var prober = new PollingProber(3000, 50);
             Assert.True(prober.check(Take.Snapshot(() => system.GetEventsSnapshot()).Has(list => list.FindAll(@event => @event.GetType() == typeof(TaskStarted)).Count, Is.EqualTo(1))));
             Assert.True(prober.check(Take.Snapshot(() => system.GetEventsSnapshot()).Has(list => list.FindAll(@event => @event.GetType() == typeof(TaskFinished)).Count, Is.EqualTo(1))));
-            makeSureAllProcessesAreDone(prober);
-        }
-
-        void makeSureAllProcessesAreDone(PollingProber prober)
-        {
-            // we do this to make sure the processes that operate on the system have exited so that the cleanup can proceed safely
-            Assert.True(prober.check(Take.Snapshot(() => system.GetEventsSnapshot()).Has(list => list.FindAll(@event => @event.GetType() == typeof(BuildEnded)).Count, Is.EqualTo(1))));
         }
 
         protected override void GivenCleanup()

@@ -17,14 +17,14 @@ namespace Frog.Domain.Specs.TaskDetection
         {
             projectFileRepo = Substitute.For<FileFinder>();
             nunitTaskDetecttor = new NUnitTaskDetctor(projectFileRepo);
-            projectFileRepo.FindAllNUnitAssemblies().Returns(As.List(Os.DirChars("l1\\l2\\l3\\fle.test.csproj"),
+            projectFileRepo.FindAllNUnitAssemblies("basefolder").Returns(As.List(Os.DirChars("l1\\l2\\l3\\fle.test.csproj"),
                                                                      Os.DirChars("l1\\l2\\l4\\fle.test.csproj"),
                                                                      Os.DirChars("l1\\l2\\l3\\flo.test.csproj")));
         }
 
         public override void When()
         {
-            items = nunitTaskDetecttor.Detect();
+            items = nunitTaskDetecttor.Detect("basefolder");
         }
 
         [Test]

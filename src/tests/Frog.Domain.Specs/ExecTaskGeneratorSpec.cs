@@ -18,13 +18,13 @@ namespace Frog.Domain.Specs
         {
             execTaskFactory = Substitute.For<ExecTaskFactory>();
             var taskSource = Substitute.For<TaskSource>();
-            taskSource.Detect().Returns(As.List<ITask>(new MSBuildTaskDescriptions("fle.sln"), new NUnitTask("flo.test.dll")));
+            taskSource.Detect("flee").Returns(As.List<ITask>(new MSBuildTaskDescriptions("fle.sln"), new NUnitTask("flo.test.dll")));
             execTaskGenerator = new ExecTaskGenerator(taskSource, execTaskFactory);
         }
 
         public override void When()
         {
-            execTaskGenerator.GimeTasks();
+            execTaskGenerator.GimeTasks("flee");
         }
 
         [Test]

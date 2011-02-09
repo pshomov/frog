@@ -5,18 +5,12 @@ namespace Frog.Domain
 {
     public class PathFinder
     {
-        readonly string start;
         private string pattern;
 
-        public PathFinder(string start)
-        {
-            this.start = start;
-        }
-
-        public virtual void apply(Action<string> action, string pattern)
+        public virtual void apply(Action<string> action, string pattern, string baseFolder)
         {
             this.pattern = pattern;
-            Diver(start, action); 
+            Diver(baseFolder, action); 
         }
 
         void Diver(string currentDir, Action<string> action)

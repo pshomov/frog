@@ -26,7 +26,7 @@ namespace Frog.Domain
 
     public interface TaskDispenser
     {
-        List<ExecTask> GimeTasks();
+        List<ExecTask> GimeTasks(string projectFolder);
     }
 
     public class FixedTasksDispenser : TaskDispenser
@@ -38,7 +38,7 @@ namespace Frog.Domain
             this.tasks = tasks;
         }
 
-        public List<ExecTask> GimeTasks()
+        public List<ExecTask> GimeTasks(string projectFolder)
         {
             return new List<ExecTask>(tasks);
         }
@@ -99,7 +99,7 @@ namespace Frog.Domain
         {
             eventPublisher.Publish(new BuildStarted());
             ExecTaskResult.Status lastTaskStatus = ExecTaskResult.Status.Success;
-            foreach (var task in tasksDispenser.GimeTasks())
+            foreach (var task in tasksDispenser.GimeTasks(sourceDrop.SourceDropLocation))
             {
                 eventPublisher.Publish(new TaskStarted());
                 lastTaskStatus = task.Perform(sourceDrop).ExecStatus;

@@ -15,9 +15,9 @@ namespace Frog.Domain.CustomTasks
             this.projectFileRepo = projectFileRepo;
         }
 
-        public IList<ITask> Detect()
+        public IList<ITask> Detect(string projectFolder)
         {
-            var items =  projectFileRepo.FindAllNUnitAssemblies();
+            var items =  projectFileRepo.FindAllNUnitAssemblies(projectFolder);
             return items.Select(s => (ITask)new NUnitTask(ProjectPathToAssemblyPath(s))).ToList();
         }
 
