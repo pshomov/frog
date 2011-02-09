@@ -13,8 +13,8 @@ namespace Frog.System.Specs
     public class TestSystem
     {
         public FakeBus theBus;
-        readonly string workingAreaPath;
-        readonly string repoArea;
+        string workingAreaPath;
+        string repoArea;
         public GitDriver driver;
         public SubfolderWorkingArea area;
         public PipelineStatusView.BuildStatus report;
