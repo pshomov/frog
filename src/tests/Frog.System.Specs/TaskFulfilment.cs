@@ -1,4 +1,3 @@
-using System.Threading;
 using Frog.Domain;
 using Frog.Domain.Specs;
 using NSubstitute;
@@ -41,14 +40,20 @@ namespace Frog.System.Specs
         public void should_have_build_result_in_build_complete_event()
         {
             var prober = new PollingProber(3000, 50);
-            Assert.True(prober.check(Take.Snapshot(() => system.GetEventsSnapshot()).Has(list => list.FindAll(@event => @event.GetType() == typeof(TaskStarted)).Count, Is.EqualTo(1))));
-            Assert.True(prober.check(Take.Snapshot(() => system.GetEventsSnapshot()).Has(list => list.FindAll(@event => @event.GetType() == typeof(TaskFinished)).Count, Is.EqualTo(1))));
+            Assert.True(
+                prober.check(
+                    Take.Snapshot(() => system.GetEventsSnapshot()).Has(
+                        list => list.FindAll(@event => @event.GetType() == typeof (TaskStarted)).Count, Is.EqualTo(1))));
+            Assert.True(
+                prober.check(
+                    Take.Snapshot(() => system.GetEventsSnapshot()).Has(
+                        list => list.FindAll(@event => @event.GetType() == typeof (TaskFinished)).Count, Is.EqualTo(1))));
         }
 
         protected override void GivenCleanup()
         {
             system.ResetSystem();
+            repo.Cleanup();
         }
     }
-
 }
