@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Threading;
 using SimpleCQRS;
 
 namespace Frog.Domain
@@ -28,21 +26,6 @@ namespace Frog.Domain
     public interface TaskDispenser
     {
         List<ExecTask> GimeTasks(string projectFolder);
-    }
-
-    public class FixedTasksDispenser : TaskDispenser
-    {
-        readonly ExecTask[] tasks;
-
-        public FixedTasksDispenser(params ExecTask[] tasks)
-        {
-            this.tasks = tasks;
-        }
-
-        public List<ExecTask> GimeTasks(string projectFolder)
-        {
-            return new List<ExecTask>(tasks);
-        }
     }
 
     public class BuildStarted : Event

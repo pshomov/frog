@@ -1,4 +1,5 @@
-﻿using Machine.Specifications;
+﻿using Frog.Specs.Support;
+using Machine.Specifications;
 using Rhino.Mocks;
 
 namespace Frog.Domain.Specs.Pipeline

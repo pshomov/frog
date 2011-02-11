@@ -2,6 +2,7 @@ using System.Threading;
 using Frog.Domain;
 using Frog.Domain.Specs;
 using Frog.Domain.UI;
+using Frog.Specs.Support;
 using NUnit.Framework;
 using xray;
 using Is = NHamcrest.Core.Is;

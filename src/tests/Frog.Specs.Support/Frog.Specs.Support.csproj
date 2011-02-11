@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BDD.cs" />
+    <Compile Include="FixedTasksDispenser.cs" />
     <Compile Include="GitTestSupport.cs" />
     <Compile Include="OSHelpers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

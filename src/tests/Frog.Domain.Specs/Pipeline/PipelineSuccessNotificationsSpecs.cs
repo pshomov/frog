@@ -1,3 +1,4 @@
+using Frog.Specs.Support;
 using NSubstitute;
 using NUnit.Framework;
 using SimpleCQRS;

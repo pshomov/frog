@@ -1,6 +1,6 @@
+using Frog.Specs.Support;
 using NSubstitute;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SimpleCQRS;
 using Arg = NSubstitute.Arg;
 
