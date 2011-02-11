@@ -8,7 +8,7 @@
     <ProjectGuid>{67C6B4A8-D6A7-46EB-B618-3F48A8478EE5}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>Frog.Domain.Specs</RootNamespace>
-    <AssemblyName>Frog.Domain.Tests</AssemblyName>
+    <AssemblyName>Frog.Domain.Test</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
