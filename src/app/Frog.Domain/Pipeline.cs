@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using SimpleCQRS;
@@ -50,10 +51,34 @@ namespace Frog.Domain
 
     public class TaskStarted : Event
     {
+        public TaskStarted(string name)
+        {
+            Name = name;
+        }
+
+        public string Name { get; private set; }
     }
 
     public class TaskFinished : Event
     {
+        readonly string taskName;
+        readonly ExecTaskResult.Status status;
+
+        public TaskFinished(string taskName, ExecTaskResult.Status status)
+        {
+            this.taskName = taskName;
+            this.status = status;
+        }
+
+        public ExecTaskResult.Status Status
+        {
+            get { return status; }
+        }
+
+        public string TaskName
+        {
+            get { return taskName; }
+        }
     }
 
     public class BuildEnded : Event
@@ -101,9 +126,9 @@ namespace Frog.Domain
             ExecTaskResult.Status lastTaskStatus = ExecTaskResult.Status.Success;
             foreach (var task in tasksDispenser.GimeTasks(sourceDrop.SourceDropLocation))
             {
-                eventPublisher.Publish(new TaskStarted());
+                eventPublisher.Publish(new TaskStarted(task.Name));
                 lastTaskStatus = task.Perform(sourceDrop).ExecStatus;
-                eventPublisher.Publish(new TaskFinished());
+                eventPublisher.Publish(new TaskFinished(task.Name, lastTaskStatus));
                 if (lastTaskStatus != ExecTaskResult.Status.Success) break;
             }
 

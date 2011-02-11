@@ -28,7 +28,7 @@ namespace Frog.System.Specs
 
             execTaskGenerator = Substitute.For<ExecTaskFactory>();
             var execTask = Substitute.For<ExecTask>("", "");
-            execTaskGenerator.CreateTask(Arg.Any<string>(), Arg.Any<string>()).Returns(execTask); 
+            execTaskGenerator.CreateTask(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>()).Returns(execTask); 
             execTask.Perform(Arg.Any<SourceDrop>()).Returns(new ExecTaskResult(ExecTask.ExecutionStatus.Success, 0));
             
             var fileFinder = new DefaultFileFinder(new PathFinder());
@@ -48,13 +48,13 @@ namespace Frog.System.Specs
         [Test]
         public void should_have_build_result_in_build_complete_event()
         {
-            execTaskGenerator.Received().CreateTask("nunit", Os.DirChars("src/tests/Some.Tests/bin/Debug/Some.Test.dll"));
+            execTaskGenerator.Received().CreateTask("nunit", Os.DirChars("src/tests/Some.Tests/bin/Debug/Some.Test.dll"), Arg.Any<string>());
         }
 
         [Test]
         public void should_execute_xbuild_task()
         {
-            execTaskGenerator.Received().CreateTask("xbuild", Os.DirChars("SampleProject.sln"));
+            execTaskGenerator.Received().CreateTask("xbuild", Os.DirChars("SampleProject.sln"), Arg.Any<string>());
         }
 
         protected override void GivenCleanup()

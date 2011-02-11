@@ -55,16 +55,18 @@ namespace Frog.Domain
             Failure
         }
 
+        readonly string name;
         readonly string _app;
         private readonly string _arguments;
 
-        public ExecTask(string app, string arguments)
+        public ExecTask(string name, string app, string arguments)
         {
+            this.name = name;
             _app = app;
             _arguments = arguments;
         }
 
-        public ExecTask(string app, string arguments, TaskReporter taskReporter) : this(app, arguments)
+        public ExecTask(string name, string app, string arguments, TaskReporter taskReporter) : this(name, app, arguments)
         {
             this.taskReporter = taskReporter;
         }
@@ -91,5 +93,7 @@ namespace Frog.Domain
             }
             return new ExecTaskResult(ExecutionStatus.Failure, -1);
         }
+
+        public string Name { get { return name; } }
     }
 }

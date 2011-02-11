@@ -30,13 +30,13 @@ namespace Frog.Domain.Specs
         [Test]
         public void should_have_xbuild_task()
         {
-            execTaskFactory.Received().CreateTask("xbuild", Arg.Any<string>());
+            execTaskFactory.Received().CreateTask("xbuild", Arg.Any<string>(), "build");
         }
 
         [Test]
         public void should_have_nunit_task()
         {
-            execTaskFactory.Received().CreateTask("nunit", Arg.Any<string>());
+            execTaskFactory.Received().CreateTask("nunit", Arg.Any<string>(), "unit_test");
         }
     }
 }

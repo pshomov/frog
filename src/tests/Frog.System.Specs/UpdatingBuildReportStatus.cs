@@ -20,7 +20,7 @@ namespace Frog.System.Specs
         {
             system = SystemDriver.GetCleanSystem();
             repo = RepositoryDriver.GetNewRepository();
-            pipeline = new PipelineOfTasks(system.Bus, new FixedTasksDispenser(new ExecTask(@"ruby", @"-e 'exit 2'")));
+            pipeline = new PipelineOfTasks(system.Bus, new FixedTasksDispenser(new ExecTask("task_name", @"ruby", @"-e 'exit 2'")));
             system.MonitorRepository(repo.Url);
             valve = new Valve(system.Git, pipeline, system.WorkingArea);
         }

@@ -2,9 +2,9 @@
 {
     public class ExecTaskFactory
     {
-        public virtual ExecTask CreateTask(string app, string args)
+        public virtual ExecTask CreateTask(string app, string args, string name)
         {
-            return new ExecTask(app, args);
+            return new ExecTask(name, app, args);
         }
     }
 }

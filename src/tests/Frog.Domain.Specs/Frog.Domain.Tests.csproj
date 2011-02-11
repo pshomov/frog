@@ -61,6 +61,7 @@
     <Compile Include="FileFinderSpecs.cs" />
     <Compile Include="Git\GitRepositoryDriverCheckBase.cs" />
     <Compile Include="Git\GitRepositoryDriverGetSourceDrop.cs" />
+    <Compile Include="StatusViewSpec.cs" />
     <Compile Include="TaskDetection\MSBuildTaskDetectorSpecs.cs" />
     <Compile Include="TaskDetection\MSBuildTaskDetectorSpecsBase.cs" />
     <Compile Include="PathGoble\GobleTests.cs" />

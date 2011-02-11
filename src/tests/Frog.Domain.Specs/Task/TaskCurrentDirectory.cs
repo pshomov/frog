@@ -15,7 +15,7 @@ namespace Frog.Domain.Specs
             string _app = "adasdasd";
             if (Os.IsWindows) {_app = @"cmd.exe"; _arguments=@"/c if %CD%==c:\temp exit /b 41";}
             if (Os.IsUnix) {_app = "/bin/bash"; _arguments = @"-c ""test `pwd` == '/usr/bin' && (echo 'matches'; exit 41)""";}
-            _task = new ExecTask(_app, _arguments);
+            _task = new ExecTask("task_name", _app, _arguments);
         }
 
         public override void When()

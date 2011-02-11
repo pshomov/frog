@@ -24,12 +24,12 @@ namespace Frog.Domain
                 if (task.GetType() == typeof(MSBuildTaskDescriptions))
                 {
                     var mstask = (MSBuildTaskDescriptions) task;
-                    result.Add( execTaskGenerator.CreateTask("xbuild", mstask.solutionFile));
+                    result.Add( execTaskGenerator.CreateTask("xbuild", mstask.solutionFile, "build"));
                 }
                 if (task.GetType() == typeof(NUnitTask))
                 {
                     var nunit = (NUnitTask) task;
-                    result.Add(execTaskGenerator.CreateTask("nunit", nunit.Assembly));
+                    result.Add(execTaskGenerator.CreateTask("nunit", nunit.Assembly, "unit_test"));
                 }
             }
             return result;
