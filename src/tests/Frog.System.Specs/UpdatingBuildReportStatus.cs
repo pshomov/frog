@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading;
 using Frog.Domain;
 using Frog.Domain.CustomTasks;
@@ -5,8 +6,11 @@ using Frog.Domain.Specs;
 using Frog.Domain.TaskDetection;
 using Frog.Specs.Support;
 using Frog.Support;
+using Frog.System.Specs.Underware;
+using NHamcrest;
 using NSubstitute;
 using NUnit.Framework;
+using SimpleCQRS;
 using xray;
 using Has = NHamcrest.Core.Has;
 using Is = NHamcrest.Core.Is;
@@ -44,10 +48,40 @@ namespace Frog.System.Specs
         {
             var prober = new PollingProber(3000, 100);
             Assert.True(prober.check(Take.Snapshot(() => system.GetEventsSnapshot())
-                                         .Has(x => x, Has.Item(Is.InstanceOf(typeof (BuildStarted))))
-                                         .Has(x => x, Has.Item(Is.InstanceOf(typeof (BuildUpdated))))
-                                         .Has(x => x, Has.Item(Is.InstanceOf(typeof (BuildUpdated))))
-                                         .Has(x => x, Has.Item(Is.InstanceOf(typeof (BuildEnded))))
+                                         .Has(x => x,
+                                              new CustomMatcher<List<Event>>("find it",
+                                                                             list =>
+                                                                             list.FindIndex(
+                                                                                 @event =>
+                                                                                 @event.GetType() ==
+                                                                                 typeof (BuildStarted) &&
+                                                                                 (((BuildStarted) @event).Status.tasks[0
+                                                                                      ].Status ==
+                                                                                  TasksInfo.TaskStatus.NotStarted))
+                                                                                   > -1))
+                                         .Has(x => x,
+                                              new CustomMatcher<List<Event>>("find it",
+                                                                             list =>
+                                                                             list.FindIndex(
+                                                                                 @event =>
+                                                                                 @event.GetType() ==
+                                                                                 typeof(BuildUpdated) &&
+                                                                                 (((BuildUpdated)@event).Status.tasks[0
+                                                                                      ].Status ==
+                                                                                  TasksInfo.TaskStatus.Started))
+                                                                                   > -1))
+                                         .Has(x => x,
+                                              new CustomMatcher<List<Event>>("find it",
+                                                                             list =>
+                                                                             list.FindIndex(
+                                                                                 @event =>
+                                                                                 @event.GetType() ==
+                                                                                 typeof(BuildUpdated) &&
+                                                                                 (((BuildUpdated)@event).Status.tasks[0
+                                                                                      ].Status ==
+                                                                                  TasksInfo.TaskStatus.FinishedError))
+                                                                                   > -1))
+                                         .Has(x => x, Has.Item(Is.InstanceOf(typeof(BuildEnded))))
                             ));
         }
 

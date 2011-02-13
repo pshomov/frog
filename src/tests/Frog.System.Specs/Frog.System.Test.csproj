@@ -59,8 +59,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="TaskDetection.cs" />
-    <Compile Include="EventedProber.cs" />
-    <Compile Include="TestSystem.cs" />
+    <Compile Include="Underware\EventedProber.cs" />
+    <Compile Include="Underware\TestSystem.cs" />
     <Compile Include="UpdatingBuildReportStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

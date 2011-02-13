@@ -8,7 +8,7 @@ using Frog.Domain.UI;
 using Frog.Specs.Support;
 using SimpleCQRS;
 
-namespace Frog.System.Specs
+namespace Frog.System.Specs.Underware
 {
     public class TestSystem
     {
