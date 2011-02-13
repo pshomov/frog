@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using Frog.Domain;
 using Frog.Domain.CustomTasks;
@@ -49,39 +51,18 @@ namespace Frog.System.Specs
             var prober = new PollingProber(3000, 100);
             Assert.True(prober.check(Take.Snapshot(() => system.GetEventsSnapshot())
                                          .Has(x => x,
-                                              new CustomMatcher<List<Event>>("find it",
-                                                                             list =>
-                                                                             list.FindIndex(
-                                                                                 @event =>
-                                                                                 @event.GetType() ==
-                                                                                 typeof (BuildStarted) &&
-                                                                                 (((BuildStarted) @event).Status.tasks[0
-                                                                                      ].Status ==
-                                                                                  TasksInfo.TaskStatus.NotStarted))
-                                                                                   > -1))
+                                              An.Event<BuildStarted>(
+                                                  buildStarted =>
+                                                  buildStarted.Status.tasks[0].Status == TasksInfo.TaskStatus.NotStarted))
                                          .Has(x => x,
-                                              new CustomMatcher<List<Event>>("find it",
-                                                                             list =>
-                                                                             list.FindIndex(
-                                                                                 @event =>
-                                                                                 @event.GetType() ==
-                                                                                 typeof(BuildUpdated) &&
-                                                                                 (((BuildUpdated)@event).Status.tasks[0
-                                                                                      ].Status ==
-                                                                                  TasksInfo.TaskStatus.Started))
-                                                                                   > -1))
+                                              An.Event<BuildUpdated>(
+                                                  buildStarted =>
+                                                  buildStarted.Status.tasks[0].Status == TasksInfo.TaskStatus.Started))
                                          .Has(x => x,
-                                              new CustomMatcher<List<Event>>("find it",
-                                                                             list =>
-                                                                             list.FindIndex(
-                                                                                 @event =>
-                                                                                 @event.GetType() ==
-                                                                                 typeof(BuildUpdated) &&
-                                                                                 (((BuildUpdated)@event).Status.tasks[0
-                                                                                      ].Status ==
-                                                                                  TasksInfo.TaskStatus.FinishedError))
-                                                                                   > -1))
-                                         .Has(x => x, Has.Item(Is.InstanceOf(typeof(BuildEnded))))
+                                              An.Event<BuildUpdated>(
+                                                  buildStarted =>
+                                                  buildStarted.Status.tasks[0].Status == TasksInfo.TaskStatus.FinishedError))
+                                         .Has(x => x, An.Event<BuildEnded>())
                             ));
         }
 
@@ -90,4 +71,6 @@ namespace Frog.System.Specs
             system.ResetSystem();
         }
     }
+
 }
+

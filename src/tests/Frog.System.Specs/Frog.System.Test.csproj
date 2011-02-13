@@ -58,6 +58,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="An.cs" />
     <Compile Include="TaskDetection.cs" />
     <Compile Include="Underware\EventedProber.cs" />
     <Compile Include="Underware\TestSystem.cs" />
