@@ -1,6 +1,6 @@
 ﻿namespace Frog.Domain.CustomTasks
 {
-    public class NUnitTask : ITask
+    public class NUnitTask : TaskBase
     {
         readonly string assembly;
 

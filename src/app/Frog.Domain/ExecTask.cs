@@ -44,6 +44,13 @@ namespace Frog.Domain
         void TaskStarted(int pid);
     }
 
+    public class TaskWithMeta
+    {
+        public string Name { get; set; }
+
+        public ExecTask Task { get; set; }
+    }
+
 
     public class ExecTask
     {
@@ -55,18 +62,18 @@ namespace Frog.Domain
             Failure
         }
 
-        readonly string name;
         readonly string _app;
         private readonly string _arguments;
+        readonly string name;
 
-        public ExecTask(string name, string app, string arguments)
+        public ExecTask(string app, string arguments, string name)
         {
-            this.name = name;
             _app = app;
             _arguments = arguments;
+            this.name = name;
         }
 
-        public ExecTask(string name, string app, string arguments, TaskReporter taskReporter) : this(name, app, arguments)
+        public ExecTask(string app, string arguments, TaskReporter taskReporter, string name) : this(app, arguments, name)
         {
             this.taskReporter = taskReporter;
         }
@@ -94,6 +101,9 @@ namespace Frog.Domain
             return new ExecTaskResult(ExecutionStatus.Failure, -1);
         }
 
-        public string Name { get { return name; } }
+        public string Name
+        {
+            get { return name; }
+        }
     }
 }

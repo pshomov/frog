@@ -32,9 +32,6 @@ namespace Frog.Domain.UI
             report.Current = BuildStatus.Status.PipelineComplete;
             switch (message.Status)
             {
-                case BuildEnded.BuildStatus.Fail:
-                    report.Completion = BuildStatus.TaskExit.Fail;
-                    break;
                 case BuildEnded.BuildStatus.Error:
                     report.Completion = BuildStatus.TaskExit.Error;
                     break;

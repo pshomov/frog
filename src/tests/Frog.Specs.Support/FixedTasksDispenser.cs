@@ -1,20 +1,22 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Frog.Domain;
+using Frog.Domain.CustomTasks;
 
 namespace Frog.Specs.Support
 {
-    public class FixedTasksDispenser : TaskDispenser
+    public class FixedTasksDispenser : TaskSource
     {
-        readonly ExecTask[] tasks;
+        readonly ITask[] tasks;
 
-        public FixedTasksDispenser(params ExecTask[] tasks)
+        public FixedTasksDispenser(params ITask[] tasks)
         {
             this.tasks = tasks;
         }
 
-        public List<ExecTask> GimeTasks(string projectFolder)
+        public IList<ITask> Detect(string projectFolder)
         {
-            return new List<ExecTask>(tasks);
+            return new List<ITask>(tasks);
         }
     }
 }

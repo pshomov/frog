@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using SimpleCQRS;
 
@@ -30,6 +31,12 @@ namespace Frog.Domain
 
     public class BuildStarted : Event
     {
+        public PipelineStatus Status;
+    }
+
+    public class BuildUpdated : Event
+    {
+        public PipelineStatus Status;
     }
 
     public class TaskStarted : Event
@@ -64,11 +71,46 @@ namespace Frog.Domain
         }
     }
 
+    public class PipelineStatus
+    {
+        public PipelineStatus(Guid id)
+        {
+            tasks = new List<TasksInfo>();
+            PipelineId = id;
+        }
+
+        public PipelineStatus(PipelineStatus pipelineStatus)
+        {
+            PipelineId = pipelineStatus.PipelineId;
+            tasks = new List<TasksInfo>();
+            pipelineStatus.tasks.ForEach(info => tasks.Add(new TasksInfo(info)));
+        }
+
+        public Guid PipelineId;
+        public List<TasksInfo> tasks;
+    }
+
+    public class TasksInfo
+    {
+        public TasksInfo()
+        {
+        }
+
+        public TasksInfo(TasksInfo tasksInfo)
+        {
+            Name = tasksInfo.Name;
+            Status = tasksInfo.Status;
+        }
+
+        public enum TaskStatus {NotStarted, Started, FinishedSuccess, FinishedError}
+        public string Name;
+        public TaskStatus Status { get; set; }
+    }
+
     public class BuildEnded : Event
     {
         public enum BuildStatus
         {
-            Fail,
             Error,
             Success
         }
@@ -91,33 +133,56 @@ namespace Frog.Domain
         }
 
         readonly IEventPublisher eventPublisher;
-        readonly TaskDispenser tasksDispenser;
+        readonly TaskSource tasksSource;
+        readonly IExecTaskGenerator execTaskGenerator;
 
-        public PipelineOfTasks(IEventPublisher eventPublisher, TaskDispenser tasksDispenser)
+        public PipelineOfTasks(IEventPublisher eventPublisher, TaskSource tasksSource, IExecTaskGenerator execTaskGenerator)
         {
             this.eventPublisher = eventPublisher;
-            this.tasksDispenser = tasksDispenser;
+            this.tasksSource = tasksSource;
+            this.execTaskGenerator = execTaskGenerator;
         }
 
-        public PipelineOfTasks(TaskDispenser taskDispenser) : this(new DummyBus(), taskDispenser)
+        public PipelineOfTasks(TaskSource taskDispenser, IExecTaskGenerator execTaskGenerator) : this(new DummyBus(), taskDispenser, execTaskGenerator)
         {
         }
 
         public void Process(SourceDrop sourceDrop)
         {
-            eventPublisher.Publish(new BuildStarted());
             ExecTaskResult.Status lastTaskStatus = ExecTaskResult.Status.Success;
-            foreach (var task in tasksDispenser.GimeTasks(sourceDrop.SourceDropLocation))
+            var execTasks = new List<ExecTask>();
+            foreach (var task in tasksSource.Detect(sourceDrop.SourceDropLocation))
             {
-                eventPublisher.Publish(new TaskStarted(task.Name));
-                lastTaskStatus = task.Perform(sourceDrop).ExecStatus;
-                eventPublisher.Publish(new TaskFinished(task.Name, lastTaskStatus));
+                execTasks.AddRange(execTaskGenerator.GimeTasks(task));
+            }
+            PipelineStatus status = GeneratePipelineStatus(execTasks);
+            eventPublisher.Publish(new BuildStarted {Status = new PipelineStatus(status)});
+
+            for (int i = 0; i < execTasks.Count; i++)
+            {
+                var execTask = execTasks[i];
+                status.tasks[i].Status = TasksInfo.TaskStatus.Started;
+                eventPublisher.Publish(new BuildUpdated {Status = new PipelineStatus(status)});
+                lastTaskStatus = execTask.Perform(sourceDrop).ExecStatus;
+                status.tasks[i].Status = lastTaskStatus == ExecTaskResult.Status.Error ? TasksInfo.TaskStatus.FinishedError : TasksInfo.TaskStatus.FinishedSuccess;
+                eventPublisher.Publish(new BuildUpdated { Status = new PipelineStatus(status) });
                 if (lastTaskStatus != ExecTaskResult.Status.Success) break;
             }
 
             eventPublisher.Publish(lastTaskStatus == ExecTaskResult.Status.Error
                                        ? new BuildEnded(BuildEnded.BuildStatus.Error)
                                        : new BuildEnded(BuildEnded.BuildStatus.Success));
+        }
+
+        PipelineStatus GeneratePipelineStatus(List<ExecTask> execTasks)
+        {
+            var pipelineStatus = new PipelineStatus(Guid.NewGuid());
+            foreach (var execTask in execTasks)
+            {
+                pipelineStatus.tasks.Add(new TasksInfo
+                                             {Name = execTask.Name, Status = TasksInfo.TaskStatus.NotStarted});
+            }
+            return pipelineStatus;
         }
     }
 

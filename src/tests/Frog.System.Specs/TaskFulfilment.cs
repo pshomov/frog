@@ -1,6 +1,9 @@
 using Frog.Domain;
+using Frog.Domain.CustomTasks;
 using Frog.Domain.Specs;
+using Frog.Domain.TaskDetection;
 using Frog.Specs.Support;
+using Frog.Support;
 using NSubstitute;
 using NUnit.Framework;
 using xray;
@@ -21,11 +24,14 @@ namespace Frog.System.Specs
             system = SystemDriver.GetCleanSystem();
             repo = RepositoryDriver.GetNewRepository();
 
-            var task1 = Substitute.For<ExecTask>(null, null);
-            var task2 = Substitute.For<ExecTask>(null, null);
+            var task1 = Substitute.For<ExecTask>(null, null, null);
+            var task2 = Substitute.For<ExecTask>(null, null, null);
+
+            var execTaskGenerator = Substitute.For<IExecTaskGenerator>();
+            execTaskGenerator.Received().GimeTasks(Arg.Any<ITask>()).Returns(As.List(task1, task2));
 
             pipeline = new PipelineOfTasks(system.Bus,
-                                           new FixedTasksDispenser(task1, task2));
+                                           new FixedTasksDispenser(new MSBuildTaskDescriptions("sdsd")), execTaskGenerator);
             system.MonitorRepository(repo.Url);
             valve = new Valve(system.Git, pipeline, system.WorkingArea);
 

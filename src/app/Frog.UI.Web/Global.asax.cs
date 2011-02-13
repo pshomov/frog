@@ -61,8 +61,7 @@ namespace Frog.UI.Web
                                                      git_password));
             var fileFinder = new DefaultFileFinder(new PathFinder());
             var pipeline = new PipelineOfTasks(bus,
-                                               new ExecTaskGenerator(new CompoundTaskSource(new MSBuildDetector(fileFinder), new NUnitTaskDetctor(fileFinder)),
-                                                                 new ExecTaskFactory()));
+                                               new CompoundTaskSource(new MSBuildDetector(fileFinder), new NUnitTaskDetctor(fileFinder)), new ExecTaskGenerator(new ExecTaskFactory()));
             var area = new SubfolderWorkingArea(workingAreaPath);
             ServiceLocator.Valve = new Valve(driver, pipeline, area);
         }

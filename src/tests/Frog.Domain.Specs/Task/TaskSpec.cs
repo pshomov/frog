@@ -13,7 +13,7 @@ namespace Frog.Domain.Specs.Task
                                     string _app = "adasdasd";
                                     if (Os.IsWindows) _app = "callme_wrong.bat";
                                     if (Os.IsUnix) _app = "./callme_wrong.sh";
-                                    _task = new ExecTask("task_name", _app, "");
+                                    _task = new ExecTask(_app, "", "task_name");
                                 };
 
         Because of = () => _taskResult = _task.Perform(new SourceDrop(""));
@@ -32,8 +32,8 @@ namespace Frog.Domain.Specs.Task
 
         Establish context = () =>
                                 {
-                                    if (Os.IsWindows) _task = new ExecTask("task_name", "cmd.exe", @"/c exit /b 4");
-                                    if (Os.IsUnix) _task = new ExecTask("task_name", "./callme.sh", "");
+                                    if (Os.IsWindows) _task = new ExecTask("cmd.exe", @"/c exit /b 4", "task_name");
+                                    if (Os.IsUnix) _task = new ExecTask("./callme.sh", "", "task_name");
                                 };
 
         Because of = () => _taskResult = _task.Perform(new SourceDrop(""));
@@ -49,8 +49,8 @@ namespace Frog.Domain.Specs.Task
 
         Establish context = () =>
                                 {
-                                    if (Os.IsWindows) _task = new ExecTask("task_name", "cmd.exe", @"/c echo buy buy");
-                                    if (Os.IsUnix) _task = new ExecTask("task_name", "./callme.sh", "");
+                                    if (Os.IsWindows) _task = new ExecTask("cmd.exe", @"/c echo buy buy", "task_name");
+                                    if (Os.IsUnix) _task = new ExecTask("./callme.sh", "", "task_name");
                                 };
 
         Because of = () => _taskResult = _task.Perform(new SourceDrop(""));

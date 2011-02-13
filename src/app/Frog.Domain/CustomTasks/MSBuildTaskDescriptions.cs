@@ -2,7 +2,7 @@
 
 namespace Frog.Domain.TaskDetection
 {
-    public class MSBuildTaskDescriptions : ITask
+    public class MSBuildTaskDescriptions : TaskBase
     {
         public readonly string solutionFile;
 

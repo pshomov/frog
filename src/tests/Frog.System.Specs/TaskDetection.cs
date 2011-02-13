@@ -18,7 +18,7 @@ namespace Frog.System.Specs
         Valve valve;
         PipelineOfTasks pipeline;
         SystemDriver system;
-        ExecTaskFactory execTaskGenerator;
+        ExecTaskFactory execTaskFactory;
         RepositoryDriver repo;
 
         public override void Given()
@@ -26,15 +26,15 @@ namespace Frog.System.Specs
             system = SystemDriver.GetCleanSystem();
             repo = RepositoryDriver.GetNewRepository();
 
-            execTaskGenerator = Substitute.For<ExecTaskFactory>();
-            var execTask = Substitute.For<ExecTask>("", "");
-            execTaskGenerator.CreateTask(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>()).Returns(execTask); 
+            var execTask = Substitute.For<ExecTask>("", "", "");
             execTask.Perform(Arg.Any<SourceDrop>()).Returns(new ExecTaskResult(ExecTask.ExecutionStatus.Success, 0));
-            
+
+            execTaskFactory = Substitute.For<ExecTaskFactory>();
+            execTaskFactory.CreateTask(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>()).Returns(execTask);
+
             var fileFinder = new DefaultFileFinder(new PathFinder());
             pipeline = new PipelineOfTasks(system.Bus,
-                                           new ExecTaskGenerator(new CompoundTaskSource(new MSBuildDetector(fileFinder), new NUnitTaskDetctor(fileFinder)),
-                                                                 execTaskGenerator));
+                                           new CompoundTaskSource(new MSBuildDetector(fileFinder), new NUnitTaskDetctor(fileFinder)), new ExecTaskGenerator(execTaskFactory));
             system.MonitorRepository(repo.Url);
             valve = new Valve(system.Git, pipeline, system.WorkingArea);
         }
@@ -48,13 +48,13 @@ namespace Frog.System.Specs
         [Test]
         public void should_have_build_result_in_build_complete_event()
         {
-            execTaskGenerator.Received().CreateTask("nunit", Os.DirChars("src/tests/Some.Tests/bin/Debug/Some.Test.dll"), Arg.Any<string>());
+            execTaskFactory.Received().CreateTask("nunit", Os.DirChars("src/tests/Some.Tests/bin/Debug/Some.Test.dll"), Arg.Any<string>());
         }
 
         [Test]
         public void should_execute_xbuild_task()
         {
-            execTaskGenerator.Received().CreateTask("xbuild", Os.DirChars("SampleProject.sln"), Arg.Any<string>());
+            execTaskFactory.Received().CreateTask("xbuild", Os.DirChars("SampleProject.sln"), Arg.Any<string>());
         }
 
         protected override void GivenCleanup()

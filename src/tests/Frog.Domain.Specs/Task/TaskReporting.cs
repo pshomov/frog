@@ -12,7 +12,7 @@ namespace Frog.Domain.Specs.Task
         public override void Given()
         {
             reporter = Substitute.For<TaskReporter>();
-            task = new ExecTask("some_task_name", "ruby", "-e 'exit 0'", reporter);
+            task = new ExecTask("ruby", "-e 'exit 0'", reporter, "task_name");
         }
 
         public override void When()

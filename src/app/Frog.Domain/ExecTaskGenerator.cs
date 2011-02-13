@@ -4,33 +4,32 @@ using Frog.Domain.TaskDetection;
 
 namespace Frog.Domain
 {
-    public class ExecTaskGenerator : TaskDispenser
+    public interface IExecTaskGenerator
     {
-        readonly TaskSource taskProvider;
+        List<ExecTask> GimeTasks(ITask task);
+    }
+
+    public class ExecTaskGenerator : IExecTaskGenerator
+    {
         readonly ExecTaskFactory execTaskGenerator;
 
-        public ExecTaskGenerator(TaskSource taskProvider, ExecTaskFactory execTaskGenerator)
+        public ExecTaskGenerator(ExecTaskFactory execTaskGenerator)
         {
-            this.taskProvider = taskProvider;
             this.execTaskGenerator = execTaskGenerator;
         }
 
-
-        public List<ExecTask> GimeTasks(string projectFolder)
+        public List<ExecTask> GimeTasks(ITask task)
         {
             var result = new List<ExecTask>();
-            foreach (var task in taskProvider.Detect(projectFolder))
+            if (task.GetType() == typeof (MSBuildTaskDescriptions))
             {
-                if (task.GetType() == typeof(MSBuildTaskDescriptions))
-                {
-                    var mstask = (MSBuildTaskDescriptions) task;
-                    result.Add( execTaskGenerator.CreateTask("xbuild", mstask.solutionFile, "build"));
-                }
-                if (task.GetType() == typeof(NUnitTask))
-                {
-                    var nunit = (NUnitTask) task;
-                    result.Add(execTaskGenerator.CreateTask("nunit", nunit.Assembly, "unit_test"));
-                }
+                var mstask = (MSBuildTaskDescriptions) task;
+                result.Add(execTaskGenerator.CreateTask("xbuild", mstask.solutionFile, "build"));
+            }
+            if (task.GetType() == typeof (NUnitTask))
+            {
+                var nunit = (NUnitTask) task;
+                result.Add(execTaskGenerator.CreateTask("nunit", nunit.Assembly, "unit_test"));
             }
             return result;
         }

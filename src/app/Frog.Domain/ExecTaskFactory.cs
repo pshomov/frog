@@ -4,7 +4,7 @@
     {
         public virtual ExecTask CreateTask(string app, string args, string name)
         {
-            return new ExecTask(name, app, args);
+            return new ExecTask(app, args, name);
         }
     }
 }
