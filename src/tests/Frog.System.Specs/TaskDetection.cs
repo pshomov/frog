@@ -1,14 +1,10 @@
-using System.Threading;
 using Frog.Domain;
 using Frog.Domain.CustomTasks;
 using Frog.Domain.Specs;
-using Frog.Domain.TaskDetection;
 using Frog.Domain.TaskSources;
 using Frog.Support;
 using NSubstitute;
 using NUnit.Framework;
-using xray;
-using Is = NHamcrest.Core.Is;
 
 namespace Frog.System.Specs
 {
@@ -34,7 +30,9 @@ namespace Frog.System.Specs
 
             var fileFinder = new DefaultFileFinder(new PathFinder());
             pipeline = new PipelineOfTasks(system.Bus,
-                                           new CompoundTaskSource(new MSBuildDetector(fileFinder), new NUnitTaskDetctor(fileFinder)), new ExecTaskGenerator(execTaskFactory));
+                                           new CompoundTaskSource(new MSBuildDetector(fileFinder),
+                                                                  new NUnitTaskDetctor(fileFinder)),
+                                           new ExecTaskGenerator(execTaskFactory));
             system.MonitorRepository(repo.Url);
             valve = new Valve(system.Git, pipeline, system.WorkingArea);
         }
@@ -48,7 +46,8 @@ namespace Frog.System.Specs
         [Test]
         public void should_have_build_result_in_build_complete_event()
         {
-            execTaskFactory.Received().CreateTask("nunit", Os.DirChars("src/tests/Some.Tests/bin/Debug/Some.Test.dll"), Arg.Any<string>());
+            execTaskFactory.Received().CreateTask("nunit", Os.DirChars("src/tests/Some.Tests/bin/Debug/Some.Test.dll"),
+                                                  Arg.Any<string>());
         }
 
         [Test]
@@ -63,5 +62,4 @@ namespace Frog.System.Specs
             repo.Cleanup();
         }
     }
-
 }
