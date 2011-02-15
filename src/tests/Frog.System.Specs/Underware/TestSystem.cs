@@ -51,7 +51,7 @@ namespace Frog.System.Specs.Underware
             var statusView = new PipelineStatusView(report);
             theBus.RegisterHandler<BuildStarted>(statusView.Handle);
             theBus.RegisterHandler<BuildEnded>(statusView.Handle);
-            theBus.RegisterHandler<TaskStarted>(statusView.Handle);
+            theBus.RegisterHandler<BuildUpdated>(statusView.Handle);
         }
 
         void SetupAllEventLogging()

@@ -1,4 +1,6 @@
+using System;
 using Frog.Domain.UI;
+using KellermanSoftware.CompareNetObjects;
 using NUnit.Framework;
 
 namespace Frog.Domain.Specs
@@ -8,6 +10,7 @@ namespace Frog.Domain.Specs
     {
         PipelineStatusView view;
         PipelineStatusView.BuildStatus buildStatus;
+        PipelineStatus pipelineStatus;
 
         public override void Given()
         {
@@ -17,7 +20,19 @@ namespace Frog.Domain.Specs
 
         public override void When()
         {
-            view.Handle(new BuildStarted());
+            pipelineStatus = new PipelineStatus(Guid.NewGuid())
+                                 {
+                                     tasks =
+                                         {
+                                             new TasksInfo
+                                                 {Name = "task1", Status = TasksInfo.TaskStatus.NotStarted}
+                                         }
+                                 };
+            view.Handle(new BuildStarted
+                            {
+                                Status =
+                                    new PipelineStatus(pipelineStatus)
+                            });
         }
 
         [Test]
@@ -27,17 +42,10 @@ namespace Frog.Domain.Specs
         }
 
         [Test]
-        public void should_set_task_name_to_empty()
+        public void should_set_status_as_as_in_message()
         {
-            Assert.That(buildStatus.TaskName, Is.EqualTo(""));
+            Assert.True(new CompareObjects().Compare(buildStatus.PipelineStatus, pipelineStatus));
         }
-
-        [Test]
-        public void should_set_exit_code_to_minus_one()
-        {
-            Assert.That(buildStatus.Completion, Is.EqualTo(PipelineStatusView.BuildStatus.TaskExit.Dugh));
-        }
-
     }
 
     [TestFixture]
@@ -60,28 +68,17 @@ namespace Frog.Domain.Specs
         [Test]
         public void should_set_status_to_BUILD_STARTED()
         {
-            Assert.That(buildStatus.Current, Is.EqualTo(PipelineStatusView.BuildStatus.Status.PipelineComplete));
-        }
-
-        [Test]
-        public void should_set_task_name_to_empty()
-        {
-            Assert.That(buildStatus.TaskName, Is.EqualTo(""));
-        }
-
-        [Test]
-        public void should_set_exit_code_to_minus_one()
-        {
-            Assert.That(buildStatus.Completion, Is.EqualTo(PipelineStatusView.BuildStatus.TaskExit.Error));
+            Assert.That(buildStatus.Current, Is.EqualTo(PipelineStatusView.BuildStatus.Status.PipelineCompleted));
         }
 
     }
 
     [TestFixture]
-    public class StatusViewAfterTaskStartedSpec : BDD
+    public class StatusViewAfterBuildUpdateSpec : BDD
     {
         PipelineStatusView view;
         PipelineStatusView.BuildStatus buildStatus;
+        PipelineStatus pipelineStatus;
 
         public override void Given()
         {
@@ -91,63 +88,34 @@ namespace Frog.Domain.Specs
 
         public override void When()
         {
-            view.Handle(new TaskStarted("fle"));
+            pipelineStatus = new PipelineStatus(Guid.NewGuid())
+            {
+                tasks =
+                                         {
+                                             new TasksInfo
+                                                 {Name = "task1", Status = TasksInfo.TaskStatus.NotStarted}
+                                         }
+            };
+            view.Handle(new BuildUpdated()
+            {
+                Status =
+                    new PipelineStatus(pipelineStatus)
+            });
+
         }
 
         [Test]
         public void should_set_status_to_TASK_STARTED()
         {
-            Assert.That(buildStatus.Current, Is.EqualTo(PipelineStatusView.BuildStatus.Status.TaskStarted));
+            Assert.That(buildStatus.Current, Is.EqualTo(PipelineStatusView.BuildStatus.Status.PipelineStarted));
         }
 
         [Test]
         public void should_set_task_name_to_empty()
         {
-            Assert.That(buildStatus.TaskName, Is.EqualTo("fle"));
-        }
-
-        [Test]
-        public void should_set_exit_code_to_minus_one()
-        {
-            Assert.That(buildStatus.Completion, Is.EqualTo(PipelineStatusView.BuildStatus.TaskExit.Dugh));
+            Assert.True(new CompareObjects().Compare(buildStatus.PipelineStatus, pipelineStatus));
         }
 
     }
 
-    [TestFixture]
-    public class StatusViewAfterTaskCompletedSpec : BDD
-    {
-        PipelineStatusView view;
-        PipelineStatusView.BuildStatus buildStatus;
-
-        public override void Given()
-        {
-            buildStatus = new PipelineStatusView.BuildStatus();
-            view = new PipelineStatusView(buildStatus);
-        }
-
-        public override void When()
-        {
-            view.Handle(new TaskFinished("fle", ExecTaskResult.Status.Error));
-        }
-
-        [Test]
-        public void should_set_status_to_TASK_ENDED()
-        {
-            Assert.That(buildStatus.Current, Is.EqualTo(PipelineStatusView.BuildStatus.Status.TaskEnded));
-        }
-
-        [Test]
-        public void should_set_task_name_to_empty()
-        {
-            Assert.That(buildStatus.TaskName, Is.EqualTo("fle"));
-        }
-
-        [Test]
-        public void should_set_exit_code_to_minus_one()
-        {
-            Assert.That(buildStatus.Completion, Is.EqualTo(PipelineStatusView.BuildStatus.TaskExit.Error));
-        }
-
-    }
 }
