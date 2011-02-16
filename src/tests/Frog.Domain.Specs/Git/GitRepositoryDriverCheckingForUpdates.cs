@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using Frog.Support;
 using NUnit.Framework;
 
 namespace Frog.Domain.Specs.Git
@@ -13,7 +14,7 @@ namespace Frog.Domain.Specs.Git
         {
             base.Given();
             _driver.CheckForUpdates();
-            GitTestSupport.CommitChangeFiles(repoUrl, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "TestFixtures\\test.txt"));
+            GitTestSupport.CommitChangeFiles(repoUrl, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Os.DirChars("TestFixtures")));
         }
 
         public override void When()

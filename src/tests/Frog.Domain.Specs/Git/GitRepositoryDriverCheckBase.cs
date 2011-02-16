@@ -20,7 +20,7 @@ namespace Frog.Domain.Specs.Git
             _driver = new GitDriver(_workPlace, _cloneFolder, repoUrl);
         }
 
-        public override void Cleanup()
+        protected override void GivenCleanup()
         {
             OSHelpers.ClearAttributes(_workPlace);
             Directory.Delete(_workPlace, true);

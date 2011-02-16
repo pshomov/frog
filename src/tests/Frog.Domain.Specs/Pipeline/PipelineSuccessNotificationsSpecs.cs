@@ -1,24 +1,27 @@
+using System.Collections.Generic;
+using Frog.Domain.CustomTasks;
+using Frog.Domain.TaskDetection;
+using Frog.Specs.Support;
+using Frog.Support;
 using NSubstitute;
+using NSubstitute.Core;
 using NUnit.Framework;
-using SimpleCQRS;
-using Arg = NSubstitute.Arg;
 
 namespace Frog.Domain.Specs.Pipeline
 {
     [TestFixture]
-    public class PipelineSuccessNotificationsSpecs : BDD
+    public class PipelineSuccessNotificationsSpecs : PipelineProcessSourceDropSpecBase
     {
-        readonly ExecTask task1 = Substitute.For<ExecTask>("", "");
-        readonly ExecTask task2 = Substitute.For<ExecTask>("", "");
-        PipelineOfTasks pipeline;
-
-        readonly IEventPublisher bus = Substitute.For<IEventPublisher>();
-
         public override void Given()
         {
+            base.Given();
+            srcTask1 = new MSBuildTaskDescriptions("");
+            eventPublisher.Detect(Arg.Any<string>()).Returns(As.List<ITask>(srcTask1));
+            task1 = Substitute.For<ExecTask>("", "", "");
             task1.Perform(Arg.Any<SourceDrop>()).Returns(new ExecTaskResult(ExecTask.ExecutionStatus.Success, 0));
+            task2 = Substitute.For<ExecTask>("", "", "");
             task2.Perform(Arg.Any<SourceDrop>()).Returns(new ExecTaskResult(ExecTask.ExecutionStatus.Success, 0));
-            pipeline = new PipelineOfTasks(bus, new FixedTasksDispencer(task1, task2));
+            execTaskGenerator.GimeTasks(Arg.Any<ITask>()).Returns(As.List(task1, task2));
         }
 
         public override void When()
@@ -27,22 +30,48 @@ namespace Frog.Domain.Specs.Pipeline
         }
 
         [Test]
-        public void should_send_pipeline_started_message()
+        public void should_update_build_status_when_first_task_finishes()
+        {
+            bus.Received().Publish(Arg.Is<BuildUpdated>(
+                started =>
+                started.Status.tasks.Count == 2 &&
+                started.Status.tasks[0].Status == TasksInfo.TaskStatus.FinishedSuccess &&
+                started.Status.tasks[1].Status == TasksInfo.TaskStatus.NotStarted));
+        }
+
+        [Test]
+        public void should_update_build_status_when_second_task_starts()
+        {
+            bus.Received().Publish(Arg.Is<BuildUpdated>(
+                started =>
+                started.Status.tasks.Count == 2 &&
+                started.Status.tasks[0].Status == TasksInfo.TaskStatus.FinishedSuccess &&
+                started.Status.tasks[1].Status == TasksInfo.TaskStatus.Started));
+        }
+
+        [Test]
+        public void should_update_build_status_when_second_task_finishes()
+        {
+            bus.Received().Publish(Arg.Is<BuildUpdated>(
+                started =>
+                started.Status.tasks.Count == 2 &&
+                started.Status.tasks[0].Status == TasksInfo.TaskStatus.FinishedSuccess &&
+                started.Status.tasks[1].Status == TasksInfo.TaskStatus.FinishedSuccess));
+        }
+
+        [Test]
+        public void should_publish_build_ended_with_success()
+        {
+            bus.Received().Publish(Arg.Is<BuildEnded>(
+                started =>
+                started.Status == BuildEnded.BuildStatus.Success));
+        }
+
+        [Test]
+        public void should_call_both_tasks()
         {
             task1.Received().Perform(Arg.Any<SourceDrop>());
-            bus.Received().Publish(Arg.Any<BuildStarted>());
-        }
-
-        [Test]
-        public void should_start_second_task_too()
-        {
             task2.Received().Perform(Arg.Any<SourceDrop>());
-        }
-
-        [Test]
-        public void should_send_pipeline_ended_message_with_status_success()
-        {
-            bus.Received().Publish(Arg.Is<BuildEnded>(obj => obj.Status == BuildEnded.BuildStatus.Success));
         }
 
     }

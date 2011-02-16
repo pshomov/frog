@@ -1,6 +1,5 @@
 bin/
 obj/
-*.sln
 _ReSharper*/
 *.user
 *.suo

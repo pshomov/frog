@@ -1,11 +1,21 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using Frog.Domain;
+using Frog.Domain.CustomTasks;
 using Frog.Domain.Specs;
-using Frog.UI.Web;
+using Frog.Domain.TaskDetection;
+using Frog.Specs.Support;
+using Frog.Support;
+using Frog.System.Specs.Underware;
+using NHamcrest;
+using NSubstitute;
 using NUnit.Framework;
 using SimpleCQRS;
 using xray;
-using It = NHamcrest.Core;
+using Has = NHamcrest.Core.Has;
+using Is = NHamcrest.Core.Is;
 
 namespace Frog.System.Specs
 {
@@ -15,12 +25,18 @@ namespace Frog.System.Specs
         Valve valve;
         PipelineOfTasks pipeline;
         SystemDriver system;
+        RepositoryDriver repo;
 
         public override void Given()
         {
             system = SystemDriver.GetCleanSystem();
-
-            pipeline = new PipelineOfTasks(system.Bus, new FixedTasksDispencer(new ExecTask(@"ruby", @"-e 'exit 2'")));
+            repo = RepositoryDriver.GetNewRepository();
+            var execTaskGenerator = Substitute.For<IExecTaskGenerator>();
+            execTaskGenerator.GimeTasks(Arg.Any<ITask>()).Returns(
+                As.List(new ExecTask(@"ruby", @"-e 'exit 2'", "task_name")));
+            pipeline = new PipelineOfTasks(system.Bus, new FixedTasksDispenser(new MSBuildTaskDescriptions("asdasd")),
+                                           execTaskGenerator);
+            system.MonitorRepository(repo.Url);
             valve = new Valve(system.Git, pipeline, system.WorkingArea);
         }
 
@@ -33,27 +49,28 @@ namespace Frog.System.Specs
         public void should_receive_build_started_event_followed_by_build_complete()
         {
             var prober = new PollingProber(3000, 100);
-            Assert.True(prober.check(Take.Snapshot(() => system.CurrentReport).
-                Has(x => x.Current, It.Is.EqualTo(PipelineStatusView.BuildStatus.Status.Started))
-                ));
-            Assert.True(prober.check(Take.Snapshot(() => system.CurrentReport).
-                Has(x => x.Current, It.Is.EqualTo(PipelineStatusView.BuildStatus.Status.Complete))
-                ));
+            Assert.True(prober.check(Take.Snapshot(() => system.GetEventsSnapshot())
+                                         .Has(x => x,
+                                              An.Event<BuildStarted>(
+                                                  buildStarted =>
+                                                  buildStarted.Status.tasks[0].Status == TasksInfo.TaskStatus.NotStarted))
+                                         .Has(x => x,
+                                              An.Event<BuildUpdated>(
+                                                  buildStarted =>
+                                                  buildStarted.Status.tasks[0].Status == TasksInfo.TaskStatus.Started))
+                                         .Has(x => x,
+                                              An.Event<BuildUpdated>(
+                                                  buildStarted =>
+                                                  buildStarted.Status.tasks[0].Status == TasksInfo.TaskStatus.FinishedError))
+                                         .Has(x => x, An.Event<BuildEnded>())
+                            ));
         }
 
-        [Test]
-        public void should_have_build_result_in_build_complete_event()
-        {
-            var prober = new PollingProber(3000, 100);
-            Assert.True(prober.check(Take.Snapshot(() => system.CurrentReport).
-                Has(x => x.Current, It.Is.EqualTo(PipelineStatusView.BuildStatus.Status.Complete)).
-                Has(x => x.Completion, It.Is.EqualTo(PipelineStatusView.BuildStatus.TaskExit.Error))
-                ));
-        }
-
-        public override void Cleanup()
+        protected override void GivenCleanup()
         {
             system.ResetSystem();
         }
     }
+
 }
+

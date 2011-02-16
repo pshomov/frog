@@ -1,5 +1,6 @@
 using System;
 using Frog.Domain;
+using Frog.Domain.UI;
 
 namespace Frog.UI.Web
 {

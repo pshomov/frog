@@ -12,13 +12,13 @@ namespace Frog.Domain.Specs
 
         public override void Given()
         {
-            pathFinder = Substitute.For<PathFinder>("");
+            pathFinder = Substitute.For<PathFinder>();
             fileFinder = new DefaultFileFinder(pathFinder);
         }
 
         public override void When()
         {
-            fileFinder.FindAllNUnitAssemblies();
+            fileFinder.FindAllNUnitAssemblies("basefolder");
         }
 
         [Test]
@@ -26,7 +26,7 @@ namespace Frog.Domain.Specs
         {
             pathFinder.Received().apply(Arg.Any<Action<string>>(),
                                         Arg.Is<string>(
-                                            s => s.Equals("*.Test.dll", StringComparison.InvariantCultureIgnoreCase)));
+                                            s => s.Equals("*.Test.csproj", StringComparison.InvariantCultureIgnoreCase)), "basefolder");
         }
     }
 
@@ -38,13 +38,13 @@ namespace Frog.Domain.Specs
 
         public override void Given()
         {
-            pathFinder = Substitute.For<PathFinder>("");
+            pathFinder = Substitute.For<PathFinder>();
             fileFinder = new DefaultFileFinder(pathFinder);
         }
 
         public override void When()
         {
-            fileFinder.FindAllSolutionFiles();
+            fileFinder.FindAllSolutionFiles("basefolder");
         }
 
         [Test]
@@ -52,7 +52,7 @@ namespace Frog.Domain.Specs
         {
             pathFinder.Received().apply(Arg.Any<Action<string>>(),
                                         Arg.Is<string>(
-                                            s => s.Equals("*.sln", StringComparison.InvariantCultureIgnoreCase)));
+                                            s => s.Equals("*.sln", StringComparison.InvariantCultureIgnoreCase)), "basefolder");
         }
     }
 }

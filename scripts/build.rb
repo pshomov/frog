@@ -13,7 +13,10 @@ def green(text); colorize(text, "32"); end
 remove_dir "../output", :force => true
 
 system "xbuild ../Frog.Net.sln /target:rebuild"
-puts(red("No Runz!")) && (exit $?) if $? != 0
+if $? != 0
+	puts(red("No Runz!"))
+	exit $?
+end
 
 mkdir "../output"
 cp_r "../src/app/Frog.UI.Web", "../output/web"

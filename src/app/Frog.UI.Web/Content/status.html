@@ -2,7 +2,7 @@
 <html>
     <head>
     <title>Check status</title>
-    <script type="text/javascript" src="../Scripts/jquery-1.4.1.js"></script>
+    <script type="text/javascript" src="../Scripts/jquery-1.4.4.js"></script>
     <script type="text/javascript" language="javascript">
         $(
             function() {
@@ -13,12 +13,16 @@
 
         function update_status() {
             $.get("../status/index", function data(msg) {
-                switch (msg.status) {
-                    case 0: set_status("started", "yellow");
+                switch (msg.status.Current) {
+                    case 0: set_status("Build started", "yellow");
                         break;
                     case 1: set_status("Not started", "gray");
                         break;
-                    case 2: set_status("Complete", "green");
+                    case 2: set_status("Build complete", msg.status.Completion == 1 ? "green" : "red");
+                        break;
+                    case 3: set_status("Task '"+msg.status.TaskName+"' started", "yellow");
+                        break;
+                    case 4: set_status("Task '" + msg.status.TaskName + "' ended", msg.status.Completion == 1 ? "green" : "red");
                         break;
                     default:
                         set_status("Unknown build status", "cyan");
