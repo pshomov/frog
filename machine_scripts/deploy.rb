@@ -3,5 +3,6 @@ require 'FileUtils'
 
 include FileUtils
 
-system "scp fresh_machine.sh root@178.239.56.36:~"
-system "ssh root@178.239.56.36 \"chmod +x fresh_machine.sh; ./fresh_machine.sh\""
+
+system "scp -r ../machine_scripts root@178.239.56.36:~"
+system "ssh root@178.239.56.36 \"chmod +x machine_scripts/fresh_machine.sh; machine_scripts/fresh_machine.sh\""
