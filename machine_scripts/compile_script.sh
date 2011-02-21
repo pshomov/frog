@@ -1,10 +1,10 @@
 #!/bin/bash
-MONO_PREFIX=/opt/mono-2.8.2
-GNOME_PREFIX=/opt/gnome-2.8.2
+<% @mono_ver =  ENV['MONO_VERSION']%>
+MONO_PREFIX=/opt/<%= @mono_ver %>
 export DYLD_LIBRARY_FALLBACK_PATH=$MONO_PREFIX/lib:$DYLD_LIBRARY_FALLBACK_PATH
 export LD_LIBRARY_PATH=$MONO_PREFIX/lib:$LD_LIBRARY_PATH
-export C_INCLUDE_PATH=$MONO_PREFIX/include:$GNOME_PREFIX/include
+export C_INCLUDE_PATH=$MONO_PREFIX/include
 export ACLOCAL_PATH=$MONO_PREFIX/share/aclocal
-export PKG_CONFIG_PATH=$MONO_PREFIX/lib/pkgconfig:$GNOME_PREFIX/lib/pkgconfig
+export PKG_CONFIG_PATH=$MONO_PREFIX/lib/pkgconfig
 export PATH=$MONO_PREFIX/bin:$PATH
-PS1="[mono 2.8] \w @ "
+PS1="[mono <%= @mono_ver %>] \w @ "

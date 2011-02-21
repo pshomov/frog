@@ -1,5 +1,7 @@
+<% @mono_ver =  ENV['MONO_VERSION']%>
+<% @libgdi_ver =  ENV['LIBGDI_VERSION']%>
 apt-get -y update
-apt-get -y install git-core curl nginx
+apt-get -y install git-core curl nginx ruby
 
 useradd -d /home/runner -m runner -p runner
 useradd -d /home/runners_boss -m runners_boss -p runners_boss
@@ -10,25 +12,25 @@ bison \
 libcairo2-dev libpango1.0-dev libfreetype6-dev libexif-dev \
 libjpeg62-dev libtiff4-dev libgif-dev zlib1g-dev
 
-cp machine_scripts/mono-2.8.2 /usr/local/bin/mono-2.8.2
-chmod +x /usr/local/bin/mono-2.8.2.sh
+cp machine_scripts/mono /usr/local/bin/mono-<%= @mono_ver %>
+chmod +x /usr/local/bin/mono-<%= @mono_ver %>.sh
 chmod +x machine_scripts/compile_script.sh
-./machine_scripts/compile_script.sh
+machine_scripts/compile_script.sh
 
-mkdir -p /opt/mono-2.8.2
+mkdir -p /opt/mono-<%= @mono_ver %>
 
-wget http://ftp.novell.com/pub/mono/sources/mono/mono-2.8.2.tar.bz2
-tar xjf mono-2.8.2.tar.bz2
-wget http://ftp.novell.com/pub/mono/sources/libgdiplus/libgdiplus-2.8.1.tar.bz2
-tar xjf libgdiplus-2.8.1.tar.bz2
+wget http://ftp.novell.com/pub/mono/sources/mono/mono-<%= @mono_ver %>.tar.bz2
+tar xjf mono-<%= @mono_ver %>.tar.bz2
+wget http://ftp.novell.com/pub/mono/sources/libgdiplus/libgdiplus-<%= @libgdi_ver %>.tar.bz2
+tar xjf libgdiplus-<%= @libgdi_ver %>.tar.bz2
 
-cd libgdiplus-2.8.1
-./configure --prefix=/opt/mono-2.8.2 --with-pango
+cd libgdiplus-<%= @libgdi_ver %>
+./configure --prefix=/opt/mono-<%= @libgdi_ver %> --with-pango
 make
 make install
 
-cd ../mono-2.8.2
-./configure --prefix=/opt/mono-2.8.2
+cd ../mono-<%= @mono_ver %>
+./configure --prefix=/opt/mono-<%= @mono_ver %>
 make
 make install
 

@@ -7,3 +7,4 @@ TestResult.xml
 *.bak
 output/
 *.7z
+tmp/

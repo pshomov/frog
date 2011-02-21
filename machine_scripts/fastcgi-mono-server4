@@ -8,7 +8,8 @@
 # Default-Stop:      0 1 6
 # Short-Description: Start fastcgi mono server with hosts
 ### END INIT INFO
-MONO_PREFIX=/opt/mono-2.8.1
+<% @mono_ver =  ENV['MONO_VERSION']%>
+MONO_PREFIX=/opt/mono-<%= @mono_ver %>
 export DYLD_LIBRARY_PATH=$MONO_PREFIX/lib:$DYLD_LIBRARY_PATH
 export LD_LIBRARY_PATH=$MONO_PREFIX/lib:$LD_LIBRARY_PATH
 export C_INCLUDE_PATH=$MONO_PREFIX/include
@@ -16,7 +17,7 @@ export ACLOCAL_PATH=$MONO_PREFIX/share/aclocal
 export PKG_CONFIG_PATH=$MONO_PREFIX/lib/pkgconfig
 
 
-PATH=/opt/mono-2.8.1/bin:/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+PATH=/opt/mono-<%= @mono_ver %>/bin:/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 NAME=monoserver
 DESC=monoserver
 
