@@ -24,13 +24,13 @@ DESC=monoserver
 MONOSERVER=$(which fastcgi-mono-server4)
 MONOSERVER_PID=$(ps auxf | grep fastcgi-mono-server4.exe | grep -v grep | awk '{print $2}')
 
-WEBAPPS="bee.runzhq.com:/runz:/home/petar/runz/web"
+WEBAPPS="/runz:/home/maintainer/runz/web"
 
 case "$1" in
         start)
                 if [ -z "${MONOSERVER_PID}" ]; then
                         echo "starting mono server"
-                        sudo -u petar ${MONOSERVER} /applications=${WEBAPPS} /socket=tcp:127.0.0.1:9000 &
+                        ${MONOSERVER} /applications=${WEBAPPS} /socket=tcp:127.0.0.1:9000 &
                         echo "mono server started"
                 else
                         echo ${WEBAPPS}
@@ -39,7 +39,7 @@ case "$1" in
         ;;
         stop)
                 if [ -n "${MONOSERVER_PID}" ]; then
-                        sudo -u petar kill ${MONOSERVER_PID}
+                        kill ${MONOSERVER_PID}
                         echo "mono server stopped"
                 else
                         echo "mono server is not running"

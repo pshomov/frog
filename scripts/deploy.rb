@@ -8,5 +8,6 @@ LOAD_ARCHIVE = "out.7z"
 rm "#{LOAD_ARCHIVE}", :force => true
 
 system "7z a -r #{LOAD_ARCHIVE} ../output/web"
-system "scp #{LOAD_ARCHIVE} unpack.rb petar@bee.runzhq.com:runz"
-system "ssh petar@bee.runzhq.com \"cd runz; chmod +x unpack.rb; ./unpack.rb\""
+system "ssh -i ~/.ssh/maintainer_id_rsa maintainer@178.239.56.36 mkdir runz"
+system "scp -i ~/.ssh/maintainer_id_rsa #{LOAD_ARCHIVE} unpack.rb maintainer@178.239.56.36:~/runz"
+system "ssh -i ~/.ssh/maintainer_id_rsa maintainer@178.239.56.36 \"cd runz; chmod +x unpack.rb; ./unpack.rb\""

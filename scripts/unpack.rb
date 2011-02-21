@@ -15,13 +15,13 @@ end
 def red(text); colorize(text, "31"); end
 def green(text); colorize(text, "32"); end
 
-_s("~/fastcgi-mono-server4 stop")
+_s("~/fastcgi-mono-server4.sh stop")
 
 _s("rm -rdf web")
-_s("p7zip -d out.7z")
+_s("7z x out.7z")
 _s("chmod -R 755 web")
 
-_s("~/fastcgi-mono-server4 start")
+_s("~/fastcgi-mono-server4.sh start")
 
 puts green "Done!"
 
