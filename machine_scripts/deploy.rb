@@ -1,27 +1,8 @@
 #!/usr/bin/env ruby
 require 'FileUtils'
-
+require 'system_common.rb'
 include FileUtils
-class String
-  def starts_with?(characters)
-      self.match(/^#{characters}/) ? true : false
-  end
-end
 
-def _s(command)
-  system(command)
-  if $? != 0
-  	puts(red("Error running '#{command}'!"))
-  	exit $?
-  end  
-end
-
-def colorize(text, color_code)
-  "\e[#{color_code}m#{text}\e[0m"
-end
-
-def red(text); colorize(text, "31"); end
-def green(text); colorize(text, "32"); end
 
 if ENV["MONO_VERSION"].nil? 
   puts red("MONO_VERSION not specified")
@@ -43,4 +24,4 @@ Dir.foreach(script_folder) do |script|
 end
 _s "ssh -i ~/.ssh/root_id_rsa root@178.239.56.36 \"rm -rdf machine_scripts\""
 _s "scp -i ~/.ssh/root_id_rsa -r ../tmp root@178.239.56.36:~/machine_scripts"
-_s "ssh -i ~/.ssh/root_id_rsa root@178.239.56.36 \"chmod +x machine_scripts/*.sh; machine_scripts/fresh_machine.sh\""
+_s "ssh -i ~/.ssh/root_id_rsa root@178.239.56.36 \"chmod +x machine_scripts/*.sh machine_scripts/*.rb; machine_scripts/fresh_machine.sh\""
