@@ -26,7 +26,7 @@ namespace Frog.Domain.Specs
         public void should_capture_std_error_output()
         {
             var err = new StringBuilder();
-            var pw = new ProcessWrapper("ruby", "-e asdfasdfddd@!#!11fasfasdf.asdfasdf");
+            var pw = new ProcessWrapper("ruby", "-e 'asdfasdfddd@!#!11fasfasdf.asdfasdf'");
             pw.OnErrorOutput += output => err.Append(output);
             pw.Execute();
             pw.WaitForProcess();
@@ -37,7 +37,7 @@ namespace Frog.Domain.Specs
         public void should_run_when_no_std_error_output_is_captured()
         {
             var err = new StringBuilder();
-            var pw = new ProcessWrapper("ruby", "-e asdfasdfddd@!#!11fasfasdf.asdfasdf");
+            var pw = new ProcessWrapper("ruby", "-e 'asdfasdfddd@!#!11fasfasdf.asdfasdf'");
             pw.Execute();
             pw.WaitForProcess();
         }
