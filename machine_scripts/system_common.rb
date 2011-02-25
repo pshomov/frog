@@ -5,7 +5,7 @@ class String
 end
 
 def _s(command)
-  puts green ">>Launching #{command}"
+  puts(green(">>Launching #{command}"))
   system(command)
   if $? != 0
   	puts(red("Error running '#{command}'!"))

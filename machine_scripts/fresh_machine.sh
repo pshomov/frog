@@ -1,3 +1,5 @@
+#!/bin/bash
+
 apt-get -y update
 apt-get -y install git-core curl nginx ruby-full p7zip-full
 
