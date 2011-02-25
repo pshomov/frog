@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-require 'FileUtils'
+require 'fileutils'
 require 'system_common.rb'
 include FileUtils
 
