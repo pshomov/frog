@@ -11,4 +11,4 @@ rm "#{LOAD_ARCHIVE}", :force => true
 system "7z a -r #{LOAD_ARCHIVE} ../output/web"
 system "ssh -i ~/.ssh/maintainer_id_rsa maintainer@#{target} mkdir runz"
 system "scp -i ~/.ssh/maintainer_id_rsa #{LOAD_ARCHIVE} unpack.rb maintainer@#{target}:~/runz"
-system "ssh -i ~/.ssh/maintainer_id_rsa maintainer@#{target} \"cd runz; chmod u=rx unpack.rb; ./unpack.rb\""
+system "ssh -i ~/.ssh/maintainer_id_rsa maintainer@#{target} \"cd runz; chmod u=rwx unpack.rb; ./unpack.rb\""
