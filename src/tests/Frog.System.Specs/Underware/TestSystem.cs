@@ -182,5 +182,10 @@ namespace Frog.System.Specs.Underware
         {
             theTestSystem.SetupRepoClone(repoUrl);
         }
+
+        public void RegisterNewProject(string repoUrl)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

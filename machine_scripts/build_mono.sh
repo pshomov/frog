@@ -7,10 +7,10 @@ bison \
 libcairo2-dev libpango1.0-dev libfreetype6-dev libexif-dev \
 libjpeg62-dev libtiff4-dev libgif-dev zlib1g-dev
 
-cp machine_scripts/mono /usr/local/bin/mono-<%= @mono_ver %>
+cp ~/machine_scripts/mono /usr/local/bin/mono-<%= @mono_ver %>
 chmod +x /usr/local/bin/mono-<%= @mono_ver %>.sh
-chmod +x machine_scripts/compile_script.sh
-machine_scripts/compile_script.sh
+chmod +x ~/machine_scripts/compile_script.sh
+~/machine_scripts/compile_script.sh
 
 mkdir -p /opt/mono-<%= @mono_ver %>
 
