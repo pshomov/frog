@@ -20,8 +20,13 @@ mkdir "../tmp"
 script_folder = File.dirname(__FILE__)
 Dir.foreach(script_folder) do |script|
   if !script.starts_with?("\\.")
-    puts "processing #{script}"
-    _s("erb #{script_folder}/#{script} > ../tmp/#{script}")
+    if script.ends_with?("\\.erb")
+      puts "processing #{script}"
+      _s("erb #{script_folder}/#{script} > ../tmp/#{script[0..-5]}")
+    else
+      puts "copying #{script}"
+      cp (script, "../tmp")
+    end
   end
 end
 _s "ssh -i ~/.ssh/root_id_rsa root@#{target} \"rm -rdf machine_scripts\""

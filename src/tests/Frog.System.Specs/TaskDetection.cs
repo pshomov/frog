@@ -31,7 +31,7 @@ namespace Frog.System.Specs
 
             var fileFinder = new DefaultFileFinder(new PathFinder());
             pipeline = new PipelineOfTasks(system.Bus,
-                                           new CompoundTaskSource(new MSBuildDetector(fileFinder),
+                                           new CompoundTaskSource(
                                                                   new NUnitTaskDetctor(fileFinder)),
                                            new ExecTaskGenerator(execTaskFactory));
             system.MonitorRepository(repo.Url);
@@ -47,7 +47,7 @@ namespace Frog.System.Specs
         [Test]
         public void should_have_build_result_in_build_complete_event()
         {
-            execTaskFactory.Received().CreateTask("nunit", Os.DirChars("src/tests/Some.Tests/bin/Debug/Some.Test.dll"),
+            execTaskFactory.Received().CreateTask("nunit", Arg.Any<string>(),
                                                   Arg.Any<string>());
         }
 
