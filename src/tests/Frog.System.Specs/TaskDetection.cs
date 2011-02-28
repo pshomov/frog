@@ -36,8 +36,9 @@ namespace Frog.System.Specs
             var fileFinder = new DefaultFileFinder(new PathFinder());
             pipeline = new PipelineOfTasks(system.Bus,
                                            new CompoundTaskSource(
-                                                                  new NUnitTaskDetctor(fileFinder),
-                                                                  new MSBuildDetector(fileFinder)),
+                                                                  new MSBuildDetector(fileFinder),
+                                                                  new NUnitTaskDetctor(fileFinder)
+                                                                  ),
                                            new ExecTaskGenerator(execTaskFactory));
             system.MonitorRepository(repo.Url);
             valve = new Valve(system.Git, pipeline, system.WorkingArea);
