@@ -1,7 +1,10 @@
+using System;
+using System.IO;
 using Frog.Domain;
 using Frog.Domain.CustomTasks;
 using Frog.Domain.Specs;
 using Frog.Domain.TaskSources;
+using Frog.Specs.Support;
 using Frog.Support;
 using Frog.System.Specs.Underware;
 using NSubstitute;
@@ -17,6 +20,7 @@ namespace Frog.System.Specs
         SystemDriver system;
         ExecTaskFactory execTaskFactory;
         RepositoryDriver repo;
+        string changeset;
 
         public override void Given()
         {
@@ -41,7 +45,19 @@ namespace Frog.System.Specs
 
         public override void When()
         {
-            repo.CommitDirectoryTree("TestFixture");
+            changeset = GetChangesetArea();
+            var genesis = new FileGenesis(changeset);
+            genesis
+                .Folder("src")
+                    .Folder("tests")
+                        .Folder("Some.Tests")
+                            .File("Some.Test.csproj", "")
+                            .Up()
+                        .Up()
+                    .Up()
+                .File("SampleProject.sln", "");
+
+            repo.CommitDirectoryTree(changeset);
             valve.Check();
         }
 
@@ -56,6 +72,19 @@ namespace Frog.System.Specs
         public void should_execute_xbuild_task()
         {
             execTaskFactory.Received().CreateTask("xbuild", Os.DirChars("SampleProject.sln"), Arg.Any<string>());
+        }
+
+        string GetChangesetArea()
+        {
+            var changeset = Path.Combine(GitTestSupport.GetTempPath(), Path.GetRandomFileName());
+            Directory.CreateDirectory(changeset);
+            return changeset;
+        }
+
+        protected override void WhenCleanup()
+        {
+            OSHelpers.ClearAttributes(changeset);
+            Directory.Delete(changeset, true);
         }
 
         protected override void GivenCleanup()
