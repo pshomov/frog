@@ -68,7 +68,31 @@ namespace Frog.Domain.Specs
         [Test]
         public void should_set_status_to_BUILD_COMPLETED()
         {
-            Assert.That(buildStatus.Current, Is.EqualTo(PipelineStatusView.BuildStatus.Status.PipelineCompleted));
+            Assert.That(buildStatus.Current, Is.EqualTo(PipelineStatusView.BuildStatus.Status.PipelineCompletedFailure));
+        }
+
+    }
+    [TestFixture]
+    public class StatusViewAfterBuildCompletedSuccessfullySpec : BDD
+    {
+        PipelineStatusView view;
+        PipelineStatusView.BuildStatus buildStatus;
+
+        public override void Given()
+        {
+            buildStatus = new PipelineStatusView.BuildStatus();
+            view = new PipelineStatusView(buildStatus);
+        }
+
+        public override void When()
+        {
+            view.Handle(new BuildEnded(BuildEnded.BuildStatus.Success));
+        }
+
+        [Test]
+        public void should_set_status_to_BUILD_COMPLETED()
+        {
+            Assert.That(buildStatus.Current, Is.EqualTo(PipelineStatusView.BuildStatus.Status.PipelineCompletedSuccess));
         }
 
     }

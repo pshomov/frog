@@ -18,11 +18,9 @@
                         break;
                     case 1: set_status("Not started", "gray");
                         break;
-                    case 2: set_status("Build complete", msg.status.Completion == 1 ? "green" : "red");
+                    case 2: set_status("Build complete", "red");
                         break;
-                    case 3: set_status("Task '"+msg.status.TaskName+"' started", "yellow");
-                        break;
-                    case 4: set_status("Task '" + msg.status.TaskName + "' ended", msg.status.Completion == 1 ? "green" : "red");
+                    case 3: set_status("Build complete", "green");
                         break;
                     default:
                         set_status("Unknown build status", "cyan");
