@@ -37,7 +37,6 @@ namespace Frog.Domain.UI
 
         public void Handle(BuildUpdated message)
         {
-            report.Current = BuildStatus.Status.PipelineStarted;
             report.PipelineStatus = new PipelineStatus(message.Status);
         }
     }

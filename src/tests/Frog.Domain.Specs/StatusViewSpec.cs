@@ -106,7 +106,7 @@ namespace Frog.Domain.Specs
 
         public override void Given()
         {
-            buildStatus = new PipelineStatusView.BuildStatus();
+            buildStatus = new PipelineStatusView.BuildStatus(){Current = PipelineStatusView.BuildStatus.Status.NotStarted};
             view = new PipelineStatusView(buildStatus);
         }
 
@@ -129,13 +129,13 @@ namespace Frog.Domain.Specs
         }
 
         [Test]
-        public void should_set_status_to_TASK_STARTED()
+        public void should_not_modify_build_status()
         {
-            Assert.That(buildStatus.Current, Is.EqualTo(PipelineStatusView.BuildStatus.Status.PipelineStarted));
+            Assert.That(buildStatus.Current, Is.EqualTo(PipelineStatusView.BuildStatus.Status.NotStarted));
         }
 
         [Test]
-        public void should_set_task_name_to_empty()
+        public void should_set_task_status_to_the_value_sent_in_the_event()
         {
             Assert.True(new CompareObjects().Compare(buildStatus.PipelineStatus, pipelineStatus));
         }
