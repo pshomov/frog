@@ -42,6 +42,11 @@ namespace Frog.UI.Web
             RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterRoutes(RouteTable.Routes);
 
+            SetupApp();
+        }
+
+        void SetupApp()
+        {
             var bus = new FakeBus();
             ServiceLocator.Report = new PipelineStatusView.BuildStatus();
             var statusView = new PipelineStatusView(ServiceLocator.Report);
