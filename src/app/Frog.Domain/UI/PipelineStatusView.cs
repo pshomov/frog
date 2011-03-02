@@ -3,7 +3,7 @@ using SimpleCQRS;
 
 namespace Frog.Domain.UI
 {
-    public class PipelineStatusView : Handles<BuildStarted>, Handles<BuildEnded>
+    public class PipelineStatusView : Handles<BuildStarted>, Handles<BuildEnded>, Handles<BuildUpdated>
     {
         readonly BuildStatus report;
 

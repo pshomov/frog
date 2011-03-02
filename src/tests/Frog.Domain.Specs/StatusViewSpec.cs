@@ -49,7 +49,7 @@ namespace Frog.Domain.Specs
     }
 
     [TestFixture]
-    public class StatusViewAfterBuildCompletedSpec : BDD
+    public class StatusViewAfterBuildCompletedWithErrorSpec : BDD
     {
         PipelineStatusView view;
         PipelineStatusView.BuildStatus buildStatus;
@@ -117,7 +117,7 @@ namespace Frog.Domain.Specs
                 tasks =
                                          {
                                              new TasksInfo
-                                                 {Name = "task1", Status = TasksInfo.TaskStatus.NotStarted}
+                                                 {Name = "task1", Status = TasksInfo.TaskStatus.Started}
                                          }
             };
             view.Handle(new BuildUpdated()

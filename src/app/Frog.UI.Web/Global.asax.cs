@@ -47,6 +47,7 @@ namespace Frog.UI.Web
             var statusView = new PipelineStatusView(ServiceLocator.Report);
             bus.RegisterHandler<BuildStarted>(statusView.Handle);
             bus.RegisterHandler<BuildEnded>(statusView.Handle);
+            bus.RegisterHandler<BuildUpdated>(statusView.Handle);
 
             var workingAreaPath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
             var repoArea = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());

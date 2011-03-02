@@ -3,9 +3,12 @@
     <head>
     <title>Check status</title>
     <script type="text/javascript" src="../Scripts/jquery-1.4.4.js"></script>
+    <script type="text/javascript" src="http://github.com/DmitryBaranovskiy/raphael/raw/master/raphael-min.js"></script>
     <script type="text/javascript" language="javascript">
+        var paper;
         $(
             function() {
+                paper = Raphael("tasks", 640, 400);
                 setInterval("update_status()", 5000);
                 update_status();
             }
@@ -25,15 +28,27 @@
                     default:
                         set_status("Unknown build status", "cyan");
                 }
+
+                var tasks = msg.status.PipelineStatus.tasks;
+                update_tasks(tasks);
             });
         }
         function set_status(msg, color) {
             $("#status").text(msg);
             $("body").attr("style", "background : " + color + ";");
-        } 
+        }
+
+        function update_tasks(tasks) {
+            var taskStatusToColor = { 0 : "gray", 1 : "yellow", 2 : "green", 3 : "red" };
+            for (var i = 0; i < tasks.length; i++) {
+                var r = paper.rect(100 + (i * 100), 10, 100, 50);
+                r.attr("fill", taskStatusToColor[tasks[i].Status]);
+            }
+        }
     </script>
     </head>
     <body>
         <div id="status"></div>
+        <div id="tasks"></div>
     </body>
 </html>
