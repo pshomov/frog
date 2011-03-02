@@ -39,9 +39,13 @@
         }
 
         function update_tasks(tasks) {
+            paper.clear();
             var taskStatusToColor = { 0 : "gray", 1 : "yellow", 2 : "green", 3 : "red" };
             for (var i = 0; i < tasks.length; i++) {
                 var r = paper.rect(100 + (i * 100), 10, 100, 50);
+                var text = paper.text(100 + (i * 100), 10, tasks[i].Name);
+                text.attr("fill", "#f1f1f1");
+                text.translate((100 - text.getBBox().width) / 2, (50 - text.getBBox().height) / 2);
                 r.attr("fill", taskStatusToColor[tasks[i].Status]);
             }
         }
