@@ -1,7 +1,10 @@
+using System.IO;
 using Frog.Domain;
 using Frog.Domain.CustomTasks;
 using Frog.Domain.Specs;
 using Frog.Domain.TaskSources;
+using Frog.Specs.Support;
+using Frog.Support;
 using Frog.System.Specs.Underware;
 using NSubstitute;
 using NUnit.Framework;
@@ -39,14 +42,30 @@ namespace Frog.System.Specs
 
         public override void When()
         {
-            system.RegisterNewProject(repo.Url);
+            valve.RegisterNewProject(new GitDriver("", "name", repo.Url));
+            var changeset = GetChangesetArea();
+            var genesis = new FileGenesis(changeset);
+            genesis
+                .File("SampleProject.sln", "")
+                .Folder("src")
+                    .Folder("tests")
+                        .Folder("Some.Tests")
+                            .File("Some.Test.csproj", "");
+            repo.CommitDirectoryTree(changeset);
+            valve.Check();
         }
 
         [Test]
-        public void should_include_project_in_next_time_all_projects_need_to_be_updated()
+        public void should_execute_xbuild_task()
         {
-            Assert.That(false);
+            execTaskFactory.Received().CreateTask("xbuild", Os.DirChars("SampleProject.sln"), Arg.Any<string>());
         }
 
+        string GetChangesetArea()
+        {
+            var changeset = Path.Combine(GitTestSupport.GetTempPath(), Path.GetRandomFileName());
+            Directory.CreateDirectory(changeset);
+            return changeset;
+        }
     }
 }
