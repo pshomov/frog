@@ -42,7 +42,7 @@ namespace Frog.System.Specs
 
         public override void When()
         {
-            valve.RegisterNewProject(new GitDriver("", "name", repo.Url));
+//            valve.RegisterNewProject(new GitDriver("", "name", repo.Url));
             var changeset = GetChangesetArea();
             var genesis = new FileGenesis(changeset);
             genesis
