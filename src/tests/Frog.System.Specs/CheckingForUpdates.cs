@@ -5,7 +5,6 @@ using Frog.Domain.TaskSources;
 using Frog.System.Specs.Underware;
 using NSubstitute;
 using NUnit.Framework;
-using SimpleCQRS;
 using xray;
 
 namespace Frog.System.Specs
@@ -14,13 +13,12 @@ namespace Frog.System.Specs
     public class CheckingForUpdates : BDD
     {
         SystemDriver system;
-        ExecTaskFactory execTaskFactory;
         RepositoryDriver repo;
 
         public override void Given()
         {
             repo = RepositoryDriver.GetNewRepository();
-            system = SystemDriver.GetCleanSystem(GetPipeline());
+            system = SystemDriver.GetCleanSystem();
             system.RegisterNewProject(repo.Url);
         }
 
@@ -45,7 +43,7 @@ namespace Frog.System.Specs
         [Test]
         public void should_send_UPDATE_FOUND_message()
         {
-            var prober = new PollingProber(3000, 100);
+            var prober = new PollingProber(5000, 100);
             Assert.True(prober.check(Take.Snapshot(() => system.GetEventsSnapshot())
                                          .Has(x => x,
                                               An.Event<UpdateFound>(
@@ -55,21 +53,5 @@ namespace Frog.System.Specs
             
         }
 
-        PipelineOfTasks GetPipeline()
-        {
-            var execTask = Substitute.For<ExecTask>("", "", "");
-            execTask.Perform(Arg.Any<SourceDrop>()).Returns(new ExecTaskResult(ExecTask.ExecutionStatus.Success, 0));
-
-            execTaskFactory = Substitute.For<ExecTaskFactory>();
-            execTaskFactory.CreateTask(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>()).Returns(execTask);
-
-            var fileFinder = new DefaultFileFinder(new PathFinder());
-            return new PipelineOfTasks(system.Bus,
-                                       new CompoundTaskSource(
-                                           new MSBuildDetector(fileFinder),
-                                           new NUnitTaskDetctor(fileFinder)
-                                           ),
-                                       new ExecTaskGenerator(execTaskFactory));
-        }
     }
 }

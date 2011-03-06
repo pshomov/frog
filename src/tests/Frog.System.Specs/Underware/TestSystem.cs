@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Frog.Domain;
+using Frog.Domain.CustomTasks;
 using Frog.Domain.Specs;
+using Frog.Domain.TaskSources;
 using Frog.Domain.UI;
 using Frog.Specs.Support;
+using NSubstitute;
 using SimpleCQRS;
 
 namespace Frog.System.Specs.Underware
@@ -20,12 +23,13 @@ namespace Frog.System.Specs.Underware
         public PipelineStatusView.BuildStatus report;
         public List<Event> events;
 
-        public TestSystem(PipelineOfTasks pipeline)
+        public TestSystem()
         {
             events = new List<Event>();
             theBus = new FakeBus();
 
-            SetupValve(pipeline);
+
+            SetupValve(GetPipeline());
             SetupWorkingArea();
             SetupRepositoryTracker();
             SetupAgent();
@@ -34,10 +38,11 @@ namespace Frog.System.Specs.Underware
             SetupAllEventLogging();
         }
 
+
         void SetupValve(PipelineOfTasks pipeline)
         {
-            driver = new GitDriver(null, null, null);
-            valve = new Valve(driver, pipeline, area);
+//            driver = new GitDriver(null, null, null);
+            valve = new Valve(null, pipeline, area, theBus);
         }
 
         void SetupAgent()
@@ -106,8 +111,27 @@ namespace Frog.System.Specs.Underware
             }
         }
 
+        PipelineOfTasks GetPipeline()
+        {
+            var execTask = Substitute.For<ExecTask>("", "", "");
+            execTask.Perform(Arg.Any<SourceDrop>()).Returns(new ExecTaskResult(ExecTask.ExecutionStatus.Success, 0));
+
+            var execTaskFactory = Substitute.For<ExecTaskFactory>();
+            execTaskFactory.CreateTask(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>()).Returns(execTask);
+
+            var fileFinder = new DefaultFileFinder(new PathFinder());
+            return new PipelineOfTasks(theBus,
+                                       new CompoundTaskSource(
+                                           new MSBuildDetector(fileFinder),
+                                           new NUnitTaskDetctor(fileFinder)
+                                           ),
+                                       new ExecTaskGenerator(execTaskFactory));
+        }
+
         public RepositoryTracker repositoryTracker;
+
         public Agent agent;
+
         public Valve valve;
 
     }
@@ -156,9 +180,9 @@ namespace Frog.System.Specs.Underware
     {
         readonly TestSystem theTestSystem;
 
-        SystemDriver(PipelineOfTasks pipeline)
+        SystemDriver()
         {
-            theTestSystem = new TestSystem(pipeline);
+            theTestSystem = new TestSystem();
         }
 
         public FakeBus Bus
@@ -181,9 +205,9 @@ namespace Frog.System.Specs.Underware
             get { return theTestSystem.report; }
         }
 
-        public static SystemDriver GetCleanSystem(PipelineOfTasks pipeline)
+        public static SystemDriver GetCleanSystem()
         {
-            return new SystemDriver(pipeline);
+            return new SystemDriver();
         }
 
         public void ResetSystem()
