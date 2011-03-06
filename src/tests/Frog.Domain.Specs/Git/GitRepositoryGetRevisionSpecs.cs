@@ -29,13 +29,13 @@ namespace Frog.Domain.Specs.Git
                 .File("SampleProject.sln", "");
 
             GitTestSupport.CommitChangeFiles(repoUrl, changeset);
-            revision1 = _driver.GetLatestRevision(repoUrl);
+            revision1 = _driver.GetLatestRevision();
             changeset = GetChangesetArea();
             genesis = new FileGenesis(changeset);
             genesis
                 .File("Fle.txt", "f");
             GitTestSupport.CommitChangeFiles(repoUrl, changeset);
-            revision2 = _driver.GetLatestRevision(repoUrl);
+            revision2 = _driver.GetLatestRevision();
 
         }
 
@@ -43,7 +43,7 @@ namespace Frog.Domain.Specs.Git
         {
             workingArea = Path.Combine(GitTestSupport.GetTempPath(), Path.GetRandomFileName());
             Directory.CreateDirectory(workingArea);
-            _driver.GetSourceRevision(repoUrl, revision1, workingArea );
+            _driver.GetSourceRevision(revision1, workingArea );
         }
 
         [Test]

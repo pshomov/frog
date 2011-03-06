@@ -72,10 +72,4 @@ namespace Frog.System.Specs
                                        new ExecTaskGenerator(execTaskFactory));
         }
     }
-
-    public class UpdateFound : Event
-    {
-        public string BuildId;
-        public string Revision;
-    }
 }

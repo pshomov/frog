@@ -1,44 +1,45 @@
 using NSubstitute;
 using NUnit.Framework;
+using Arg = NSubstitute.Arg;
 
 namespace Frog.Domain.Specs.ValveSpecs
 {
     [TestFixture]
-    public class ValveWhenSourceUpdatesExists : ValveWhenUpdateSpecsBase
+    public class ValveNoUpdates : ValveWhenUpdateSpecsBase
     {
         SourceDrop sourceDrop;
 
         public override void Given()
         {
             base.Given();
-            sourceRepoDriver.CheckForUpdates().Returns(true);
+            sourceRepoDriver.GetLatestRevision().Returns("2344");
             sourceDrop = new SourceDrop("");
             sourceRepoDriver.GetLatestSourceDrop("").Returns(sourceDrop);
-            workingArea.AllocateWorkingArea().Returns("");
-            valve = new Domain.Valve(sourceRepoDriver, pipeline, workingArea);
+            workingArea.AllocateWorkingArea().Returns("dugh");
+            valve = new Valve(null, pipeline, workingArea);
         }
 
         public override void When()
         {
-            valve.Check();
+            valve.Check(repoUrl:sourceRepoDriver, revision:"2344");
         }
 
         [Test]
-        public void should_ask_repository_to_do_initial_checkout()
+        public void should_ask_repository_for_latest_rev()
         {
-            sourceRepoDriver.Received().CheckForUpdates();
+            sourceRepoDriver.Received().GetLatestRevision();
         }
 
         [Test]
         public void should_ask_repository_for_a_source_drop()
         {
-            sourceRepoDriver.Received().GetLatestSourceDrop("");
+            sourceRepoDriver.DidNotReceive().GetSourceRevision(Arg.Any<string>(), Arg.Any<string>());
         }
 
         [Test]
         public void should_tell_pipeline_to_start_rolin()
         {
-            pipeline.Received().Process(sourceDrop);
+            pipeline.DidNotReceive().Process(Arg.Any<SourceDrop>());
         }
 
     }

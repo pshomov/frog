@@ -7,8 +7,8 @@ namespace Frog.Domain
 {
     public interface SourceRepoDriver
     {
-        string GetLatestRevision(string repo);
-        void GetSourceRevision(string repo, string revision, string checkoutPath);
+        string GetLatestRevision();
+        void GetSourceRevision(string revision, string checkoutPath);
         bool CheckForUpdates();
         SourceDrop GetLatestSourceDrop(string sourceDropLocation);
     }
@@ -26,11 +26,16 @@ namespace Frog.Domain
             _repoUrl = repoUrl;
         }
 
-        public string GetLatestRevision(string repo)
+        public GitDriver(string repo)
+        {
+            this._repoUrl = repo;
+        }
+
+        public string GetLatestRevision()
         {
             string scriptPath = Path.Combine(Underware.GitProductionScriptsLocation, "git_remote_latest_rev.rb");
             var process = new ProcessWrapper("ruby",
-                                             scriptPath + " " + repo);
+                                             scriptPath + " " + _repoUrl);
             string result = "";
             process.OnStdOutput +=
                 s => { if (result.Length == 0)
@@ -46,11 +51,11 @@ namespace Frog.Domain
             return result;
         }
 
-        public void GetSourceRevision(string repo, string revision, string workingArea)
+        public void GetSourceRevision(string revision, string workingArea)
         {
             string scriptPath = Path.Combine(Underware.GitProductionScriptsLocation, "git_fetch.rb");
             var process = new ProcessWrapper("ruby", 
-                                             scriptPath + " " + repo + " "+ revision + " "+ " "+ workingArea);
+                                             scriptPath + " " + _repoUrl + " "+ revision + " "+ " "+ workingArea);
             process.Execute();
             var exitcode = process.WaitForProcess();
             if (exitcode != 0)

@@ -1,7 +1,5 @@
-using System;
 using System.IO;
 using Frog.Specs.Support;
-using Frog.Support;
 using NUnit.Framework;
 
 namespace Frog.Domain.Specs.Git
@@ -17,21 +15,18 @@ namespace Frog.Domain.Specs.Git
             var changeset = GetChangesetArea();
             var genesis = new FileGenesis(changeset);
             genesis
+                .File("SampleProject.sln", "")
                 .Folder("src")
-                    .Folder("tests")
-                        .Folder("Some.Tests")
-                            .File("Some.Test.csproj", "")
-                            .Up()
-                        .Up()
-                    .Up()
-                .File("SampleProject.sln", "");
+                .Folder("tests")
+                .Folder("Some.Tests")
+                .File("Some.Test.csproj", "");
 
             GitTestSupport.CommitChangeFiles(repoUrl, changeset);
         }
 
         public override void When()
         {
-            revision = _driver.GetLatestRevision(repoUrl);
+            revision = _driver.GetLatestRevision();
         }
 
         [Test]
@@ -46,6 +41,5 @@ namespace Frog.Domain.Specs.Git
             Directory.CreateDirectory(changeset);
             return changeset;
         }
-
     }
 }

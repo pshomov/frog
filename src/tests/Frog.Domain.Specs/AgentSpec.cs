@@ -55,7 +55,7 @@ namespace Frog.Domain.Specs
         [Test]
         public void should_listen_for_CHECK_FOR_UPDATES_message()
         {
-            valve.Received().Check("http://fle", "2");
+            valve.Received().Check(Arg.Any<SourceRepoDriver>(), "2");
         }
 
     }

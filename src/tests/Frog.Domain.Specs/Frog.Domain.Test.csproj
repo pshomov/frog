@@ -79,6 +79,8 @@
     <Compile Include="Task\TaskCurrentDirectory.cs" />
     <Compile Include="Task\TaskReporting.cs" />
     <Compile Include="TaskDetection\NUnitTaskDetectorSpecs.cs" />
+    <Compile Include="ValveSpecs\ValveNoUpdates.cs" />
+    <Compile Include="ValveSpecs\ValveSourceUpdates.cs" />
     <Compile Include="ValveSpecs\ValveWhenSourceUpdatesExists.cs" />
     <Compile Include="Git\GitRepositoryDriverCheckingForUpdatesWhenNoUpdates.cs" />
     <Compile Include="Git\GitRepositoryDriverCheckingForUpdates.cs" />

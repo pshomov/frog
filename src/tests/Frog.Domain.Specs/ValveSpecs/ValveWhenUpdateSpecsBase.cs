@@ -1,4 +1,4 @@
-using Rhino.Mocks;
+using NSubstitute;
 
 namespace Frog.Domain.Specs.ValveSpecs
 {
@@ -11,9 +11,9 @@ namespace Frog.Domain.Specs.ValveSpecs
 
         public override void Given()
         {
-            sourceRepoDriver = MockRepository.GenerateMock<SourceRepoDriver>();
-            pipeline = MockRepository.GenerateMock<Domain.Pipeline>();
-            workingArea = MockRepository.GenerateMock<WorkingArea>();
+            sourceRepoDriver = Substitute.For<SourceRepoDriver>();
+            pipeline = Substitute.For<Domain.Pipeline>();
+            workingArea = Substitute.For<WorkingArea>();
         }
     }
 }
