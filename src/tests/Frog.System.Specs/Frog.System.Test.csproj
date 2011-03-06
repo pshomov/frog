@@ -57,6 +57,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CheckingForUpdates.cs" />
     <Compile Include="ProjectRegistration.cs" />
     <Compile Include="Underware\An.cs" />
     <Compile Include="TaskDetection.cs" />

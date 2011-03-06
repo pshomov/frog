@@ -1,11 +1,14 @@
 using System;
 using System.IO;
+using System.Text.RegularExpressions;
 using Frog.Support;
 
 namespace Frog.Domain
 {
     public interface SourceRepoDriver
     {
+        string GetLatestRevision(string repo);
+        void GetSourceRevision(string repo, string revision);
         bool CheckForUpdates();
         SourceDrop GetLatestSourceDrop(string sourceDropLocation);
     }
@@ -21,6 +24,31 @@ namespace Frog.Domain
             _codeBase = codeBase;
             _repoFolder = repoFolder;
             _repoUrl = repoUrl;
+        }
+
+        public string GetLatestRevision(string repo)
+        {
+            string scriptPath = Path.Combine(Underware.GitProductionScriptsLocation, "git_remote_latest_rev.rb");
+            var process = new ProcessWrapper("ruby",
+                                             scriptPath + " " + repo);
+            string result = "";
+            process.OnStdOutput +=
+                s => { if (result.Length == 0)
+                {
+                    if (Regex.IsMatch(s, @"^([a-f,0-9]*)\s*refs/heads/master"))
+                    result = Regex.Match(s, @"^([a-f,0-9]*)\s*refs/heads/master").Groups[1].Value;
+                }
+                        };
+            process.Execute();
+            var exitcode = process.WaitForProcess();
+            if (exitcode != 0)
+                throw new InvalidProgramException("script failed, see log for details");
+            return result;
+        }
+
+        public void GetSourceRevision(string repo, string revision)
+        {
+            throw new NotImplementedException();
         }
 
         public bool CheckForUpdates()
@@ -62,7 +90,7 @@ namespace Frog.Domain
             }
         }
 
-        public static void CopyFolder(DirectoryInfo source, DirectoryInfo target)
+        static void CopyFolder(DirectoryInfo source, DirectoryInfo target)
         {
             foreach (DirectoryInfo dir in source.GetDirectories())
                 if (dir.Name != ".git") CopyFolder(dir, target.CreateSubdirectory(dir.Name));

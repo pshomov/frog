@@ -1,6 +1,6 @@
 using Rhino.Mocks;
 
-namespace Frog.Domain.Specs.Valve
+namespace Frog.Domain.Specs.ValveSpecs
 {
     public abstract class ValveWhenUpdateSpecsBase : BDD
     {

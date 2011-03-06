@@ -1,9 +1,7 @@
-using System;
-using Frog.Domain.Specs.Valve;
 using NUnit.Framework;
 using Rhino.Mocks;
 
-namespace Frog.Domain.Specs
+namespace Frog.Domain.Specs.ValveSpecs
 {
     [TestFixture]
     public class ValveWhenSourceUpdatesExists : ValveWhenUpdateSpecsBase

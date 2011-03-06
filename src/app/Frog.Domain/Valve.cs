@@ -1,6 +1,14 @@
+using System;
+
 namespace Frog.Domain
 {
-    public class Valve
+    public interface IValve
+    {
+        void Check();
+        void Check(string repoUrl, string revision);
+    }
+
+    public class Valve : IValve
     {
         readonly SourceRepoDriver _sourceRepoDriver;
         readonly Pipeline _pipeline;
@@ -21,6 +29,11 @@ namespace Frog.Domain
                 var sourceDrop = _sourceRepoDriver.GetLatestSourceDrop(sourceDropLocation);
                 _pipeline.Process(sourceDrop);
             }
+        }
+
+        public void Check(string repoUrl, string revision)
+        {
+            throw new NotImplementedException();
         }
     }
 

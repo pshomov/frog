@@ -1,7 +1,7 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 
-namespace Frog.Domain.Specs.Valve
+namespace Frog.Domain.Specs.ValveSpecs
 {
     [TestFixture]
     public class ValveWhenNoSourceUpdates : BDD

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -40,6 +40,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Agent.cs" />
+    <Compile Include="RepositoryTracker.cs" />
     <Compile Include="UI\PipelineStatusView.cs" />
     <Compile Include="TaskSources\CompoundTaskSource.cs" />
     <Compile Include="ExecTaskGenerator.cs" />
@@ -62,6 +64,9 @@
     <Compile Include="Valve.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="git_scripts\git_remote_latest_rev.rb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="git_scripts\git_initial_fetch.rb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

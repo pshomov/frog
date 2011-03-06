@@ -59,10 +59,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AgentSpec.cs" />
     <Compile Include="FileFinderSpecs.cs" />
+    <Compile Include="Git\GitRepositoryCheckForLatestRev.cs" />
     <Compile Include="Git\GitRepositoryDriverCheckBase.cs" />
     <Compile Include="Git\GitRepositoryDriverGetSourceDrop.cs" />
     <Compile Include="Pipeline\PipelineProcessSourceDropSpec.cs" />
+    <Compile Include="RepositoryTrackerSpecs.cs" />
     <Compile Include="StatusViewSpec.cs" />
     <Compile Include="TaskDetection\MSBuildTaskDetectorSpecs.cs" />
     <Compile Include="TaskDetection\MSBuildTaskDetectorSpecsBase.cs" />
@@ -75,14 +78,14 @@
     <Compile Include="Task\TaskCurrentDirectory.cs" />
     <Compile Include="Task\TaskReporting.cs" />
     <Compile Include="TaskDetection\NUnitTaskDetectorSpecs.cs" />
-    <Compile Include="Valve\ValveWhenSourceUpdatesExists.cs" />
+    <Compile Include="ValveSpecs\ValveWhenSourceUpdatesExists.cs" />
     <Compile Include="Git\GitRepositoryDriverCheckingForUpdatesWhenNoUpdates.cs" />
     <Compile Include="Git\GitRepositoryDriverCheckingForUpdates.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Git\GitRepositoryDriverInitialCheckout.cs" />
     <Compile Include="Task\TaskSpec.cs" />
-    <Compile Include="Valve\ValveWhenNoSourceUpdates.cs" />
-    <Compile Include="Valve\ValveWhenUpdateSpecsBase.cs" />
+    <Compile Include="ValveSpecs\ValveWhenNoSourceUpdates.cs" />
+    <Compile Include="ValveSpecs\ValveWhenUpdateSpecsBase.cs" />
     <Compile Include="WorkingAreaSpecs.cs" />
     <Compile Include="FileGeneration\FileGenesisTests.cs" />
   </ItemGroup>

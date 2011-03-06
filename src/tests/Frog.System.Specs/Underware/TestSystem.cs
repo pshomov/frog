@@ -20,23 +20,43 @@ namespace Frog.System.Specs.Underware
         public PipelineStatusView.BuildStatus report;
         public List<Event> events;
 
-        public TestSystem()
+        public TestSystem(PipelineOfTasks pipeline)
         {
             events = new List<Event>();
             theBus = new FakeBus();
 
+            SetupValve(pipeline);
             SetupWorkingArea();
+            SetupRepositoryTracker();
+            SetupAgent();
 
             SetupView();
             SetupAllEventLogging();
         }
 
-        public void SetupRepoClone(string dummyRepo)
+        void SetupValve(PipelineOfTasks pipeline)
         {
-            repoArea = Path.Combine(GitTestSupport.GetTempPath(), Path.GetRandomFileName());
-            Directory.CreateDirectory(repoArea);
-            driver = new GitDriver(repoArea, "test", dummyRepo);
+            driver = new GitDriver(null, null, null);
+            valve = new Valve(driver, pipeline, area);
         }
+
+        void SetupAgent()
+        {
+            agent = new Agent(theBus, valve);
+            agent.JoinTheParty();
+        }
+
+        void SetupRepositoryTracker()
+        {
+            repositoryTracker = new RepositoryTracker(theBus);
+        }
+
+//        public void SetupRepoClone(string dummyRepo)
+//        {
+//            repoArea = Path.Combine(GitTestSupport.GetTempPath(), Path.GetRandomFileName());
+//            Directory.CreateDirectory(repoArea);
+//            driver = new GitDriver(repoArea, "test", dummyRepo);
+//        }
 
         void SetupWorkingArea()
         {
@@ -86,12 +106,10 @@ namespace Frog.System.Specs.Underware
             }
         }
 
-        static readonly TestSystem theTestSystem = new TestSystem();
+        public RepositoryTracker repositoryTracker;
+        public Agent agent;
+        public Valve valve;
 
-        public static TestSystem TheTestSystem
-        {
-            get { return theTestSystem; }
-        }
     }
 
     public class RepositoryDriver
@@ -138,9 +156,9 @@ namespace Frog.System.Specs.Underware
     {
         readonly TestSystem theTestSystem;
 
-        SystemDriver()
+        SystemDriver(PipelineOfTasks pipeline)
         {
-            theTestSystem = new TestSystem();
+            theTestSystem = new TestSystem(pipeline);
         }
 
         public FakeBus Bus
@@ -163,9 +181,9 @@ namespace Frog.System.Specs.Underware
             get { return theTestSystem.report; }
         }
 
-        public static SystemDriver GetCleanSystem()
+        public static SystemDriver GetCleanSystem(PipelineOfTasks pipeline)
         {
-            return new SystemDriver();
+            return new SystemDriver(pipeline);
         }
 
         public void ResetSystem()
@@ -178,14 +196,19 @@ namespace Frog.System.Specs.Underware
             return theTestSystem.GetEventsSoFar();
         }
 
-        public void MonitorRepository(string repoUrl)
-        {
-            theTestSystem.SetupRepoClone(repoUrl);
-        }
+//        public void MonitorRepository(string repoUrl)
+//        {
+//            theTestSystem.SetupRepoClone(repoUrl);
+//        }
 
         public void RegisterNewProject(string repoUrl)
         {
-            throw new NotImplementedException();
+            theTestSystem.repositoryTracker.Track(repoUrl);
+        }
+
+        public void CheckProjectsForUpdates()
+        {
+            theTestSystem.repositoryTracker.CheckForUpdates();
         }
     }
 }
