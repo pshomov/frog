@@ -64,6 +64,9 @@
     <Compile Include="Valve.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="git_scripts\git_fetch.rb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="git_scripts\git_remote_latest_rev.rb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

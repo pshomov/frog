@@ -8,7 +8,7 @@ namespace Frog.Domain
     public interface SourceRepoDriver
     {
         string GetLatestRevision(string repo);
-        void GetSourceRevision(string repo, string revision);
+        void GetSourceRevision(string repo, string revision, string checkoutPath);
         bool CheckForUpdates();
         SourceDrop GetLatestSourceDrop(string sourceDropLocation);
     }
@@ -46,9 +46,17 @@ namespace Frog.Domain
             return result;
         }
 
-        public void GetSourceRevision(string repo, string revision)
+        public void GetSourceRevision(string repo, string revision, string workingArea)
         {
-            throw new NotImplementedException();
+            string scriptPath = Path.Combine(Underware.GitProductionScriptsLocation, "git_fetch.rb");
+            var process = new ProcessWrapper("ruby", 
+                                             scriptPath + " " + repo + " "+ revision + " "+ " "+ workingArea);
+            process.Execute();
+            var exitcode = process.WaitForProcess();
+            if (exitcode != 0)
+            {
+                throw new InvalidProgramException("script failed, see log for details");
+            }
         }
 
         public bool CheckForUpdates()
