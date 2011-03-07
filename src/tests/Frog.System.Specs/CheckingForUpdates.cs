@@ -48,7 +48,7 @@ namespace Frog.System.Specs
                                          .Has(x => x,
                                               An.Event<UpdateFound>(
                                                   ev =>
-                                                  ev.Revision.Length > 0))
+                                                  ev.Revision.Length == 40))
                             ));
             
         }
