@@ -1,9 +1,6 @@
 using Frog.Domain;
-using Frog.Domain.CustomTasks;
 using Frog.Domain.Specs;
-using Frog.Domain.TaskSources;
 using Frog.System.Specs.Underware;
-using NSubstitute;
 using NUnit.Framework;
 using xray;
 
@@ -37,7 +34,6 @@ namespace Frog.System.Specs
                                                   ev =>
                                                   ev.RepoUrl == repo.Url))
                             ));
-            
         }
 
         [Test]
@@ -50,8 +46,6 @@ namespace Frog.System.Specs
                                                   ev =>
                                                   ev.Revision.Length == 40))
                             ));
-            
         }
-
     }
 }
