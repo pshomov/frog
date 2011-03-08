@@ -8,15 +8,12 @@ namespace Frog.Domain.Specs.ValveSpecs
     [TestFixture]
     public class ValveSourceUpdates : ValveWhenUpdateSpecsBase
     {
-        SourceDrop sourceDrop;
         IEventPublisher eventPublisher;
 
         public override void Given()
         {
             base.Given();
             sourceRepoDriver.GetLatestRevision().Returns("2344");
-            sourceDrop = new SourceDrop("");
-            sourceRepoDriver.GetLatestSourceDrop("").Returns(sourceDrop);
             workingArea.AllocateWorkingArea().Returns("dugh");
             eventPublisher = Substitute.For<IEventPublisher>();
             valve = new Valve(pipeline, workingArea, eventPublisher);

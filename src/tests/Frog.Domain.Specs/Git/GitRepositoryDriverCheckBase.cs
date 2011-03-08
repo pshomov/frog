@@ -1,5 +1,4 @@
 using System.IO;
-using System.Threading;
 using Frog.Specs.Support;
 
 namespace Frog.Domain.Specs.Git
@@ -14,10 +13,10 @@ namespace Frog.Domain.Specs.Git
 
         public override void Given()
         {
-            _workPlace = Path.Combine(GitTestSupport.GetTempPath() ,Path.GetRandomFileName());
+            _workPlace = Path.Combine(GitTestSupport.GetTempPath(), Path.GetRandomFileName());
             Directory.CreateDirectory(_workPlace);
             repoUrl = GitTestSupport.CreateDummyRepo(_workPlace, _repoFolder);
-            _driver = new GitDriver(_workPlace, _cloneFolder, repoUrl);
+            _driver = new GitDriver(repoUrl);
         }
 
         protected override void GivenCleanup()
