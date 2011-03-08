@@ -16,7 +16,7 @@ namespace Frog.Domain.Specs.ValveSpecs
             sourceDrop = new SourceDrop("");
             sourceRepoDriver.GetLatestSourceDrop("").Returns(sourceDrop);
             workingArea.AllocateWorkingArea().Returns("dugh");
-            valve = new Valve(null, pipeline, workingArea);
+            valve = new Valve(pipeline, workingArea, null);
         }
 
         public override void When()

@@ -81,13 +81,11 @@
     <Compile Include="TaskDetection\NUnitTaskDetectorSpecs.cs" />
     <Compile Include="ValveSpecs\ValveNoUpdates.cs" />
     <Compile Include="ValveSpecs\ValveSourceUpdates.cs" />
-    <Compile Include="ValveSpecs\ValveWhenSourceUpdatesExists.cs" />
     <Compile Include="Git\GitRepositoryDriverCheckingForUpdatesWhenNoUpdates.cs" />
     <Compile Include="Git\GitRepositoryDriverCheckingForUpdates.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Git\GitRepositoryDriverInitialCheckout.cs" />
     <Compile Include="Task\TaskSpec.cs" />
-    <Compile Include="ValveSpecs\ValveWhenNoSourceUpdates.cs" />
     <Compile Include="ValveSpecs\ValveWhenUpdateSpecsBase.cs" />
     <Compile Include="WorkingAreaSpecs.cs" />
     <Compile Include="FileGeneration\FileGenesisTests.cs" />

@@ -42,7 +42,7 @@ namespace Frog.System.Specs.Underware
         void SetupValve(PipelineOfTasks pipeline)
         {
 //            driver = new GitDriver(null, null, null);
-            valve = new Valve(null, pipeline, area, theBus);
+            valve = new Valve(pipeline, area, theBus);
         }
 
         void SetupAgent()

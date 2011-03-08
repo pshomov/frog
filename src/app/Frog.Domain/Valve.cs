@@ -5,7 +5,6 @@ namespace Frog.Domain
 {
     public interface IValve
     {
-        void Check();
         void Check(SourceRepoDriver repoUrl, string revision);
     }
 
@@ -17,27 +16,15 @@ namespace Frog.Domain
 
     public class Valve : IValve
     {
-        readonly SourceRepoDriver _sourceRepoDriver;
         readonly Pipeline _pipeline;
         readonly WorkingArea _workingArea;
         readonly IEventPublisher eventPublisher;
 
-        public Valve(SourceRepoDriver sourceRepoDriver, Pipeline pipeline, WorkingArea workingArea, IEventPublisher eventPublisher = null)
+        public Valve(Pipeline pipeline, WorkingArea workingArea, IEventPublisher eventPublisher)
         {
-            _sourceRepoDriver = sourceRepoDriver;
             _pipeline = pipeline;
             _workingArea = workingArea;
             this.eventPublisher = eventPublisher;
-        }
-
-        public void Check()
-        {
-            if (_sourceRepoDriver.CheckForUpdates())
-            {
-                var sourceDropLocation = _workingArea.AllocateWorkingArea();
-                var sourceDrop = _sourceRepoDriver.GetLatestSourceDrop(sourceDropLocation);
-                _pipeline.Process(sourceDrop);
-            }
         }
 
         public void Check(SourceRepoDriver repoUrl, string revision)

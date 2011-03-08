@@ -19,7 +19,7 @@ namespace Frog.Domain.Specs.ValveSpecs
             sourceRepoDriver.GetLatestSourceDrop("").Returns(sourceDrop);
             workingArea.AllocateWorkingArea().Returns("dugh");
             eventPublisher = Substitute.For<IEventPublisher>();
-            valve = new Valve(null, pipeline, workingArea, eventPublisher);
+            valve = new Valve(pipeline, workingArea, eventPublisher);
         }
 
         public override void When()

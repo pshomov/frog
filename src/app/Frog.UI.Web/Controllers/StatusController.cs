@@ -13,7 +13,7 @@ namespace Frog.UI.Web.Controllers
         [AcceptVerbs(HttpVerbs.Get)]
         public void Check()
         {
-            ServiceLocator.Valve.Check();
+            ServiceLocator.RepositoryTracker.CheckForUpdates();
         }
     }
 }

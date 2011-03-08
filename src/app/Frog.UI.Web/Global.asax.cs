@@ -59,17 +59,21 @@ namespace Frog.UI.Web
             Directory.CreateDirectory(repoArea);
             Directory.CreateDirectory(workingAreaPath);
 
-            var git_username = Environment.GetEnvironmentVariable("MY_GIT_USERNAME");
-            var git_password = Environment.GetEnvironmentVariable("MY_GIT_PASSWORD");
-
-            var driver = new GitDriver(repoArea, "test",
-                                       String.Format("https://{0}:{1}@github.com/pshomov/frog.git", git_username,
-                                                     git_password));
+//            var git_username = Environment.GetEnvironmentVariable("MY_GIT_USERNAME");
+//            var git_password = Environment.GetEnvironmentVariable("MY_GIT_PASSWORD");
+//
+//            var driver = new GitDriver(repoArea, "test",
+//                                       String.Format("https://{0}:{1}@github.com/pshomov/frog.git", git_username,
+//                                                     git_password));
             var fileFinder = new DefaultFileFinder(new PathFinder());
             var pipeline = new PipelineOfTasks(bus,
                                                new CompoundTaskSource(new MSBuildDetector(fileFinder), new NUnitTaskDetctor(fileFinder)), new ExecTaskGenerator(new ExecTaskFactory()));
             var area = new SubfolderWorkingArea(workingAreaPath);
-            ServiceLocator.Valve = new Valve(driver, pipeline, area);
+            var agent = new Agent(bus, new Valve(pipeline, area, bus));
+            agent.JoinTheParty();
+            
+            ServiceLocator.RepositoryTracker = new RepositoryTracker(bus);
+
         }
     }
 }

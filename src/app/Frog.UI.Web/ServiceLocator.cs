@@ -8,6 +8,6 @@ namespace Frog.UI.Web
     {
         public static PipelineStatusView.BuildStatus Report { get; set; }
 
-        public static Valve Valve { get; set; }
+        public static RepositoryTracker RepositoryTracker { get; set; }
     }
 }
