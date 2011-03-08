@@ -18,6 +18,8 @@ namespace Frog.UI.Web
 
     public class MvcApplication : System.Web.HttpApplication
     {
+        string mapPath;
+
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
             filters.Add(new HandleErrorAttribute());
@@ -37,12 +39,29 @@ namespace Frog.UI.Web
 
         protected void Application_Start()
         {
+            mapPath = Server.MapPath("~/App_Data/Crash_");
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomainOnUnhandledException;
             AreaRegistration.RegisterAllAreas();
 
             RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterRoutes(RouteTable.Routes);
 
             SetupApp();
+        }
+        
+        void CurrentDomainOnUnhandledException(object sender, UnhandledExceptionEventArgs unhandledExceptionEventArgs)
+        {
+            try
+            {
+                Exception ex = (Exception) unhandledExceptionEventArgs.ExceptionObject;
+                Console.WriteLine("Exception is: \n"+ex.ToString());
+                using (var crashFile = new StreamWriter(mapPath + DateTime.UtcNow.ToString("yyyyMMdd") + ".log"))
+                    crashFile.WriteLine("<crash><time>" + DateTime.UtcNow.TimeOfDay.ToString() + "</time><url>" + HttpContext.Current.Request.Url + "</url><exception>" + ex.ToString() + "</exception></crash>");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
         }
 
         void SetupApp()
@@ -75,12 +94,6 @@ namespace Frog.UI.Web
             ServiceLocator.RepositoryTracker = new RepositoryTracker(bus);
 
         }
-        protected void Application_Error(object sender, EventArgs args)
-        {
-            Exception ex = Server.GetLastError();
-            using (var crashFile = new System.IO.StreamWriter(Server.MapPath("~/App_Data/Crash_" + DateTime.UtcNow.ToString("yyyyMMdd") + ".log")))
-                crashFile.WriteLine("<crash><time>" + DateTime.UtcNow.TimeOfDay.ToString() + "</time><url>" + HttpContext.Current.Request.Url + "</url><exception>" + ex.ToString() + "</exception></crash>");
 
-        }
     }
 }
