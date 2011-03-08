@@ -1,22 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
+using Frog.Support;
 
 namespace Frog.UI.Web.Controllers
 {
     public class RegisterProjectController : Controller
     {
-        //
-        // GET: /RegisterProject/
-
-        [AcceptVerbs("POST", "GET")]
+        [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult Index(string url)
         {
+            if (url.IsNullOrEmpty())
+            {
+                return Json(new {error = "Url was not provided"});
+            }
             ServiceLocator.RepositoryTracker.Track(url);
             return Redirect("~/Content/status.html");
         }
-
     }
 }

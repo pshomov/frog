@@ -73,4 +73,12 @@ namespace Frog.Support
             throw new PlatformNotSupportedException(" Not sure how to handle the path on this platform, please report this error");
         }
     }
+
+    public static class ExtensionMethods
+    {
+        public static bool IsNullOrEmpty(this string str)
+        {
+            return string.IsNullOrWhiteSpace(str);
+        }
+    }
 }
