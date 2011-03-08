@@ -1,7 +1,7 @@
 using NUnit.Framework;
 using Frog.Support;
 
-namespace Frog.Domain.Specs
+namespace Frog.Domain.Specs.Task
 {
     [TestFixture]
     public class TaskCurrentDirectory : BDD

@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using NUnit.Framework;
 
@@ -41,6 +40,5 @@ namespace Frog.Domain.Specs
             Assert.That(Directory.GetFiles(allocatedArea).Length == 0 &&
                         Directory.GetDirectories(allocatedArea).Length == 0);
         }
-
     }
 }

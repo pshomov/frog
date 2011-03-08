@@ -1,4 +1,3 @@
-using System;
 using SimpleCQRS;
 
 namespace Frog.Domain
@@ -16,14 +15,14 @@ namespace Frog.Domain
 
     public class Valve : IValve
     {
-        readonly Pipeline _pipeline;
-        readonly WorkingArea _workingArea;
+        readonly Pipeline pipeline;
+        readonly WorkingArea workingArea;
         readonly IEventPublisher eventPublisher;
 
         public Valve(Pipeline pipeline, WorkingArea workingArea, IEventPublisher eventPublisher)
         {
-            _pipeline = pipeline;
-            _workingArea = workingArea;
+            this.pipeline = pipeline;
+            this.workingArea = workingArea;
             this.eventPublisher = eventPublisher;
         }
 
@@ -32,10 +31,10 @@ namespace Frog.Domain
             string latestRev;
             if ((latestRev = repoUrl.GetLatestRevision()) != revision)
             {
-                eventPublisher.Publish(new UpdateFound{Revision = latestRev});
-                var workingArea = _workingArea.AllocateWorkingArea();
-                repoUrl.GetSourceRevision(latestRev, workingArea);
-                _pipeline.Process(new SourceDrop(workingArea));
+                eventPublisher.Publish(new UpdateFound {Revision = latestRev});
+                var allocatedWorkingArea = workingArea.AllocateWorkingArea();
+                repoUrl.GetSourceRevision(latestRev, allocatedWorkingArea);
+                pipeline.Process(new SourceDrop(allocatedWorkingArea));
             }
         }
     }
