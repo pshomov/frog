@@ -75,5 +75,12 @@ namespace Frog.UI.Web
             ServiceLocator.RepositoryTracker = new RepositoryTracker(bus);
 
         }
+        protected void Application_Error(object sender, EventArgs args)
+        {
+            Exception ex = Server.GetLastError();
+            using (var crashFile = new System.IO.StreamWriter(Server.MapPath("~/App_Data/Crash_" + DateTime.UtcNow.ToString("yyyyMMdd") + ".log")))
+                crashFile.WriteLine("<crash><time>" + DateTime.UtcNow.TimeOfDay.ToString() + "</time><url>" + HttpContext.Current.Request.Url + "</url><exception>" + ex.ToString() + "</exception></crash>");
+
+        }
     }
 }
