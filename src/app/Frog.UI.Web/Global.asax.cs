@@ -9,9 +9,10 @@ using Frog.Domain;
 using Frog.Domain.CustomTasks;
 using Frog.Domain.TaskSources;
 using Frog.Domain.UI;
+using Frog.UI.Web;
 using SimpleCQRS;
 
-namespace Frog.UI.Web
+namespace Frog.UI.Web2
 {
     // Note: For instructions on enabling IIS6 or IIS7 classic mode, 
     // visit http://go.microsoft.com/?LinkId=9394801
@@ -19,11 +20,6 @@ namespace Frog.UI.Web
     public class MvcApplication : System.Web.HttpApplication
     {
         string mapPath;
-
-        public static void RegisterGlobalFilters(GlobalFilterCollection filters)
-        {
-            filters.Add(new HandleErrorAttribute());
-        }
 
         public static void RegisterRoutes(RouteCollection routes)
         {
@@ -43,18 +39,17 @@ namespace Frog.UI.Web
             AppDomain.CurrentDomain.UnhandledException += CurrentDomainOnUnhandledException;
             AreaRegistration.RegisterAllAreas();
 
-            RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterRoutes(RouteTable.Routes);
 
             SetupApp();
         }
-        
+
         void CurrentDomainOnUnhandledException(object sender, UnhandledExceptionEventArgs unhandledExceptionEventArgs)
         {
             try
             {
-                Exception ex = (Exception) unhandledExceptionEventArgs.ExceptionObject;
-                Console.WriteLine("Exception is: \n"+ex.ToString());
+                Exception ex = (Exception)unhandledExceptionEventArgs.ExceptionObject;
+                Console.WriteLine("Exception is: \n" + ex.ToString());
                 using (var crashFile = new StreamWriter(mapPath + DateTime.UtcNow.ToString("yyyyMMdd") + ".log"))
                     crashFile.WriteLine("<crash><time>" + DateTime.UtcNow.TimeOfDay.ToString() + "</time><url>" + HttpContext.Current.Request.Url + "</url><exception>" + ex.ToString() + "</exception></crash>");
             }
@@ -78,22 +73,21 @@ namespace Frog.UI.Web
             Directory.CreateDirectory(repoArea);
             Directory.CreateDirectory(workingAreaPath);
 
-//            var git_username = Environment.GetEnvironmentVariable("MY_GIT_USERNAME");
-//            var git_password = Environment.GetEnvironmentVariable("MY_GIT_PASSWORD");
-//
-//            var driver = new GitDriver(repoArea, "test",
-//                                       String.Format("https://{0}:{1}@github.com/pshomov/frog.git", git_username,
-//                                                     git_password));
+            //            var git_username = Environment.GetEnvironmentVariable("MY_GIT_USERNAME");
+            //            var git_password = Environment.GetEnvironmentVariable("MY_GIT_PASSWORD");
+            //
+            //            var driver = new GitDriver(repoArea, "test",
+            //                                       String.Format("https://{0}:{1}@github.com/pshomov/frog.git", git_username,
+            //                                                     git_password));
             var fileFinder = new DefaultFileFinder(new PathFinder());
             var pipeline = new PipelineOfTasks(bus,
                                                new CompoundTaskSource(new MSBuildDetector(fileFinder), new NUnitTaskDetctor(fileFinder)), new ExecTaskGenerator(new ExecTaskFactory()));
             var area = new SubfolderWorkingArea(workingAreaPath);
             var agent = new Agent(bus, new Valve(pipeline, area, bus));
             agent.JoinTheParty();
-            
+
             ServiceLocator.RepositoryTracker = new RepositoryTracker(bus);
 
         }
-
     }
 }

@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Frog.UI.Web")]
+[assembly: AssemblyTitle("Frog.UI.Web2")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Microsoft")]
-[assembly: AssemblyProduct("Frog.UI.Web")]
+[assembly: AssemblyProduct("Frog.UI.Web2")]
 [assembly: AssemblyCopyright("Copyright © Microsoft 2011")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("6095208a-2964-458b-bd46-e32a950da678")]
+[assembly: Guid("d1938ab8-e23e-44b3-a8cc-04b5b6658b39")]
 
 // Version information for an assembly consists of the following four values:
 //
