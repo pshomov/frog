@@ -58,12 +58,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CheckingForUpdates.cs" />
-    <Compile Include="ProjectRegistration.cs" />
     <Compile Include="Underware\An.cs" />
-    <Compile Include="TaskDetection.cs" />
     <Compile Include="Underware\EventedProber.cs" />
     <Compile Include="Underware\TestSystem.cs" />
-    <Compile Include="UpdatingBuildReportStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
