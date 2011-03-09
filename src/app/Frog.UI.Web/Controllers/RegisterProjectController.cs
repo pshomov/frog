@@ -10,7 +10,7 @@ namespace Frog.UI.Web.Controllers
         {
             if (url.IsNullOrEmpty())
             {
-                return Json(new {error = "Url was not provided"});
+                return MonoBugs.Json(new {error = "Url was not provided"});
             }
             ServiceLocator.RepositoryTracker.Track(url);
             return Redirect("~/Content/status.html");
