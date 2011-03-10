@@ -25,7 +25,7 @@ namespace Frog.Domain.Specs
         public void should_register_repository()
         {
             repositoryTracker.CheckForUpdates();
-            bus.Received().Publish(Arg.Is<CheckForUpdates>(updates => updates.RepoUrl == "http://fle"));
+            bus.Received().Publish(Arg.Is<CheckForUpdates>(updates => updates.RepoUrl == "http://fle" && updates.Revision == ""));
         }
 
     }

@@ -29,8 +29,8 @@ namespace Frog.System.Specs.Underware
             theBus = new FakeBus();
 
 
-            SetupValve(GetPipeline());
             SetupWorkingArea();
+            SetupValve(GetPipeline());
             SetupRepositoryTracker();
             SetupAgent();
 

@@ -12,23 +12,28 @@ namespace Frog.Domain
 
     public class RepositoryTracker
     {
+        public class RepositoryInfo
+        {
+            public string Url;
+            public string LastBuiltRevision;
+        }
         readonly IEventPublisher eventPublisher;
-        List<string> trackedRepos;
+        List<RepositoryInfo> trackedRepos;
 
         public RepositoryTracker(IEventPublisher eventPublisher)
         {
             this.eventPublisher = eventPublisher;
-            trackedRepos = new List<string>();
+            trackedRepos = new List<RepositoryInfo>();
         }
 
         public void Track(string repoUrl)
         {
-            trackedRepos.Add(repoUrl);
+            trackedRepos.Add(new RepositoryInfo{Url = repoUrl, LastBuiltRevision = ""});
         }
 
         public void CheckForUpdates()
         {
-            trackedRepos.ForEach(s => eventPublisher.Publish(new CheckForUpdates{RepoUrl = s}));
+            trackedRepos.ForEach(s => eventPublisher.Publish(new CheckForUpdates{RepoUrl = s.Url, Revision = s.LastBuiltRevision}));
         }
     }
 }

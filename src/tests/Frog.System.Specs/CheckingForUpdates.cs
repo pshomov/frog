@@ -32,7 +32,7 @@ namespace Frog.System.Specs
                                          .Has(x => x,
                                               An.Event<CheckForUpdates>(
                                                   ev =>
-                                                  ev.RepoUrl == repo.Url))
+                                                  ev.RepoUrl == repo.Url && ev.Revision == ""))
                             ));
         }
 
