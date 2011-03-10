@@ -220,11 +220,6 @@ namespace Frog.System.Specs.Underware
             return theTestSystem.GetEventsSoFar();
         }
 
-//        public void MonitorRepository(string repoUrl)
-//        {
-//            theTestSystem.SetupRepoClone(repoUrl);
-//        }
-
         public void RegisterNewProject(string repoUrl)
         {
             theTestSystem.repositoryTracker.Track(repoUrl);
