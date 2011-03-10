@@ -41,8 +41,7 @@ namespace Frog.System.Specs.Underware
 
         void SetupValve(PipelineOfTasks pipeline)
         {
-//            driver = new GitDriver(null, null, null);
-            valve = new Valve(pipeline, area, theBus);
+            valve = new Valve(pipeline, area);
         }
 
         void SetupAgent()
@@ -54,6 +53,7 @@ namespace Frog.System.Specs.Underware
         void SetupRepositoryTracker()
         {
             repositoryTracker = new RepositoryTracker(theBus);
+            repositoryTracker.StartListeningForBuildUpdates();
         }
 
 //        public void SetupRepoClone(string dummyRepo)

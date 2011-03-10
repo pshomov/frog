@@ -37,14 +37,25 @@ namespace Frog.System.Specs
         }
 
         [Test]
-        public void should_send_UPDATE_FOUND_message()
+        public void should_send_UPDATE_FOUND_message_and_update_the_last_build_revision()
         {
             var prober = new PollingProber(5000, 100);
+            string updateFound = "crazy value";
             Assert.True(prober.check(Take.Snapshot(() => system.GetEventsSnapshot())
                                          .Has(x => x,
                                               An.Event<UpdateFound>(
                                                   ev =>
-                                                  ev.Revision.Length == 40))
+                                                      {
+                                                          updateFound = ev.Revision;
+                                                          return ev.Revision.Length == 40;
+                                                      }))
+                            ));
+            system.CheckProjectsForUpdates();
+            Assert.True(prober.check(Take.Snapshot(() => system.GetEventsSnapshot())
+                                         .Has(x => x,
+                                              An.Event<CheckForUpdates>(
+                                                  ev =>
+                                                  ev.RepoUrl == repo.Url && ev.Revision == updateFound))
                             ));
         }
     }

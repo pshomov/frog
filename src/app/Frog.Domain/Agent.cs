@@ -20,6 +20,7 @@ namespace Frog.Domain
 
         public void Handle(CheckForUpdates message)
         {
+            valve.OnUpdateFound += s => theBus.Publish(new UpdateFound {RepoUrl = message.RepoUrl, Revision = s});
             valve.Check(new GitDriver(message.RepoUrl), message.Revision);
         }
     }

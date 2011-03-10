@@ -8,15 +8,18 @@ namespace Frog.Domain.Specs.ValveSpecs
     [TestFixture]
     public class ValveSourceUpdates : ValveWhenUpdateSpecsBase
     {
-        IEventPublisher eventPublisher;
+        bool updateFound;
+        string newRevision;
 
         public override void Given()
         {
             base.Given();
             sourceRepoDriver.GetLatestRevision().Returns("2344");
             workingArea.AllocateWorkingArea().Returns("dugh");
-            eventPublisher = Substitute.For<IEventPublisher>();
-            valve = new Valve(pipeline, workingArea, eventPublisher);
+            valve = new Valve(pipeline, workingArea);
+            valve.OnUpdateFound += s => { updateFound = true;
+                                            newRevision = s;
+            };
         }
 
         public override void When()
@@ -45,7 +48,8 @@ namespace Frog.Domain.Specs.ValveSpecs
         [Test]
         public void should_send_message_that_build_has_started()
         {
-            eventPublisher.Received().Publish(Arg.Is<UpdateFound>(found => found.Revision == "2344"));
+            Assert.That(updateFound, Is.True);
+            Assert.That(newRevision, Is.EqualTo("2344"));
         }
 
 

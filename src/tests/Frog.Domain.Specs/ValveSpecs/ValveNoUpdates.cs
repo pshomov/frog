@@ -12,7 +12,7 @@ namespace Frog.Domain.Specs.ValveSpecs
             base.Given();
             sourceRepoDriver.GetLatestRevision().Returns("2344");
             workingArea.AllocateWorkingArea().Returns("dugh");
-            valve = new Valve(pipeline, workingArea, null);
+            valve = new Valve(pipeline, workingArea);
         }
 
         public override void When()

@@ -43,6 +43,7 @@ namespace Frog.Domain.Specs
         {
             bus = Substitute.For<IBus>();
             valve = Substitute.For<IValve>();
+            valve.When(iValve => iValve.Check(Arg.Any<SourceRepoDriver>(), Arg.Any<string>())).Do(info => valve.OnUpdateFound += Raise.Event<Action<string>>("new_rev"));
             agent = new Agent(bus, valve);
             agent.JoinTheParty();
         }
@@ -56,6 +57,12 @@ namespace Frog.Domain.Specs
         public void should_listen_for_CHECK_FOR_UPDATES_message()
         {
             valve.Received().Check(Arg.Any<SourceRepoDriver>(), "2");
+        }
+
+        [Test]
+        public void should_publish_UPDATE_FOUND_event()
+        {
+            bus.Received().Publish(Arg.Is<UpdateFound>(found => found.Revision == "new_rev" && found.RepoUrl == "http://fle"));
         }
 
     }

@@ -83,11 +83,11 @@ namespace Frog.UI.Web2
             var pipeline = new PipelineOfTasks(bus,
                                                new CompoundTaskSource(new MSBuildDetector(fileFinder), new NUnitTaskDetctor(fileFinder)), new ExecTaskGenerator(new ExecTaskFactory()));
             var area = new SubfolderWorkingArea(workingAreaPath);
-            var agent = new Agent(bus, new Valve(pipeline, area, bus));
+            var agent = new Agent(bus, new Valve(pipeline, area));
             agent.JoinTheParty();
 
             ServiceLocator.RepositoryTracker = new RepositoryTracker(bus);
-
+            ServiceLocator.RepositoryTracker.StartListeningForBuildUpdates();
         }
     }
 }
