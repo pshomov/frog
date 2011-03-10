@@ -7,9 +7,9 @@ namespace Frog.System.Specs.Underware
     public class EventedProber
     {
         readonly int timeout;
-        readonly FakeBus bus;
+        readonly IBus bus;
 
-        public EventedProber(int timeout, FakeBus bus)
+        public EventedProber(int timeout, IBus bus)
         {
             this.timeout = timeout;
             this.bus = bus;

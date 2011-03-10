@@ -4,10 +4,10 @@ namespace Frog.Domain
 {
     public class Agent : Handles<CheckForUpdates>
     {
-        readonly FakeBus theBus;
+        readonly IBus theBus;
         readonly IValve valve;
 
-        public Agent(FakeBus theBus, IValve valve)
+        public Agent(IBus theBus, IValve valve)
         {
             this.theBus = theBus;
             this.valve = valve;

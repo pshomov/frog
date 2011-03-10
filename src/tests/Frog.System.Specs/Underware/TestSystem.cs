@@ -15,7 +15,7 @@ namespace Frog.System.Specs.Underware
 {
     public class TestSystem
     {
-        public FakeBus theBus;
+        public IBus theBus;
         string workingAreaPath;
         string repoArea;
         public GitDriver driver;
@@ -185,7 +185,7 @@ namespace Frog.System.Specs.Underware
             theTestSystem = new TestSystem();
         }
 
-        public FakeBus Bus
+        public IBus Bus
         {
             get { return theTestSystem.theBus; }
         }

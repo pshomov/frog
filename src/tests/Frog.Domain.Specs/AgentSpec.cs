@@ -9,12 +9,12 @@ namespace Frog.Domain.Specs
     [TestFixture]
     public class AgentJoinsThePartySpec : BDD
     {
-        FakeBus bus;
+        IBus bus;
         Agent agent;
 
         public override void Given()
         {
-            bus = Substitute.For<FakeBus>();
+            bus = Substitute.For<IBus>();
             var valve = Substitute.For<IValve>();
             agent = new Agent(bus, valve);
         }
@@ -35,13 +35,13 @@ namespace Frog.Domain.Specs
     [TestFixture]
     public class AgentGetsToCheckForUpdates : BDD
     {
-        FakeBus bus;
+        IBus bus;
         Agent agent;
         IValve valve;
 
         public override void Given()
         {
-            bus = Substitute.For<FakeBus>();
+            bus = Substitute.For<IBus>();
             valve = Substitute.For<IValve>();
             agent = new Agent(bus, valve);
             agent.JoinTheParty();
