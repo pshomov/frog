@@ -1,3 +1,4 @@
+using System;
 using Frog.Domain.CustomTasks;
 using Frog.Domain.TaskDetection;
 using Frog.Support;
@@ -13,17 +14,32 @@ namespace Frog.Domain.Specs.Pipeline
         protected ExecTask task1;
         protected ExecTask task2;
         protected readonly SourceDrop SourceDrop = new SourceDrop("");
-        protected TaskSource eventPublisher;
+        protected TaskSource taskSource;
         protected IExecTaskGenerator execTaskGenerator;
         protected MSBuildTaskDescriptions srcTask1;
         protected IEventPublisher bus;
+        BuildStarted buildStarted;
+        BuildUpdated buildUpdated;
+        BuildEnded buildEnded;
+        protected Action<BuildStarted> pipelineOnBuildStarted;
+        protected Action<BuildEnded> pipelineOnOnBuildEnded;
+        protected Action<BuildUpdated> pipelineOnBuildUpdated;
 
         public override void Given()
         {
+            buildStarted = null;
+            buildUpdated = null;
+            buildEnded = null;
             bus = Substitute.For<IEventPublisher>();
-            eventPublisher = Substitute.For<TaskSource>();
+            taskSource = Substitute.For<TaskSource>();
             execTaskGenerator = Substitute.For<IExecTaskGenerator>();
-            pipeline = new PipelineOfTasks(bus, eventPublisher, execTaskGenerator);
+            pipeline = new PipelineOfTasks(taskSource, execTaskGenerator);
+            pipelineOnBuildStarted = Substitute.For<Action<BuildStarted>>();
+            pipelineOnOnBuildEnded = Substitute.For<Action<BuildEnded>>();
+            pipelineOnBuildUpdated = Substitute.For<Action<BuildUpdated>>();
+            pipeline.OnBuildStarted += pipelineOnBuildStarted;
+            pipeline.OnBuildUpdated += pipelineOnBuildUpdated;
+            pipeline.OnBuildEnded += pipelineOnOnBuildEnded;
         }
     }
 
@@ -34,7 +50,7 @@ namespace Frog.Domain.Specs.Pipeline
         {
             base.Given();
             srcTask1 = new MSBuildTaskDescriptions("");
-            eventPublisher.Detect(Arg.Any<string>()).Returns(As.List<ITask>(srcTask1));
+            taskSource.Detect(Arg.Any<string>()).Returns(As.List<ITask>(srcTask1));
             task1 = Substitute.For<ExecTask>("", "", "");
             task1.Perform(Arg.Any<SourceDrop>()).Returns(new ExecTaskResult(ExecTask.ExecutionStatus.Failure, 4));
             task2 = Substitute.For<ExecTask>("", "", "");
@@ -50,7 +66,7 @@ namespace Frog.Domain.Specs.Pipeline
         [Test]
         public void should_get_all_tasks()
         {
-            eventPublisher.Received().Detect("");
+            taskSource.Received().Detect("");
         }
 
         [Test]
@@ -62,7 +78,7 @@ namespace Frog.Domain.Specs.Pipeline
         [Test]
         public void should_broadcast_build_started_with_two_non_stared_tasks()
         {
-            bus.Received().Publish(Arg.Is<BuildStarted>(
+            pipelineOnBuildStarted.Received().Invoke(Arg.Is<BuildStarted>(
                     started =>
                     started.Status.tasks.Count == 2 &&
                     started.Status.tasks[0].Status == TasksInfo.TaskStatus.NotStarted &&
@@ -72,17 +88,16 @@ namespace Frog.Domain.Specs.Pipeline
         [Test]
         public void should_update_build_status_when_task_starts()
         {
-            bus.Received().Publish(Arg.Is<BuildUpdated>(
+            pipelineOnBuildUpdated.Received().Invoke(Arg.Is<BuildUpdated>(
                 started =>
                 started.Status.tasks.Count == 2 &&
                 started.Status.tasks[0].Status == TasksInfo.TaskStatus.Started &&
                 started.Status.tasks[1].Status == TasksInfo.TaskStatus.NotStarted));
         }
 
-        [Test]
         public void should_update_build_status_when_task_finishes()
         {
-            bus.Received().Publish(Arg.Is<BuildUpdated>(
+            pipelineOnBuildUpdated.Received().Invoke(Arg.Is<BuildUpdated>(
                 started =>
                 started.Status.tasks.Count == 2 &&
                 started.Status.tasks[0].Status == TasksInfo.TaskStatus.FinishedError &&
@@ -92,7 +107,7 @@ namespace Frog.Domain.Specs.Pipeline
         [Test]
         public void should_publish_build_ended_with_error()
         {
-            bus.Received().Publish(Arg.Is<BuildEnded>(
+            pipelineOnOnBuildEnded.Received().Invoke(Arg.Is<BuildEnded>(
                 started =>
                 started.Status == BuildEnded.BuildStatus.Error));
         }
@@ -100,7 +115,7 @@ namespace Frog.Domain.Specs.Pipeline
         [Test]
         public void should_not_start_second_task_at_all()
         {
-            bus.DidNotReceive().Publish(Arg.Is<BuildUpdated>(
+            pipelineOnBuildUpdated.DidNotReceive().Invoke(Arg.Is<BuildUpdated>(
                 started =>
                 started.Status.tasks.Count == 2 &&
                 started.Status.tasks[1].Status == TasksInfo.TaskStatus.Started));

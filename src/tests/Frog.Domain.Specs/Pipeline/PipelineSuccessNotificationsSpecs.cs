@@ -16,7 +16,7 @@ namespace Frog.Domain.Specs.Pipeline
         {
             base.Given();
             srcTask1 = new MSBuildTaskDescriptions("");
-            eventPublisher.Detect(Arg.Any<string>()).Returns(As.List<ITask>(srcTask1));
+            taskSource.Detect(Arg.Any<string>()).Returns(As.List<ITask>(srcTask1));
             task1 = Substitute.For<ExecTask>("", "", "");
             task1.Perform(Arg.Any<SourceDrop>()).Returns(new ExecTaskResult(ExecTask.ExecutionStatus.Success, 0));
             task2 = Substitute.For<ExecTask>("", "", "");

@@ -114,8 +114,7 @@ namespace Frog.System.Specs.Underware
             execTaskFactory.CreateTask(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>()).Returns(execTask);
 
             var fileFinder = new DefaultFileFinder(new PathFinder());
-            return new PipelineOfTasks(theBus,
-                                       new CompoundTaskSource(
+            return new PipelineOfTasks(new CompoundTaskSource(
                                            new MSBuildDetector(fileFinder),
                                            new NUnitTaskDetctor(fileFinder)
                                            ),

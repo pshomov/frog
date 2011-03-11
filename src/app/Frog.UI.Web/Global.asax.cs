@@ -80,8 +80,7 @@ namespace Frog.UI.Web2
             //                                       String.Format("https://{0}:{1}@github.com/pshomov/frog.git", git_username,
             //                                                     git_password));
             var fileFinder = new DefaultFileFinder(new PathFinder());
-            var pipeline = new PipelineOfTasks(bus,
-                                               new CompoundTaskSource(new MSBuildDetector(fileFinder), new NUnitTaskDetctor(fileFinder)), new ExecTaskGenerator(new ExecTaskFactory()));
+            var pipeline = new PipelineOfTasks(new CompoundTaskSource(new MSBuildDetector(fileFinder), new NUnitTaskDetctor(fileFinder)), new ExecTaskGenerator(new ExecTaskFactory()));
             var area = new SubfolderWorkingArea(workingAreaPath);
             var agent = new Agent(bus, new Valve(pipeline, area));
             agent.JoinTheParty();
