@@ -143,10 +143,6 @@ namespace Frog.Domain
             this.execTaskGenerator = execTaskGenerator;
         }
 
-        public PipelineOfTasks(TaskSource taskDispenser, IExecTaskGenerator execTaskGenerator) : this(new DummyBus(), taskDispenser, execTaskGenerator)
-        {
-        }
-
         public void Process(SourceDrop sourceDrop)
         {
             List<ExecTask> execTasks = GenerateTasks(sourceDrop);
