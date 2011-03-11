@@ -15,18 +15,16 @@ namespace Frog.System.Specs.Underware
 {
     public class TestSystem
     {
-        public IBus theBus;
+        IBus theBus;
         string workingAreaPath;
-        public GitDriver driver;
-        public SubfolderWorkingArea area;
-        public PipelineStatusView.BuildStatus report;
-        public List<Event> events;
+        SubfolderWorkingArea area;
+        PipelineStatusView.BuildStatus report;
+        List<Event> events;
 
         public TestSystem()
         {
             events = new List<Event>();
             theBus = new FakeBus();
-
 
             SetupWorkingArea();
             SetupValve(GetPipeline());
@@ -54,13 +52,6 @@ namespace Frog.System.Specs.Underware
             repositoryTracker = new RepositoryTracker(theBus);
             repositoryTracker.StartListeningForBuildUpdates();
         }
-
-//        public void SetupRepoClone(string dummyRepo)
-//        {
-//            repoArea = Path.Combine(GitTestSupport.GetTempPath(), Path.GetRandomFileName());
-//            Directory.CreateDirectory(repoArea);
-//            driver = new GitDriver(repoArea, "test", dummyRepo);
-//        }
 
         void SetupWorkingArea()
         {
@@ -123,9 +114,9 @@ namespace Frog.System.Specs.Underware
 
         public RepositoryTracker repositoryTracker;
 
-        public Agent agent;
+        Agent agent;
 
-        public Valve valve;
+        Valve valve;
 
     }
 
@@ -148,11 +139,6 @@ namespace Frog.System.Specs.Underware
         public static RepositoryDriver GetNewRepository()
         {
             return new RepositoryDriver(SetupDummyRepo());
-        }
-
-        public void CommitDirectoryTree(string treeRoot)
-        {
-            GitTestSupport.CommitChangeFiles(repoPath, treeRoot);
         }
 
         static string SetupDummyRepo()
@@ -178,34 +164,9 @@ namespace Frog.System.Specs.Underware
             theTestSystem = new TestSystem();
         }
 
-        public IBus Bus
-        {
-            get { return theTestSystem.theBus; }
-        }
-
-        public SourceRepoDriver Git
-        {
-            get { return theTestSystem.driver; }
-        }
-
-        public WorkingArea WorkingArea
-        {
-            get { return theTestSystem.area; }
-        }
-
-        public PipelineStatusView.BuildStatus CurrentReport
-        {
-            get { return theTestSystem.report; }
-        }
-
         public static SystemDriver GetCleanSystem()
         {
             return new SystemDriver();
-        }
-
-        public void ResetSystem()
-        {
-            theTestSystem.CleanupTestSystem();
         }
 
         public List<Event> GetEventsSnapshot()

@@ -13,23 +13,16 @@ namespace Frog.Domain.Specs.Pipeline
         protected Domain.Pipeline pipeline;
         protected ExecTask task1;
         protected ExecTask task2;
-        protected readonly SourceDrop SourceDrop = new SourceDrop("");
         protected TaskSource taskSource;
         protected IExecTaskGenerator execTaskGenerator;
         protected MSBuildTaskDescriptions srcTask1;
         protected IEventPublisher bus;
-        BuildStarted buildStarted;
-        BuildUpdated buildUpdated;
-        BuildEnded buildEnded;
         protected Action<BuildStarted> pipelineOnBuildStarted;
         protected Action<BuildEnded> pipelineOnOnBuildEnded;
         protected Action<BuildUpdated> pipelineOnBuildUpdated;
 
         public override void Given()
         {
-            buildStarted = null;
-            buildUpdated = null;
-            buildEnded = null;
             bus = Substitute.For<IEventPublisher>();
             taskSource = Substitute.For<TaskSource>();
             execTaskGenerator = Substitute.For<IExecTaskGenerator>();
@@ -95,6 +88,7 @@ namespace Frog.Domain.Specs.Pipeline
                 started.Status.tasks[1].Status == TasksInfo.TaskStatus.NotStarted));
         }
 
+        [Test]
         public void should_update_build_status_when_task_finishes()
         {
             pipelineOnBuildUpdated.Received().Invoke(Arg.Is<BuildUpdated>(

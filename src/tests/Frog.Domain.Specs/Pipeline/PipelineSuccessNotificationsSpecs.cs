@@ -1,10 +1,7 @@
-using System.Collections.Generic;
 using Frog.Domain.CustomTasks;
 using Frog.Domain.TaskDetection;
-using Frog.Specs.Support;
 using Frog.Support;
 using NSubstitute;
-using NSubstitute.Core;
 using NUnit.Framework;
 
 namespace Frog.Domain.Specs.Pipeline
@@ -73,6 +70,5 @@ namespace Frog.Domain.Specs.Pipeline
             task1.Received().Perform(Arg.Any<SourceDrop>());
             task2.Received().Perform(Arg.Any<SourceDrop>());
         }
-
     }
 }

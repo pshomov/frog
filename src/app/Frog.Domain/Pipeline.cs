@@ -27,11 +27,6 @@ namespace Frog.Domain
         event Action<BuildEnded> OnBuildEnded;
     }
 
-    public interface TaskDispenser
-    {
-        List<ExecTask> GimeTasks(string projectFolder);
-    }
-
     public class BuildStarted : Event
     {
         public PipelineStatus Status;
