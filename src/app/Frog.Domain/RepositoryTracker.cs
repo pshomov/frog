@@ -24,16 +24,14 @@ namespace Frog.Domain
             public string Url;
             public string LastBuiltRevision;
         }
-        readonly IBus eventPublisher;
+
+        readonly IBus bus;
         readonly List<RepositoryInfo> trackedRepos;
-        List<BuildInfo> builds;
 
-
-        public RepositoryTracker(IBus eventPublisher)
+        public RepositoryTracker(IBus bus)
         {
-            this.eventPublisher = eventPublisher;
+            this.bus = bus;
             trackedRepos = new List<RepositoryInfo>();
-            builds = new List<BuildInfo>();
         }
 
         public void Track(string repoUrl)
@@ -43,30 +41,18 @@ namespace Frog.Domain
 
         public void CheckForUpdates()
         {
-            trackedRepos.ForEach(s => eventPublisher.Publish(new CheckForUpdates{RepoUrl = s.Url, Revision = s.LastBuiltRevision}));
+            trackedRepos.ForEach(s => bus.Publish(new CheckForUpdates{RepoUrl = s.Url, Revision = s.LastBuiltRevision}));
         }
 
         public void StartListeningForBuildUpdates()
         {
-            eventPublisher.RegisterHandler<UpdateFound>(Handle);
+            bus.RegisterHandler<UpdateFound>(Handle);
         }
 
         public void Handle(UpdateFound message)
         {
             var repo = trackedRepos.Single(repositoryInfo => repositoryInfo.Url == message.RepoUrl);
             repo.LastBuiltRevision = message.Revision;
-        }
-    }
-
-    public class BuildInfo
-    {
-        public Guid Id { get; private set; }
-        public Guid RepoId { get; private set; }
-
-        public BuildInfo(Guid repoId)
-        {
-            RepoId = repoId;
-            Id = Guid.NewGuid();
         }
     }
 }
