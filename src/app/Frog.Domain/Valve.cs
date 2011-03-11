@@ -11,7 +11,6 @@ namespace Frog.Domain
 
     public class UpdateFound : Event
     {
-        public string BuildId;
         public string Revision;
         public string RepoUrl;
     }
