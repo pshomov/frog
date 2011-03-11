@@ -38,7 +38,7 @@ namespace Frog.Domain.Specs
         [Test]
         public void should_set_status_to_BUILD_STARTED()
         {
-            Assert.That(buildStatus.Current, Is.EqualTo(PipelineStatusView.BuildStatus.Status.PipelineCompletedFailure));
+            Assert.That(buildStatus.Current, Is.EqualTo(PipelineStatusView.BuildStatus.Status.PipelineStarted));
         }
 
         [Test]
