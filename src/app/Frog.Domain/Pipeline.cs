@@ -149,12 +149,13 @@ namespace Frog.Domain
 
         public void Process(SourceDrop sourceDrop)
         {
+            List<ExecTask> execTasks = GenerateTasks(sourceDrop);
+            RunTasks(sourceDrop, execTasks);
+        }
+
+        void RunTasks(SourceDrop sourceDrop, List<ExecTask> execTasks)
+        {
             ExecTaskResult.Status lastTaskStatus = ExecTaskResult.Status.Success;
-            var execTasks = new List<ExecTask>();
-            foreach (var task in tasksSource.Detect(sourceDrop.SourceDropLocation))
-            {
-                execTasks.AddRange(execTaskGenerator.GimeTasks(task));
-            }
             PipelineStatus status = GeneratePipelineStatus(execTasks);
             eventPublisher.Publish(new BuildStarted {Status = new PipelineStatus(status)});
 
@@ -172,6 +173,16 @@ namespace Frog.Domain
             eventPublisher.Publish(lastTaskStatus == ExecTaskResult.Status.Error
                                        ? new BuildEnded(BuildEnded.BuildStatus.Error)
                                        : new BuildEnded(BuildEnded.BuildStatus.Success));
+        }
+
+        List<ExecTask> GenerateTasks(SourceDrop sourceDrop)
+        {
+            var execTasks = new List<ExecTask>();
+            foreach (var task in tasksSource.Detect(sourceDrop.SourceDropLocation))
+            {
+                execTasks.AddRange(execTaskGenerator.GimeTasks(task));
+            }
+            return execTasks;
         }
 
         PipelineStatus GeneratePipelineStatus(List<ExecTask> execTasks)

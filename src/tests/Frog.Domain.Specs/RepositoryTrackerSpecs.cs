@@ -50,6 +50,7 @@ namespace Frog.Domain.Specs
         }
 
     }
+
     [TestFixture]
     public class RepositoryUpdatesLastRevisionInfoSpecs : RepositoryTrackerSpecsBase
     {
@@ -70,6 +71,5 @@ namespace Frog.Domain.Specs
             repositoryTracker.CheckForUpdates();
             bus.Received().Publish(Arg.Is<CheckForUpdates>(updates => updates.RepoUrl == "http://fle" && updates.Revision == "12"));
         }
-
     }
 }
