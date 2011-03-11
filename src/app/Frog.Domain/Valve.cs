@@ -7,6 +7,9 @@ namespace Frog.Domain
     {
         void Check(SourceRepoDriver repoUrl, string revision);
         event Action<string> OnUpdateFound;
+        event Action<BuildStarted> OnBuildStarted;
+        event Action<BuildUpdated> OnBuildUpdated;
+        event Action<BuildEnded> OnBuildEnded;
     }
 
     public class UpdateFound : Event
@@ -39,6 +42,9 @@ namespace Frog.Domain
         }
 
         public event Action<string> OnUpdateFound = s => {};
+        public event Action<BuildStarted> OnBuildStarted;
+        public event Action<BuildUpdated> OnBuildUpdated;
+        public event Action<BuildEnded> OnBuildEnded;
     }
 
     public interface WorkingArea
