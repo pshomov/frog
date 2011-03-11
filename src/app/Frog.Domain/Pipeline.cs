@@ -42,38 +42,6 @@ namespace Frog.Domain
         public PipelineStatus Status;
     }
 
-    public class TaskStarted : Event
-    {
-        public TaskStarted(string name)
-        {
-            Name = name;
-        }
-
-        public string Name { get; private set; }
-    }
-
-    public class TaskFinished : Event
-    {
-        readonly string taskName;
-        readonly ExecTaskResult.Status status;
-
-        public TaskFinished(string taskName, ExecTaskResult.Status status)
-        {
-            this.taskName = taskName;
-            this.status = status;
-        }
-
-        public ExecTaskResult.Status Status
-        {
-            get { return status; }
-        }
-
-        public string TaskName
-        {
-            get { return taskName; }
-        }
-    }
-
     public class PipelineStatus
     {
         public PipelineStatus(Guid id)
