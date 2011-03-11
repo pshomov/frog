@@ -13,7 +13,7 @@ namespace Frog.Domain.Specs
             {
                 Given();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 GivenCleanup();
                 throw;
@@ -22,7 +22,7 @@ namespace Frog.Domain.Specs
             {
                 When();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 GivenCleanup();
                 WhenCleanup();

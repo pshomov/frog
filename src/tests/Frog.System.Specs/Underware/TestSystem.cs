@@ -17,7 +17,6 @@ namespace Frog.System.Specs.Underware
     {
         public IBus theBus;
         string workingAreaPath;
-        string repoArea;
         public GitDriver driver;
         public SubfolderWorkingArea area;
         public PipelineStatusView.BuildStatus report;
@@ -103,11 +102,6 @@ namespace Frog.System.Specs.Underware
             {
                 OSHelpers.ClearAttributes(workingAreaPath);
                 Directory.Delete(workingAreaPath, true);
-            }
-            if (Directory.Exists(repoArea))
-            {
-                OSHelpers.ClearAttributes(repoArea);
-                Directory.Delete(repoArea, true);
             }
         }
 
