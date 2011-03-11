@@ -29,7 +29,7 @@ namespace Frog.Domain.Specs.Pipeline
         [Test]
         public void should_update_build_status_when_first_task_finishes()
         {
-            bus.Received().Publish(Arg.Is<BuildUpdated>(
+            pipelineOnBuildUpdated.Received().Invoke(Arg.Is<BuildUpdated>(
                 started =>
                 started.Status.tasks.Count == 2 &&
                 started.Status.tasks[0].Status == TasksInfo.TaskStatus.FinishedSuccess &&
@@ -39,7 +39,7 @@ namespace Frog.Domain.Specs.Pipeline
         [Test]
         public void should_update_build_status_when_second_task_starts()
         {
-            bus.Received().Publish(Arg.Is<BuildUpdated>(
+            pipelineOnBuildUpdated.Received().Invoke(Arg.Is<BuildUpdated>(
                 started =>
                 started.Status.tasks.Count == 2 &&
                 started.Status.tasks[0].Status == TasksInfo.TaskStatus.FinishedSuccess &&
@@ -49,7 +49,7 @@ namespace Frog.Domain.Specs.Pipeline
         [Test]
         public void should_update_build_status_when_second_task_finishes()
         {
-            bus.Received().Publish(Arg.Is<BuildUpdated>(
+            pipelineOnBuildUpdated.Received().Invoke(Arg.Is<BuildUpdated>(
                 started =>
                 started.Status.tasks.Count == 2 &&
                 started.Status.tasks[0].Status == TasksInfo.TaskStatus.FinishedSuccess &&
@@ -59,7 +59,7 @@ namespace Frog.Domain.Specs.Pipeline
         [Test]
         public void should_publish_build_ended_with_success()
         {
-            bus.Received().Publish(Arg.Is<BuildEnded>(
+            pipelineOnBuildEnded.Received().Invoke(Arg.Is<BuildEnded>(
                 started =>
                 started.Status == BuildEnded.BuildStatus.Success));
         }

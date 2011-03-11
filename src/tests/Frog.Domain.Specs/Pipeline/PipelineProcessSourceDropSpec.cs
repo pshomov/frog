@@ -4,7 +4,6 @@ using Frog.Domain.TaskDetection;
 using Frog.Support;
 using NSubstitute;
 using NUnit.Framework;
-using SimpleCQRS;
 
 namespace Frog.Domain.Specs.Pipeline
 {
@@ -16,23 +15,26 @@ namespace Frog.Domain.Specs.Pipeline
         protected TaskSource taskSource;
         protected IExecTaskGenerator execTaskGenerator;
         protected MSBuildTaskDescriptions srcTask1;
-        protected IEventPublisher bus;
         protected Action<BuildStarted> pipelineOnBuildStarted;
-        protected Action<BuildEnded> pipelineOnOnBuildEnded;
+        protected Action<BuildEnded> pipelineOnBuildEnded;
         protected Action<BuildUpdated> pipelineOnBuildUpdated;
 
         public override void Given()
         {
-            bus = Substitute.For<IEventPublisher>();
             taskSource = Substitute.For<TaskSource>();
             execTaskGenerator = Substitute.For<IExecTaskGenerator>();
             pipeline = new PipelineOfTasks(taskSource, execTaskGenerator);
+            ObservingEvents();
+        }
+
+        void ObservingEvents()
+        {
             pipelineOnBuildStarted = Substitute.For<Action<BuildStarted>>();
-            pipelineOnOnBuildEnded = Substitute.For<Action<BuildEnded>>();
+            pipelineOnBuildEnded = Substitute.For<Action<BuildEnded>>();
             pipelineOnBuildUpdated = Substitute.For<Action<BuildUpdated>>();
             pipeline.OnBuildStarted += pipelineOnBuildStarted;
             pipeline.OnBuildUpdated += pipelineOnBuildUpdated;
-            pipeline.OnBuildEnded += pipelineOnOnBuildEnded;
+            pipeline.OnBuildEnded += pipelineOnBuildEnded;
         }
     }
 
@@ -72,10 +74,10 @@ namespace Frog.Domain.Specs.Pipeline
         public void should_broadcast_build_started_with_two_non_stared_tasks()
         {
             pipelineOnBuildStarted.Received().Invoke(Arg.Is<BuildStarted>(
-                    started =>
-                    started.Status.tasks.Count == 2 &&
-                    started.Status.tasks[0].Status == TasksInfo.TaskStatus.NotStarted &&
-                    started.Status.tasks[1].Status == TasksInfo.TaskStatus.NotStarted));
+                started =>
+                started.Status.tasks.Count == 2 &&
+                started.Status.tasks[0].Status == TasksInfo.TaskStatus.NotStarted &&
+                started.Status.tasks[1].Status == TasksInfo.TaskStatus.NotStarted));
         }
 
         [Test]
@@ -101,7 +103,7 @@ namespace Frog.Domain.Specs.Pipeline
         [Test]
         public void should_publish_build_ended_with_error()
         {
-            pipelineOnOnBuildEnded.Received().Invoke(Arg.Is<BuildEnded>(
+            pipelineOnBuildEnded.Received().Invoke(Arg.Is<BuildEnded>(
                 started =>
                 started.Status == BuildEnded.BuildStatus.Error));
         }
@@ -121,6 +123,5 @@ namespace Frog.Domain.Specs.Pipeline
             task1.Received().Perform(Arg.Any<SourceDrop>());
             task2.DidNotReceive().Perform(Arg.Any<SourceDrop>());
         }
-
     }
 }
