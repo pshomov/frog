@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Web;
@@ -23,6 +24,7 @@ namespace Frog.UI.Web
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+            routes.MapRoute("status", "project/github/{user}/{project}/{action}", new {controller = "CI", action = "status"});
             routes.MapRoute(
                 "Default", // Route name
                 "{controller}/{action}/{id}", // URL with parameters
@@ -61,7 +63,7 @@ namespace Frog.UI.Web
         void SetupApp()
         {
             var bus = new FakeBus();
-            ServiceLocator.Report = new Dictionary<string, PipelineStatusView.BuildStatus>();
+            ServiceLocator.Report = new ConcurrentDictionary<string, PipelineStatusView.BuildStatus>();
             var statusView = new PipelineStatusView(ServiceLocator.Report);
             bus.RegisterHandler<BuildStarted>(statusView.Handle);
             bus.RegisterHandler<BuildEnded>(statusView.Handle);

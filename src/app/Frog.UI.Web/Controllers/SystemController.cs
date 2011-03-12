@@ -6,7 +6,7 @@ using Frog.UI.Web;
 namespace Frog.UI.Web.Controllers
 {
     [HandleError]
-    public class StatusController : Controller
+    public class SystemController : Controller
     {
 
         public ActionResult Index()

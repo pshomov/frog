@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using NSubstitute;
 using NUnit.Framework;
 using SimpleCQRS;
@@ -31,6 +32,24 @@ namespace Frog.Domain.Specs
             repositoryTracker.CheckForUpdates();
             bus.Received().Publish(Arg.Is<CheckForUpdates>(updates => 
                 updates.RepoUrl == "http://fle" && updates.Revision == ""));
+        }
+
+    }
+
+    [TestFixture]
+    public class RepositoryTrackerTracksProjectOnlyOnceSpecs : RepositoryTrackerSpecsBase
+    {
+        public override void When()
+        {
+            repositoryTracker.Track("http://fle");
+            repositoryTracker.Track("http://fle");
+        }
+
+        [Test]
+        public void should_register_repository()
+        {
+            repositoryTracker.CheckForUpdates();
+            Assert.That(bus.ReceivedCalls().Where(call => call.GetMethodInfo().Name == "Publish").Count(), Is.EqualTo(1));
         }
 
     }

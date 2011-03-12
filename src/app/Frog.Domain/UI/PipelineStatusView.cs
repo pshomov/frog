@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using SimpleCQRS;
 
@@ -6,9 +7,9 @@ namespace Frog.Domain.UI
 {
     public class PipelineStatusView : Handles<BuildStarted>, Handles<BuildEnded>, Handles<BuildUpdated>
     {
-        readonly Dictionary<string, BuildStatus> report;
+        readonly ConcurrentDictionary<string, BuildStatus> report;
 
-        public PipelineStatusView(Dictionary<string, BuildStatus> report)
+        public PipelineStatusView(ConcurrentDictionary<string, BuildStatus> report)
         {
             this.report = report;
         }
@@ -34,7 +35,7 @@ namespace Frog.Domain.UI
 
         void EnsureReportExistsForRepo(string repoUrl)
         {
-            if (!report.ContainsKey(repoUrl)) report.Add(repoUrl, new BuildStatus());
+            report.TryAdd(repoUrl, new BuildStatus());
         }
 
 

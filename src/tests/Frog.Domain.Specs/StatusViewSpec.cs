@@ -1,5 +1,5 @@
 using System;
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 using Frog.Domain.UI;
 using KellermanSoftware.CompareNetObjects;
 using NUnit.Framework;
@@ -10,11 +10,11 @@ namespace Frog.Domain.Specs
     {
         protected PipelineStatusView view;
         protected PipelineStatus pipelineStatus;
-        protected Dictionary<string, PipelineStatusView.BuildStatus> buildStatuses;
+        protected ConcurrentDictionary<string, PipelineStatusView.BuildStatus> buildStatuses;
 
         public override void Given()
         {
-            buildStatuses = new Dictionary<string, PipelineStatusView.BuildStatus>();
+            buildStatuses = new ConcurrentDictionary<string, PipelineStatusView.BuildStatus>();
             view = new PipelineStatusView(buildStatuses);
         }
     }

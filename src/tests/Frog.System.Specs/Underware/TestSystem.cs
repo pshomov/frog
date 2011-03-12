@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -15,11 +16,11 @@ namespace Frog.System.Specs.Underware
 {
     public class TestSystem
     {
-        IBus theBus;
+        readonly IBus theBus;
         string workingAreaPath;
         SubfolderWorkingArea area;
-        Dictionary<string, PipelineStatusView.BuildStatus> report;
-        List<Event> events;
+        ConcurrentDictionary<string, PipelineStatusView.BuildStatus> report;
+        readonly List<Event> events;
 
         public TestSystem()
         {
@@ -62,7 +63,7 @@ namespace Frog.System.Specs.Underware
 
         void SetupView()
         {
-            report = new Dictionary<string, PipelineStatusView.BuildStatus>();
+            report = new ConcurrentDictionary<string, PipelineStatusView.BuildStatus>();
             var statusView = new PipelineStatusView(report);
             theBus.RegisterHandler<BuildStarted>(statusView.Handle);
             theBus.RegisterHandler<BuildEnded>(statusView.Handle);
@@ -117,7 +118,6 @@ namespace Frog.System.Specs.Underware
         Agent agent;
 
         Valve valve;
-
     }
 
     public class RepositoryDriver
@@ -131,9 +131,7 @@ namespace Frog.System.Specs.Underware
 
         public string Url
         {
-            get {
-                return repoPath;
-            }
+            get { return repoPath; }
         }
 
         public static RepositoryDriver GetNewRepository()

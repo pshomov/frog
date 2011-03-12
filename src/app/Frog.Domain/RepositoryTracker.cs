@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Linq;
 using SimpleCQRS;
 
@@ -26,22 +26,23 @@ namespace Frog.Domain
         }
 
         readonly IBus bus;
-        readonly List<RepositoryInfo> trackedRepos;
+        readonly ConcurrentDictionary<string, RepositoryInfo> trackedRepos;
 
         public RepositoryTracker(IBus bus)
         {
             this.bus = bus;
-            trackedRepos = new List<RepositoryInfo>();
+            trackedRepos = new ConcurrentDictionary<string, RepositoryInfo>();
         }
 
         public void Track(string repoUrl)
         {
-            trackedRepos.Add(new RepositoryInfo{Url = repoUrl, LastBuiltRevision = ""});
+            trackedRepos.TryAdd(repoUrl, new RepositoryInfo {Url = repoUrl, LastBuiltRevision = ""});
         }
 
         public void CheckForUpdates()
         {
-            trackedRepos.ForEach(s => bus.Publish(new CheckForUpdates{RepoUrl = s.Url, Revision = s.LastBuiltRevision}));
+            trackedRepos.ToList().ForEach(
+                s => bus.Publish(new CheckForUpdates {RepoUrl = s.Value.Url, Revision = s.Value.LastBuiltRevision}));
         }
 
         public void StartListeningForBuildUpdates()
@@ -51,8 +52,8 @@ namespace Frog.Domain
 
         public void Handle(UpdateFound message)
         {
-            var repo = trackedRepos.Single(repositoryInfo => repositoryInfo.Url == message.RepoUrl);
-            repo.LastBuiltRevision = message.Revision;
+            var repo = trackedRepos.Single(repositoryInfo => repositoryInfo.Value.Url == message.RepoUrl);
+            repo.Value.LastBuiltRevision = message.Revision;
         }
     }
 }
