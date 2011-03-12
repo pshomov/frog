@@ -15,9 +15,9 @@ namespace Frog.Domain.Specs.Pipeline
         protected TaskSource taskSource;
         protected IExecTaskGenerator execTaskGenerator;
         protected MSBuildTaskDescriptions srcTask1;
-        protected Action<BuildStarted> pipelineOnBuildStarted;
-        protected Action<BuildEnded> pipelineOnBuildEnded;
-        protected Action<BuildUpdated> pipelineOnBuildUpdated;
+        protected Action<PipelineStatus> pipelineOnBuildStarted;
+        protected Action<BuildTotalStatus> pipelineOnBuildEnded;
+        protected Action<PipelineStatus> pipelineOnBuildUpdated;
 
         public override void Given()
         {
@@ -29,9 +29,9 @@ namespace Frog.Domain.Specs.Pipeline
 
         void ObservingEvents()
         {
-            pipelineOnBuildStarted = Substitute.For<Action<BuildStarted>>();
-            pipelineOnBuildEnded = Substitute.For<Action<BuildEnded>>();
-            pipelineOnBuildUpdated = Substitute.For<Action<BuildUpdated>>();
+            pipelineOnBuildStarted = Substitute.For<Action<PipelineStatus>>();
+            pipelineOnBuildEnded = Substitute.For<Action<BuildTotalStatus>>();
+            pipelineOnBuildUpdated = Substitute.For<Action<PipelineStatus>>();
             pipeline.OnBuildStarted += pipelineOnBuildStarted;
             pipeline.OnBuildUpdated += pipelineOnBuildUpdated;
             pipeline.OnBuildEnded += pipelineOnBuildEnded;
@@ -73,48 +73,48 @@ namespace Frog.Domain.Specs.Pipeline
         [Test]
         public void should_broadcast_build_started_with_two_non_stared_tasks()
         {
-            pipelineOnBuildStarted.Received().Invoke(Arg.Is<BuildStarted>(
+            pipelineOnBuildStarted.Received().Invoke(Arg.Is<PipelineStatus>(
                 started =>
-                started.Status.tasks.Count == 2 &&
-                started.Status.tasks[0].Status == TasksInfo.TaskStatus.NotStarted &&
-                started.Status.tasks[1].Status == TasksInfo.TaskStatus.NotStarted));
+                started.tasks.Count == 2 &&
+                started.tasks[0].Status == TasksInfo.TaskStatus.NotStarted &&
+                started.tasks[1].Status == TasksInfo.TaskStatus.NotStarted));
         }
 
         [Test]
         public void should_update_build_status_when_task_starts()
         {
-            pipelineOnBuildUpdated.Received().Invoke(Arg.Is<BuildUpdated>(
+            pipelineOnBuildUpdated.Received().Invoke(Arg.Is<PipelineStatus>(
                 started =>
-                started.Status.tasks.Count == 2 &&
-                started.Status.tasks[0].Status == TasksInfo.TaskStatus.Started &&
-                started.Status.tasks[1].Status == TasksInfo.TaskStatus.NotStarted));
+                started.tasks.Count == 2 &&
+                started.tasks[0].Status == TasksInfo.TaskStatus.Started &&
+                started.tasks[1].Status == TasksInfo.TaskStatus.NotStarted));
         }
 
         [Test]
         public void should_update_build_status_when_task_finishes()
         {
-            pipelineOnBuildUpdated.Received().Invoke(Arg.Is<BuildUpdated>(
+            pipelineOnBuildUpdated.Received().Invoke(Arg.Is<PipelineStatus>(
                 started =>
-                started.Status.tasks.Count == 2 &&
-                started.Status.tasks[0].Status == TasksInfo.TaskStatus.FinishedError &&
-                started.Status.tasks[1].Status == TasksInfo.TaskStatus.NotStarted));
+                started.tasks.Count == 2 &&
+                started.tasks[0].Status == TasksInfo.TaskStatus.FinishedError &&
+                started.tasks[1].Status == TasksInfo.TaskStatus.NotStarted));
         }
 
         [Test]
         public void should_publish_build_ended_with_error()
         {
-            pipelineOnBuildEnded.Received().Invoke(Arg.Is<BuildEnded>(
+            pipelineOnBuildEnded.Received().Invoke(Arg.Is<BuildTotalStatus>(
                 started =>
-                started.Status == BuildEnded.BuildStatus.Error));
+                started == BuildTotalStatus.Error));
         }
 
         [Test]
         public void should_not_start_second_task_at_all()
         {
-            pipelineOnBuildUpdated.DidNotReceive().Invoke(Arg.Is<BuildUpdated>(
+            pipelineOnBuildUpdated.DidNotReceive().Invoke(Arg.Is<PipelineStatus>(
                 started =>
-                started.Status.tasks.Count == 2 &&
-                started.Status.tasks[1].Status == TasksInfo.TaskStatus.Started));
+                started.tasks.Count == 2 &&
+                started.tasks[1].Status == TasksInfo.TaskStatus.Started));
         }
 
         [Test]

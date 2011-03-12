@@ -21,7 +21,7 @@ namespace Frog.Domain.UI
 
         public void Handle(BuildEnded message)
         {
-            report.Current = message.Status == BuildEnded.BuildStatus.Success ? BuildStatus.Status.PipelineCompletedSuccess : BuildStatus.Status.PipelineCompletedFailure;
+            report.Current = message.TotalStatus == Domain.BuildTotalStatus.Success ? BuildStatus.Status.PipelineCompletedSuccess : BuildStatus.Status.PipelineCompletedFailure;
         }
 
         public class BuildStatus

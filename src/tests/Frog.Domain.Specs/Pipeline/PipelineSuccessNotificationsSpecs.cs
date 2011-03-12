@@ -29,39 +29,39 @@ namespace Frog.Domain.Specs.Pipeline
         [Test]
         public void should_update_build_status_when_first_task_finishes()
         {
-            pipelineOnBuildUpdated.Received().Invoke(Arg.Is<BuildUpdated>(
+            pipelineOnBuildUpdated.Received().Invoke(Arg.Is<PipelineStatus>(
                 started =>
-                started.Status.tasks.Count == 2 &&
-                started.Status.tasks[0].Status == TasksInfo.TaskStatus.FinishedSuccess &&
-                started.Status.tasks[1].Status == TasksInfo.TaskStatus.NotStarted));
+                started.tasks.Count == 2 &&
+                started.tasks[0].Status == TasksInfo.TaskStatus.FinishedSuccess &&
+                started.tasks[1].Status == TasksInfo.TaskStatus.NotStarted));
         }
 
         [Test]
         public void should_update_build_status_when_second_task_starts()
         {
-            pipelineOnBuildUpdated.Received().Invoke(Arg.Is<BuildUpdated>(
+            pipelineOnBuildUpdated.Received().Invoke(Arg.Is<PipelineStatus>(
                 started =>
-                started.Status.tasks.Count == 2 &&
-                started.Status.tasks[0].Status == TasksInfo.TaskStatus.FinishedSuccess &&
-                started.Status.tasks[1].Status == TasksInfo.TaskStatus.Started));
+                started.tasks.Count == 2 &&
+                started.tasks[0].Status == TasksInfo.TaskStatus.FinishedSuccess &&
+                started.tasks[1].Status == TasksInfo.TaskStatus.Started));
         }
 
         [Test]
         public void should_update_build_status_when_second_task_finishes()
         {
-            pipelineOnBuildUpdated.Received().Invoke(Arg.Is<BuildUpdated>(
+            pipelineOnBuildUpdated.Received().Invoke(Arg.Is<PipelineStatus>(
                 started =>
-                started.Status.tasks.Count == 2 &&
-                started.Status.tasks[0].Status == TasksInfo.TaskStatus.FinishedSuccess &&
-                started.Status.tasks[1].Status == TasksInfo.TaskStatus.FinishedSuccess));
+                started.tasks.Count == 2 &&
+                started.tasks[0].Status == TasksInfo.TaskStatus.FinishedSuccess &&
+                started.tasks[1].Status == TasksInfo.TaskStatus.FinishedSuccess));
         }
 
         [Test]
         public void should_publish_build_ended_with_success()
         {
-            pipelineOnBuildEnded.Received().Invoke(Arg.Is<BuildEnded>(
+            pipelineOnBuildEnded.Received().Invoke(Arg.Is<BuildTotalStatus>(
                 started =>
-                started.Status == BuildEnded.BuildStatus.Success));
+                started == BuildTotalStatus.Success));
         }
 
         [Test]

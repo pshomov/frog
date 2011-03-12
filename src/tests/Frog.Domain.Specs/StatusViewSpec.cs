@@ -62,7 +62,7 @@ namespace Frog.Domain.Specs
 
         public override void When()
         {
-            view.Handle(new BuildEnded(BuildEnded.BuildStatus.Error));
+            view.Handle(new BuildEnded(BuildTotalStatus.Error));
         }
 
         [Test]
@@ -86,7 +86,7 @@ namespace Frog.Domain.Specs
 
         public override void When()
         {
-            view.Handle(new BuildEnded(BuildEnded.BuildStatus.Success));
+            view.Handle(new BuildEnded(BuildTotalStatus.Success));
         }
 
         [Test]

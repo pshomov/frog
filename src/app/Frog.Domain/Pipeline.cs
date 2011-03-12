@@ -22,20 +22,11 @@ namespace Frog.Domain
     public interface Pipeline
     {
         void Process(SourceDrop sourceDrop);
-        event Action<BuildStarted> OnBuildStarted;
-        event Action<BuildUpdated> OnBuildUpdated;
-        event Action<BuildEnded> OnBuildEnded;
+        event Action<PipelineStatus> OnBuildStarted;
+        event Action<PipelineStatus> OnBuildUpdated;
+        event Action<BuildTotalStatus> OnBuildEnded;
     }
 
-    public class BuildStarted : Event
-    {
-        public PipelineStatus Status;
-    }
-
-    public class BuildUpdated : Event
-    {
-        public PipelineStatus Status;
-    }
 
     public class PipelineStatus
     {
@@ -73,20 +64,10 @@ namespace Frog.Domain
         public TaskStatus Status { get; set; }
     }
 
-    public class BuildEnded : Event
+    public enum BuildTotalStatus
     {
-        public enum BuildStatus
-        {
-            Error,
-            Success
-        }
-
-        public readonly BuildStatus Status;
-
-        public BuildEnded(BuildStatus status)
-        {
-            Status = status;
-        }
+        Error,
+        Success
     }
 
     public class PipelineOfTasks : Pipeline
@@ -106,30 +87,30 @@ namespace Frog.Domain
             RunTasks(sourceDrop, execTasks);
         }
 
-        public event Action<BuildStarted> OnBuildStarted;
-        public event Action<BuildUpdated> OnBuildUpdated;
-        public event Action<BuildEnded> OnBuildEnded;
+        public event Action<PipelineStatus> OnBuildStarted;
+        public event Action<PipelineStatus> OnBuildUpdated;
+        public event Action<BuildTotalStatus> OnBuildEnded;
 
         void RunTasks(SourceDrop sourceDrop, List<ExecTask> execTasks)
         {
             ExecTaskResult.Status lastTaskStatus = ExecTaskResult.Status.Success;
             PipelineStatus status = GeneratePipelineStatus(execTasks);
-            OnBuildStarted(new BuildStarted {Status = new PipelineStatus(status)});
+            OnBuildStarted(new PipelineStatus(status));
 
             for (int i = 0; i < execTasks.Count; i++)
             {
                 var execTask = execTasks[i];
                 status.tasks[i].Status = TasksInfo.TaskStatus.Started;
-                OnBuildUpdated(new BuildUpdated {Status = new PipelineStatus(status)});
+                OnBuildUpdated(new PipelineStatus(status));
                 lastTaskStatus = execTask.Perform(sourceDrop).ExecStatus;
                 status.tasks[i].Status = lastTaskStatus == ExecTaskResult.Status.Error ? TasksInfo.TaskStatus.FinishedError : TasksInfo.TaskStatus.FinishedSuccess;
-                OnBuildUpdated(new BuildUpdated { Status = new PipelineStatus(status) });
+                OnBuildUpdated(new PipelineStatus(status));
                 if (lastTaskStatus != ExecTaskResult.Status.Success) break;
             }
 
             OnBuildEnded(lastTaskStatus == ExecTaskResult.Status.Error
-                                       ? new BuildEnded(BuildEnded.BuildStatus.Error)
-                                       : new BuildEnded(BuildEnded.BuildStatus.Success));
+                                       ? BuildTotalStatus.Error
+                                       : BuildTotalStatus.Success);
         }
 
         List<ExecTask> GenerateTasks(SourceDrop sourceDrop)

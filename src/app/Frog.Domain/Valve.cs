@@ -7,9 +7,9 @@ namespace Frog.Domain
     {
         void Check(SourceRepoDriver repoUrl, string revision);
         event Action<string> OnUpdateFound;
-        event Action<BuildStarted> OnBuildStarted;
-        event Action<BuildUpdated> OnBuildUpdated;
-        event Action<BuildEnded> OnBuildEnded;
+        event Action<PipelineStatus> OnBuildStarted;
+        event Action<PipelineStatus> OnBuildUpdated;
+        event Action<BuildTotalStatus> OnBuildEnded;
     }
 
     public class UpdateFound : Event
@@ -37,14 +37,25 @@ namespace Frog.Domain
                 OnUpdateFound(latestRev);
                 var allocatedWorkingArea = workingArea.AllocateWorkingArea();
                 repoUrl.GetSourceRevision(latestRev, allocatedWorkingArea);
-                pipeline.Process(new SourceDrop(allocatedWorkingArea));
+                ProcessPipeline(allocatedWorkingArea);
             }
         }
 
+        void ProcessPipeline(string allocatedWorkingArea)
+        {
+            pipeline.OnBuildEnded += OnBuildEnded;
+            pipeline.OnBuildStarted += OnBuildStarted;
+            pipeline.OnBuildUpdated += OnBuildUpdated;
+            pipeline.Process(new SourceDrop(allocatedWorkingArea));
+            pipeline.OnBuildEnded -= OnBuildEnded;
+            pipeline.OnBuildStarted -= OnBuildStarted;
+            pipeline.OnBuildUpdated -= OnBuildUpdated;
+        }
+
         public event Action<string> OnUpdateFound = s => {};
-        public event Action<BuildStarted> OnBuildStarted;
-        public event Action<BuildUpdated> OnBuildUpdated;
-        public event Action<BuildEnded> OnBuildEnded;
+        public event Action<PipelineStatus> OnBuildStarted;
+        public event Action<PipelineStatus> OnBuildUpdated;
+        public event Action<BuildTotalStatus> OnBuildEnded;
     }
 
     public interface WorkingArea

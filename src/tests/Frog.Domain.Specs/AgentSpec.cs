@@ -43,6 +43,12 @@ namespace Frog.Domain.Specs
             valve = Substitute.For<IValve>();
             valve.When(iValve => iValve.Check(Arg.Any<SourceRepoDriver>(), Arg.Any<string>())).Do(
                 info => valve.OnUpdateFound += Raise.Event<Action<string>>("new_rev"));
+            valve.When(iValve => iValve.Check(Arg.Any<SourceRepoDriver>(), Arg.Any<string>())).Do(
+                info => valve.OnBuildStarted += Raise.Event<Action<PipelineStatus>>(new PipelineStatus(Guid.NewGuid())));
+            valve.When(iValve => iValve.Check(Arg.Any<SourceRepoDriver>(), Arg.Any<string>())).Do(
+                info => valve.OnBuildUpdated += Raise.Event<Action<PipelineStatus>>(new PipelineStatus(Guid.NewGuid())));
+            valve.When(iValve => iValve.Check(Arg.Any<SourceRepoDriver>(), Arg.Any<string>())).Do(
+                info => valve.OnBuildEnded += Raise.Event<Action<BuildTotalStatus>>(BuildTotalStatus.Success));
             agent = new Agent(bus, valve);
             agent.JoinTheParty();
         }
@@ -64,5 +70,28 @@ namespace Frog.Domain.Specs
             bus.Received().Publish(
                 Arg.Is<UpdateFound>(found => found.Revision == "new_rev" && found.RepoUrl == "http://fle"));
         }
+
+        [Test]
+        public void should_publish_BuildStarted_event()
+        {
+            bus.Received().Publish(
+                Arg.Is<BuildStarted>(found => found.Status != null && found.RepoUrl == "http://fle"));
+        }
+
+        [Test]
+        public void should_publish_BuildUpdated_event()
+        {
+            bus.Received().Publish(
+                Arg.Is<BuildUpdated>(found => found.Status != null && found.RepoUrl == "http://fle"));
+        }
+
+        [Test]
+        public void should_publish_BuildEnded_event()
+        {
+            bus.Received().Publish(
+                Arg.Is<BuildEnded>(found => found.TotalStatus == BuildTotalStatus.Success && found.RepoUrl == "http://fle"));
+        }
+
     }
+    
 }
