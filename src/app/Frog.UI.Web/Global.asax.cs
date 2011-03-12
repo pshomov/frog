@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Web;
 using System.Web.Mvc;
@@ -60,7 +61,7 @@ namespace Frog.UI.Web
         void SetupApp()
         {
             var bus = new FakeBus();
-            ServiceLocator.Report = new PipelineStatusView.BuildStatus();
+            ServiceLocator.Report = new Dictionary<string, PipelineStatusView.BuildStatus>();
             var statusView = new PipelineStatusView(ServiceLocator.Report);
             bus.RegisterHandler<BuildStarted>(statusView.Handle);
             bus.RegisterHandler<BuildEnded>(statusView.Handle);

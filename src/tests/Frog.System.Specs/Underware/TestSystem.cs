@@ -18,7 +18,7 @@ namespace Frog.System.Specs.Underware
         IBus theBus;
         string workingAreaPath;
         SubfolderWorkingArea area;
-        PipelineStatusView.BuildStatus report;
+        Dictionary<string, PipelineStatusView.BuildStatus> report;
         List<Event> events;
 
         public TestSystem()
@@ -62,7 +62,7 @@ namespace Frog.System.Specs.Underware
 
         void SetupView()
         {
-            report = new PipelineStatusView.BuildStatus();
+            report = new Dictionary<string, PipelineStatusView.BuildStatus>();
             var statusView = new PipelineStatusView(report);
             theBus.RegisterHandler<BuildStarted>(statusView.Handle);
             theBus.RegisterHandler<BuildEnded>(statusView.Handle);

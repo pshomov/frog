@@ -1,23 +1,27 @@
 using System;
+using System.Collections.Generic;
 using Frog.Domain.UI;
 using KellermanSoftware.CompareNetObjects;
 using NUnit.Framework;
 
 namespace Frog.Domain.Specs
 {
-    [TestFixture]
-    public class StatusViewAfterBuildStarterSpec : BDD
+    public abstract class StatusViewAfterBuildStarterSpecBase : BDD
     {
-        PipelineStatusView view;
-        PipelineStatusView.BuildStatus buildStatus;
-        PipelineStatus pipelineStatus;
+        protected PipelineStatusView view;
+        protected PipelineStatus pipelineStatus;
+        protected Dictionary<string, PipelineStatusView.BuildStatus> buildStatuses;
 
         public override void Given()
         {
-            buildStatus = new PipelineStatusView.BuildStatus();
-            view = new PipelineStatusView(buildStatus);
+            buildStatuses = new Dictionary<string, PipelineStatusView.BuildStatus>();
+            view = new PipelineStatusView(buildStatuses);
         }
+    }
 
+    [TestFixture]
+    public class StatusViewAfterBuildStarterSpec : StatusViewAfterBuildStarterSpecBase
+    {
         public override void When()
         {
             pipelineStatus = new PipelineStatus(Guid.NewGuid())
@@ -34,52 +38,36 @@ namespace Frog.Domain.Specs
         [Test]
         public void should_set_status_to_BUILD_STARTED()
         {
-            Assert.That(buildStatus.Current, Is.EqualTo(PipelineStatusView.BuildStatus.Status.PipelineStarted));
+            Assert.That(buildStatuses["http://repo"].Current,
+                        Is.EqualTo(PipelineStatusView.BuildStatus.Status.PipelineStarted));
         }
 
         [Test]
         public void should_set_status_as_as_in_message()
         {
-            Assert.True(new CompareObjects().Compare(buildStatus.PipelineStatus, pipelineStatus));
+            Assert.True(new CompareObjects().Compare(buildStatuses["http://repo"].PipelineStatus, pipelineStatus));
         }
     }
 
     [TestFixture]
-    public class StatusViewAfterBuildCompletedWithErrorSpec : BDD
+    public class StatusViewAfterBuildCompletedWithErrorSpec : StatusViewAfterBuildStarterSpecBase
     {
-        PipelineStatusView view;
-        PipelineStatusView.BuildStatus buildStatus;
-
-        public override void Given()
-        {
-            buildStatus = new PipelineStatusView.BuildStatus();
-            view = new PipelineStatusView(buildStatus);
-        }
-
         public override void When()
         {
-            view.Handle(new BuildEnded("http://fle",BuildTotalStatus.Error));
+            view.Handle(new BuildEnded("http://fle", BuildTotalStatus.Error));
         }
 
         [Test]
         public void should_set_status_to_BUILD_COMPLETED()
         {
-            Assert.That(buildStatus.Current, Is.EqualTo(PipelineStatusView.BuildStatus.Status.PipelineCompletedFailure));
+            Assert.That(buildStatuses["http://fle"].Current,
+                        Is.EqualTo(PipelineStatusView.BuildStatus.Status.PipelineCompletedFailure));
         }
-
     }
+
     [TestFixture]
-    public class StatusViewAfterBuildCompletedSuccessfullySpec : BDD
+    public class StatusViewAfterBuildCompletedSuccessfullySpec : StatusViewAfterBuildStarterSpecBase
     {
-        PipelineStatusView view;
-        PipelineStatusView.BuildStatus buildStatus;
-
-        public override void Given()
-        {
-            buildStatus = new PipelineStatusView.BuildStatus();
-            view = new PipelineStatusView(buildStatus);
-        }
-
         public override void When()
         {
             view.Handle(new BuildEnded("http://flo", BuildTotalStatus.Success));
@@ -88,50 +76,38 @@ namespace Frog.Domain.Specs
         [Test]
         public void should_set_status_to_BUILD_COMPLETED()
         {
-            Assert.That(buildStatus.Current, Is.EqualTo(PipelineStatusView.BuildStatus.Status.PipelineCompletedSuccess));
+            Assert.That(buildStatuses["http://flo"].Current,
+                        Is.EqualTo(PipelineStatusView.BuildStatus.Status.PipelineCompletedSuccess));
         }
-
     }
 
     [TestFixture]
-    public class StatusViewAfterBuildUpdateSpec : BDD
+    public class StatusViewAfterBuildUpdateSpec : StatusViewAfterBuildStarterSpecBase
     {
-        PipelineStatusView view;
-        PipelineStatusView.BuildStatus buildStatus;
-        PipelineStatus pipelineStatus;
-
-        public override void Given()
-        {
-            buildStatus = new PipelineStatusView.BuildStatus(){Current = PipelineStatusView.BuildStatus.Status.NotStarted};
-            view = new PipelineStatusView(buildStatus);
-        }
-
         public override void When()
         {
             pipelineStatus = new PipelineStatus(Guid.NewGuid())
-            {
-                tasks =
+                                 {
+                                     tasks =
                                          {
                                              new TasksInfo
                                                  {Name = "task1", Status = TasksInfo.TaskStatus.Started}
                                          }
-            };
+                                 };
             view.Handle(new BuildUpdated("http://dugh", new PipelineStatus(pipelineStatus)));
-
         }
 
         [Test]
         public void should_not_modify_build_status()
         {
-            Assert.That(buildStatus.Current, Is.EqualTo(PipelineStatusView.BuildStatus.Status.NotStarted));
+            Assert.That(buildStatuses["http://dugh"].Current,
+                        Is.EqualTo(PipelineStatusView.BuildStatus.Status.NotStarted));
         }
 
         [Test]
         public void should_set_task_status_to_the_value_sent_in_the_event()
         {
-            Assert.True(new CompareObjects().Compare(buildStatus.PipelineStatus, pipelineStatus));
+            Assert.True(new CompareObjects().Compare(buildStatuses["http://dugh"].PipelineStatus, pipelineStatus));
         }
-
     }
-
 }
