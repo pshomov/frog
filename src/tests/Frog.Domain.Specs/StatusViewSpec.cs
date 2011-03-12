@@ -28,11 +28,7 @@ namespace Frog.Domain.Specs
                                                  {Name = "task1", Status = TasksInfo.TaskStatus.NotStarted}
                                          }
                                  };
-            view.Handle(new BuildStarted
-                            {
-                                Status =
-                                    new PipelineStatus(pipelineStatus)
-                            });
+            view.Handle(new BuildStarted("http://repo", new PipelineStatus(pipelineStatus)));
         }
 
         [Test]
@@ -62,7 +58,7 @@ namespace Frog.Domain.Specs
 
         public override void When()
         {
-            view.Handle(new BuildEnded(BuildTotalStatus.Error));
+            view.Handle(new BuildEnded("http://fle",BuildTotalStatus.Error));
         }
 
         [Test]
@@ -86,7 +82,7 @@ namespace Frog.Domain.Specs
 
         public override void When()
         {
-            view.Handle(new BuildEnded(BuildTotalStatus.Success));
+            view.Handle(new BuildEnded("http://flo", BuildTotalStatus.Success));
         }
 
         [Test]
@@ -120,11 +116,7 @@ namespace Frog.Domain.Specs
                                                  {Name = "task1", Status = TasksInfo.TaskStatus.Started}
                                          }
             };
-            view.Handle(new BuildUpdated()
-            {
-                Status =
-                    new PipelineStatus(pipelineStatus)
-            });
+            view.Handle(new BuildUpdated("http://dugh", new PipelineStatus(pipelineStatus)));
 
         }
 

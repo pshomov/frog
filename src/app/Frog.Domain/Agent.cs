@@ -6,23 +6,38 @@ namespace Frog.Domain
     public class BuildEvent : Event
     {
         public string RepoUrl;
+
+        protected BuildEvent(string repoUrl)
+        {
+            RepoUrl = repoUrl;
+        }
     }
 
     public class BuildStarted : BuildEvent
     {
         public PipelineStatus Status;
+
+        public BuildStarted(string repoUrl, PipelineStatus status) : base(repoUrl)
+        {
+            Status = status;
+        }
     }
 
     public class BuildUpdated : BuildEvent
     {
         public PipelineStatus Status;
+
+        public BuildUpdated(string repoUrl, PipelineStatus status) : base(repoUrl)
+        {
+            Status = status;
+        }
     }
 
     public class BuildEnded : BuildEvent
     {
         public readonly BuildTotalStatus TotalStatus;
 
-        public BuildEnded(BuildTotalStatus totalStatus)
+        public BuildEnded(string repoUrl, BuildTotalStatus totalStatus) : base(repoUrl)
         {
             TotalStatus = totalStatus;
         }
@@ -47,9 +62,9 @@ namespace Frog.Domain
         public void Handle(CheckForUpdates message)
         {
             Action<string> onUpdateFound = s => theBus.Publish(new UpdateFound {RepoUrl = message.RepoUrl, Revision = s});
-            Action<BuildTotalStatus> onBuildEnded = started => theBus.Publish(new BuildEnded(started) {RepoUrl = message.RepoUrl});
-            Action<PipelineStatus> onBuildStarted = started => theBus.Publish(new BuildStarted {Status = started, RepoUrl = message.RepoUrl});
-            Action<PipelineStatus> onBuildUpdated = started => theBus.Publish(new BuildUpdated {Status = started, RepoUrl = message.RepoUrl});
+            Action<BuildTotalStatus> onBuildEnded = started => theBus.Publish(new BuildEnded(message.RepoUrl, started));
+            Action<PipelineStatus> onBuildStarted = started => theBus.Publish(new BuildStarted(status : started, repoUrl : message.RepoUrl));
+            Action<PipelineStatus> onBuildUpdated = started => theBus.Publish(new BuildUpdated(status : started, repoUrl : message.RepoUrl));
             valve.OnUpdateFound += onUpdateFound;
             valve.OnBuildStarted += onBuildStarted;
             valve.OnBuildUpdated += onBuildUpdated;
