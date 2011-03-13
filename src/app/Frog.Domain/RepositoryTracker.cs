@@ -52,8 +52,7 @@ namespace Frog.Domain
 
         public void Handle(UpdateFound message)
         {
-            var repo = trackedRepos.Single(repositoryInfo => repositoryInfo.Value.Url == message.RepoUrl);
-            repo.Value.LastBuiltRevision = message.Revision;
+            trackedRepos[message.RepoUrl].LastBuiltRevision = message.Revision;
         }
     }
 }
