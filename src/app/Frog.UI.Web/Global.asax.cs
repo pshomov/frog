@@ -62,29 +62,48 @@ namespace Frog.UI.Web
 
         void SetupApp()
         {
-            var bus = new FakeBus();
-            ServiceLocator.Report = new ConcurrentDictionary<string, PipelineStatusView.BuildStatus>();
-            var statusView = new PipelineStatusView(ServiceLocator.Report);
-            bus.RegisterHandler<BuildStarted>(statusView.Handle);
-            bus.RegisterHandler<BuildEnded>(statusView.Handle);
-            bus.RegisterHandler<BuildUpdated>(statusView.Handle);
+            var system = new ProductionSystem();
+            ServiceLocator.RepositoryTracker = system.repositoryTracker;
+            ServiceLocator.Report = system.report;
 
+//            var bus = new FakeBus();
+//            ServiceLocator.Report = new ConcurrentDictionary<string, PipelineStatusView.BuildStatus>();
+//            var statusView = new PipelineStatusView(ServiceLocator.Report);
+//            bus.RegisterHandler<BuildStarted>(statusView.Handle);
+//            bus.RegisterHandler<BuildEnded>(statusView.Handle);
+//            bus.RegisterHandler<BuildUpdated>(statusView.Handle);
+//
+//            var workingAreaPath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+//            var repoArea = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+//            Directory.CreateDirectory(repoArea);
+//            Directory.CreateDirectory(workingAreaPath);
+//
+//            var fileFinder = new DefaultFileFinder(new PathFinder());
+//            var pipeline =
+//                new PipelineOfTasks(
+//                    new CompoundTaskSource(new MSBuildDetector(fileFinder), new NUnitTaskDetctor(fileFinder)),
+//                    new ExecTaskGenerator(new ExecTaskFactory()));
+//            var area = new SubfolderWorkingArea(workingAreaPath);
+//            var agent = new Agent(bus, new Valve(pipeline, area));
+//            agent.JoinTheParty();
+//
+//            ServiceLocator.RepositoryTracker = new RepositoryTracker(bus);
+//            ServiceLocator.RepositoryTracker.StartListeningForBuildUpdates();
+        }
+    }
+
+    public class ProductionSystem : SystemBase
+    {
+        protected override WorkingArea SetupWorkingArea()
+        {
             var workingAreaPath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
-            var repoArea = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
-            Directory.CreateDirectory(repoArea);
             Directory.CreateDirectory(workingAreaPath);
+            return new SubfolderWorkingArea(workingAreaPath);
+        }
 
-            var fileFinder = new DefaultFileFinder(new PathFinder());
-            var pipeline =
-                new PipelineOfTasks(
-                    new CompoundTaskSource(new MSBuildDetector(fileFinder), new NUnitTaskDetctor(fileFinder)),
-                    new ExecTaskGenerator(new ExecTaskFactory()));
-            var area = new SubfolderWorkingArea(workingAreaPath);
-            var agent = new Agent(bus, new Valve(pipeline, area));
-            agent.JoinTheParty();
-
-            ServiceLocator.RepositoryTracker = new RepositoryTracker(bus);
-            ServiceLocator.RepositoryTracker.StartListeningForBuildUpdates();
+        protected override ExecTaskFactory GetExecTaskFactory()
+        {
+            return new ExecTaskFactory();
         }
     }
 }
