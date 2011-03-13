@@ -1,15 +1,22 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 using SimpleCQRS;
 
 namespace Frog.Domain
 {
     public class BuildEvent : Event
     {
-        public string RepoUrl;
+        public string RepoUrl { get; private set; }
 
-        protected BuildEvent(string repoUrl)
+        public BuildEvent(string repoUrl)
         {
-            RepoUrl = repoUrl;
+            var privateRepo = new Regex(@"^(http://)(\w+):(\w+)@(github.com.*)$");
+            if (privateRepo.IsMatch(repoUrl))
+            {
+                var b = privateRepo.Match(repoUrl).Groups;
+                RepoUrl = b[1].Value + b[4].Value;
+            } else
+                RepoUrl = repoUrl;
         }
     }
 
