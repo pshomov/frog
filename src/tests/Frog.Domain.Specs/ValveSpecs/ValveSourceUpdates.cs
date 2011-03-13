@@ -16,15 +16,15 @@ namespace Frog.Domain.Specs.ValveSpecs
             base.Given();
             sourceRepoDriver.GetLatestRevision().Returns("2344");
             workingArea.AllocateWorkingArea().Returns("dugh");
-            valve = new Valve(pipeline, workingArea);
-            valve.OnUpdateFound += s => { updateFound = true;
+            worker = new Worker(pipeline, workingArea);
+            worker.OnUpdateFound += s => { updateFound = true;
                                             newRevision = s;
             };
         }
 
         public override void When()
         {
-            valve.Check(repoUrl:sourceRepoDriver, revision:"123");
+            worker.CheckForUpdatesAndKickOffPipeline(repoUrl:sourceRepoDriver, revision:"123");
         }
 
         [Test]

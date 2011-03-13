@@ -62,7 +62,7 @@
     <Compile Include="TaskSources\MSBuildDetector.cs" />
     <Compile Include="CustomTasks\MSBuildTaskDescriptions.cs" />
     <Compile Include="TaskSources\TaskSource.cs" />
-    <Compile Include="Valve.cs" />
+    <Compile Include="Worker.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="git_scripts\git_fetch.rb">

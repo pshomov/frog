@@ -1,5 +1,4 @@
 ﻿using System.Collections.Concurrent;
-using System.IO;
 using Frog.Domain.CustomTasks;
 using Frog.Domain.TaskSources;
 using Frog.Domain.UI;
@@ -10,11 +9,11 @@ namespace Frog.Domain
     public abstract class SystemBase
     {
         protected IBus theBus;
-        WorkingArea area;
+        readonly WorkingArea area;
         public ConcurrentDictionary<string, PipelineStatusView.BuildStatus> report { get; private set; }
         public RepositoryTracker repositoryTracker { get; private set; }
         Agent agent;
-        Valve valve;
+        Worker worker;
 
         protected SystemBase()
         {
@@ -35,12 +34,12 @@ namespace Frog.Domain
 
         protected void SetupValve(PipelineOfTasks pipeline)
         {
-            valve = new Valve(pipeline, area);
+            worker = new Worker(pipeline, area);
         }
 
         protected void SetupAgent()
         {
-            agent = new Agent(theBus, valve);
+            agent = new Agent(theBus, worker);
             agent.JoinTheParty();
         }
 

@@ -87,9 +87,9 @@ namespace Frog.System.Specs.Underware
 
         static string SetupDummyRepo()
         {
-            var original_repo = Path.Combine(GitTestSupport.GetTempPath(), Path.GetRandomFileName());
-            Directory.CreateDirectory(original_repo);
-            return GitTestSupport.CreateDummyRepo(original_repo, "test_repo");
+            var originalRepo = Path.Combine(GitTestSupport.GetTempPath(), Path.GetRandomFileName());
+            Directory.CreateDirectory(originalRepo);
+            return GitTestSupport.CreateDummyRepo(originalRepo, "test_repo");
         }
 
         public void Cleanup()

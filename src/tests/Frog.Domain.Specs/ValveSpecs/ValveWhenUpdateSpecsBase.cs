@@ -7,7 +7,7 @@ namespace Frog.Domain.Specs.ValveSpecs
         protected SourceRepoDriver sourceRepoDriver;
         protected Domain.Pipeline pipeline;
         protected WorkingArea workingArea;
-        protected Domain.Valve valve;
+        protected Worker worker;
 
         public override void Given()
         {

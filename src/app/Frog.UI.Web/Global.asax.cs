@@ -1,15 +1,9 @@
 ﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.IO;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using Frog.Domain;
-using Frog.Domain.CustomTasks;
-using Frog.Domain.TaskSources;
-using Frog.Domain.UI;
-using SimpleCQRS;
 
 namespace Frog.UI.Web
 {
@@ -24,7 +18,8 @@ namespace Frog.UI.Web
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
-            routes.MapRoute("status", "project/github/{user}/{project}/{action}", new {controller = "Project", action = "status"});
+            routes.MapRoute("status", "project/github/{user}/{project}/{action}",
+                            new {controller = "Project", action = "status"});
             routes.MapRoute(
                 "Default", // Route name
                 "{controller}/{action}/{id}", // URL with parameters
@@ -65,30 +60,6 @@ namespace Frog.UI.Web
             var system = new ProductionSystem();
             ServiceLocator.RepositoryTracker = system.repositoryTracker;
             ServiceLocator.Report = system.report;
-
-//            var bus = new FakeBus();
-//            ServiceLocator.Report = new ConcurrentDictionary<string, PipelineStatusView.BuildStatus>();
-//            var statusView = new PipelineStatusView(ServiceLocator.Report);
-//            bus.RegisterHandler<BuildStarted>(statusView.Handle);
-//            bus.RegisterHandler<BuildEnded>(statusView.Handle);
-//            bus.RegisterHandler<BuildUpdated>(statusView.Handle);
-//
-//            var workingAreaPath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
-//            var repoArea = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
-//            Directory.CreateDirectory(repoArea);
-//            Directory.CreateDirectory(workingAreaPath);
-//
-//            var fileFinder = new DefaultFileFinder(new PathFinder());
-//            var pipeline =
-//                new PipelineOfTasks(
-//                    new CompoundTaskSource(new MSBuildDetector(fileFinder), new NUnitTaskDetctor(fileFinder)),
-//                    new ExecTaskGenerator(new ExecTaskFactory()));
-//            var area = new SubfolderWorkingArea(workingAreaPath);
-//            var agent = new Agent(bus, new Valve(pipeline, area));
-//            agent.JoinTheParty();
-//
-//            ServiceLocator.RepositoryTracker = new RepositoryTracker(bus);
-//            ServiceLocator.RepositoryTracker.StartListeningForBuildUpdates();
         }
     }
 

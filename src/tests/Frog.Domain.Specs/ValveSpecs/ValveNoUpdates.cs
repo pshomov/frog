@@ -12,12 +12,12 @@ namespace Frog.Domain.Specs.ValveSpecs
             base.Given();
             sourceRepoDriver.GetLatestRevision().Returns("2344");
             workingArea.AllocateWorkingArea().Returns("dugh");
-            valve = new Valve(pipeline, workingArea);
+            worker = new Worker(pipeline, workingArea);
         }
 
         public override void When()
         {
-            valve.Check(repoUrl:sourceRepoDriver, revision:"2344");
+            worker.CheckForUpdatesAndKickOffPipeline(repoUrl:sourceRepoDriver, revision:"2344");
         }
 
         [Test]

@@ -14,7 +14,7 @@ namespace Frog.Domain.Specs
         public override void Given()
         {
             bus = Substitute.For<IBus>();
-            var valve = Substitute.For<IValve>();
+            var valve = Substitute.For<Worker>(null,null);
             agent = new Agent(bus, valve);
         }
 
@@ -35,21 +35,21 @@ namespace Frog.Domain.Specs
     {
         IBus bus;
         Agent agent;
-        IValve valve;
+        Worker worker;
 
         public override void Given()
         {
             bus = Substitute.For<IBus>();
-            valve = Substitute.For<IValve>();
-            valve.When(iValve => iValve.Check(Arg.Any<SourceRepoDriver>(), Arg.Any<string>())).Do(
-                info => valve.OnUpdateFound += Raise.Event<Action<string>>("new_rev"));
-            valve.When(iValve => iValve.Check(Arg.Any<SourceRepoDriver>(), Arg.Any<string>())).Do(
-                info => valve.OnBuildStarted += Raise.Event<Action<PipelineStatus>>(new PipelineStatus(Guid.NewGuid())));
-            valve.When(iValve => iValve.Check(Arg.Any<SourceRepoDriver>(), Arg.Any<string>())).Do(
-                info => valve.OnBuildUpdated += Raise.Event<Action<PipelineStatus>>(new PipelineStatus(Guid.NewGuid())));
-            valve.When(iValve => iValve.Check(Arg.Any<SourceRepoDriver>(), Arg.Any<string>())).Do(
-                info => valve.OnBuildEnded += Raise.Event<Action<BuildTotalStatus>>(BuildTotalStatus.Success));
-            agent = new Agent(bus, valve);
+            worker = Substitute.For<Worker>(null, null);
+            worker.When(iValve => iValve.CheckForUpdatesAndKickOffPipeline(Arg.Any<SourceRepoDriver>(), Arg.Any<string>())).Do(
+                info => worker.OnUpdateFound += Raise.Event<Action<string>>("new_rev"));
+            worker.When(iValve => iValve.CheckForUpdatesAndKickOffPipeline(Arg.Any<SourceRepoDriver>(), Arg.Any<string>())).Do(
+                info => worker.OnBuildStarted += Raise.Event<Action<PipelineStatus>>(new PipelineStatus(Guid.NewGuid())));
+            worker.When(iValve => iValve.CheckForUpdatesAndKickOffPipeline(Arg.Any<SourceRepoDriver>(), Arg.Any<string>())).Do(
+                info => worker.OnBuildUpdated += Raise.Event<Action<PipelineStatus>>(new PipelineStatus(Guid.NewGuid())));
+            worker.When(iValve => iValve.CheckForUpdatesAndKickOffPipeline(Arg.Any<SourceRepoDriver>(), Arg.Any<string>())).Do(
+                info => worker.OnBuildEnded += Raise.Event<Action<BuildTotalStatus>>(BuildTotalStatus.Success));
+            agent = new Agent(bus, worker);
             agent.JoinTheParty();
         }
 
@@ -61,7 +61,7 @@ namespace Frog.Domain.Specs
         [Test]
         public void should_check_for_updates()
         {
-            valve.Received().Check(Arg.Any<SourceRepoDriver>(), "2");
+            worker.Received().CheckForUpdatesAndKickOffPipeline(Arg.Any<SourceRepoDriver>(), "2");
         }
 
         [Test]

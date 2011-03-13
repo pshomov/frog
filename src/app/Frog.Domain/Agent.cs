@@ -22,7 +22,7 @@ namespace Frog.Domain
 
     public class BuildStarted : BuildEvent
     {
-        public PipelineStatus Status;
+        public readonly PipelineStatus Status;
 
         public BuildStarted(string repoUrl, PipelineStatus status) : base(repoUrl)
         {
@@ -32,7 +32,7 @@ namespace Frog.Domain
 
     public class BuildUpdated : BuildEvent
     {
-        public PipelineStatus Status;
+        public readonly PipelineStatus Status;
 
         public BuildUpdated(string repoUrl, PipelineStatus status) : base(repoUrl)
         {
@@ -53,12 +53,12 @@ namespace Frog.Domain
     public class Agent : Handles<CheckForUpdates>
     {
         readonly IBus theBus;
-        readonly IValve valve;
+        readonly Worker worker;
 
-        public Agent(IBus theBus, IValve valve)
+        public Agent(IBus theBus, Worker worker)
         {
             this.theBus = theBus;
-            this.valve = valve;
+            this.worker = worker;
         }
 
         public void JoinTheParty()
@@ -72,14 +72,14 @@ namespace Frog.Domain
             Action<BuildTotalStatus> onBuildEnded = started => theBus.Publish(new BuildEnded(message.RepoUrl, started));
             Action<PipelineStatus> onBuildStarted = started => theBus.Publish(new BuildStarted(status : started, repoUrl : message.RepoUrl));
             Action<PipelineStatus> onBuildUpdated = started => theBus.Publish(new BuildUpdated(status : started, repoUrl : message.RepoUrl));
-            valve.OnUpdateFound += onUpdateFound;
-            valve.OnBuildStarted += onBuildStarted;
-            valve.OnBuildUpdated += onBuildUpdated;
-            valve.OnBuildEnded += onBuildEnded;
-            valve.Check(new GitDriver(message.RepoUrl), message.Revision);
-            valve.OnBuildEnded -= onBuildEnded;
-            valve.OnBuildStarted -= onBuildStarted;
-            valve.OnBuildUpdated -= onBuildUpdated;
+            worker.OnUpdateFound += onUpdateFound;
+            worker.OnBuildStarted += onBuildStarted;
+            worker.OnBuildUpdated += onBuildUpdated;
+            worker.OnBuildEnded += onBuildEnded;
+            worker.CheckForUpdatesAndKickOffPipeline(new GitDriver(message.RepoUrl), message.Revision);
+            worker.OnBuildEnded -= onBuildEnded;
+            worker.OnBuildStarted -= onBuildStarted;
+            worker.OnBuildUpdated -= onBuildUpdated;
         }
     }
 }
