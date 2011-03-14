@@ -5,7 +5,7 @@ using SimpleCQRS;
 
 namespace Frog.Domain
 {
-    public class CheckForUpdates : Event
+    public class CheckForUpdates : Command
     {
         public string RepoUrl;
         public string Revision;
@@ -42,7 +42,7 @@ namespace Frog.Domain
         public void CheckForUpdates()
         {
             trackedRepos.ToList().ForEach(
-                s => bus.Publish(new CheckForUpdates {RepoUrl = s.Value.Url, Revision = s.Value.LastBuiltRevision}));
+                s => bus.Send(new CheckForUpdates {RepoUrl = s.Value.Url, Revision = s.Value.LastBuiltRevision}));
         }
 
         public void StartListeningForBuildUpdates()

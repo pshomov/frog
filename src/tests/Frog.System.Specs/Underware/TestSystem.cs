@@ -12,12 +12,12 @@ namespace Frog.System.Specs.Underware
 {
     public class System : SystemBase
     {
-        readonly List<Event> events;
+        readonly List<Message> messages;
         string workingAreaPath;
 
         public System()
         {
-            events = new List<Event>();
+            messages = new List<Message>();
             SetupAllEventLogging();
         }
 
@@ -30,24 +30,18 @@ namespace Frog.System.Specs.Underware
 
         void SetupAllEventLogging()
         {
-            var allmessages = AppDomain.CurrentDomain.GetAssemblies().ToList()
-                .SelectMany(s => s.GetTypes()).Where(type => typeof (Event).IsAssignableFrom(type));
-            var mthd = theBus.GetType().GetMethod("RegisterHandler");
-            Action<Event> eventLogger = @event => events.Add(@event);
-            foreach (var msg in allmessages)
-            {
-                mthd.MakeGenericMethod(msg).Invoke(theBus, new object[] {eventLogger});
-            }
+            IBusDebug busDebug = (IBusDebug) theBus;
+            busDebug.OnMessage += msg => messages.Add(msg);
         }
 
-        public List<Event> GetEventsSoFar()
+        public List<Message> GetMessagesSoFar()
         {
-            return new List<Event>(events);
+            return new List<Message>(messages);
         }
 
         public void CleanupTestSystem()
         {
-            events.Clear();
+            messages.Clear();
             if (Directory.Exists(workingAreaPath))
             {
                 OSHelpers.ClearAttributes(workingAreaPath);
@@ -113,9 +107,9 @@ namespace Frog.System.Specs.Underware
             return new SystemDriver();
         }
 
-        public List<Event> GetEventsSnapshot()
+        public List<Message> GetEventsSnapshot()
         {
-            return theSystem.GetEventsSoFar();
+            return theSystem.GetMessagesSoFar();
         }
 
         public void RegisterNewProject(string repoUrl)

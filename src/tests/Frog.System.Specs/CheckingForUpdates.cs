@@ -30,7 +30,7 @@ namespace Frog.System.Specs
             var prober = new PollingProber(3000, 100);
             Assert.True(prober.check(Take.Snapshot(() => system.GetEventsSnapshot())
                                          .Has(x => x,
-                                              An.Event<CheckForUpdates>(
+                                              An.Command<CheckForUpdates>(
                                                   ev =>
                                                   ev.RepoUrl == repo.Url && ev.Revision == ""))
                             ));
@@ -53,7 +53,7 @@ namespace Frog.System.Specs
             system.CheckProjectsForUpdates();
             Assert.True(prober.check(Take.Snapshot(() => system.GetEventsSnapshot())
                                          .Has(x => x,
-                                              An.Event<CheckForUpdates>(
+                                              An.Command<CheckForUpdates>(
                                                   ev =>
                                                   ev.RepoUrl == repo.Url && ev.Revision == updateFound))
                             ));

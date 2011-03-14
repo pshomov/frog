@@ -30,7 +30,7 @@ namespace Frog.Domain.Specs
         public void should_register_repository()
         {
             repositoryTracker.CheckForUpdates();
-            bus.Received().Publish(Arg.Is<CheckForUpdates>(updates => 
+            bus.Received().Send(Arg.Is<CheckForUpdates>(updates => 
                 updates.RepoUrl == "http://fle" && updates.Revision == ""));
         }
 
@@ -49,7 +49,7 @@ namespace Frog.Domain.Specs
         public void should_register_repository()
         {
             repositoryTracker.CheckForUpdates();
-            Assert.That(bus.ReceivedCalls().Where(call => call.GetMethodInfo().Name == "Publish").Count(), Is.EqualTo(1));
+            Assert.That(bus.ReceivedCalls().Where(call => call.GetMethodInfo().Name == "Send").Count(), Is.EqualTo(1));
         }
 
     }
@@ -88,7 +88,7 @@ namespace Frog.Domain.Specs
         public void should_register_repository()
         {
             repositoryTracker.CheckForUpdates();
-            bus.Received().Publish(Arg.Is<CheckForUpdates>(updates => updates.RepoUrl == "http://fle" && updates.Revision == "12"));
+            bus.Received().Send(Arg.Is<CheckForUpdates>(updates => updates.RepoUrl == "http://fle" && updates.Revision == "12"));
         }
     }
 }

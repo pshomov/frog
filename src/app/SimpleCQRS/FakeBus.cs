@@ -8,7 +8,13 @@ namespace SimpleCQRS
     {
         void RegisterHandler<T>(Action<T> handler) where T : Message;
     }
-    public class FakeBus : IBus
+
+    public interface IBusDebug
+    {
+        event Action<Message> OnMessage;
+    }
+
+    public class FakeBus : IBus, IBusDebug
     {
         private readonly Dictionary<Type, List<Action<Message>>> _routes = new Dictionary<Type, List<Action<Message>>>();
 
@@ -25,6 +31,7 @@ namespace SimpleCQRS
 
         public void Send<T>(T command) where T : Command
         {
+            OnMessage(command);
             List<Action<Message>> handlers; 
             if (_routes.TryGetValue(typeof(T), out handlers))
             {
@@ -39,6 +46,7 @@ namespace SimpleCQRS
 
         public void Publish<T>(T @event) where T : Event
         {
+            OnMessage(@event);
             List<Action<Message>> handlers; 
             if (!_routes.TryGetValue(@event.GetType(), out handlers)) return;
             foreach(var handler in handlers)
@@ -48,6 +56,8 @@ namespace SimpleCQRS
                 ThreadPool.QueueUserWorkItem(x => handler1(@event));
             }
         }
+
+        public event Action<Message> OnMessage = message => {};
     }
 
     public interface Handles<T>
