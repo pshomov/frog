@@ -37,6 +37,12 @@ namespace Frog.Domain.Specs.PathGoble
 
         }
 
+        [TearDown]
+        public void TearDown()
+        {
+            Directory.Delete(workPlace, true);
+        }
+
         [Test]
         public void should_find_file_down_a_folder_hieararchy()
         {
