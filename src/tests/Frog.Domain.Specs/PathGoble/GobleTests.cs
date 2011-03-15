@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using System.IO;
+using Frog.Support;
 using NUnit.Framework;
 
 namespace Frog.Domain.Specs.PathGoble
@@ -18,7 +18,7 @@ namespace Frog.Domain.Specs.PathGoble
 
             Assert.That(list.Count, Is.EqualTo(1));
             Assert.That(list[0],
-                        Is.EqualTo(string.Format("TestFixtures{0}Goble{0}level1{0}l1f1.txt", Path.DirectorySeparatorChar)));
+                        Is.EqualTo(Os.DirChars("TestFixtures/Goble/level1/l1f1.txt")));
         }
 
         [Test]
@@ -32,11 +32,9 @@ namespace Frog.Domain.Specs.PathGoble
 
             Assert.That(list.Count, Is.EqualTo(2));
             Assert.That(list[0],
-                        Is.EqualTo(string.Format("TestFixtures{0}Goble{0}level1{0}level2{0}l2f1.txt",
-                                                 Path.DirectorySeparatorChar)));
+                        Is.EqualTo(Os.DirChars("TestFixtures/Goble/level1/level2/l2f1.txt")));
             Assert.That(list[1],
-                        Is.EqualTo(string.Format("TestFixtures{0}Goble{0}level1{0}level2{0}l2f2.txt",
-                                                 Path.DirectorySeparatorChar)));
+                        Is.EqualTo(Os.DirChars("TestFixtures/Goble/level1/level2/l2f2.txt")));
         }
 
         [Test]
@@ -50,19 +48,17 @@ namespace Frog.Domain.Specs.PathGoble
 
             Assert.That(list.Count, Is.EqualTo(6));
             Assert.That(list[0],
-                        Is.EqualTo(string.Format("TestFixtures{0}Goble{0}level1{0}level2{0}l2f1.txt",
-                                                 Path.DirectorySeparatorChar)));
+                        Is.EqualTo(Os.DirChars("TestFixtures/Goble/level1/level2/l2f1.txt")));
             Assert.That(list[1],
-                        Is.EqualTo(string.Format("TestFixtures{0}Goble{0}level1{0}level2{0}l2f2.txt",
-                                                 Path.DirectorySeparatorChar)));
+                        Is.EqualTo(Os.DirChars("TestFixtures/Goble/level1/level2/l2f2.txt")));
             Assert.That(list[2],
-                        Is.EqualTo(string.Format("TestFixtures{0}Goble{0}level1{0}l1f1.txt", Path.DirectorySeparatorChar)));
+                        Is.EqualTo(Os.DirChars("TestFixtures/Goble/level1/l1f1.txt")));
             Assert.That(list[3],
-                        Is.EqualTo(string.Format("TestFixtures{0}Goble{0}level1{0}l1f2.txt", Path.DirectorySeparatorChar)));
+                        Is.EqualTo(Os.DirChars("TestFixtures/Goble/level1/l1f2.txt")));
             Assert.That(list[4],
-                        Is.EqualTo(string.Format("TestFixtures{0}Goble{0}l0f1.txt", Path.DirectorySeparatorChar)));
+                        Is.EqualTo(Os.DirChars("TestFixtures/Goble/l0f1.txt")));
             Assert.That(list[5],
-                        Is.EqualTo(string.Format("TestFixtures{0}Goble{0}l0f2.txt", Path.DirectorySeparatorChar)));
+                        Is.EqualTo(Os.DirChars("TestFixtures/Goble/l0f2.txt")));
         }
     }
 }
