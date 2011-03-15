@@ -71,12 +71,6 @@
     <None Include="git_scripts\git_remote_latest_rev.rb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="git_scripts\git_initial_fetch.rb">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="git_scripts\git_check_for_updates.rb">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Frog.Support\Frog.Support.csproj">
