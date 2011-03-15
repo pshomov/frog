@@ -20,14 +20,14 @@ namespace Frog.Domain
             this.workingArea = workingArea;
         }
 
-        public virtual void CheckForUpdatesAndKickOffPipeline(SourceRepoDriver repoUrl, string revision)
+        public virtual void CheckForUpdatesAndKickOffPipeline(SourceRepoDriver repo, string revision)
         {
             string latestRev;
-            if ((latestRev = repoUrl.GetLatestRevision()) != revision)
+            if ((latestRev = repo.GetLatestRevision()) != revision)
             {
                 OnUpdateFound(latestRev);
                 var allocatedWorkingArea = workingArea.AllocateWorkingArea();
-                repoUrl.GetSourceRevision(latestRev, allocatedWorkingArea);
+                repo.GetSourceRevision(latestRev, allocatedWorkingArea);
                 ProcessPipeline(allocatedWorkingArea);
             }
         }

@@ -24,7 +24,7 @@ namespace Frog.Domain.Specs.ValveSpecs
 
         public override void When()
         {
-            worker.CheckForUpdatesAndKickOffPipeline(repoUrl:sourceRepoDriver, revision:"123");
+            worker.CheckForUpdatesAndKickOffPipeline(repo:sourceRepoDriver, revision:"123");
         }
 
         [Test]
