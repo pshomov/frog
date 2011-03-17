@@ -80,6 +80,7 @@ namespace Frog.Domain
             worker.OnBuildEnded -= onBuildEnded;
             worker.OnBuildStarted -= onBuildStarted;
             worker.OnBuildUpdated -= onBuildUpdated;
+            worker.OnUpdateFound -= onUpdateFound;
         }
     }
 }

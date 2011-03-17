@@ -19,7 +19,7 @@ namespace Frog.Domain.Specs.TaskDetection
             nunitTaskDetecttor = new NUnitTaskDetctor(projectFileRepo);
             projectFileRepo.FindAllNUnitAssemblies("basefolder").Returns(As.List(Os.DirChars("l1\\l2\\l3\\fle.test.csproj"),
                                                                      Os.DirChars("l1\\l2\\l4\\fle.test.csproj"),
-                                                                     Os.DirChars("l1\\l2\\l3\\flo.test.csproj")));
+                                                                     Os.DirChars("l1\\l2\\l3\\flo.tests.csproj")));
         }
 
         public override void When()
@@ -38,7 +38,7 @@ namespace Frog.Domain.Specs.TaskDetection
         {
             Assert.That((items[0] as NUnitTask).Assembly, Is.EqualTo(Os.DirChars("l1\\l2\\l3\\bin\\Debug\\fle.test.dll")));
             Assert.That((items[1] as NUnitTask).Assembly, Is.EqualTo(Os.DirChars("l1\\l2\\l4\\bin\\Debug\\fle.test.dll")));
-            Assert.That((items[2] as NUnitTask).Assembly, Is.EqualTo(Os.DirChars("l1\\l2\\l3\\bin\\Debug\\flo.test.dll")));
+            Assert.That((items[2] as NUnitTask).Assembly, Is.EqualTo(Os.DirChars("l1\\l2\\l3\\bin\\Debug\\flo.tests.dll")));
         }
     }
 }

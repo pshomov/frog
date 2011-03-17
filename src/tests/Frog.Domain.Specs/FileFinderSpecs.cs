@@ -27,6 +27,9 @@ namespace Frog.Domain.Specs
             pathFinder.Received().apply(Arg.Any<Action<string>>(),
                                         Arg.Is<string>(
                                             s => s.Equals("*.Test.csproj", StringComparison.InvariantCultureIgnoreCase)), "basefolder");
+            pathFinder.Received().apply(Arg.Any<Action<string>>(),
+                                        Arg.Is<string>(
+                                            s => s.Equals("*.Tests.csproj", StringComparison.InvariantCultureIgnoreCase)), "basefolder");
         }
     }
 
