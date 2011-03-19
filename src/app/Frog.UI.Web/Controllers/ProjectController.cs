@@ -11,10 +11,24 @@ namespace Frog.UI.Web.Controllers
         {
             return View();
         }
+        public ActionResult Status2(string projectUrl)
+        {
+            return View("Status");
+        }
 
         public ActionResult Data(string user, string project)
         {
             string projectUrl = String.Format("http://github.com/{0}/{1}.git", user, project);
+            return GetProjectStatus(projectUrl);
+        }
+
+        public ActionResult Data2(string projectUrl)
+        {
+            return GetProjectStatus(projectUrl);
+        }
+
+        ActionResult GetProjectStatus(string projectUrl)
+        {
             if (ServiceLocator.Report.ContainsKey(projectUrl))
                 return MonoBugs.Json(new {status = ServiceLocator.Report[projectUrl]});
             else

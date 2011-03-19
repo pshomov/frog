@@ -16,7 +16,7 @@
 
             function update_status() {
                 $.ajax({
-                    url: "data",
+                    url: "data2",
                     success: function data(msg) {
                         switch (msg.status.Current) {
                             case 0: set_status("Build started", "yellow");

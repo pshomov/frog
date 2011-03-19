@@ -18,8 +18,10 @@ namespace Frog.UI.Web
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
-            routes.MapRoute("status", "project/github/{user}/{project}/{action}",
-                            new {controller = "Project", action = "status"});
+            routes.MapRoute("debug_repo_status", "project/test/file/{projectUrl}/{action}",
+                            new {controller = "Project"});
+            routes.MapRoute("github_status", "project/github/{user}/{project}/{action}",
+                            new {controller = "Project"});
             routes.MapRoute(
                 "Default", // Route name
                 "{controller}/{action}/{id}", // URL with parameters

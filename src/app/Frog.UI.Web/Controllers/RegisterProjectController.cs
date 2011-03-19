@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System.Globalization;
+using System.Web.Mvc;
 using Frog.Support;
 
 namespace Frog.UI.Web.Controllers
@@ -13,7 +14,9 @@ namespace Frog.UI.Web.Controllers
                 return MonoBugs.Json(new {error = "Url was not provided"});
             }
             ServiceLocator.RepositoryTracker.Track(url);
-            return Redirect("~/Content/status.html");
+            if (url.StartsWith("http://", true, CultureInfo.InvariantCulture))
+                return MonoBugs.Json(new {projectUrl = Url.Action("status", "Project", new {user = "u", project = "p"})});
+            return MonoBugs.Json(new { projectUrl = Url.Action("status2", "Project", new { projectUrl = Server.UrlEncode(url) }) });
         }
     }
 }
