@@ -17,7 +17,6 @@ namespace Frog.UI.Web
         static void RegisterRoutes(RouteCollection routes)
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
-            routes.IgnoreRoute("*.ico");
 
             routes.MapRoute("debug_repo_status", "project/test/file/{projectUrl}/{action}",
                             new {controller = "Project"});
