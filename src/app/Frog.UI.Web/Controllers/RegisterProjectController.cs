@@ -4,6 +4,7 @@ using Frog.Support;
 
 namespace Frog.UI.Web.Controllers
 {
+	[HandleError]
     public class RegisterProjectController : Controller
     {
         [AcceptVerbs(HttpVerbs.Post)]
@@ -16,7 +17,7 @@ namespace Frog.UI.Web.Controllers
             ServiceLocator.RepositoryTracker.Track(url);
             if (url.StartsWith("http://", true, CultureInfo.InvariantCulture))
                 return MonoBugs.Json(new {projectUrl = Url.Action("status", "Project", new {user = "u", project = "p"})});
-            return MonoBugs.Json(new { projectUrl = Url.Action("status2", "Project", new { projectUrl = Server.UrlEncode(url) }) });
+            return MonoBugs.Json(new { projectUrl = Url.Action("status2", "Project", new { projectUrl = Server.UrlEncode(PathUrlConversion.Path2Url(url)) }) });
         }
     }
 }

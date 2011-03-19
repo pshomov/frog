@@ -5,6 +5,7 @@ using System.Web.Mvc;
 
 namespace Frog.UI.Web.Controllers
 {
+	[HandleError]
     public class ProjectController : Controller
     {
         public ActionResult Status(string user, string project)
@@ -24,7 +25,7 @@ namespace Frog.UI.Web.Controllers
 
         public ActionResult Data2(string projectUrl)
         {
-            return GetProjectStatus(projectUrl);
+            return GetProjectStatus(PathUrlConversion.Url2Path(projectUrl));
         }
 
         ActionResult GetProjectStatus(string projectUrl)

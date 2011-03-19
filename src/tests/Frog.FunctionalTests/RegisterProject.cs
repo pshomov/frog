@@ -17,6 +17,7 @@ namespace Frog.FunctionalTests
         RemoteWebDriver driver;
         string baseUrl;
         string basePath;
+		FirefoxDriver driver2;
 
         [Test]
         public void should_register_project_successfully()
@@ -24,12 +25,21 @@ namespace Frog.FunctionalTests
             basePath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
             Directory.CreateDirectory(basePath);
             string repo = GitTestSupport.CreateDummyRepo(basePath, "testrepo");
+			
+            var changeset = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+            Directory.CreateDirectory(changeset);
+			var gen = new FileGenesis(changeset);
+			gen.File("build.sln", "invalid");
+			GitTestSupport.CommitChangeFiles(repo, changeset);
+			
             driver.Navigate().GoToUrl(U("Content/register.html"));
             driver.FindElement(By.Id("url")).SendKeys(repo);
             driver.FindElementById("reg_button").Click();
-            WithRetries(() => driver.FindElementById("newly_registered"));
-            var driver2 = new FirefoxDriver();
+            driver2 = new FirefoxDriver();
             driver2.Navigate().GoToUrl(U("system/check"));
+			driver2.Quit();
+            WithRetries(() => driver.FindElementById("newly_registered")).Click();
+			Assert.That(WithRetries(() => driver.FindElement(By.CssSelector("#status")).Text), Is.EqualTo("Build complete"));			
         }
 
         static T WithRetries<T>(Func<T> callback, int retries = 100)
@@ -60,18 +70,18 @@ namespace Frog.FunctionalTests
         [SetUp]
         public void Setup()
         {
-            baseUrl = "http://localhost:6502/runz/";
+            baseUrl = "http://localhost:6502/";
             driver = new FirefoxDriver();
         }
 
         [TearDown]
         public void TearDown()
         {
-//            driver.Quit();
+            driver.Quit();
             if (!basePath.IsNullOrEmpty())
             {
-//                OSHelpers.ClearAttributes(basePath);
-//                Directory.Delete(basePath, true);
+                OSHelpers.ClearAttributes(basePath);
+                Directory.Delete(basePath, true);
             }
         }
     }
