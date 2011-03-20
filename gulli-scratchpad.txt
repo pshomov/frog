@@ -1,0 +1,4 @@
+Ubiquituos languange/metaphor maintenance. How are we going to do it?
+Frog does not connect with me.  
+Still have ValveSpecs, that are testing workers.
+Do we want to isolate drivers (e.g. Git, VS Solution specific stuff) early? Or just wait until we add a second...
