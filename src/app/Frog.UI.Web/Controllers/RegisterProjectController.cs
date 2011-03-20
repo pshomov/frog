@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using System.Web.Mvc;
+using System.Web;
 using Frog.Support;
 
 namespace Frog.UI.Web.Controllers
@@ -17,7 +18,7 @@ namespace Frog.UI.Web.Controllers
             ServiceLocator.RepositoryTracker.Track(url);
             if (url.StartsWith("http://", true, CultureInfo.InvariantCulture))
                 return MonoBugs.Json(new {projectUrl = Url.Action("status", "Project", new {user = "u", project = "p"})});
-            return MonoBugs.Json(new { projectUrl = Url.Action("status2", "Project", new { projectUrl = Server.UrlEncode(PathUrlConversion.Path2Url(url)) }) });
+            return MonoBugs.Json(new { projectUrl = Url.Action("status2", "Project", new { projectUrl = HttpUtility.UrlEncode(PathUrlConversion.Path2Url(url)) }) });
         }
     }
 }
