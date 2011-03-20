@@ -25,7 +25,7 @@ namespace Frog.UI.Web.Controllers
 
         public ActionResult Data2(string projectUrl)
         {
-            return GetProjectStatus(PathUrlConversion.Url2Path(projectUrl));
+            return GetProjectStatus(PathUrlConversion.Url2Path(HttpUtility.UrlDecode(projectUrl)));
         }
 
         ActionResult GetProjectStatus(string projectUrl)
