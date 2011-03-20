@@ -2,6 +2,7 @@
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using Frog.Support;
 
 namespace Frog.UI.Web.Controllers
 {
@@ -25,7 +26,8 @@ namespace Frog.UI.Web.Controllers
 
         public ActionResult Data2(string projectUrl)
         {
-            string url = HttpUtility.UrlDecode (projectUrl);
+            if (Os.IsWindows)
+                projectUrl = HttpUtility.UrlDecode (projectUrl);
             return GetProjectStatus(PathUrlConversion.Url2Path(projectUrl));
         }
 
