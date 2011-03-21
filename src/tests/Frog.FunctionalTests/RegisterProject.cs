@@ -37,7 +37,7 @@ namespace Frog.FunctionalTests
             WithRetries(() => driver.FindElementById("newly_registered")).Click();
             driver2 = new FirefoxDriver();
             driver2.Navigate().GoToUrl(U("system/check"));
-            AssertThatWithRetries(() => driver.FindElement(By.CssSelector("#status")).Text, Is.EqualTo("Build complete"));			
+            WithRetries(() => Assert.That(driver.FindElement(By.CssSelector("#status")).Text, Is.EqualTo("Build complete")));	
         }
 
         string GetMeAWorkingFolder()
@@ -47,56 +47,58 @@ namespace Frog.FunctionalTests
             return changeset;
         }
 
-        static T WithRetries<T>(Func<T> callback, int retries = 100)
+        static T WithRetries<T>(Func<T> query, int retries = 100)
         {
             while (true)
             {
                 try
                 {
-                    return callback();
+                    return query();
                 }
                 catch (NoSuchElementException)
                 {
                     if (retries > 0)
                     {
-                        retries--;
-                        Thread.Sleep(100);
+                        retries = SleepABit(retries);
                     }
                     else throw;
                 }
             }
         }
 
-        static void AssertThatWithRetries<T>(Func<T> callback,  IResolveConstraint constraint, int retries = 100)
+        static void WithRetries(Action action,  int retries = 100)
         {
             while (true)
             {
                 try
                 {
-                    var val = callback();
-                    if (!constraint.Resolve().Matches(ref val))
+                    action();
+                    return;
+                }
+                catch(AssertionException)
+                {
+                    if (retries > 0)
                     {
-                        if (retries > 0)
-                        {
-                            retries--;
-                            Thread.Sleep(100);
-                        } else
-                        {
-                            Assert.That(val, constraint);
-                        }
-                    } else 
-                        return;
+                        retries = SleepABit(retries);
+                    }
+                    else throw;
                 }
                 catch (NoSuchElementException)
                 {
                     if (retries > 0)
                     {
-                        retries--;
-                        Thread.Sleep(100);
+                        retries = SleepABit(retries);
                     }
                     else throw;
                 }
             }
+        }
+
+        static int SleepABit(int retries)
+        {
+            retries--;
+            Thread.Sleep(100);
+            return retries;
         }
 
         Uri U(string relativeUrl)
