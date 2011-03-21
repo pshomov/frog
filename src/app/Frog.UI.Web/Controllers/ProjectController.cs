@@ -13,10 +13,6 @@ namespace Frog.UI.Web.Controllers
         {
             return View();
         }
-        public ActionResult Status2(string projectUrl)
-        {
-            return View("Status");
-        }
 
         public ActionResult Data(string user, string project)
         {
@@ -24,14 +20,8 @@ namespace Frog.UI.Web.Controllers
             return GetProjectStatus(projectUrl);
         }
 
-        public ActionResult Data2(string projectUrl)
-        {
-            if (Os.IsWindows)
-                projectUrl = HttpUtility.UrlDecode (projectUrl);
-            return GetProjectStatus(PathUrlConversion.Url2Path(projectUrl));
-        }
 
-        ActionResult GetProjectStatus(string projectUrl)
+	    protected internal ActionResult GetProjectStatus(string projectUrl)
         {
             if (ServiceLocator.Report.ContainsKey(projectUrl))
                 return MonoBugs.Json(new {status = ServiceLocator.Report[projectUrl]});

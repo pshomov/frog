@@ -1,11 +1,9 @@
-﻿using System.Globalization;
-using System.Web.Mvc;
-using System.Web;
+﻿using System.Web.Mvc;
 using Frog.Support;
 
 namespace Frog.UI.Web.Controllers
 {
-	[HandleError]
+    [HandleError]
     public class RegisterProjectController : Controller
     {
         [AcceptVerbs(HttpVerbs.Post)]
@@ -16,9 +14,7 @@ namespace Frog.UI.Web.Controllers
                 return MonoBugs.Json(new {error = "Url was not provided"});
             }
             ServiceLocator.RepositoryTracker.Track(url);
-            if (url.StartsWith("http://", true, CultureInfo.InvariantCulture))
-                return MonoBugs.Json(new {projectUrl = Url.Action("status", "Project", new {user = "u", project = "p"})});
-            return MonoBugs.Json(new { projectUrl = Url.Action("status2", "Project", new { projectUrl = HttpUtility.UrlEncode(PathUrlConversion.Path2Url(url)) }) });
+            return MonoBugs.Json(new {projectUrl = Url.Action("status", "Project", new {user = "u", project = "p"})});
         }
     }
 }

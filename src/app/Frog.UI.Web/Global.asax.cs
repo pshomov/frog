@@ -14,28 +14,13 @@ namespace Frog.UI.Web
     {
         string mapPath;
 
-        static void RegisterRoutes(RouteCollection routes)
-        {
-            routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
-
-            routes.MapRoute("debug_repo_status", "project/test/file/{projectUrl}/{action}",
-                            new {controller = "Project"});
-            routes.MapRoute("github_status", "project/github/{user}/{project}/{action}",
-                            new {controller = "Project"});
-            routes.MapRoute(
-                "Default", // Route name
-                "{controller}/{action}/{id}", // URL with parameters
-                new {controller = "Home", action = "Index", id = UrlParameter.Optional} // Parameter defaults
-                );
-        }
-
         protected void Application_Start()
         {
             mapPath = Server.MapPath("~/App_Data/Crash_");
             AppDomain.CurrentDomain.UnhandledException += CurrentDomainOnUnhandledException;
             AreaRegistration.RegisterAllAreas();
-
-            RegisterRoutes(RouteTable.Routes);
+            var setup = new AcceptanceTestSetup();
+            setup.RegisterRoutes(RouteTable.Routes);
 
             SetupApp();
         }
@@ -62,6 +47,34 @@ namespace Frog.UI.Web
             var system = new ProductionSystem();
             ServiceLocator.RepositoryTracker = system.repositoryTracker;
             ServiceLocator.Report = system.report;
+        }
+    }
+
+    internal class ProductionSetup
+    {
+        public virtual void RegisterRoutes(RouteCollection routes)
+        {
+            routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
+
+            routes.MapRoute("github_status", "project/github/{user}/{project}/{action}",
+                            new { controller = "Project" });
+            routes.MapRoute("github_register_project", "project/register",
+                            new { controller = "RegisterProject", action="index" });
+            routes.MapRoute("check_projects_for_updates", "system/check",
+                            new { controller = "System", action = "check" });
+        }
+        
+    }
+
+    internal class AcceptanceTestSetup : ProductionSetup
+    {
+        public override void RegisterRoutes(RouteCollection routes)
+        {
+            routes.MapRoute("test_repo_status", "project/test/file/{projectUrl}/{action}",
+                            new { controller = "TestProject" });
+            routes.MapRoute("test_register_project", "project/register",
+                            new { controller = "TestRegisterProject", action="Index" });
+            base.RegisterRoutes(routes);
         }
     }
 
