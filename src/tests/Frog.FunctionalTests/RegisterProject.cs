@@ -14,8 +14,8 @@ namespace Frog.FunctionalTests
     [TestFixture]
     public class RegisterProject
     {
-        RemoteWebDriver driver;
-        FirefoxDriver driver2;
+        RemoteWebDriver browser1;
+        FirefoxDriver browser2;
         string baseUrl;
         string basePath;
 
@@ -29,14 +29,15 @@ namespace Frog.FunctionalTests
             gen.File("build.sln", "invalid");
             GitTestSupport.CommitChangeFiles(repo, gen.Root);
 
-            driver.Navigate().GoToUrl(U("Content/register.html"));
-            driver.FindElement(By.Id("url")).SendKeys(repo);
-            driver.FindElementById("reg_button").Click();
-            WithRetries(() => driver.FindElementById("newly_registered")).Click();
-            driver2 = new FirefoxDriver();
-            driver2.Navigate().GoToUrl(U("system/check"));
+            browser1.Navigate().GoToUrl(U("Content/register.html"));
+            browser1.FindElement(By.Id("url")).SendKeys(repo);
+            browser1.FindElementById("reg_button").Click();
+            WithRetries(() => browser1.FindElementById("newly_registered")).Click();
+            browser2 = new FirefoxDriver();
+            browser2.Navigate().GoToUrl(U("system/check"));
+            browser2.Quit();
             WithRetries(
-                () => Assert.That(driver.FindElement(By.CssSelector("#status")).Text, Is.EqualTo("Build complete")));
+                () => Assert.That(browser1.FindElement(By.CssSelector("#status")).Text, Is.EqualTo("Build complete")));
         }
 
 
@@ -103,14 +104,13 @@ namespace Frog.FunctionalTests
         public void Setup()
         {
             baseUrl = "http://localhost:6502/";
-            driver = new FirefoxDriver();
+            browser1 = new FirefoxDriver();
         }
 
         [TearDown]
         public void TearDown()
         {
-            driver2.Quit();
-            driver.Quit();
+            browser1.Quit();
             if (!basePath.IsNullOrEmpty())
             {
                 OSHelpers.ClearAttributes(basePath);

@@ -2,7 +2,7 @@
 using System.Web.Mvc;
 using Frog.Support;
 
-namespace Frog.UI.Web.Controllers
+namespace Frog.UI.Web.Controllers.TestSupport
 {
     [HandleError]
     public class TestProjectController : Controller

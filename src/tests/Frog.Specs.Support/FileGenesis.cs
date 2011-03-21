@@ -44,7 +44,5 @@ namespace Frog.Specs.Support
         {
             return new FileGenesis(Directory.GetParent(root).ToString());
         }
-
-
     }
 }

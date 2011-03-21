@@ -3,13 +3,13 @@ using System.Web.Mvc;
 using System.Web;
 using Frog.Support;
 
-namespace Frog.UI.Web.Controllers
+namespace Frog.UI.Web.Controllers.TestSupport
 {
 	[HandleError]
     public class TestRegisterProjectController : Controller
     {
         [AcceptVerbs(HttpVerbs.Post)]
-        public new ActionResult Index(string url)
+        public ActionResult Index(string url)
         {
             if (!url.IsNullOrEmpty() && !url.StartsWith("http://", true, CultureInfo.InvariantCulture))
             {
