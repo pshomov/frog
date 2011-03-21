@@ -5,6 +5,7 @@ using Frog.Domain.Specs;
 using Frog.Specs.Support;
 using Frog.Support;
 using NUnit.Framework;
+using NUnit.Framework.Constraints;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.Remote;
@@ -22,24 +23,28 @@ namespace Frog.FunctionalTests
         [Test]
         public void should_register_project_successfully()
         {
-            basePath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
-            Directory.CreateDirectory(basePath);
+            basePath = GetMeAWorkingFolder();
             string repo = GitTestSupport.CreateDummyRepo(basePath, "testrepo");
 			
-            var changeset = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
-            Directory.CreateDirectory(changeset);
-			var gen = new FileGenesis(changeset);
+            string changeset = GetMeAWorkingFolder();
+            var gen = new FileGenesis(changeset);
 			gen.File("build.sln", "invalid");
 			GitTestSupport.CommitChangeFiles(repo, changeset);
 			
             driver.Navigate().GoToUrl(U("Content/register.html"));
             driver.FindElement(By.Id("url")).SendKeys(repo);
             driver.FindElementById("reg_button").Click();
+            WithRetries(() => driver.FindElementById("newly_registered")).Click();
             driver2 = new FirefoxDriver();
             driver2.Navigate().GoToUrl(U("system/check"));
-			driver2.Quit();
-            WithRetries(() => driver.FindElementById("newly_registered")).Click();
-			Assert.That(WithRetries(() => driver.FindElement(By.CssSelector("#status")).Text), Is.EqualTo("Build complete"));			
+            AssertThatWithRetries(() => driver.FindElement(By.CssSelector("#status")).Text, Is.EqualTo("Build complete"));			
+        }
+
+        string GetMeAWorkingFolder()
+        {
+            var changeset = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+            Directory.CreateDirectory(changeset);
+            return changeset;
         }
 
         static T WithRetries<T>(Func<T> callback, int retries = 100)
@@ -49,6 +54,38 @@ namespace Frog.FunctionalTests
                 try
                 {
                     return callback();
+                }
+                catch (NoSuchElementException)
+                {
+                    if (retries > 0)
+                    {
+                        retries--;
+                        Thread.Sleep(100);
+                    }
+                    else throw;
+                }
+            }
+        }
+
+        static void AssertThatWithRetries<T>(Func<T> callback,  IResolveConstraint constraint, int retries = 100)
+        {
+            while (true)
+            {
+                try
+                {
+                    var val = callback();
+                    if (!constraint.Resolve().Matches(ref val))
+                    {
+                        if (retries > 0)
+                        {
+                            retries--;
+                            Thread.Sleep(100);
+                        } else
+                        {
+                            Assert.That(val, constraint);
+                        }
+                    } else 
+                        return;
                 }
                 catch (NoSuchElementException)
                 {
@@ -77,6 +114,7 @@ namespace Frog.FunctionalTests
         [TearDown]
         public void TearDown()
         {
+            driver2.Quit();
             driver.Quit();
             if (!basePath.IsNullOrEmpty())
             {
