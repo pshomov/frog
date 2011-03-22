@@ -5,7 +5,25 @@ namespace Frog.Specs.Support
     public class FileGenesis
     {
         readonly string root;
-		
+        readonly bool should_auto_clean;
+
+        public string Root
+        {
+            get { return root; }
+        }
+
+        public FileGenesis()
+        {
+            root = OSHelpers.GetMeAWorkingFolder();
+            should_auto_clean = true;
+        }
+
+        ~FileGenesis()
+        {
+            if (should_auto_clean)
+                OSHelpers.NukeDirectory(root);
+        }
+
         public FileGenesis(string root){
             this.root = root;
         }

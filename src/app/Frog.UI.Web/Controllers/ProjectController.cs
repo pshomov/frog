@@ -2,9 +2,11 @@
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using Frog.Support;
 
 namespace Frog.UI.Web.Controllers
 {
+	[HandleError]
     public class ProjectController : Controller
     {
         public ActionResult Status(string user, string project)
@@ -15,6 +17,12 @@ namespace Frog.UI.Web.Controllers
         public ActionResult Data(string user, string project)
         {
             string projectUrl = String.Format("http://github.com/{0}/{1}.git", user, project);
+            return GetProjectStatus(projectUrl);
+        }
+
+
+	    protected internal ActionResult GetProjectStatus(string projectUrl)
+        {
             if (ServiceLocator.Report.ContainsKey(projectUrl))
                 return MonoBugs.Json(new {status = ServiceLocator.Report[projectUrl]});
             else

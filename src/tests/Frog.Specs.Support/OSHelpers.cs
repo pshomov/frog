@@ -19,5 +19,22 @@ namespace Frog.Specs.Support
                     File.SetAttributes(file, FileAttributes.Normal);
             }
         }
+
+        public static void NukeDirectory(string directory)
+        {
+            if (Directory.Exists(directory))
+            {
+                ClearAttributes(directory);
+                Directory.Delete(directory,true);
+            }
+        }
+
+        public static string GetMeAWorkingFolder()
+        {
+            var changeset = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+            Directory.CreateDirectory(changeset);
+            return changeset;
+        }
+
     }
 }

@@ -3,6 +3,7 @@ using Frog.Support;
 
 namespace Frog.UI.Web.Controllers
 {
+    [HandleError]
     public class RegisterProjectController : Controller
     {
         [AcceptVerbs(HttpVerbs.Post)]
@@ -13,7 +14,7 @@ namespace Frog.UI.Web.Controllers
                 return MonoBugs.Json(new {error = "Url was not provided"});
             }
             ServiceLocator.RepositoryTracker.Track(url);
-            return Redirect("~/Content/status.html");
+            return MonoBugs.Json(new {projectUrl = Url.Action("status", "Project", new {user = "u", project = "p"})});
         }
     }
 }

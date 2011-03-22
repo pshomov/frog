@@ -59,7 +59,7 @@
                 st.push(text);
                 st.translate(100 * (i + 1), 100);
             }
-        }
+        };
     </script>
     </head>
     <body>

@@ -31,7 +31,7 @@ namespace Frog.Domain
             process.OnStdOutput +=
                 s =>
                     {
-                        if (result.Length == 0)
+                        if (result.Length == 0 && !s.IsNullOrEmpty())
                         {
                             if (Regex.IsMatch(s, revision_extracting_regex))
                                 result = Regex.Match(s, revision_extracting_regex).Groups[1].Value;
