@@ -4,6 +4,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using Frog.Domain;
+using Frog.Support;
 
 namespace Frog.UI.Web
 {
@@ -16,10 +17,22 @@ namespace Frog.UI.Web
             mapPath = Server.MapPath("~/App_Data/Crash_");
             AppDomain.CurrentDomain.UnhandledException += CurrentDomainOnUnhandledException;
             AreaRegistration.RegisterAllAreas();
-            var setup = new AcceptanceTestSetup();
-            setup.RegisterRoutes(RouteTable.Routes);
 
-            SetupApp();
+            WireUpApp();
+
+            WebFrontendSetup frontendSetup = GetWebFrontendSetup();
+            frontendSetup.RegisterRoutes(RouteTable.Routes);
+        }
+
+        WebFrontendSetup GetWebFrontendSetup()
+        {
+            string mode = Environment.GetEnvironmentVariable("RUNZ_ACCEPTANCE_MODE");
+            WebFrontendSetup setup;
+            if (!mode.IsNullOrEmpty() && mode == "ACCEPTANCE")
+                setup = new AcceptanceTestWebFrontendSetup();
+            else 
+                setup = new WebFrontendSetup();
+            return setup;
         }
 
         void CurrentDomainOnUnhandledException(object sender, UnhandledExceptionEventArgs unhandledExceptionEventArgs)
@@ -39,7 +52,7 @@ namespace Frog.UI.Web
             }
         }
 
-        void SetupApp()
+        void WireUpApp()
         {
             var system = new ProductionSystem();
             ServiceLocator.RepositoryTracker = system.repositoryTracker;
@@ -47,30 +60,29 @@ namespace Frog.UI.Web
         }
     }
 
-    internal class ProductionSetup
+    internal class WebFrontendSetup
     {
         public virtual void RegisterRoutes(RouteCollection routes)
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute("github_status", "project/github/{user}/{project}/{action}",
-                            new { controller = "Project" });
+                            new {controller = "Project"});
             routes.MapRoute("github_register_project", "project/register",
-                            new { controller = "RegisterProject", action="index" });
+                            new {controller = "RegisterProject", action = "index"});
             routes.MapRoute("check_projects_for_updates", "system/check",
-                            new { controller = "System", action = "check" });
+                            new {controller = "System", action = "check"});
         }
-        
     }
 
-    internal class AcceptanceTestSetup : ProductionSetup
+    internal class AcceptanceTestWebFrontendSetup : WebFrontendSetup
     {
         public override void RegisterRoutes(RouteCollection routes)
         {
             routes.MapRoute("test_repo_status", "project/test/file/{projectUrl}/{action}",
-                            new { controller = "TestProject" });
+                            new {controller = "TestProject"});
             routes.MapRoute("test_register_project", "project/register",
-                            new { controller = "TestRegisterProject", action="Index" });
+                            new {controller = "TestRegisterProject", action = "Index"});
             base.RegisterRoutes(routes);
         }
     }
