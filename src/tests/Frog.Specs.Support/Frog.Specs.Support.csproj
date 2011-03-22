@@ -43,8 +43,12 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\libs\NUnit\nunit.framework.dll</HintPath>
     </Reference>
+    <Reference Include="WebDriver.Common">
+      <HintPath>..\..\..\libs\WebDriver\WebDriver.Common.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssertionHelpers.cs" />
     <Compile Include="BDD.cs" />
     <Compile Include="FileGenesis.cs" />
     <Compile Include="FixedExecTaskGenerator.cs" />
