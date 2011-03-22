@@ -2,7 +2,7 @@ using NSubstitute;
 
 namespace Frog.Domain.Specs.ValveSpecs
 {
-    public abstract class ValveWhenUpdateSpecsBase : BDD
+    public abstract class WorkerSpecsBase : BDD
     {
         protected SourceRepoDriver sourceRepoDriver;
         protected Domain.Pipeline pipeline;

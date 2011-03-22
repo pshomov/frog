@@ -79,11 +79,11 @@
     <Compile Include="Task\TaskCurrentDirectory.cs" />
     <Compile Include="Task\TaskReporting.cs" />
     <Compile Include="TaskDetection\NUnitTaskDetectorSpecs.cs" />
-    <Compile Include="ValveSpecs\ValveNoUpdates.cs" />
-    <Compile Include="ValveSpecs\ValveSourceUpdates.cs" />
+    <Compile Include="WorkerSpecs\WorkerDoesNothingWhenNoUpdates.cs" />
+    <Compile Include="WorkerSpecs\WorkerKicksPipelineOffWhenSourceUpdates.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Task\TaskSpec.cs" />
-    <Compile Include="ValveSpecs\ValveWhenUpdateSpecsBase.cs" />
+    <Compile Include="WorkerSpecs\WorkerSpecsBase.cs" />
     <Compile Include="WorkingAreaSpecs.cs" />
     <Compile Include="FileGeneration\FileGenesisTests.cs" />
   </ItemGroup>

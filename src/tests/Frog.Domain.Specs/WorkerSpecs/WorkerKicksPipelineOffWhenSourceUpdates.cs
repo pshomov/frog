@@ -6,7 +6,7 @@ using Arg = NSubstitute.Arg;
 namespace Frog.Domain.Specs.ValveSpecs
 {
     [TestFixture]
-    public class ValveSourceUpdates : ValveWhenUpdateSpecsBase
+    public class WorkerKicksPipelineOffWhenSourceUpdates : WorkerSpecsBase
     {
         bool updateFound;
         string newRevision;

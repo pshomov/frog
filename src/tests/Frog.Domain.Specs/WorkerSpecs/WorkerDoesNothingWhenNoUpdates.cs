@@ -5,7 +5,7 @@ using Arg = NSubstitute.Arg;
 namespace Frog.Domain.Specs.ValveSpecs
 {
     [TestFixture]
-    public class ValveNoUpdates : ValveWhenUpdateSpecsBase
+    public class WorkerDoesNothingWhenNoUpdates : WorkerSpecsBase
     {
         public override void Given()
         {
