@@ -13,7 +13,7 @@ if ENV["LIBGDI_VERSION"].nil?
   exit 2
 end
 
-target = "testbee1.runzhq.com"
+target = ARGV[0]
 
 remove_dir "../tmp", :force => true
 mkdir "../tmp"
