@@ -20,7 +20,7 @@ namespace Frog.Domain
             theBus = SetupBus();
 
             area = SetupWorkingArea();
-            SetupValve(GetPipeline());
+            SetupWorker(GetPipeline());
             SetupRepositoryTracker();
             SetupAgent();
 
@@ -32,7 +32,7 @@ namespace Frog.Domain
             return new FakeBus();
         }
 
-        protected void SetupValve(PipelineOfTasks pipeline)
+        protected void SetupWorker(PipelineOfTasks pipeline)
         {
             worker = new Worker(pipeline, area);
         }

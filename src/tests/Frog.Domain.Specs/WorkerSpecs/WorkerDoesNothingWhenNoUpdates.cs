@@ -1,8 +1,7 @@
 using NSubstitute;
 using NUnit.Framework;
-using Arg = NSubstitute.Arg;
 
-namespace Frog.Domain.Specs.ValveSpecs
+namespace Frog.Domain.Specs.WorkerSpecs
 {
     [TestFixture]
     public class WorkerDoesNothingWhenNoUpdates : WorkerSpecsBase

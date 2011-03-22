@@ -1,6 +1,6 @@
 using NSubstitute;
 
-namespace Frog.Domain.Specs.ValveSpecs
+namespace Frog.Domain.Specs.WorkerSpecs
 {
     public abstract class WorkerSpecsBase : BDD
     {
