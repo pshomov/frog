@@ -10,8 +10,8 @@ namespace Frog.Domain.Specs.WorkerSpecs
         {
             base.Given();
             sourceRepoDriver.GetLatestRevision().Returns("2344");
-            workingArea.AllocateWorkingArea().Returns("dugh");
-            worker = new Worker(pipeline, workingArea);
+            workingAreaGoverner.AllocateWorkingArea().Returns("dugh");
+            worker = new Worker(pipeline, workingAreaGoverner);
         }
 
         public override void When()
@@ -37,5 +37,10 @@ namespace Frog.Domain.Specs.WorkerSpecs
             pipeline.DidNotReceive().Process(Arg.Any<SourceDrop>());
         }
 
+        [Test]
+        public void should_not_clean_working_area()
+        {
+            workingAreaGoverner.DidNotReceive().DeallocateWorkingArea(Arg.Any<string>());
+        }
     }
 }

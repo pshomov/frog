@@ -6,14 +6,14 @@ namespace Frog.Domain.Specs.WorkerSpecs
     {
         protected SourceRepoDriver sourceRepoDriver;
         protected Domain.Pipeline pipeline;
-        protected WorkingArea workingArea;
+        protected WorkingAreaGoverner workingAreaGoverner;
         protected Worker worker;
 
         public override void Given()
         {
             sourceRepoDriver = Substitute.For<SourceRepoDriver>();
             pipeline = Substitute.For<Domain.Pipeline>();
-            workingArea = Substitute.For<WorkingArea>();
+            workingAreaGoverner = Substitute.For<WorkingAreaGoverner>();
         }
     }
 }

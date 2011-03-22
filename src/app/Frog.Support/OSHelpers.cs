@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace Frog.Specs.Support
+namespace Frog.Support
 {
     public static class OSHelpers
     {

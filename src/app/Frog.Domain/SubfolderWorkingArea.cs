@@ -1,12 +1,14 @@
+using System;
 using System.IO;
+using Frog.Support;
 
 namespace Frog.Domain
 {
-    public class SubfolderWorkingArea : WorkingArea
+    public class SubfolderWorkingAreaGoverner : WorkingAreaGoverner
     {
         readonly string allocationRoot;
 
-        public SubfolderWorkingArea(string allocationRoot)
+        public SubfolderWorkingAreaGoverner(string allocationRoot)
         {
             this.allocationRoot = allocationRoot;
         }
@@ -16,6 +18,11 @@ namespace Frog.Domain
             var allocateWorkingAreaPath = Path.Combine(allocationRoot, Path.GetRandomFileName());
             Directory.CreateDirectory(allocateWorkingAreaPath);
             return allocateWorkingAreaPath;
+        }
+
+        public void DeallocateWorkingArea(string allocatedArea)
+        {
+            OSHelpers.NukeDirectory(allocatedArea);
         }
     }
 }

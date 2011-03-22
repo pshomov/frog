@@ -4,9 +4,9 @@ using NUnit.Framework;
 namespace Frog.Domain.Specs
 {
     [TestFixture]
-    public class WorkingAreaSpecs : BDD
+    public class WorkingAreaAllocation : BDD
     {
-        WorkingArea workingArea;
+        WorkingAreaGoverner workingAreaGoverner;
         string allocationRoot;
         string allocatedArea;
 
@@ -14,12 +14,12 @@ namespace Frog.Domain.Specs
         {
             allocationRoot = Path.Combine(GitTestSupport.GetTempPath(), Path.GetRandomFileName());
             Directory.CreateDirectory(allocationRoot);
-            workingArea = new SubfolderWorkingArea(allocationRoot);
+            workingAreaGoverner = new SubfolderWorkingAreaGoverner(allocationRoot);
         }
 
         public override void When()
         {
-            allocatedArea = workingArea.AllocateWorkingArea();
+            allocatedArea = workingAreaGoverner.AllocateWorkingArea();
         }
 
         [Test]
@@ -40,5 +40,33 @@ namespace Frog.Domain.Specs
             Assert.That(Directory.GetFiles(allocatedArea).Length == 0 &&
                         Directory.GetDirectories(allocatedArea).Length == 0);
         }
+    }
+
+    [TestFixture]
+    public class WorkingAreaDeAllocation : BDD
+    {
+        WorkingAreaGoverner workingAreaGoverner;
+        string allocationRoot;
+        string allocatedArea;
+
+        public override void Given()
+        {
+            allocationRoot = Path.Combine(GitTestSupport.GetTempPath(), Path.GetRandomFileName());
+            Directory.CreateDirectory(allocationRoot);
+            workingAreaGoverner = new SubfolderWorkingAreaGoverner(allocationRoot);
+            allocatedArea = workingAreaGoverner.AllocateWorkingArea();
+        }
+
+        public override void When()
+        {
+            workingAreaGoverner.DeallocateWorkingArea(allocatedArea);
+        }
+
+        [Test]
+        public void should_have_deleted_the_folder()
+        {
+            Assert.That(!Directory.Exists(allocatedArea));
+        }
+
     }
 }

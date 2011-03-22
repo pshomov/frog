@@ -89,11 +89,11 @@ namespace Frog.UI.Web
 
     public class ProductionSystem : SystemBase
     {
-        protected override WorkingArea SetupWorkingArea()
+        protected override WorkingAreaGoverner SetupWorkingAreaGovernor()
         {
             var workingAreaPath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
             Directory.CreateDirectory(workingAreaPath);
-            return new SubfolderWorkingArea(workingAreaPath);
+            return new SubfolderWorkingAreaGoverner(workingAreaPath);
         }
 
         protected override ExecTaskFactory GetExecTaskFactory()

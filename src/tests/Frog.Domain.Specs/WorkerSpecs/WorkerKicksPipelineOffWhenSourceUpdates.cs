@@ -13,16 +13,18 @@ namespace Frog.Domain.Specs.WorkerSpecs
         {
             base.Given();
             sourceRepoDriver.GetLatestRevision().Returns("2344");
-            workingArea.AllocateWorkingArea().Returns("dugh");
-            worker = new Worker(pipeline, workingArea);
-            worker.OnUpdateFound += s => { updateFound = true;
+            workingAreaGoverner.AllocateWorkingArea().Returns("dugh");
+            worker = new Worker(pipeline, workingAreaGoverner);
+            worker.OnUpdateFound += s =>
+                                        {
+                                            updateFound = true;
                                             newRevision = s;
-            };
+                                        };
         }
 
         public override void When()
         {
-            worker.CheckForUpdatesAndKickOffPipeline(repo:sourceRepoDriver, revision:"123");
+            worker.CheckForUpdatesAndKickOffPipeline(repo: sourceRepoDriver, revision: "123");
         }
 
         [Test]
@@ -40,7 +42,7 @@ namespace Frog.Domain.Specs.WorkerSpecs
         [Test]
         public void should_tell_pipeline_to_start_rolin()
         {
-            pipeline.Received().Process(Arg.Is<SourceDrop>(obj => obj.SourceDropLocation == "dugh" ));
+            pipeline.Received().Process(Arg.Is<SourceDrop>(obj => obj.SourceDropLocation == "dugh"));
         }
 
         [Test]
@@ -50,6 +52,10 @@ namespace Frog.Domain.Specs.WorkerSpecs
             Assert.That(newRevision, Is.EqualTo("2344"));
         }
 
-
+        [Test]
+        public void should_clean_working_area()
+        {
+            workingAreaGoverner.Received().DeallocateWorkingArea("dugh");
+        }
     }
 }

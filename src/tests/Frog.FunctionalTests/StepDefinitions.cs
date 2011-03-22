@@ -1,6 +1,7 @@
 ﻿using System;
 using Frog.Domain.Specs;
 using Frog.Specs.Support;
+using Frog.Support;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Firefox;

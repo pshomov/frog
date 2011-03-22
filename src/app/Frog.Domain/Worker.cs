@@ -1,4 +1,5 @@
 using System;
+using Frog.Support;
 using SimpleCQRS;
 
 namespace Frog.Domain
@@ -12,12 +13,12 @@ namespace Frog.Domain
     public class Worker
     {
         readonly Pipeline pipeline;
-        readonly WorkingArea workingArea;
+        readonly WorkingAreaGoverner workingAreaGoverner;
 
-        public Worker(Pipeline pipeline, WorkingArea workingArea)
+        public Worker(Pipeline pipeline, WorkingAreaGoverner workingAreaGoverner)
         {
             this.pipeline = pipeline;
-            this.workingArea = workingArea;
+            this.workingAreaGoverner = workingAreaGoverner;
         }
 
         public virtual void CheckForUpdatesAndKickOffPipeline(SourceRepoDriver repo, string revision)
@@ -26,9 +27,10 @@ namespace Frog.Domain
             if ((latestRev = repo.GetLatestRevision()) != revision)
             {
                 OnUpdateFound(latestRev);
-                var allocatedWorkingArea = workingArea.AllocateWorkingArea();
+                var allocatedWorkingArea = workingAreaGoverner.AllocateWorkingArea();
                 repo.GetSourceRevision(latestRev, allocatedWorkingArea);
                 ProcessPipeline(allocatedWorkingArea);
+                workingAreaGoverner.DeallocateWorkingArea(allocatedWorkingArea);
             }
         }
 
@@ -49,8 +51,9 @@ namespace Frog.Domain
         public virtual event Action<BuildTotalStatus> OnBuildEnded;
     }
 
-    public interface WorkingArea
+    public interface WorkingAreaGoverner
     {
         string AllocateWorkingArea();
+        void DeallocateWorkingArea(string allocatedArea);
     }
 }

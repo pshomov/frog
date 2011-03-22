@@ -84,7 +84,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Task\TaskSpec.cs" />
     <Compile Include="WorkerSpecs\WorkerSpecsBase.cs" />
-    <Compile Include="WorkingAreaSpecs.cs" />
+    <Compile Include="WorkingAreaAllocation.cs" />
     <Compile Include="FileGeneration\FileGenesisTests.cs" />
   </ItemGroup>
   <ItemGroup>

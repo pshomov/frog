@@ -1,5 +1,6 @@
 using System.IO;
 using Frog.Specs.Support;
+using Frog.Support;
 
 namespace Frog.Domain.Specs.Git
 {

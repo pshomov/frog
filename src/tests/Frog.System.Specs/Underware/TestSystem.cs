@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using Frog.Domain;
 using Frog.Domain.Specs;
-using Frog.Specs.Support;
+using Frog.Support;
 using NSubstitute;
 using SimpleCQRS;
 
@@ -21,11 +19,11 @@ namespace Frog.System.Specs.Underware
             SetupAllEventLogging();
         }
 
-        protected override WorkingArea SetupWorkingArea()
+        protected override WorkingAreaGoverner SetupWorkingAreaGovernor()
         {
             workingAreaPath = Path.Combine(GitTestSupport.GetTempPath(), Path.GetRandomFileName());
             Directory.CreateDirectory(workingAreaPath);
-            return new SubfolderWorkingArea(workingAreaPath);
+            return new SubfolderWorkingAreaGoverner(workingAreaPath);
         }
 
         void SetupAllEventLogging()

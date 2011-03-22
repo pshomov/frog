@@ -9,7 +9,7 @@ namespace Frog.Domain
     public abstract class SystemBase
     {
         protected IBus theBus;
-        readonly WorkingArea area;
+        readonly WorkingAreaGoverner areaGoverner;
         public ConcurrentDictionary<string, PipelineStatusView.BuildStatus> report { get; private set; }
         public RepositoryTracker repositoryTracker { get; private set; }
         Agent agent;
@@ -19,7 +19,7 @@ namespace Frog.Domain
         {
             theBus = SetupBus();
 
-            area = SetupWorkingArea();
+            areaGoverner = SetupWorkingAreaGovernor();
             SetupWorker(GetPipeline());
             SetupRepositoryTracker();
             SetupAgent();
@@ -34,7 +34,7 @@ namespace Frog.Domain
 
         protected void SetupWorker(PipelineOfTasks pipeline)
         {
-            worker = new Worker(pipeline, area);
+            worker = new Worker(pipeline, areaGoverner);
         }
 
         protected void SetupAgent()
@@ -49,7 +49,7 @@ namespace Frog.Domain
             repositoryTracker.StartListeningForBuildUpdates();
         }
 
-        protected abstract WorkingArea SetupWorkingArea();
+        protected abstract WorkingAreaGoverner SetupWorkingAreaGovernor();
 
         protected void SetupView()
         {
