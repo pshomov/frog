@@ -13,7 +13,7 @@ namespace Frog.Domain
 
     public class GitDriver : SourceRepoDriver
     {
-        const string revision_extracting_regex = @"^([a-f,0-9]*)\s*refs/heads/master";
+        const string RevisionExtractingRegex = @"^([a-f,0-9]*)\s*refs/heads/master";
         readonly string repoUrl;
 
         public GitDriver(string repo)
@@ -33,8 +33,8 @@ namespace Frog.Domain
                     {
                         if (result.Length == 0 && !s.IsNullOrEmpty())
                         {
-                            if (Regex.IsMatch(s, revision_extracting_regex))
-                                result = Regex.Match(s, revision_extracting_regex).Groups[1].Value;
+                            if (Regex.IsMatch(s, RevisionExtractingRegex))
+                                result = Regex.Match(s, RevisionExtractingRegex).Groups[1].Value;
                         }
                     };
             process.Execute();

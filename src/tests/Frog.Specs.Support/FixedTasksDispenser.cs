@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Frog.Domain;
 using Frog.Domain.CustomTasks;
+using Frog.Domain.TaskSources;
 
 namespace Frog.Specs.Support
 {

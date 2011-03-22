@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
 using SimpleCQRS;
 
 namespace Frog.Domain.UI
@@ -30,7 +28,9 @@ namespace Frog.Domain.UI
         public void Handle(BuildEnded message)
         {
             EnsureReportExistsForRepo(message.RepoUrl);
-            report[message.RepoUrl].Current = message.TotalStatus == BuildTotalStatus.Success ? BuildStatus.Status.PipelineCompletedSuccess : BuildStatus.Status.PipelineCompletedFailure;
+            report[message.RepoUrl].Current = message.TotalStatus == BuildTotalStatus.Success
+                                                  ? BuildStatus.Status.PipelineCompletedSuccess
+                                                  : BuildStatus.Status.PipelineCompletedFailure;
         }
 
         void EnsureReportExistsForRepo(string repoUrl)
@@ -48,10 +48,14 @@ namespace Frog.Domain.UI
 
             public PipelineStatus PipelineStatus { get; set; }
 
-            public enum Status { PipelineStarted, NotStarted,
+            public enum Status
+            {
+                PipelineStarted,
+                NotStarted,
                 PipelineCompletedFailure,
                 PipelineCompletedSuccess
             }
+
             public Status Current { get; set; }
         }
     }

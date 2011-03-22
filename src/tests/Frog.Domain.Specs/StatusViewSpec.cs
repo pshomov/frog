@@ -26,7 +26,7 @@ namespace Frog.Domain.Specs
         {
             pipelineStatus = new PipelineStatus(Guid.NewGuid())
                                  {
-                                     tasks =
+                                     Tasks =
                                          {
                                              new TasksInfo
                                                  {Name = "task1", Status = TasksInfo.TaskStatus.NotStarted}
@@ -88,7 +88,7 @@ namespace Frog.Domain.Specs
         {
             pipelineStatus = new PipelineStatus(Guid.NewGuid())
                                  {
-                                     tasks =
+                                     Tasks =
                                          {
                                              new TasksInfo
                                                  {Name = "task1", Status = TasksInfo.TaskStatus.Started}

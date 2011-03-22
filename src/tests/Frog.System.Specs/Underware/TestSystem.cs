@@ -28,7 +28,7 @@ namespace Frog.System.Specs.Underware
 
         void SetupAllEventLogging()
         {
-            IBusDebug busDebug = (IBusDebug) theBus;
+            IBusDebug busDebug = (IBusDebug) TheBus;
             busDebug.OnMessage += msg => messages.Add(msg);
         }
 

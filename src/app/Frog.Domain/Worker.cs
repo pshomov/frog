@@ -1,5 +1,4 @@
 using System;
-using Frog.Support;
 using SimpleCQRS;
 
 namespace Frog.Domain
@@ -21,14 +20,14 @@ namespace Frog.Domain
             this.workingAreaGoverner = workingAreaGoverner;
         }
 
-        public virtual void CheckForUpdatesAndKickOffPipeline(SourceRepoDriver repo, string revision)
+        public virtual void CheckForUpdatesAndKickOffPipeline(SourceRepoDriver repositoryDriver, string revision)
         {
-            string latestRev;
-            if ((latestRev = repo.GetLatestRevision()) != revision)
+            string latestRevision;
+            if ((latestRevision = repositoryDriver.GetLatestRevision()) != revision)
             {
-                OnUpdateFound(latestRev);
+                OnUpdateFound(latestRevision);
                 var allocatedWorkingArea = workingAreaGoverner.AllocateWorkingArea();
-                repo.GetSourceRevision(latestRev, allocatedWorkingArea);
+                repositoryDriver.GetSourceRevision(latestRevision, allocatedWorkingArea);
                 ProcessPipeline(allocatedWorkingArea);
                 workingAreaGoverner.DeallocateWorkingArea(allocatedWorkingArea);
             }
@@ -45,15 +44,9 @@ namespace Frog.Domain
             pipeline.OnBuildUpdated -= OnBuildUpdated;
         }
 
-        public virtual event Action<string> OnUpdateFound = s => {};
+        public virtual event Action<string> OnUpdateFound = s => { };
         public virtual event Action<PipelineStatus> OnBuildStarted;
         public virtual event Action<PipelineStatus> OnBuildUpdated;
         public virtual event Action<BuildTotalStatus> OnBuildEnded;
-    }
-
-    public interface WorkingAreaGoverner
-    {
-        string AllocateWorkingArea();
-        void DeallocateWorkingArea(string allocatedArea);
     }
 }

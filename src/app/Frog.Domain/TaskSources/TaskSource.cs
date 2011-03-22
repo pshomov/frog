@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Frog.Domain.CustomTasks;
 
-namespace Frog.Domain
+namespace Frog.Domain.TaskSources
 {
     public interface TaskSource
     {

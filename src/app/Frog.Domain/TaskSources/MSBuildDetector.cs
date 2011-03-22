@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Frog.Domain.CustomTasks;
-using Frog.Domain.TaskDetection;
 using Frog.Support;
 
 namespace Frog.Domain.TaskSources

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Concurrent;
-using Frog.Domain.CustomTasks;
 using Frog.Domain.TaskSources;
 using Frog.Domain.UI;
 using SimpleCQRS;
@@ -8,7 +7,7 @@ namespace Frog.Domain
 {
     public abstract class SystemBase
     {
-        protected IBus theBus;
+        protected IBus TheBus;
         readonly WorkingAreaGoverner areaGoverner;
         public ConcurrentDictionary<string, PipelineStatusView.BuildStatus> report { get; private set; }
         public RepositoryTracker repositoryTracker { get; private set; }
@@ -17,7 +16,7 @@ namespace Frog.Domain
 
         protected SystemBase()
         {
-            theBus = SetupBus();
+            TheBus = SetupBus();
 
             areaGoverner = SetupWorkingAreaGovernor();
             SetupWorker(GetPipeline());
@@ -39,13 +38,13 @@ namespace Frog.Domain
 
         protected void SetupAgent()
         {
-            agent = new Agent(theBus, worker);
+            agent = new Agent(TheBus, worker);
             agent.JoinTheParty();
         }
 
         protected void SetupRepositoryTracker()
         {
-            repositoryTracker = new RepositoryTracker(theBus);
+            repositoryTracker = new RepositoryTracker(TheBus);
             repositoryTracker.StartListeningForBuildUpdates();
         }
 
@@ -55,9 +54,9 @@ namespace Frog.Domain
         {
             report = new ConcurrentDictionary<string, PipelineStatusView.BuildStatus>();
             var statusView = new PipelineStatusView(report);
-            theBus.RegisterHandler<BuildStarted>(statusView.Handle);
-            theBus.RegisterHandler<BuildEnded>(statusView.Handle);
-            theBus.RegisterHandler<BuildUpdated>(statusView.Handle);
+            TheBus.RegisterHandler<BuildStarted>(statusView.Handle);
+            TheBus.RegisterHandler<BuildEnded>(statusView.Handle);
+            TheBus.RegisterHandler<BuildUpdated>(statusView.Handle);
         }
 
         protected PipelineOfTasks GetPipeline()

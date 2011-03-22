@@ -1,14 +1,12 @@
-﻿using Frog.Domain.CustomTasks;
-
-namespace Frog.Domain.TaskDetection
+﻿namespace Frog.Domain.CustomTasks
 {
-    public class MSBuildTaskDescriptions : TaskBase
+    public class MSBuildTaskDescriptions : ITask
     {
-        public readonly string solutionFile;
+        public readonly string SolutionFile;
 
         public MSBuildTaskDescriptions(string solutionFile)
         {
-            this.solutionFile = solutionFile;
+            SolutionFile = solutionFile;
         }
     }
 }

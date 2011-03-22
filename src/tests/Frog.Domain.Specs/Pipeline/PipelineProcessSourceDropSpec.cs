@@ -1,6 +1,6 @@
 using System;
 using Frog.Domain.CustomTasks;
-using Frog.Domain.TaskDetection;
+using Frog.Domain.TaskSources;
 using Frog.Support;
 using NSubstitute;
 using NUnit.Framework;
@@ -75,9 +75,9 @@ namespace Frog.Domain.Specs.Pipeline
         {
             pipelineOnBuildStarted.Received().Invoke(Arg.Is<PipelineStatus>(
                 started =>
-                started.tasks.Count == 2 &&
-                started.tasks[0].Status == TasksInfo.TaskStatus.NotStarted &&
-                started.tasks[1].Status == TasksInfo.TaskStatus.NotStarted));
+                started.Tasks.Count == 2 &&
+                started.Tasks[0].Status == TasksInfo.TaskStatus.NotStarted &&
+                started.Tasks[1].Status == TasksInfo.TaskStatus.NotStarted));
         }
 
         [Test]
@@ -85,9 +85,9 @@ namespace Frog.Domain.Specs.Pipeline
         {
             pipelineOnBuildUpdated.Received().Invoke(Arg.Is<PipelineStatus>(
                 started =>
-                started.tasks.Count == 2 &&
-                started.tasks[0].Status == TasksInfo.TaskStatus.Started &&
-                started.tasks[1].Status == TasksInfo.TaskStatus.NotStarted));
+                started.Tasks.Count == 2 &&
+                started.Tasks[0].Status == TasksInfo.TaskStatus.Started &&
+                started.Tasks[1].Status == TasksInfo.TaskStatus.NotStarted));
         }
 
         [Test]
@@ -95,9 +95,9 @@ namespace Frog.Domain.Specs.Pipeline
         {
             pipelineOnBuildUpdated.Received().Invoke(Arg.Is<PipelineStatus>(
                 started =>
-                started.tasks.Count == 2 &&
-                started.tasks[0].Status == TasksInfo.TaskStatus.FinishedError &&
-                started.tasks[1].Status == TasksInfo.TaskStatus.NotStarted));
+                started.Tasks.Count == 2 &&
+                started.Tasks[0].Status == TasksInfo.TaskStatus.FinishedError &&
+                started.Tasks[1].Status == TasksInfo.TaskStatus.NotStarted));
         }
 
         [Test]
@@ -113,8 +113,8 @@ namespace Frog.Domain.Specs.Pipeline
         {
             pipelineOnBuildUpdated.DidNotReceive().Invoke(Arg.Is<PipelineStatus>(
                 started =>
-                started.tasks.Count == 2 &&
-                started.tasks[1].Status == TasksInfo.TaskStatus.Started));
+                started.Tasks.Count == 2 &&
+                started.Tasks[1].Status == TasksInfo.TaskStatus.Started));
         }
 
         [Test]

@@ -1,5 +1,4 @@
 using Frog.Domain.CustomTasks;
-using Frog.Domain.TaskDetection;
 using Frog.Support;
 using NSubstitute;
 using NUnit.Framework;
@@ -31,9 +30,9 @@ namespace Frog.Domain.Specs.Pipeline
         {
             pipelineOnBuildUpdated.Received().Invoke(Arg.Is<PipelineStatus>(
                 started =>
-                started.tasks.Count == 2 &&
-                started.tasks[0].Status == TasksInfo.TaskStatus.FinishedSuccess &&
-                started.tasks[1].Status == TasksInfo.TaskStatus.NotStarted));
+                started.Tasks.Count == 2 &&
+                started.Tasks[0].Status == TasksInfo.TaskStatus.FinishedSuccess &&
+                started.Tasks[1].Status == TasksInfo.TaskStatus.NotStarted));
         }
 
         [Test]
@@ -41,9 +40,9 @@ namespace Frog.Domain.Specs.Pipeline
         {
             pipelineOnBuildUpdated.Received().Invoke(Arg.Is<PipelineStatus>(
                 started =>
-                started.tasks.Count == 2 &&
-                started.tasks[0].Status == TasksInfo.TaskStatus.FinishedSuccess &&
-                started.tasks[1].Status == TasksInfo.TaskStatus.Started));
+                started.Tasks.Count == 2 &&
+                started.Tasks[0].Status == TasksInfo.TaskStatus.FinishedSuccess &&
+                started.Tasks[1].Status == TasksInfo.TaskStatus.Started));
         }
 
         [Test]
@@ -51,9 +50,9 @@ namespace Frog.Domain.Specs.Pipeline
         {
             pipelineOnBuildUpdated.Received().Invoke(Arg.Is<PipelineStatus>(
                 started =>
-                started.tasks.Count == 2 &&
-                started.tasks[0].Status == TasksInfo.TaskStatus.FinishedSuccess &&
-                started.tasks[1].Status == TasksInfo.TaskStatus.FinishedSuccess));
+                started.Tasks.Count == 2 &&
+                started.Tasks[0].Status == TasksInfo.TaskStatus.FinishedSuccess &&
+                started.Tasks[1].Status == TasksInfo.TaskStatus.FinishedSuccess));
         }
 
         [Test]

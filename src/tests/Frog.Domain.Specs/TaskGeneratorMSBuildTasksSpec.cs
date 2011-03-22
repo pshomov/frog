@@ -1,5 +1,4 @@
 using Frog.Domain.CustomTasks;
-using Frog.Domain.TaskDetection;
 using NSubstitute;
 using NUnit.Framework;
 

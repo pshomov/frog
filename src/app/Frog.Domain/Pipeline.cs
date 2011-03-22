@@ -1,21 +1,21 @@
 using System;
 using System.Collections.Generic;
-using SimpleCQRS;
+using Frog.Domain.TaskSources;
 
 namespace Frog.Domain
 {
     public class SourceDrop
     {
-        readonly string _sourceDropLocation;
+        readonly string sourceDropLocation;
 
         public SourceDrop(string sourceDropLocation)
         {
-            _sourceDropLocation = sourceDropLocation;
+            this.sourceDropLocation = sourceDropLocation;
         }
 
         public string SourceDropLocation
         {
-            get { return _sourceDropLocation; }
+            get { return sourceDropLocation; }
         }
     }
 
@@ -27,24 +27,23 @@ namespace Frog.Domain
         event Action<BuildTotalStatus> OnBuildEnded;
     }
 
-
     public class PipelineStatus
     {
         public PipelineStatus(Guid id)
         {
-            tasks = new List<TasksInfo>();
+            Tasks = new List<TasksInfo>();
             PipelineId = id;
         }
 
         public PipelineStatus(PipelineStatus pipelineStatus)
         {
             PipelineId = pipelineStatus.PipelineId;
-            tasks = new List<TasksInfo>();
-            pipelineStatus.tasks.ForEach(info => tasks.Add(new TasksInfo(info)));
+            Tasks = new List<TasksInfo>();
+            pipelineStatus.Tasks.ForEach(info => Tasks.Add(new TasksInfo(info)));
         }
 
         public Guid PipelineId;
-        public List<TasksInfo> tasks;
+        public List<TasksInfo> Tasks;
     }
 
     public class TasksInfo
@@ -59,7 +58,14 @@ namespace Frog.Domain
             Status = tasksInfo.Status;
         }
 
-        public enum TaskStatus {NotStarted, Started, FinishedSuccess, FinishedError}
+        public enum TaskStatus
+        {
+            NotStarted,
+            Started,
+            FinishedSuccess,
+            FinishedError
+        }
+
         public string Name;
         public TaskStatus Status { get; set; }
     }
@@ -100,17 +106,19 @@ namespace Frog.Domain
             for (int i = 0; i < execTasks.Count; i++)
             {
                 var execTask = execTasks[i];
-                status.tasks[i].Status = TasksInfo.TaskStatus.Started;
+                status.Tasks[i].Status = TasksInfo.TaskStatus.Started;
                 OnBuildUpdated(new PipelineStatus(status));
                 lastTaskStatus = execTask.Perform(sourceDrop).ExecStatus;
-                status.tasks[i].Status = lastTaskStatus == ExecTaskResult.Status.Error ? TasksInfo.TaskStatus.FinishedError : TasksInfo.TaskStatus.FinishedSuccess;
+                status.Tasks[i].Status = lastTaskStatus == ExecTaskResult.Status.Error
+                                             ? TasksInfo.TaskStatus.FinishedError
+                                             : TasksInfo.TaskStatus.FinishedSuccess;
                 OnBuildUpdated(new PipelineStatus(status));
                 if (lastTaskStatus != ExecTaskResult.Status.Success) break;
             }
 
             OnBuildEnded(lastTaskStatus == ExecTaskResult.Status.Error
-                                       ? BuildTotalStatus.Error
-                                       : BuildTotalStatus.Success);
+                             ? BuildTotalStatus.Error
+                             : BuildTotalStatus.Success);
         }
 
         List<ExecTask> GenerateTasks(SourceDrop sourceDrop)
@@ -128,11 +136,10 @@ namespace Frog.Domain
             var pipelineStatus = new PipelineStatus(Guid.NewGuid());
             foreach (var execTask in execTasks)
             {
-                pipelineStatus.tasks.Add(new TasksInfo
+                pipelineStatus.Tasks.Add(new TasksInfo
                                              {Name = execTask.Name, Status = TasksInfo.TaskStatus.NotStarted});
             }
             return pipelineStatus;
         }
     }
-
 }

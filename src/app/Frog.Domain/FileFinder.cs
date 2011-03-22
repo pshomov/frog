@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 
 namespace Frog.Domain
@@ -23,8 +22,8 @@ namespace Frog.Domain
         {
             var dlls = new List<string>();
             var baseFolderFull = Path.GetFullPath(baseFolder);
-            pathFinder.apply(s => dlls.Add(s.Remove(0, baseFolderFull.Length+1)), "*.TEST.CSPROJ", baseFolder);
-            pathFinder.apply(s => dlls.Add(s.Remove(0, baseFolderFull.Length+1)), "*.TESTS.CSPROJ", baseFolder);
+            pathFinder.apply(s => dlls.Add(s.Remove(0, baseFolderFull.Length + 1)), "*.TEST.CSPROJ", baseFolder);
+            pathFinder.apply(s => dlls.Add(s.Remove(0, baseFolderFull.Length + 1)), "*.TESTS.CSPROJ", baseFolder);
             return dlls;
         }
 

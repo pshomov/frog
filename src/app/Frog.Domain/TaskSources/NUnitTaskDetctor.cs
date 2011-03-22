@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Frog.Domain.CustomTasks;
 using Frog.Support;
 
-namespace Frog.Domain.CustomTasks
+namespace Frog.Domain.TaskSources
 {
     public class NUnitTaskDetctor : TaskSource
     {
@@ -17,15 +17,15 @@ namespace Frog.Domain.CustomTasks
 
         public IList<ITask> Detect(string projectFolder)
         {
-            var items =  projectFileRepo.FindAllNUnitAssemblies(projectFolder);
-            return items.Select(s => (ITask)new NUnitTask(ProjectPathToAssemblyPath(s))).ToList();
+            var items = projectFileRepo.FindAllNUnitAssemblies(projectFolder);
+            return items.Select(s => (ITask) new NUnitTask(ProjectPathToAssemblyPath(s))).ToList();
         }
 
-        private string ProjectPathToAssemblyPath(string projectPath)
+        string ProjectPathToAssemblyPath(string projectPath)
         {
             var projectName = Path.GetFileNameWithoutExtension(projectPath);
             var assemblyPojectFolder = Path.GetDirectoryName(projectPath);
-            return Path.Combine(Path.Combine(assemblyPojectFolder, Os.DirChars("bin/Debug")), projectName+".dll");
+            return Path.Combine(Path.Combine(assemblyPojectFolder, Os.DirChars("bin/Debug")), projectName + ".dll");
         }
     }
 }

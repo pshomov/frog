@@ -24,7 +24,7 @@ namespace Frog.Domain.Specs.WorkerSpecs
 
         public override void When()
         {
-            worker.CheckForUpdatesAndKickOffPipeline(repo: sourceRepoDriver, revision: "123");
+            worker.CheckForUpdatesAndKickOffPipeline(repositoryDriver: sourceRepoDriver, revision: "123");
         }
 
         [Test]

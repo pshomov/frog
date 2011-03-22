@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Frog.Domain.CustomTasks;
-using Frog.Domain.TaskDetection;
 
 namespace Frog.Domain
 {
@@ -24,7 +23,7 @@ namespace Frog.Domain
             if (task.GetType() == typeof (MSBuildTaskDescriptions))
             {
                 var mstask = (MSBuildTaskDescriptions) task;
-                result.Add(execTaskGenerator.CreateTask("xbuild", mstask.solutionFile, "build"));
+                result.Add(execTaskGenerator.CreateTask("xbuild", mstask.SolutionFile, "build"));
             }
             if (task.GetType() == typeof (NUnitTask))
             {

@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Frog.Domain.CustomTasks;
-using Frog.Domain.TaskDetection;
 using Frog.Domain.TaskSources;
 using Frog.Support;
 using NSubstitute;
@@ -31,7 +30,7 @@ namespace Frog.Domain.Specs.TaskDetection
         public void should_prefer_root_file_sln_over_any_other_down_the_hierarchy()
         {
             Assert.That(items.Count, Is.EqualTo(1));
-            Assert.That((items[0] as MSBuildTaskDescriptions).solutionFile, Is.EqualTo("a1.sln"));
+            Assert.That((items[0] as MSBuildTaskDescriptions).SolutionFile, Is.EqualTo("a1.sln"));
         }
     }
 
@@ -87,7 +86,7 @@ namespace Frog.Domain.Specs.TaskDetection
         public void should_always_prefer_the_solution_called_BUILD()
         {
             Assert.That(items.Count, Is.EqualTo(1));
-            Assert.That((items[0] as MSBuildTaskDescriptions).solutionFile, Is.EqualTo("Build.sln"));
+            Assert.That((items[0] as MSBuildTaskDescriptions).SolutionFile, Is.EqualTo("Build.sln"));
         }
     }
 
@@ -136,7 +135,7 @@ namespace Frog.Domain.Specs.TaskDetection
         public void should_always_select_the_only_solution_file()
         {
             Assert.That(items.Count, Is.EqualTo(1));
-            Assert.That((items[0] as MSBuildTaskDescriptions).solutionFile, Is.EqualTo(Os.DirChars("fle\\flo\\a.sln")));
+            Assert.That((items[0] as MSBuildTaskDescriptions).SolutionFile, Is.EqualTo(Os.DirChars("fle\\flo\\a.sln")));
         }
     }
 }

@@ -12,28 +12,28 @@ namespace Frog.Domain
             Error
         };
 
-        readonly ExecTask.ExecutionStatus _executionStatus;
-        readonly int _exitCode;
+        readonly ExecTask.ExecutionStatus executionStatus;
+        readonly int exitCode;
 
         public ExecTaskResult(ExecTask.ExecutionStatus executionStatus, int exitCode)
         {
-            _executionStatus = executionStatus;
-            _exitCode = exitCode;
+            this.executionStatus = executionStatus;
+            this.exitCode = exitCode;
         }
 
         public int ExitCode
         {
             get
             {
-                if (_executionStatus != ExecTask.ExecutionStatus.Success)
+                if (executionStatus != ExecTask.ExecutionStatus.Success)
                     throw new InvalidOperationException("Task did not execute, so there is no exit code");
-                return _exitCode;
+                return exitCode;
             }
         }
 
         public bool HasExecuted
         {
-            get { return _executionStatus == ExecTask.ExecutionStatus.Success; }
+            get { return executionStatus == ExecTask.ExecutionStatus.Success; }
         }
 
         public Status ExecStatus { get {return HasExecuted && ExitCode == 0 ? Status.Success : Status.Error;} }
@@ -62,14 +62,14 @@ namespace Frog.Domain
             Failure
         }
 
-        readonly string _app;
-        private readonly string _arguments;
+        readonly string app;
+        private readonly string arguments;
         readonly string name;
 
         public ExecTask(string app, string arguments, string name)
         {
-            _app = app;
-            _arguments = arguments;
+            this.app = app;
+            this.arguments = arguments;
             this.name = name;
         }
 
@@ -83,7 +83,7 @@ namespace Frog.Domain
             ProcessWrapper process;
             try
             {
-                process = new ProcessWrapper(_app, _arguments, sourceDrop.SourceDropLocation);
+                process = new ProcessWrapper(app, arguments, sourceDrop.SourceDropLocation);
                 process.Execute();
                 if (taskReporter != null) taskReporter.TaskStarted(process.ProcessInfo.Id);
                 var exitcode = process.WaitForProcess(60000);
