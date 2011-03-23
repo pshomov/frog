@@ -44,13 +44,6 @@ namespace Frog.Domain
         void TaskStarted(int pid);
     }
 
-    public class TaskWithMeta
-    {
-        public string Name { get; set; }
-
-        public ExecTask Task { get; set; }
-    }
-
 
     public class ExecTask
     {
