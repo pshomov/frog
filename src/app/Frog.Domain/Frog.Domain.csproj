@@ -57,7 +57,6 @@
     <Compile Include="Pipeline.cs" />
     <Compile Include="ExecTaskFactory.cs" />
     <Compile Include="SubfolderWorkingArea.cs" />
-    <Compile Include="TaskConvertor.cs" />
     <Compile Include="TaskSources\MSBuildDetector.cs" />
     <Compile Include="CustomTasks\MSBuildTaskDescriptions.cs" />
     <Compile Include="TaskSources\TaskSource.cs" />
