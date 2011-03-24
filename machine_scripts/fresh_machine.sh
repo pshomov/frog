@@ -16,6 +16,8 @@ cp machine_scripts/bashrc /home/maintainer/.bashrc
 cp machine_scripts/fastcgi-mono-server4.sh /home/maintainer
 chown maintainer:maintainer /home/maintainer/fastcgi-mono-server4.sh
 
+crontab -u maintainer machine_scripts/crontab
+
 cp machine_scripts/sshd_config /etc/ssh/sshd_config
 mkdir -p /home/maintainer/.ssh
 mkdir -p /root/.ssh
