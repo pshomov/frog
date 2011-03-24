@@ -1,5 +1,4 @@
 using Frog.Domain;
-using Frog.Domain.Specs;
 using Frog.Specs.Support;
 using Frog.System.Specs.Underware;
 using NUnit.Framework;
@@ -41,7 +40,7 @@ namespace Frog.System.Specs
         public void should_send_UPDATE_FOUND_message_and_update_the_last_build_revision()
         {
             var prober = new PollingProber(5000, 100);
-            string updateFound = "crazy value";
+            var updateFound = "crazy value";
             Assert.True(prober.check(Take.Snapshot(() => system.GetEventsSnapshot())
                                          .Has(x => x,
                                               An.Event<UpdateFound>(

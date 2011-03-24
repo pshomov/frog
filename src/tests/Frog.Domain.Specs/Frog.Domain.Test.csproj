@@ -59,7 +59,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AgentSpec.cs" />
+    <Compile Include="Agent\AgentSpecs.cs" />
+    <Compile Include="Agent\AgentSpecsBase.cs" />
+    <Compile Include="Agent\AgentSpecsWithTwoPeojects.cs" />
+    <Compile Include="Agent\AgentJoinsThePartySpec.cs" />
     <Compile Include="BuildEventRepoFilteringSpecs.cs" />
     <Compile Include="FileFinderSpecs.cs" />
     <Compile Include="Git\GitRepositoryGetRevisionSpecs.cs" />
