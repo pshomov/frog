@@ -1,22 +1,37 @@
+using System;
 using Frog.Domain;
-using Frog.Domain.Specs;
 using Frog.Specs.Support;
 using Frog.System.Specs.Underware;
+using NSubstitute;
 using NUnit.Framework;
+using SimpleCQRS;
 using xray;
 
 namespace Frog.System.Specs
 {
+    public class SystemWithConsoleOutput : TestSystem
+    {
+        protected override ExecTask GetExecTask()
+        {
+            var result = Substitute.For<ExecTask>(null,null,null);
+            result.When(task => task.Perform(Arg.Any<SourceDrop>())).Do(
+                info => result.OnTerminalOutputUpdate += Raise.Event<Action<string>>("Terminal output 1"));
+            result.When(task => task.Perform(Arg.Any<SourceDrop>())).Do(
+                info => result.OnTerminalOutputUpdate += Raise.Event<Action<string>>("Terminal output 2"));
+            return result;
+        }
+    }
+
     [TestFixture]
     public class RealTimeConsoleStreaming : BDD
     {
-        SystemDriver<TestSystem> system;
+        SystemDriver<SystemWithConsoleOutput> system;
         RepositoryDriver repo;
 
         protected override void Given()
         {
             repo = RepositoryDriver.GetNewRepository();
-            system = SystemDriver<TestSystem>.GetCleanSystem();
+            system = SystemDriver<SystemWithConsoleOutput>.GetCleanSystem();
             system.RegisterNewProject(repo.Url);
         }
 
@@ -26,37 +41,16 @@ namespace Frog.System.Specs
         }
 
         [Test]
-        public void should_send_CHECK_FOR_UPDATES_message()
-        {
-            var prober = new PollingProber(3000, 100);
-            Assert.True(prober.check(Take.Snapshot(() => system.GetEventsSnapshot())
-                                         .Has(x => x,
-                                              An.Command<CheckForUpdates>(
-                                                  ev =>
-                                                  ev.RepoUrl == repo.Url && ev.Revision == ""))
-                            ));
-        }
-
-        [Test]
-        public void should_send_UPDATE_FOUND_message_and_update_the_last_build_revision()
+        public void should_send_TERMINAL_UPDATE_message()
         {
             var prober = new PollingProber(5000, 100);
-            string updateFound = "crazy value";
             Assert.True(prober.check(Take.Snapshot(() => system.GetEventsSnapshot())
                                          .Has(x => x,
-                                              An.Event<UpdateFound>(
-                                                  ev =>
-                                                      {
-                                                          updateFound = ev.Revision;
-                                                          return ev.Revision.Length == 40;
-                                                      }))
-                            ));
-            system.CheckProjectsForUpdates();
-            Assert.True(prober.check(Take.Snapshot(() => system.GetEventsSnapshot())
+                                              An.Event<TerminalUpdate>(
+                                                  ev => ev.RepoUrl == repo.Url && ev.TaskIndex == 0 && ev.Content == "Terminal output 1"))
                                          .Has(x => x,
-                                              An.Command<CheckForUpdates>(
-                                                  ev =>
-                                                  ev.RepoUrl == repo.Url && ev.Revision == updateFound))
+                                              An.Event<TerminalUpdate>(
+                                                  ev => ev.RepoUrl == repo.Url && ev.TaskIndex == 0 && ev.Content == "Terminal output 2"))
                             ));
         }
     }

@@ -9,13 +9,13 @@ namespace Frog.Domain.Specs.Agent
     {
         protected override void When()
         {
-            agent.JoinTheParty();
+            Agent.JoinTheParty();
         }
 
         [Test]
         public void should_listen_for_CHECK_FOR_UPDATES_message()
         {
-            bus.Received().RegisterHandler(Arg.Any<Action<CheckForUpdates>>());
+            Bus.Received().RegisterHandler(Arg.Any<Action<CheckForUpdates>>());
         }
     }
 }

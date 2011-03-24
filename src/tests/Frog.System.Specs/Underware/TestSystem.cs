@@ -54,13 +54,18 @@ namespace Frog.System.Specs.Underware
 
         protected override ExecTaskFactory GetExecTaskFactory()
         {
-            var execTask = Substitute.For<ExecTask>("", "", "");
-            execTask.Perform(Arg.Any<SourceDrop>()).Returns(new ExecTaskResult(ExecTask.ExecutionStatus.Success, 0));
+            ExecTask execTask = GetExecTask();
             var execTaskFactory = Substitute.For<ExecTaskFactory>();
             execTaskFactory.CreateTask(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>()).Returns(execTask);
             return execTaskFactory;
         }
 
+        protected virtual ExecTask GetExecTask()
+        {
+            var execTask = Substitute.For<ExecTask>("", "", "");
+            execTask.Perform(Arg.Any<SourceDrop>()).Returns(new ExecTaskResult(ExecTask.ExecutionStatus.Success, 0));
+            return execTask;
+        }
     }
 
     public class RepositoryDriver

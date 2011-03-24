@@ -7,27 +7,28 @@ namespace Frog.Domain.Specs.Agent
 {
     public abstract class AgentSpecsBase : BDD
     {
-        protected IBus bus;
-        protected Domain.Agent agent;
-        protected Worker worker;
+        protected IBus Bus;
+        protected Domain.Agent Agent;
+        protected Worker Worker;
 
         protected override void Given()
         {
-            bus = Substitute.For<IBus>();
-            worker = Substitute.For<Worker>(null, null);
-            worker.When(
+            Bus = Substitute.For<IBus>();
+            Worker = Substitute.For<Worker>(null, null);
+            Worker.When(
                 iValve => iValve.CheckForUpdatesAndKickOffPipeline(Arg.Any<SourceRepoDriver>(), Arg.Any<string>())).Do(
                     info =>
                         {
-                            worker.OnUpdateFound += Raise.Event<Action<string>>("new_rev");
-                            worker.OnBuildStarted +=
+                            Worker.OnUpdateFound += Raise.Event<Action<string>>("new_rev");
+                            Worker.OnBuildStarted +=
                                 Raise.Event<Action<PipelineStatus>>(new PipelineStatus(Guid.NewGuid()));
-                            worker.OnBuildUpdated +=
+                            Worker.OnTerminalUpdates += Raise.Event<Action<string, int, int>>("content", 1, 1);
+                            Worker.OnBuildUpdated +=
                                 Raise.Event<Action<PipelineStatus>>(new PipelineStatus(Guid.NewGuid()));
-                            worker.OnBuildEnded += Raise.Event<Action<BuildTotalStatus>>(BuildTotalStatus.Success);
+                            Worker.OnBuildEnded += Raise.Event<Action<BuildTotalStatus>>(BuildTotalStatus.Success);
                         });
-            agent = new Domain.Agent(bus, worker);
-            agent.JoinTheParty();
+            Agent = new Domain.Agent(Bus, Worker);
+            Agent.JoinTheParty();
         }
     }
 }

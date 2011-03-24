@@ -45,6 +45,7 @@ namespace Frog.Domain
         }
 
         public virtual event Action<string> OnUpdateFound = s => { };
+        public virtual event Action<string,int,int> OnTerminalUpdates = (s, i, arg3) => {};
         public virtual event Action<PipelineStatus> OnBuildStarted;
         public virtual event Action<PipelineStatus> OnBuildUpdated;
         public virtual event Action<BuildTotalStatus> OnBuildEnded;

@@ -59,7 +59,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Agent\AgentSpecs.cs" />
+    <Compile Include="Agent\AgentChecksForUpdates.cs" />
+    <Compile Include="Agent\AgentHandlesTerminalUpdates.cs" />
     <Compile Include="Agent\AgentSpecsBase.cs" />
     <Compile Include="Agent\AgentSpecsWithTwoPeojects.cs" />
     <Compile Include="Agent\AgentJoinsThePartySpec.cs" />

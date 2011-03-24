@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel;
 using Frog.Support;
+using SimpleCQRS;
 
 namespace Frog.Domain
 {
@@ -58,6 +59,7 @@ namespace Frog.Domain
         readonly string app;
         private readonly string arguments;
         readonly string name;
+        public event Action<string> OnTerminalOutputUpdate;
 
         public ExecTask(string app, string arguments, string name)
         {

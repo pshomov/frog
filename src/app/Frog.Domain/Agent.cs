@@ -15,7 +15,8 @@ namespace Frog.Domain
             {
                 var b = privateRepo.Match(repoUrl).Groups;
                 RepoUrl = b[1].Value + b[4].Value;
-            } else
+            }
+            else
                 RepoUrl = repoUrl;
         }
     }
@@ -50,6 +51,24 @@ namespace Frog.Domain
         }
     }
 
+    public class TerminalUpdate : BuildEvent
+    {
+        public string Content { get; private set; }
+
+        public int TaskIndex { get; private set; }
+
+        public int ContentSequenceIndex { get; private set; }
+
+        public TerminalUpdate(string content, int taskIndex, int contentSequenceIndex, string repoUrl)
+            : base(repoUrl)
+        {
+            Content = content;
+            TaskIndex = taskIndex;
+            ContentSequenceIndex = contentSequenceIndex;
+        }
+    }
+
+
     public class Agent : Handles<CheckForUpdates>
     {
         readonly IBus theBus;
@@ -68,11 +87,19 @@ namespace Frog.Domain
 
         public void Handle(CheckForUpdates message)
         {
-            Action<string> onUpdateFound = s => theBus.Publish(new UpdateFound {RepoUrl = message.RepoUrl, Revision = s});
+            Action<string> onUpdateFound =
+                s => theBus.Publish(new UpdateFound {RepoUrl = message.RepoUrl, Revision = s});
             Action<BuildTotalStatus> onBuildEnded = started => theBus.Publish(new BuildEnded(message.RepoUrl, started));
-            Action<PipelineStatus> onBuildStarted = started => theBus.Publish(new BuildStarted(status : started, repoUrl : message.RepoUrl));
-            Action<PipelineStatus> onBuildUpdated = started => theBus.Publish(new BuildUpdated(status : started, repoUrl : message.RepoUrl));
+            Action<PipelineStatus> onBuildStarted =
+                started => theBus.Publish(new BuildStarted(status: started, repoUrl: message.RepoUrl));
+            Action<PipelineStatus> onBuildUpdated =
+                started => theBus.Publish(new BuildUpdated(status: started, repoUrl: message.RepoUrl));
             worker.OnUpdateFound += onUpdateFound;
+            Action<string, int, int> onTerminalUpdates = (s1, i, arg3) =>
+                                                         theBus.Publish(new TerminalUpdate(repoUrl: message.RepoUrl,
+                                                                                           content: s1, taskIndex: i,
+                                                                                           contentSequenceIndex: arg3));
+            worker.OnTerminalUpdates += onTerminalUpdates;
             worker.OnBuildStarted += onBuildStarted;
             worker.OnBuildUpdated += onBuildUpdated;
             worker.OnBuildEnded += onBuildEnded;
@@ -81,6 +108,7 @@ namespace Frog.Domain
             worker.OnBuildStarted -= onBuildStarted;
             worker.OnBuildUpdated -= onBuildUpdated;
             worker.OnUpdateFound -= onUpdateFound;
+            worker.OnTerminalUpdates -= onTerminalUpdates;
         }
     }
 }
