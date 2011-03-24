@@ -8,6 +8,10 @@ if ENV["MONO_VERSION"].nil?
   puts red("MONO_VERSION not specified")
   exit 2
 end
+if ENV["MONO_XSP_VERSION"].nil? 
+  puts red("MONO_XSP_VERSION not specified")
+  exit 2
+end
 if ENV["LIBGDI_VERSION"].nil? 
   puts red("LIBGDI_VERSION not specified")
   exit 2

@@ -20,7 +20,9 @@ cp machine_scripts/sshd_config /etc/ssh/sshd_config
 mkdir -p /home/maintainer/.ssh
 mkdir -p /root/.ssh
 cp machine_scripts/id_rsa.pub /home/maintainer/.ssh/authorized_keys
+chmod 444 /home/maintainer/.ssh/authorized_keys
 cp machine_scripts/root_id_rsa.pub /root/.ssh/authorized_keys
+chmod 444 /root/.ssh/authorized_keys
 
 /etc/init.d/ssh reload
 
