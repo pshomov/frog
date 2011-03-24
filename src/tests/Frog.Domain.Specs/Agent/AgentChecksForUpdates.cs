@@ -4,7 +4,7 @@ using NUnit.Framework;
 namespace Frog.Domain.Specs.Agent
 {
     [TestFixture]
-    public class AgentSpecs : AgentSpecsBase
+    public class AgentChecksForUpdates : AgentSpecsBase
     {
         protected override void When()
         {
