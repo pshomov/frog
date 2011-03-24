@@ -8,7 +8,7 @@ namespace Frog.Domain.Specs.Pipeline
     [TestFixture]
     public class PipelineSuccessNotificationsSpecs : PipelineProcessSourceDropSpecBase
     {
-        public override void Given()
+        protected override void Given()
         {
             base.Given();
             srcTask1 = new MSBuildTaskDescriptions("");
@@ -20,7 +20,7 @@ namespace Frog.Domain.Specs.Pipeline
             execTaskGenerator.GimeTasks(Arg.Any<ITask>()).Returns(As.List(task1, task2));
         }
 
-        public override void When()
+        protected override void When()
         {
             pipeline.Process(new SourceDrop(""));
         }

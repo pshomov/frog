@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Frog.Specs.Support;
 using NSubstitute;
 using NUnit.Framework;
 using SimpleCQRS;
@@ -11,7 +12,7 @@ namespace Frog.Domain.Specs
         protected RepositoryTracker repositoryTracker;
         protected IBus bus;
 
-        public override void Given()
+        protected override void Given()
         {
             bus = Substitute.For<IBus>();
             repositoryTracker = new RepositoryTracker(bus);
@@ -21,7 +22,7 @@ namespace Frog.Domain.Specs
     [TestFixture]
     public class RepositoryTrackerSpecs : RepositoryTrackerSpecsBase
     {
-        public override void When()
+        protected override void When()
         {
             repositoryTracker.Track("http://fle");
         }
@@ -39,7 +40,7 @@ namespace Frog.Domain.Specs
     [TestFixture]
     public class RepositoryTrackerTracksProjectOnlyOnceSpecs : RepositoryTrackerSpecsBase
     {
-        public override void When()
+        protected override void When()
         {
             repositoryTracker.Track("http://fle");
             repositoryTracker.Track("http://fle");
@@ -57,7 +58,7 @@ namespace Frog.Domain.Specs
     [TestFixture]
     public class RepositoryListensForBuildUpdatesSpecs : RepositoryTrackerSpecsBase
     {
-        public override void When()
+        protected override void When()
         {
             repositoryTracker.StartListeningForBuildUpdates();
         }
@@ -73,13 +74,13 @@ namespace Frog.Domain.Specs
     [TestFixture]
     public class RepositoryUpdatesLastRevisionInfoSpecs : RepositoryTrackerSpecsBase
     {
-        public override void Given()
+        protected override void Given()
         {
             base.Given();
             repositoryTracker.Track("http://fle");
         }
 
-        public override void When()
+        protected override void When()
         {
             repositoryTracker.Handle(new UpdateFound{RepoUrl = "http://fle", Revision = "12"});
         }

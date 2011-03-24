@@ -1,3 +1,4 @@
+using Frog.Specs.Support;
 using NUnit.Framework;
 using Frog.Support;
 
@@ -10,7 +11,7 @@ namespace Frog.Domain.Specs.Task
         ExecTaskResult taskResult;
         private string _arguments;
 
-        public override void Given()
+        protected override void Given()
         {
             string _app = "adasdasd";
             if (Os.IsWindows) {_app = @"cmd.exe"; _arguments=@"/c if %CD%==c:\temp exit /b 41";}
@@ -18,7 +19,7 @@ namespace Frog.Domain.Specs.Task
             _task = new ExecTask(_app, _arguments, "task_name");
         }
 
-        public override void When()
+        protected override void When()
         {
             if (Os.IsWindows) taskResult = _task.Perform(new SourceDrop(@"c:\temp"));
             if (Os.IsUnix) taskResult = _task.Perform(new SourceDrop(@"/usr/bin"));

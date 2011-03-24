@@ -8,7 +8,7 @@ using xray;
 namespace Frog.System.Specs
 {
     [TestFixture]
-    public class CheckingForUpdates : BDD
+    public class RealTimeConsoleStreaming : BDD
     {
         SystemDriver<TestSystem> system;
         RepositoryDriver repo;

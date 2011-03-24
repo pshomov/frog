@@ -7,7 +7,7 @@ namespace Frog.Domain
 {
     public abstract class SystemBase
     {
-        protected IBus TheBus;
+        protected readonly IBus TheBus;
         readonly WorkingAreaGoverner areaGoverner;
         public ConcurrentDictionary<string, PipelineStatusView.BuildStatus> report { get; private set; }
         public RepositoryTracker repositoryTracker { get; private set; }

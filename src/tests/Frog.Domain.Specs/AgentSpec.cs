@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading;
+using Frog.Specs.Support;
 using NSubstitute;
 using NUnit.Framework;
 using SimpleCQRS;
@@ -13,7 +14,7 @@ namespace Frog.Domain.Specs
         protected Agent agent;
         protected Worker worker;
 
-        public override void Given()
+        protected override void Given()
         {
             bus = Substitute.For<IBus>();
             worker = Substitute.For<Worker>(null, null);
@@ -36,8 +37,7 @@ namespace Frog.Domain.Specs
     [TestFixture]
     public class AgentJoinsThePartySpec : AgentGetsToCheckForUpdatesBase
     {
-
-        public override void When()
+        protected override void When()
         {
             agent.JoinTheParty();
         }
@@ -52,7 +52,7 @@ namespace Frog.Domain.Specs
     [TestFixture]
     public class AgentGetsToCheckForUpdates : AgentGetsToCheckForUpdatesBase
     {
-        public override void When()
+        protected override void When()
         {
             agent.Handle(new CheckForUpdates {RepoUrl = "http://fle", Revision = "2"});
         }
@@ -95,7 +95,7 @@ namespace Frog.Domain.Specs
     [TestFixture]
     public class AgentGetsToCheckForUpdatesWithTwoPeojects : AgentGetsToCheckForUpdatesBase
     {
-        public override void When()
+        protected override void When()
         {
             agent.Handle(new CheckForUpdates {RepoUrl = "http://fle", Revision = "2"});
             agent.Handle(new CheckForUpdates {RepoUrl = "http://flo", Revision = "2"});

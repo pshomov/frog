@@ -1,3 +1,4 @@
+using Frog.Specs.Support;
 using NSubstitute;
 
 namespace Frog.Domain.Specs.WorkerSpecs
@@ -9,7 +10,7 @@ namespace Frog.Domain.Specs.WorkerSpecs
         protected WorkingAreaGoverner workingAreaGoverner;
         protected Worker worker;
 
-        public override void Given()
+        protected override void Given()
         {
             sourceRepoDriver = Substitute.For<SourceRepoDriver>();
             pipeline = Substitute.For<Domain.Pipeline>();

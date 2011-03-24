@@ -9,7 +9,7 @@ namespace Frog.Domain.Specs.Git
     {
         string revision;
 
-        public override void Given()
+        protected override void Given()
         {
             base.Given();
             var changeset = GetChangesetArea();
@@ -24,7 +24,7 @@ namespace Frog.Domain.Specs.Git
             GitTestSupport.CommitChangeFiles(repoUrl, changeset);
         }
 
-        public override void When()
+        protected override void When()
         {
             revision = _driver.GetLatestRevision();
         }

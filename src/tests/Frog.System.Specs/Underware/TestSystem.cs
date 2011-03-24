@@ -8,12 +8,17 @@ using SimpleCQRS;
 
 namespace Frog.System.Specs.Underware
 {
-    public class System : SystemBase
+    public abstract class TestSystemBase : SystemBase
+    {
+        public abstract List<Message> GetMessagesSoFar();
+    }
+
+    public class TestSystem : TestSystemBase
     {
         readonly List<Message> messages;
         string workingAreaPath;
 
-        public System()
+        public TestSystem()
         {
             messages = new List<Message>();
             SetupAllEventLogging();
@@ -32,7 +37,7 @@ namespace Frog.System.Specs.Underware
             busDebug.OnMessage += msg => messages.Add(msg);
         }
 
-        public List<Message> GetMessagesSoFar()
+        public override List<Message> GetMessagesSoFar()
         {
             return new List<Message>(messages);
         }
@@ -51,11 +56,11 @@ namespace Frog.System.Specs.Underware
         {
             var execTask = Substitute.For<ExecTask>("", "", "");
             execTask.Perform(Arg.Any<SourceDrop>()).Returns(new ExecTaskResult(ExecTask.ExecutionStatus.Success, 0));
-
             var execTaskFactory = Substitute.For<ExecTaskFactory>();
             execTaskFactory.CreateTask(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>()).Returns(execTask);
             return execTaskFactory;
         }
+
     }
 
     public class RepositoryDriver
@@ -91,33 +96,33 @@ namespace Frog.System.Specs.Underware
         }
     }
 
-    public class SystemDriver
+    public class SystemDriver<TSystem> where  TSystem : TestSystemBase, new()
     {
-        readonly System theSystem;
+        readonly TSystem theTestSystem;
 
         SystemDriver()
         {
-            theSystem = new System();
+            theTestSystem = new TSystem();
         }
 
-        public static SystemDriver GetCleanSystem()
+        public static SystemDriver<TSystem> GetCleanSystem()
         {
-            return new SystemDriver();
+            return new SystemDriver<TSystem>();
         }
 
         public List<Message> GetEventsSnapshot()
         {
-            return theSystem.GetMessagesSoFar();
+            return theTestSystem.GetMessagesSoFar();
         }
 
         public void RegisterNewProject(string repoUrl)
         {
-            theSystem.repositoryTracker.Track(repoUrl);
+            theTestSystem.repositoryTracker.Track(repoUrl);
         }
 
         public void CheckProjectsForUpdates()
         {
-            theSystem.repositoryTracker.CheckForUpdates();
+            theTestSystem.repositoryTracker.CheckForUpdates();
         }
     }
 }

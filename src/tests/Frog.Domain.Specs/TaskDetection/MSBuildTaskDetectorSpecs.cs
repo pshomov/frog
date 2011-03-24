@@ -13,7 +13,7 @@ namespace Frog.Domain.Specs.TaskDetection
         MSBuildDetector msbuildTaskDetecttor;
         IList<ITask> items;
 
-        public override void Given()
+        protected override void Given()
         {
             msbuildTaskDetecttor = new MSBuildDetector(projectFileRepo);
             projectFileRepo.FindAllSolutionFiles("basefolder").Returns(As.List(Os.DirChars("a1.sln"),
@@ -21,7 +21,7 @@ namespace Frog.Domain.Specs.TaskDetection
                                                                              Os.DirChars("a2\\asdas\\asd\\b.sln")));
         }
 
-        public override void When()
+        protected override void When()
         {
             items = msbuildTaskDetecttor.Detect("basefolder");
         }
@@ -40,7 +40,7 @@ namespace Frog.Domain.Specs.TaskDetection
         MSBuildDetector msbuildTaskDetecttor;
         IList<ITask> items;
 
-        public override void Given()
+        protected override void Given()
         {
             msbuildTaskDetecttor = new MSBuildDetector(projectFileRepo);
             projectFileRepo.FindAllSolutionFiles("basefolder").Returns(As.List(Os.DirChars("a1.sln"),
@@ -49,7 +49,7 @@ namespace Frog.Domain.Specs.TaskDetection
                                                                                  "a2\\asdas\\asd\\build.sln")));
         }
 
-        public override void When()
+        protected override void When()
         {
             items = msbuildTaskDetecttor.Detect("basefolder");
         }
@@ -67,7 +67,7 @@ namespace Frog.Domain.Specs.TaskDetection
         MSBuildDetector msbuildTaskDetecttor;
         IList<ITask> items;
 
-        public override void Given()
+        protected override void Given()
         {
             msbuildTaskDetecttor = new MSBuildDetector(projectFileRepo);
             projectFileRepo.FindAllSolutionFiles("basefolder").Returns(As.List(Os.DirChars("a1.sln"),
@@ -77,7 +77,7 @@ namespace Frog.Domain.Specs.TaskDetection
                                                                                  "a2\\asdas\\asd\\build.sln")));
         }
 
-        public override void When()
+        protected override void When()
         {
             items = msbuildTaskDetecttor.Detect("basefolder");
         }
@@ -96,13 +96,13 @@ namespace Frog.Domain.Specs.TaskDetection
         MSBuildDetector msbuildTaskDetecttor;
         IList<ITask> items;
 
-        public override void Given()
+        protected override void Given()
         {
             msbuildTaskDetecttor = new MSBuildDetector(projectFileRepo);
             projectFileRepo.FindAllSolutionFiles("basefolder").Returns(new List<string>());
         }
 
-        public override void When()
+        protected override void When()
         {
             items = msbuildTaskDetecttor.Detect("basefolder");
         }
@@ -120,13 +120,13 @@ namespace Frog.Domain.Specs.TaskDetection
         MSBuildDetector msbuildTaskDetecttor;
         IList<ITask> items;
 
-        public override void Given()
+        protected override void Given()
         {
             msbuildTaskDetecttor = new MSBuildDetector(projectFileRepo);
             projectFileRepo.FindAllSolutionFiles("basefolder").Returns(As.List(Os.DirChars("fle\\flo\\a.sln")));
         }
 
-        public override void When()
+        protected override void When()
         {
             items = msbuildTaskDetecttor.Detect("basefolder");
         }

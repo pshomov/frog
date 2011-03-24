@@ -1,3 +1,4 @@
+using Frog.Specs.Support;
 using NSubstitute;
 
 namespace Frog.Domain.Specs
@@ -6,7 +7,7 @@ namespace Frog.Domain.Specs
     {
         protected FileFinder projectFileRepo;
 
-        public override void SetupDependencies()
+        protected override void SetupDependencies()
         {
             projectFileRepo = Substitute.For<FileFinder>();
         }

@@ -9,7 +9,7 @@ namespace Frog.Domain.Specs.WorkerSpecs
         bool updateFound;
         string newRevision;
 
-        public override void Given()
+        protected override void Given()
         {
             base.Given();
             sourceRepoDriver.GetLatestRevision().Returns("2344");
@@ -22,7 +22,7 @@ namespace Frog.Domain.Specs.WorkerSpecs
                                         };
         }
 
-        public override void When()
+        protected override void When()
         {
             worker.CheckForUpdatesAndKickOffPipeline(repositoryDriver: sourceRepoDriver, revision: "123");
         }

@@ -6,7 +6,7 @@ namespace Frog.Domain.Specs.WorkerSpecs
     [TestFixture]
     public class WorkerDoesNothingWhenNoUpdates : WorkerSpecsBase
     {
-        public override void Given()
+        protected override void Given()
         {
             base.Given();
             sourceRepoDriver.GetLatestRevision().Returns("2344");
@@ -14,7 +14,7 @@ namespace Frog.Domain.Specs.WorkerSpecs
             worker = new Worker(pipeline, workingAreaGoverner);
         }
 
-        public override void When()
+        protected override void When()
         {
             worker.CheckForUpdatesAndKickOffPipeline(repositoryDriver:sourceRepoDriver, revision:"2344");
         }

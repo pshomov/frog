@@ -12,7 +12,7 @@ namespace Frog.Domain.Specs.Git
         protected string _workPlace;
         protected string repoUrl;
 
-        public override void Given()
+        protected override void Given()
         {
             _workPlace = Path.Combine(GitTestSupport.GetTempPath(), Path.GetRandomFileName());
             Directory.CreateDirectory(_workPlace);

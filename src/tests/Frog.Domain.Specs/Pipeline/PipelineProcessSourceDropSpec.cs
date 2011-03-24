@@ -1,6 +1,7 @@
 using System;
 using Frog.Domain.CustomTasks;
 using Frog.Domain.TaskSources;
+using Frog.Specs.Support;
 using Frog.Support;
 using NSubstitute;
 using NUnit.Framework;
@@ -19,7 +20,7 @@ namespace Frog.Domain.Specs.Pipeline
         protected Action<BuildTotalStatus> pipelineOnBuildEnded;
         protected Action<PipelineStatus> pipelineOnBuildUpdated;
 
-        public override void Given()
+        protected override void Given()
         {
             taskSource = Substitute.For<TaskSource>();
             execTaskGenerator = Substitute.For<IExecTaskGenerator>();
@@ -41,7 +42,7 @@ namespace Frog.Domain.Specs.Pipeline
     [TestFixture]
     public class PipelineProcessSourceDropSpec : PipelineProcessSourceDropSpecBase
     {
-        public override void Given()
+        protected override void Given()
         {
             base.Given();
             srcTask1 = new MSBuildTaskDescriptions("");
@@ -53,7 +54,7 @@ namespace Frog.Domain.Specs.Pipeline
             execTaskGenerator.GimeTasks(Arg.Any<ITask>()).Returns(As.List(task1, task2));
         }
 
-        public override void When()
+        protected override void When()
         {
             pipeline.Process(new SourceDrop(""));
         }

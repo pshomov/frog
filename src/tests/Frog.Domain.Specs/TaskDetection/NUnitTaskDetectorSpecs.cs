@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Frog.Domain.CustomTasks;
 using Frog.Domain.TaskSources;
+using Frog.Specs.Support;
 using Frog.Support;
 using NSubstitute;
 using NUnit.Framework;
@@ -14,7 +15,7 @@ namespace Frog.Domain.Specs.TaskDetection
         NUnitTaskDetctor nunitTaskDetecttor;
         IList<ITask> items;
 
-        public override void Given()
+        protected override void Given()
         {
             projectFileRepo = Substitute.For<FileFinder>();
             nunitTaskDetecttor = new NUnitTaskDetctor(projectFileRepo);
@@ -23,7 +24,7 @@ namespace Frog.Domain.Specs.TaskDetection
                                                                      Os.DirChars("l1\\l2\\l3\\flo.tests.csproj")));
         }
 
-        public override void When()
+        protected override void When()
         {
             items = nunitTaskDetecttor.Detect("basefolder");
         }

@@ -13,7 +13,7 @@ namespace Frog.Domain.Specs.Git
         string revision2;
         string workingArea;
 
-        public override void Given()
+        protected override void Given()
         {
             base.Given();
             var changeset = GetChangesetArea();
@@ -39,7 +39,7 @@ namespace Frog.Domain.Specs.Git
 
         }
 
-        public override void When()
+        protected override void When()
         {
             workingArea = Path.Combine(GitTestSupport.GetTempPath(), Path.GetRandomFileName());
             Directory.CreateDirectory(workingArea);

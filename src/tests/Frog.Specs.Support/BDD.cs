@@ -1,7 +1,7 @@
 using System;
 using NUnit.Framework;
 
-namespace Frog.Domain.Specs
+namespace Frog.Specs.Support
 {
     public abstract class BDD
     {
@@ -30,9 +30,9 @@ namespace Frog.Domain.Specs
             }
         }
 
-        public virtual void SetupDependencies(){}
-        public abstract void Given();
-        public abstract void When();
+        protected virtual void SetupDependencies(){}
+        protected abstract void Given();
+        protected abstract void When();
 
         protected virtual void GivenCleanup(){}
         protected virtual void WhenCleanup(){}

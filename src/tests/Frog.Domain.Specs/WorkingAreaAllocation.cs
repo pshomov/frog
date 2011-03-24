@@ -1,4 +1,5 @@
 using System.IO;
+using Frog.Specs.Support;
 using NUnit.Framework;
 
 namespace Frog.Domain.Specs
@@ -10,14 +11,14 @@ namespace Frog.Domain.Specs
         string allocationRoot;
         string allocatedArea;
 
-        public override void Given()
+        protected override void Given()
         {
             allocationRoot = Path.Combine(GitTestSupport.GetTempPath(), Path.GetRandomFileName());
             Directory.CreateDirectory(allocationRoot);
             workingAreaGoverner = new SubfolderWorkingAreaGoverner(allocationRoot);
         }
 
-        public override void When()
+        protected override void When()
         {
             allocatedArea = workingAreaGoverner.AllocateWorkingArea();
         }
@@ -49,7 +50,7 @@ namespace Frog.Domain.Specs
         string allocationRoot;
         string allocatedArea;
 
-        public override void Given()
+        protected override void Given()
         {
             allocationRoot = Path.Combine(GitTestSupport.GetTempPath(), Path.GetRandomFileName());
             Directory.CreateDirectory(allocationRoot);
@@ -57,7 +58,7 @@ namespace Frog.Domain.Specs
             allocatedArea = workingAreaGoverner.AllocateWorkingArea();
         }
 
-        public override void When()
+        protected override void When()
         {
             workingAreaGoverner.DeallocateWorkingArea(allocatedArea);
         }

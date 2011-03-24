@@ -1,4 +1,5 @@
 using Frog.Domain.CustomTasks;
+using Frog.Specs.Support;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -10,13 +11,13 @@ namespace Frog.Domain.Specs
         ExecTaskGenerator execTaskGenerator;
         ExecTaskFactory execTaskFactory;
 
-        public override void Given()
+        protected override void Given()
         {
             execTaskFactory = Substitute.For<ExecTaskFactory>();
             execTaskGenerator = new ExecTaskGenerator(execTaskFactory);
         }
 
-        public override void When()
+        protected override void When()
         {
             execTaskGenerator.GimeTasks(new MSBuildTaskDescriptions("fle.sln"));
         }
@@ -34,13 +35,13 @@ namespace Frog.Domain.Specs
         ExecTaskGenerator execTaskGenerator;
         ExecTaskFactory execTaskFactory;
 
-        public override void Given()
+        protected override void Given()
         {
             execTaskFactory = Substitute.For<ExecTaskFactory>();
             execTaskGenerator = new ExecTaskGenerator(execTaskFactory);
         }
 
-        public override void When()
+        protected override void When()
         {
             execTaskGenerator.GimeTasks(new NUnitTask("fle.csproj"));
         }

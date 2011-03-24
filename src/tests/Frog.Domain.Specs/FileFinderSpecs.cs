@@ -1,4 +1,5 @@
 using System;
+using Frog.Specs.Support;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -10,13 +11,13 @@ namespace Frog.Domain.Specs
         FileFinder fileFinder;
         PathFinder pathFinder;
 
-        public override void Given()
+        protected override void Given()
         {
             pathFinder = Substitute.For<PathFinder>();
             fileFinder = new DefaultFileFinder(pathFinder);
         }
 
-        public override void When()
+        protected override void When()
         {
             fileFinder.FindAllNUnitAssemblies("basefolder");
         }
@@ -39,13 +40,13 @@ namespace Frog.Domain.Specs
         FileFinder fileFinder;
         PathFinder pathFinder;
 
-        public override void Given()
+        protected override void Given()
         {
             pathFinder = Substitute.For<PathFinder>();
             fileFinder = new DefaultFileFinder(pathFinder);
         }
 
-        public override void When()
+        protected override void When()
         {
             fileFinder.FindAllSolutionFiles("basefolder");
         }

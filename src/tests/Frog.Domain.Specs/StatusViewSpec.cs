@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Concurrent;
 using Frog.Domain.UI;
+using Frog.Specs.Support;
 using KellermanSoftware.CompareNetObjects;
 using NUnit.Framework;
 
@@ -12,7 +13,7 @@ namespace Frog.Domain.Specs
         protected PipelineStatus pipelineStatus;
         protected ConcurrentDictionary<string, PipelineStatusView.BuildStatus> buildStatuses;
 
-        public override void Given()
+        protected override void Given()
         {
             buildStatuses = new ConcurrentDictionary<string, PipelineStatusView.BuildStatus>();
             view = new PipelineStatusView(buildStatuses);
@@ -22,7 +23,7 @@ namespace Frog.Domain.Specs
     [TestFixture]
     public class StatusViewAfterBuildStarterSpec : StatusViewAfterBuildStarterSpecBase
     {
-        public override void When()
+        protected override void When()
         {
             pipelineStatus = new PipelineStatus(Guid.NewGuid())
                                  {
@@ -52,7 +53,7 @@ namespace Frog.Domain.Specs
     [TestFixture]
     public class StatusViewAfterBuildCompletedWithErrorSpec : StatusViewAfterBuildStarterSpecBase
     {
-        public override void When()
+        protected override void When()
         {
             view.Handle(new BuildEnded("http://fle", BuildTotalStatus.Error));
         }
@@ -68,7 +69,7 @@ namespace Frog.Domain.Specs
     [TestFixture]
     public class StatusViewAfterBuildCompletedSuccessfullySpec : StatusViewAfterBuildStarterSpecBase
     {
-        public override void When()
+        protected override void When()
         {
             view.Handle(new BuildEnded("http://flo", BuildTotalStatus.Success));
         }
@@ -84,7 +85,7 @@ namespace Frog.Domain.Specs
     [TestFixture]
     public class StatusViewAfterBuildUpdateSpec : StatusViewAfterBuildStarterSpecBase
     {
-        public override void When()
+        protected override void When()
         {
             pipelineStatus = new PipelineStatus(Guid.NewGuid())
                                  {

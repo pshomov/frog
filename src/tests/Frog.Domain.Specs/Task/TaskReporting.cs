@@ -1,3 +1,4 @@
+using Frog.Specs.Support;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -9,13 +10,13 @@ namespace Frog.Domain.Specs.Task
         ExecTask task;
         TaskReporter reporter;
 
-        public override void Given()
+        protected override void Given()
         {
             reporter = Substitute.For<TaskReporter>();
             task = new ExecTask("ruby", "-e 'exit 0'", reporter, "task_name");
         }
 
-        public override void When()
+        protected override void When()
         {
             task.Perform(new SourceDrop(""));
         }
