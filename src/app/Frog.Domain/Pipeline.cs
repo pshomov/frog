@@ -25,6 +25,7 @@ namespace Frog.Domain
         event Action<PipelineStatus> OnBuildStarted;
         event Action<PipelineStatus> OnBuildUpdated;
         event Action<BuildTotalStatus> OnBuildEnded;
+        event Action<string, int, int> OnTerminalUpdate;
     }
 
     public class PipelineStatus
@@ -96,6 +97,7 @@ namespace Frog.Domain
         public event Action<PipelineStatus> OnBuildStarted;
         public event Action<PipelineStatus> OnBuildUpdated;
         public event Action<BuildTotalStatus> OnBuildEnded;
+        public event Action<string, int, int> OnTerminalUpdate;
 
         void RunTasks(SourceDrop sourceDrop, List<ExecTask> execTasks)
         {
