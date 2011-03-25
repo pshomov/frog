@@ -5,16 +5,16 @@ namespace Frog.Domain.Specs.WorkerSpecs
 {
     public abstract class WorkerSpecsBase : BDD
     {
-        protected SourceRepoDriver sourceRepoDriver;
-        protected Domain.Pipeline pipeline;
-        protected WorkingAreaGoverner workingAreaGovernor;
-        protected Worker worker;
+        protected SourceRepoDriver SourceRepoDriver;
+        protected Domain.Pipeline Pipeline;
+        protected WorkingAreaGoverner WorkingAreaGovernor;
+        protected Worker Worker;
 
         protected override void Given()
         {
-            sourceRepoDriver = Substitute.For<SourceRepoDriver>();
-            pipeline = Substitute.For<Domain.Pipeline>();
-            workingAreaGovernor = Substitute.For<WorkingAreaGoverner>();
+            SourceRepoDriver = Substitute.For<SourceRepoDriver>();
+            Pipeline = Substitute.For<Domain.Pipeline>();
+            WorkingAreaGovernor = Substitute.For<WorkingAreaGoverner>();
         }
     }
 }
