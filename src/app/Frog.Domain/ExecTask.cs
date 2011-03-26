@@ -59,7 +59,7 @@ namespace Frog.Domain
         readonly string app;
         private readonly string arguments;
         readonly string name;
-        public event Action<string> OnTerminalOutputUpdate;
+        public virtual event Action<string> OnTerminalOutputUpdate;
 
         public ExecTask(string app, string arguments, string name)
         {

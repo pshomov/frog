@@ -9,7 +9,7 @@ namespace Frog.Domain.Specs.WorkerSpecs
     {
         string content;
         int taskindex;
-        int sequenceindex;
+        int contentSequenceIndex;
 
         protected override void Given()
         {
@@ -17,13 +17,17 @@ namespace Frog.Domain.Specs.WorkerSpecs
             SourceRepoDriver.GetLatestRevision().Returns("2344");
             WorkingAreaGovernor.AllocateWorkingArea().Returns("dugh");
             Worker = new Worker(Pipeline, WorkingAreaGovernor);
-            Worker.OnTerminalUpdates += (s, i, arg3) =>
+            Worker.OnTerminalUpdates += info =>
                                             {
-                                                content = s;
-                                                taskindex = i;
-                                                sequenceindex = arg3;
+                                                content = info.Content;
+                                                taskindex = info.TaskIndex;
+                                                contentSequenceIndex = info.ContentSequenceIndex;
                                             };
-            Pipeline.When(pipeline => pipeline.Process(Arg.Any<SourceDrop>())).Do(info => Pipeline.OnTerminalUpdate += Raise.Event<Action<string, int, int>>("cont", 2, 3));
+            Pipeline.When(pipeline => pipeline.Process(Arg.Any<SourceDrop>())).Do(
+                info =>
+                Pipeline.OnTerminalUpdate +=
+                Raise.Event<Action<TerminalUpdateInfo>>(new TerminalUpdateInfo(content: "cont", taskIndex: 2,
+                                                                               contentSequenceIndex: 3)));
         }
 
         protected override void When()
@@ -36,7 +40,7 @@ namespace Frog.Domain.Specs.WorkerSpecs
         {
             Assert.That(content, Is.EqualTo("cont"));
             Assert.That(taskindex, Is.EqualTo(2));
-            Assert.That(sequenceindex, Is.EqualTo(3));
+            Assert.That(contentSequenceIndex, Is.EqualTo(3));
         }
     }
 }

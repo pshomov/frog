@@ -46,10 +46,10 @@ namespace Frog.Domain
             pipeline.OnTerminalUpdate -= OnTerminalUpdates;
         }
 
-        public virtual event Action<string> OnUpdateFound = s => { };
-        public virtual event Action<string,int,int> OnTerminalUpdates = (s, i, arg3) => {};
-        public virtual event Action<PipelineStatus> OnBuildStarted;
-        public virtual event Action<PipelineStatus> OnBuildUpdated;
-        public virtual event Action<BuildTotalStatus> OnBuildEnded;
+        public virtual event Action<string> OnUpdateFound = s => {};
+        public virtual event Action<TerminalUpdateInfo> OnTerminalUpdates = info => {};
+        public virtual event Action<PipelineStatus> OnBuildStarted = status => {};
+        public virtual event Action<PipelineStatus> OnBuildUpdated =  status => {};
+        public virtual event Action<BuildTotalStatus> OnBuildEnded = status => {};
     }
 }

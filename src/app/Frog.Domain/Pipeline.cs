@@ -25,7 +25,21 @@ namespace Frog.Domain
         event Action<PipelineStatus> OnBuildStarted;
         event Action<PipelineStatus> OnBuildUpdated;
         event Action<BuildTotalStatus> OnBuildEnded;
-        event Action<string, int, int> OnTerminalUpdate;
+        event Action<TerminalUpdateInfo> OnTerminalUpdate;
+    }
+
+    public class TerminalUpdateInfo
+    {
+        public TerminalUpdateInfo(int contentSequenceIndex, string content, int taskIndex)
+        {
+            ContentSequenceIndex = contentSequenceIndex;
+            Content = content;
+            TaskIndex = taskIndex;
+        }
+
+        public string Content { get; private set; }
+        public int ContentSequenceIndex { get; private set; }
+        public int TaskIndex { get; private set; }
     }
 
     public class PipelineStatus
@@ -94,10 +108,10 @@ namespace Frog.Domain
             RunTasks(sourceDrop, execTasks);
         }
 
-        public event Action<PipelineStatus> OnBuildStarted;
-        public event Action<PipelineStatus> OnBuildUpdated;
-        public event Action<BuildTotalStatus> OnBuildEnded;
-        public event Action<string, int, int> OnTerminalUpdate;
+        public event Action<PipelineStatus> OnBuildStarted = status => {};
+        public event Action<PipelineStatus> OnBuildUpdated = status => {};
+        public event Action<BuildTotalStatus> OnBuildEnded = status => {};
+        public event Action<TerminalUpdateInfo> OnTerminalUpdate = info => {};
 
         void RunTasks(SourceDrop sourceDrop, List<ExecTask> execTasks)
         {
@@ -110,6 +124,8 @@ namespace Frog.Domain
                 var execTask = execTasks[i];
                 status.Tasks[i].Status = TasksInfo.TaskStatus.Started;
                 OnBuildUpdated(new PipelineStatus(status));
+                int sequneceIndex = 0;
+                execTask.OnTerminalOutputUpdate += s => OnTerminalUpdate(new TerminalUpdateInfo(sequneceIndex++, s, i));
                 lastTaskStatus = execTask.Perform(sourceDrop).ExecStatus;
                 status.Tasks[i].Status = lastTaskStatus == ExecTaskResult.Status.Error
                                              ? TasksInfo.TaskStatus.FinishedError

@@ -95,10 +95,10 @@ namespace Frog.Domain
             Action<PipelineStatus> onBuildUpdated =
                 started => theBus.Publish(new BuildUpdated(status: started, repoUrl: message.RepoUrl));
             worker.OnUpdateFound += onUpdateFound;
-            Action<string, int, int> onTerminalUpdates = (s1, i, arg3) =>
+            Action<TerminalUpdateInfo> onTerminalUpdates = info => 
                                                          theBus.Publish(new TerminalUpdate(repoUrl: message.RepoUrl,
-                                                                                           content: s1, taskIndex: i,
-                                                                                           contentSequenceIndex: arg3));
+                                                                                           content: info.Content, taskIndex: info.TaskIndex,
+                                                                                           contentSequenceIndex: info.ContentSequenceIndex));
             worker.OnTerminalUpdates += onTerminalUpdates;
             worker.OnBuildStarted += onBuildStarted;
             worker.OnBuildUpdated += onBuildUpdated;
