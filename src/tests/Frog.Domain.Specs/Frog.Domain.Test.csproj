@@ -85,6 +85,7 @@
     <Compile Include="Task\TaskCurrentDirectory.cs" />
     <Compile Include="Task\TaskReporting.cs" />
     <Compile Include="TaskDetection\NUnitTaskDetectorSpecs.cs" />
+    <Compile Include="TerminalOutputConsolidationMethod.cs" />
     <Compile Include="WorkerSpecs\WorkerPropagetesTerminalUpdateEvents.cs" />
     <Compile Include="WorkerSpecs\WorkerDoesNothingWhenNoUpdates.cs" />
     <Compile Include="WorkerSpecs\WorkerKicksPipelineOffWhenSourceUpdates.cs" />
