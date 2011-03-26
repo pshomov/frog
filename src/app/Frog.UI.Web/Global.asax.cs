@@ -4,6 +4,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using Frog.Domain;
+using Frog.Domain.TaskSources;
 using Frog.Support;
 
 namespace Frog.UI.Web
@@ -96,9 +97,15 @@ namespace Frog.UI.Web
             return new SubfolderWorkingAreaGoverner(workingAreaPath);
         }
 
-        protected override ExecTaskFactory GetExecTaskFactory()
+        protected override PipelineOfTasks GetPipeline()
         {
-            return new ExecTaskFactory();
+            var fileFinder = new DefaultFileFinder(new PathFinder());
+            return new PipelineOfTasks(new CompoundTaskSource(
+                                           new MSBuildDetector(fileFinder),
+                                           new NUnitTaskDetctor(fileFinder)
+                                           ),
+                                       new ExecTaskGenerator(new ExecTaskFactory()));
         }
+
     }
 }

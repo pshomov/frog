@@ -1,5 +1,4 @@
 ﻿using System.Collections.Concurrent;
-using Frog.Domain.TaskSources;
 using Frog.Domain.UI;
 using SimpleCQRS;
 
@@ -59,18 +58,6 @@ namespace Frog.Domain
             TheBus.RegisterHandler<BuildUpdated>(statusView.Handle);
         }
 
-        protected PipelineOfTasks GetPipeline()
-        {
-            ExecTaskFactory execTaskFactory = GetExecTaskFactory();
-
-            var fileFinder = new DefaultFileFinder(new PathFinder());
-            return new PipelineOfTasks(new CompoundTaskSource(
-                                           new MSBuildDetector(fileFinder),
-                                           new NUnitTaskDetctor(fileFinder)
-                                           ),
-                                       new ExecTaskGenerator(execTaskFactory));
-        }
-
-        protected abstract ExecTaskFactory GetExecTaskFactory();
+        protected abstract PipelineOfTasks GetPipeline();
     }
 }

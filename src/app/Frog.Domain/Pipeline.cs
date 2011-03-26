@@ -125,8 +125,10 @@ namespace Frog.Domain
                 status.Tasks[i].Status = TasksInfo.TaskStatus.Started;
                 OnBuildUpdated(new PipelineStatus(status));
                 int sequneceIndex = 0;
-                execTask.OnTerminalOutputUpdate += s => OnTerminalUpdate(new TerminalUpdateInfo(sequneceIndex++, s, i));
+                Action<string> execTaskOnOnTerminalOutputUpdate = s => OnTerminalUpdate(new TerminalUpdateInfo(sequneceIndex++, s, i));
+                execTask.OnTerminalOutputUpdate += execTaskOnOnTerminalOutputUpdate;
                 lastTaskStatus = execTask.Perform(sourceDrop).ExecStatus;
+                execTask.OnTerminalOutputUpdate -= execTaskOnOnTerminalOutputUpdate;
                 status.Tasks[i].Status = lastTaskStatus == ExecTaskResult.Status.Error
                                              ? TasksInfo.TaskStatus.FinishedError
                                              : TasksInfo.TaskStatus.FinishedSuccess;

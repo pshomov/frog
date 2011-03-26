@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Frog.Domain;
 using Frog.Domain.Specs;
+using Frog.Domain.TaskSources;
 using Frog.Support;
 using NSubstitute;
 using SimpleCQRS;
@@ -17,6 +19,8 @@ namespace Frog.System.Specs.Underware
     {
         readonly List<Message> messages;
         string workingAreaPath;
+        protected IExecTaskGenerator execTaskGenerator;
+        protected TaskSource tasksSource;
 
         public TestSystem()
         {
@@ -31,9 +35,19 @@ namespace Frog.System.Specs.Underware
             return new SubfolderWorkingAreaGoverner(workingAreaPath);
         }
 
+        protected override PipelineOfTasks GetPipeline()
+        {
+            {
+                execTaskGenerator = Substitute.For<IExecTaskGenerator>();
+                tasksSource = Substitute.For<TaskSource>();
+                return new PipelineOfTasks(tasksSource,
+                                           execTaskGenerator);
+            }
+        }
+
         void SetupAllEventLogging()
         {
-            IBusDebug busDebug = (IBusDebug) TheBus;
+            var busDebug = (IBusDebug) TheBus;
             busDebug.OnMessage += msg => messages.Add(msg);
         }
 
@@ -50,21 +64,6 @@ namespace Frog.System.Specs.Underware
                 OSHelpers.ClearAttributes(workingAreaPath);
                 Directory.Delete(workingAreaPath, true);
             }
-        }
-
-        protected override ExecTaskFactory GetExecTaskFactory()
-        {
-            ExecTask execTask = GetExecTask();
-            var execTaskFactory = Substitute.For<ExecTaskFactory>();
-            execTaskFactory.CreateTask(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>()).Returns(execTask);
-            return execTaskFactory;
-        }
-
-        protected virtual ExecTask GetExecTask()
-        {
-            var execTask = Substitute.For<ExecTask>("", "", "");
-            execTask.Perform(Arg.Any<SourceDrop>()).Returns(new ExecTaskResult(ExecTask.ExecutionStatus.Success, 0));
-            return execTask;
         }
     }
 
