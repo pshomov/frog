@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -27,9 +26,6 @@ namespace Frog.Domain.Specs.Agent
                 Arg.Is<UpdateFound>(found => found.Revision == "new_rev" && found.RepoUrl == "http://fle"));
             Bus.Received().Publish(
                 Arg.Is<UpdateFound>(found => found.Revision == "new_rev" && found.RepoUrl == "http://flo"));
-            Console.WriteLine(Bus.ReceivedCalls());
-            Assert.That(Bus.ReceivedCalls().Where(call => call.GetMethodInfo().Name == "Publish").ToList().Count,
-                        Is.EqualTo(8));
         }
 
         [Test]
