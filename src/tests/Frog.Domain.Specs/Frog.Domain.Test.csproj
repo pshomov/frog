@@ -69,13 +69,15 @@
     <Compile Include="Git\GitRepositoryGetRevisionSpecs.cs" />
     <Compile Include="Git\GitRepositoryCheckForLatestRev.cs" />
     <Compile Include="Git\GitRepositoryDriverCheckBase.cs" />
-    <Compile Include="Pipeline\PipelineProcessSourceDropSpec.cs" />
+    <Compile Include="Pipeline\PipelineProcessFaultyBuild.cs" />
+    <Compile Include="Pipeline\PipelineProcessSpecBase.cs" />
+    <Compile Include="Pipeline\PipelinePropagateTerminalUpdateEvents.cs" />
     <Compile Include="RepositoryTrackerSpecs.cs" />
     <Compile Include="StatusViewSpec.cs" />
     <Compile Include="TaskDetection\MSBuildTaskDetectorSpecs.cs" />
     <Compile Include="TaskDetection\MSBuildTaskDetectorSpecsBase.cs" />
     <Compile Include="PathGoble\GobleTests.cs" />
-    <Compile Include="Pipeline\PipelineSuccessNotificationsSpecs.cs" />
+    <Compile Include="Pipeline\PipelineProcessSuccessfulBuild.cs" />
     <Compile Include="ProcessHandlerSpecs.cs" />
     <Compile Include="TaskGeneratorMSBuildTasksSpec.cs">
       <SubType>Code</SubType>
