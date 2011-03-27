@@ -95,7 +95,7 @@ namespace Frog.System.Specs
         }
 
         [Test]
-        public void should_update_view_with_terminal_update()
+        public void should_update_view_with_terminal_updates()
         {
             var prober = new PollingProber(5000, 100);
             Assert.True(prober.check(Take.Snapshot(() => system.GetView())
