@@ -21,6 +21,7 @@ namespace Frog.Domain.UI
             EnsureReportExistsForRepo(message.RepoUrl);
             report[message.RepoUrl].Current = BuildStatus.Status.PipelineStarted;
             report[message.RepoUrl].PipelineStatus = new PipelineStatus(message.Status);
+            report[message.RepoUrl].CombinedTerminalOutput.Clear();
         }
 
         public void Handle(BuildUpdated message)
@@ -35,6 +36,14 @@ namespace Frog.Domain.UI
             report[message.RepoUrl].Current = message.TotalStatus == BuildTotalStatus.Success
                                                   ? BuildStatus.Status.PipelineCompletedSuccess
                                                   : BuildStatus.Status.PipelineCompletedFailure;
+        }
+
+        public void Handle(TerminalUpdate message)
+        {
+            EnsureReportExistsForRepo(message.RepoUrl);
+            var combinedTerminalOutput = report[message.RepoUrl].CombinedTerminalOutput;
+            while (combinedTerminalOutput.Count <= message.TaskIndex) combinedTerminalOutput.Add(new TerminalOutput());
+            combinedTerminalOutput[message.TaskIndex].Add(message.ContentSequenceIndex, message.Content);
         }
 
         void EnsureReportExistsForRepo(string repoUrl)
@@ -81,6 +90,7 @@ namespace Frog.Domain.UI
             public BuildStatus()
             {
                 Current = Status.NotStarted;
+                CombinedTerminalOutput = new List<TerminalOutput>();
             }
 
             public PipelineStatus PipelineStatus { get; set; }

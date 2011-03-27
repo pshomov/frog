@@ -1,15 +1,32 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NHamcrest;
 using SimpleCQRS;
 
 namespace Frog.System.Specs.Underware
 {
+    public class InlineMatcher<T> : Matcher<T>
+    {
+        readonly NHamcrest.Func<T, bool> assertion;
+
+        public InlineMatcher(NHamcrest.Func<T, bool> assertion)
+        {
+            this.assertion = assertion;
+        }
+
+        public override bool Matches(T item)
+        {
+            return assertion(item);
+        }
+    }
+
+
     public class EventMatcher<T> : Matcher<List<Message>> where T : Event
     {
-        readonly Func<T, bool>[] matchers;
+        readonly NHamcrest.Func<T, bool>[] matchers;
 
-        public EventMatcher(params Func<T, bool>[] matchers)
+        public EventMatcher(params NHamcrest.Func<T, bool>[] matchers)
         {
             this.matchers = matchers;
         }
@@ -24,9 +41,9 @@ namespace Frog.System.Specs.Underware
 
     public class CommandMatcher<T> : Matcher<List<Message>> where T : Command
     {
-        readonly Func<T, bool>[] matchers;
+        readonly NHamcrest.Func<T, bool>[] matchers;
 
-        public CommandMatcher(params Func<T, bool>[] matchers)
+        public CommandMatcher(params NHamcrest.Func<T, bool>[] matchers)
         {
             this.matchers = matchers;
         }
@@ -41,13 +58,21 @@ namespace Frog.System.Specs.Underware
 
     public static class An
     {
-        public static IMatcher<List<Message>> Event<T>(params Func<T, bool>[] matchers) where T : Event
+        public static IMatcher<List<Message>> Event<T>(params NHamcrest.Func<T, bool>[] matchers) where T : Event
         {
             return new EventMatcher<T>(matchers);
         }
-        public static IMatcher<List<Message>> Command<T>(params Func<T, bool>[] matchers) where T : Command
+        public static IMatcher<List<Message>> Command<T>(params NHamcrest.Func<T, bool>[] matchers) where T : Command
         {
             return new CommandMatcher<T>(matchers);
+        }
+    }
+
+    public static class A
+    {
+        public static IMatcher<T> Check<T>(NHamcrest.Func<T, bool> matchers)
+        {
+            return new InlineMatcher<T>(matchers);
         }
     }
 }

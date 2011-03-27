@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Frog.Domain;
 using Frog.Domain.CustomTasks;
+using Frog.Domain.UI;
 using Frog.Specs.Support;
 using Frog.Support;
 using Frog.System.Specs.Underware;
@@ -13,6 +14,11 @@ namespace Frog.System.Specs
 {
     public class SystemWithConsoleOutput : TestSystem
     {
+        public const string TerminalOutput1 = "Terminal output 1";
+        public const string TerminalOutput2 = "Terminal output 2";
+        public const string TerminalOutput3 = "Terminal output 3";
+        public const string TerminalOutput4 = "Terminal output 4";
+
         public SystemWithConsoleOutput()
         {
             tasksSource.Detect(Arg.Any<string>()).Returns(As.List<ITask>(new MSBuildTaskDescriptions("fle.sln")));
@@ -25,15 +31,15 @@ namespace Frog.System.Specs
             var task1 = Substitute.For<ExecTask>(null, null, null);
             task1.Perform(Arg.Any<SourceDrop>()).Returns(new ExecTaskResult(ExecTask.ExecutionStatus.Success, 0));
             task1.When(task => task.Perform(Arg.Any<SourceDrop>())).Do(
-                info => task1.OnTerminalOutputUpdate += Raise.Event<Action<string>>("Terminal output 1"));
+                info => task1.OnTerminalOutputUpdate += Raise.Event<Action<string>>(TerminalOutput1));
             task1.When(task => task.Perform(Arg.Any<SourceDrop>())).Do(
-                info => task1.OnTerminalOutputUpdate += Raise.Event<Action<string>>("Terminal output 2"));
+                info => task1.OnTerminalOutputUpdate += Raise.Event<Action<string>>(TerminalOutput2));
             var task2 = Substitute.For<ExecTask>(null, null, null);
             task2.Perform(Arg.Any<SourceDrop>()).Returns(new ExecTaskResult(ExecTask.ExecutionStatus.Success, 0));
             task2.When(task => task.Perform(Arg.Any<SourceDrop>())).Do(
-                info => task2.OnTerminalOutputUpdate += Raise.Event<Action<string>>("Terminal output 3"));
+                info => task2.OnTerminalOutputUpdate += Raise.Event<Action<string>>(TerminalOutput3));
             task2.When(task => task.Perform(Arg.Any<SourceDrop>())).Do(
-                info => task2.OnTerminalOutputUpdate += Raise.Event<Action<string>>("Terminal output 4"));
+                info => task2.OnTerminalOutputUpdate += Raise.Event<Action<string>>(TerminalOutput4));
             return As.List(task1, task2);
         }
     }
@@ -57,7 +63,7 @@ namespace Frog.System.Specs
         }
 
         [Test]
-        public void should_send_TERMINAL_UPDATE_message()
+        public void should_send_TERMINAL_UPDATE_messages()
         {
             var prober = new PollingProber(5000, 100);
             Assert.True(prober.check(Take.Snapshot(() => system.GetEventsSnapshot())
@@ -66,25 +72,45 @@ namespace Frog.System.Specs
                                                   ev =>
                                                   ev.RepoUrl == repo.Url && ev.TaskIndex == 0 &&
                                                   ev.ContentSequenceIndex == 0 &&
-                                                  ev.Content == "Terminal output 1"))
+                                                  ev.Content == SystemWithConsoleOutput.TerminalOutput1))
                                          .Has(x => x,
                                               An.Event<TerminalUpdate>(
                                                   ev =>
                                                   ev.RepoUrl == repo.Url && ev.TaskIndex == 0 &&
                                                   ev.ContentSequenceIndex == 1 &&
-                                                  ev.Content == "Terminal output 2"))
+                                                  ev.Content == SystemWithConsoleOutput.TerminalOutput2))
                                          .Has(x => x,
                                               An.Event<TerminalUpdate>(
                                                   ev =>
                                                   ev.RepoUrl == repo.Url && ev.TaskIndex == 1 &&
                                                   ev.ContentSequenceIndex == 0 &&
-                                                  ev.Content == "Terminal output 3"))
+                                                  ev.Content == SystemWithConsoleOutput.TerminalOutput3))
                                          .Has(x => x,
                                               An.Event<TerminalUpdate>(
                                                   ev =>
                                                   ev.RepoUrl == repo.Url && ev.TaskIndex == 1 &&
                                                   ev.ContentSequenceIndex == 1 &&
-                                                  ev.Content == "Terminal output 4"))
+                                                  ev.Content == SystemWithConsoleOutput.TerminalOutput4))
+                            ));
+        }
+
+        [Test]
+        public void should_update_view_with_terminal_update()
+        {
+            var prober = new PollingProber(5000, 100);
+            Assert.True(prober.check(Take.Snapshot(() => system.GetView())
+                                         .Has(statuses => statuses,
+                                              A.Check<Dictionary<string, PipelineStatusView.BuildStatus>>(
+                                                  arg =>
+                                                  arg[repo.Url].CombinedTerminalOutput.Count > 0 &&
+                                                  arg[repo.Url].CombinedTerminalOutput[0].Combined ==
+                                                  SystemWithConsoleOutput.TerminalOutput1 + SystemWithConsoleOutput.TerminalOutput2))
+                                         .Has(statuses => statuses,
+                                              A.Check<Dictionary<string, PipelineStatusView.BuildStatus>>(
+                                                  arg =>
+                                                  arg[repo.Url].CombinedTerminalOutput.Count > 1 &&
+                                                  arg[repo.Url].CombinedTerminalOutput[1].Combined ==
+                                                  SystemWithConsoleOutput.TerminalOutput3 + SystemWithConsoleOutput.TerminalOutput4))
                             ));
         }
     }

@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using Frog.Domain;
 using Frog.Domain.Specs;
 using Frog.Domain.TaskSources;
+using Frog.Domain.UI;
 using Frog.Support;
 using NSubstitute;
 using SimpleCQRS;
@@ -127,6 +129,11 @@ namespace Frog.System.Specs.Underware
         public void CheckProjectsForUpdates()
         {
             theTestSystem.repositoryTracker.CheckForUpdates();
+        }
+
+        public Dictionary<string, PipelineStatusView.BuildStatus> GetView()
+        {
+            return new Dictionary<string, PipelineStatusView.BuildStatus>(theTestSystem.report);
         }
     }
 }

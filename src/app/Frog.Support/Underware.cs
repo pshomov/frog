@@ -25,7 +25,7 @@ namespace Frog.Support
 
     public class As
     {
-        public static IList<T> List<T>(params T[] items)
+        public static List<T> List<T>(params T[] items)
         {
             var result = new List<T>();
             result.AddRange(items);

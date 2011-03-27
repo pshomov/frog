@@ -56,6 +56,7 @@ namespace Frog.Domain
             TheBus.RegisterHandler<BuildStarted>(statusView.Handle);
             TheBus.RegisterHandler<BuildEnded>(statusView.Handle);
             TheBus.RegisterHandler<BuildUpdated>(statusView.Handle);
+            TheBus.RegisterHandler<TerminalUpdate>(statusView.Handle);
         }
 
         protected abstract PipelineOfTasks GetPipeline();

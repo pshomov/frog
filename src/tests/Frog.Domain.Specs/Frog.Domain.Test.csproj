@@ -74,6 +74,7 @@
     <Compile Include="PipelineStatusViewSpecs\StatusViewAfterBuildStarterSpec.cs" />
     <Compile Include="PipelineStatusViewSpecs\StatusViewAfterBuildStarterSpecBase.cs" />
     <Compile Include="PipelineStatusViewSpecs\StatusViewAfterBuildUpdateSpec.cs" />
+    <Compile Include="PipelineStatusViewSpecs\StatusViewWhenTerminalUpdate.cs" />
     <Compile Include="Pipeline\PipelineProcessFaultyBuild.cs" />
     <Compile Include="Pipeline\PipelineProcessSpecBase.cs" />
     <Compile Include="Pipeline\PipelinePropagateTerminalUpdateEvents.cs" />
