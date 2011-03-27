@@ -1,7 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using Frog.Specs.Support;
 
-namespace Frog.Domain.Specs.PipelineStatusView
+namespace Frog.Domain.Specs.PipelineStatusViewSpecs
 {
     public abstract class StatusViewAfterBuildStarterSpecBase : BDD
     {

@@ -2,7 +2,7 @@
 using KellermanSoftware.CompareNetObjects;
 using NUnit.Framework;
 
-namespace Frog.Domain.Specs.PipelineStatusView
+namespace Frog.Domain.Specs.PipelineStatusViewSpecs
 {
     [TestFixture]
     public class StatusViewAfterBuildUpdateSpec : StatusViewAfterBuildStarterSpecBase

@@ -69,11 +69,11 @@
     <Compile Include="Git\GitRepositoryGetRevisionSpecs.cs" />
     <Compile Include="Git\GitRepositoryCheckForLatestRev.cs" />
     <Compile Include="Git\GitRepositoryDriverCheckBase.cs" />
-    <Compile Include="PipelineStatusView\StatusViewAfterBuildCompletedSuccessfullySpec.cs" />
-    <Compile Include="PipelineStatusView\StatusViewAfterBuildCompletedWithErrorSpec.cs" />
-    <Compile Include="PipelineStatusView\StatusViewAfterBuildStarterSpec.cs" />
-    <Compile Include="PipelineStatusView\StatusViewAfterBuildStarterSpecBase.cs" />
-    <Compile Include="PipelineStatusView\StatusViewAfterBuildUpdateSpec.cs" />
+    <Compile Include="PipelineStatusViewSpecs\StatusViewAfterBuildCompletedSuccessfullySpec.cs" />
+    <Compile Include="PipelineStatusViewSpecs\StatusViewAfterBuildCompletedWithErrorSpec.cs" />
+    <Compile Include="PipelineStatusViewSpecs\StatusViewAfterBuildStarterSpec.cs" />
+    <Compile Include="PipelineStatusViewSpecs\StatusViewAfterBuildStarterSpecBase.cs" />
+    <Compile Include="PipelineStatusViewSpecs\StatusViewAfterBuildUpdateSpec.cs" />
     <Compile Include="Pipeline\PipelineProcessFaultyBuild.cs" />
     <Compile Include="Pipeline\PipelineProcessSpecBase.cs" />
     <Compile Include="Pipeline\PipelinePropagateTerminalUpdateEvents.cs" />
