@@ -17,13 +17,14 @@ namespace Frog.Domain.Specs
         }
 
         [Test]
-        public void should_combine_order_pieces_by_content_sequnece_number()
+        public void should_order_pieces_by_content_sequnece_number()
         {
             var terminalOutput = new PipelineStatusView.TerminalOutput();
+            terminalOutput.Add(sequnceIndex: 2, content: "cont2");
+            terminalOutput.Add(sequnceIndex: 0, content: "cont0");
             terminalOutput.Add(sequnceIndex: 1, content: "cont1");
-            terminalOutput.Add(sequnceIndex: 0, content: "cont2");
 
-            Assert.That(terminalOutput.Combined, Is.EqualTo("cont2cont1"));
+            Assert.That(terminalOutput.Combined, Is.EqualTo("cont0cont1cont2"));
         }
 
         [Test]
