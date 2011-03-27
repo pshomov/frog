@@ -31,15 +31,19 @@ namespace Frog.System.Specs
             var task1 = Substitute.For<ExecTask>(null, null, null);
             task1.Perform(Arg.Any<SourceDrop>()).Returns(new ExecTaskResult(ExecTask.ExecutionStatus.Success, 0));
             task1.When(task => task.Perform(Arg.Any<SourceDrop>())).Do(
-                info => task1.OnTerminalOutputUpdate += Raise.Event<Action<string>>(TerminalOutput1));
-            task1.When(task => task.Perform(Arg.Any<SourceDrop>())).Do(
-                info => task1.OnTerminalOutputUpdate += Raise.Event<Action<string>>(TerminalOutput2));
+                info =>
+                    {
+                        task1.OnTerminalOutputUpdate += Raise.Event<Action<string>>(TerminalOutput1);
+                        task1.OnTerminalOutputUpdate += Raise.Event<Action<string>>(TerminalOutput2);
+                    });
             var task2 = Substitute.For<ExecTask>(null, null, null);
             task2.Perform(Arg.Any<SourceDrop>()).Returns(new ExecTaskResult(ExecTask.ExecutionStatus.Success, 0));
             task2.When(task => task.Perform(Arg.Any<SourceDrop>())).Do(
-                info => task2.OnTerminalOutputUpdate += Raise.Event<Action<string>>(TerminalOutput3));
-            task2.When(task => task.Perform(Arg.Any<SourceDrop>())).Do(
-                info => task2.OnTerminalOutputUpdate += Raise.Event<Action<string>>(TerminalOutput4));
+                info =>
+                    {
+                        task2.OnTerminalOutputUpdate += Raise.Event<Action<string>>(TerminalOutput3);
+                        task2.OnTerminalOutputUpdate += Raise.Event<Action<string>>(TerminalOutput4);
+                    });
             return As.List(task1, task2);
         }
     }
@@ -104,13 +108,15 @@ namespace Frog.System.Specs
                                                   arg =>
                                                   arg[repo.Url].CombinedTerminalOutput.Count > 0 &&
                                                   arg[repo.Url].CombinedTerminalOutput[0].Combined ==
-                                                  SystemWithConsoleOutput.TerminalOutput1 + SystemWithConsoleOutput.TerminalOutput2))
+                                                  SystemWithConsoleOutput.TerminalOutput1 +
+                                                  SystemWithConsoleOutput.TerminalOutput2))
                                          .Has(statuses => statuses,
                                               A.Check<Dictionary<string, PipelineStatusView.BuildStatus>>(
                                                   arg =>
                                                   arg[repo.Url].CombinedTerminalOutput.Count > 1 &&
                                                   arg[repo.Url].CombinedTerminalOutput[1].Combined ==
-                                                  SystemWithConsoleOutput.TerminalOutput3 + SystemWithConsoleOutput.TerminalOutput4))
+                                                  SystemWithConsoleOutput.TerminalOutput3 +
+                                                  SystemWithConsoleOutput.TerminalOutput4))
                             ));
         }
     }
