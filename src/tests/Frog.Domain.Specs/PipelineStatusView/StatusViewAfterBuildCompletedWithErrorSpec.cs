@@ -7,13 +7,13 @@ namespace Frog.Domain.Specs.PipelineStatusView
     {
         protected override void When()
         {
-            view.Handle(new BuildEnded("http://fle", BuildTotalStatus.Error));
+            View.Handle(new BuildEnded("http://fle", BuildTotalStatus.Error));
         }
 
         [Test]
         public void should_set_status_to_BUILD_COMPLETED()
         {
-            Assert.That(buildStatuses["http://fle"].Current,
+            Assert.That(BuildStatuses["http://fle"].Current,
                         Is.EqualTo(UI.PipelineStatusView.BuildStatus.Status.PipelineCompletedFailure));
         }
     }

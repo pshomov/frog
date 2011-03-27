@@ -9,7 +9,7 @@ namespace Frog.Domain.Specs.PipelineStatusView
     {
         protected override void When()
         {
-            pipelineStatus = new PipelineStatus(Guid.NewGuid())
+            PipelineStatus = new PipelineStatus(Guid.NewGuid())
                                  {
                                      Tasks =
                                          {
@@ -17,20 +17,20 @@ namespace Frog.Domain.Specs.PipelineStatusView
                                                  {Name = "task1", Status = TasksInfo.TaskStatus.Started}
                                          }
                                  };
-            view.Handle(new BuildUpdated("http://dugh", new PipelineStatus(pipelineStatus)));
+            View.Handle(new BuildUpdated("http://dugh", new PipelineStatus(PipelineStatus)));
         }
 
         [Test]
         public void should_not_modify_build_status()
         {
-            Assert.That(buildStatuses["http://dugh"].Current,
+            Assert.That(BuildStatuses["http://dugh"].Current,
                         Is.EqualTo(UI.PipelineStatusView.BuildStatus.Status.NotStarted));
         }
 
         [Test]
         public void should_set_task_status_to_the_value_sent_in_the_event()
         {
-            Assert.True(new CompareObjects().Compare(buildStatuses["http://dugh"].PipelineStatus, pipelineStatus));
+            Assert.True(new CompareObjects().Compare(BuildStatuses["http://dugh"].PipelineStatus, PipelineStatus));
         }
     }
 }
