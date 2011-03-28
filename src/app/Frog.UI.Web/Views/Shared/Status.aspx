@@ -78,6 +78,6 @@
     <body>
         <div id="status"></div>
         <div id="tasks"></div>
-        <textarea id="terminal"></textarea>
+        <textarea id="terminal" style="width:100%;height:30%;margin-bottom:0;" rows="20" readonly="readonly"></textarea>
     </body>
 </html>
