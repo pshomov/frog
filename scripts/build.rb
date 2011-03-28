@@ -12,9 +12,10 @@ def green(text); colorize(text, "32"); end
 remove_dir "../output", :force => true
 
 system "xbuild ../Frog.Net.sln /target:rebuild /property:Configuration=Release"
-if $? != 0
+status = $?.exitstatus
+if status != 0
 	puts(red("No Runz!"))
-	exit $?
+	exit(status)
 end
 
 mkdir "../output"
