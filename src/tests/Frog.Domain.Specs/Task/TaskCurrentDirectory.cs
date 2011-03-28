@@ -14,14 +14,14 @@ namespace Frog.Domain.Specs.Task
         protected override void Given()
         {
             string _app = "adasdasd";
-            if (Os.IsWindows) {_app = @"cmd.exe"; _arguments=@"/c if %CD%==c:\temp exit /b 41";}
+            if (Os.IsWindows) {_app = @"cmd.exe"; _arguments=@"/c if %CD%==c:\ exit /b 41";}
             if (Os.IsUnix) {_app = "/bin/bash"; _arguments = @"-c ""test `pwd` == '/usr/bin' && (echo 'matches'; exit 41)""";}
             _task = new ExecTask(_app, _arguments, "task_name");
         }
 
         protected override void When()
         {
-            if (Os.IsWindows) taskResult = _task.Perform(new SourceDrop(@"c:\temp"));
+            if (Os.IsWindows) taskResult = _task.Perform(new SourceDrop(@"c:\"));
             if (Os.IsUnix) taskResult = _task.Perform(new SourceDrop(@"/usr/bin"));
         }
 
