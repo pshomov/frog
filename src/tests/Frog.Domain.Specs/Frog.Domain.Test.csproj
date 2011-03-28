@@ -120,11 +120,6 @@
       <Name>Frog.Specs.Support</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="Task\callme.sh">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup />
