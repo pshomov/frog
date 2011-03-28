@@ -31,7 +31,7 @@
                                 set_status("Unknown build status", "cyan");
                         }
 
-                        var tasks = msg.status.PipelineStatus.tasks;
+                        var tasks = msg.status.PipelineStatus.Tasks;
                         update_tasks(tasks);
                     },
                     error: function () {
@@ -44,10 +44,23 @@
             $("body").attr("style", "background : " + color + ";");
         };
 
+        function get_console_output(taskIndex) {
+            $.ajax({
+                url: "task/" + taskIndex,
+                success: function (msg) {
+                    $("#terminal").text(msg.terminalOutput);
+                },
+                error : function() {
+                    console.log("Error retriving the terminal output");
+                }
+            });
+        };
+
         function update_tasks(tasks) {
             paper.clear();
             var taskStatusToColor = { 0: "gray", 1: "yellow", 2: "green", 3: "red" };
             for (var i = 0; i < tasks.length; i++) {
+                get_console_output(i);
                 var r = paper.rect(-50, -25, 100, 50);
                 var text = paper.text(0, 0, tasks[i].Name);
                 text.attr("fill", "#f1f1f1");
@@ -65,5 +78,6 @@
     <body>
         <div id="status"></div>
         <div id="tasks"></div>
+        <textarea id="terminal"></textarea>
     </body>
 </html>

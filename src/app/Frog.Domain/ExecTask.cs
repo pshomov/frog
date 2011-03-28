@@ -1,7 +1,6 @@
 using System;
 using System.ComponentModel;
 using Frog.Support;
-using SimpleCQRS;
 
 namespace Frog.Domain
 {
@@ -11,7 +10,7 @@ namespace Frog.Domain
         {
             Success,
             Error
-        };
+        } ;
 
         readonly ExecTask.ExecutionStatus executionStatus;
         readonly int exitCode;
@@ -37,7 +36,10 @@ namespace Frog.Domain
             get { return executionStatus == ExecTask.ExecutionStatus.Success; }
         }
 
-        public Status ExecStatus { get {return HasExecuted && ExitCode == 0 ? Status.Success : Status.Error;} }
+        public Status ExecStatus
+        {
+            get { return HasExecuted && ExitCode == 0 ? Status.Success : Status.Error; }
+        }
     }
 
     public interface TaskReporter
@@ -57,7 +59,7 @@ namespace Frog.Domain
         }
 
         readonly string app;
-        private readonly string arguments;
+        readonly string arguments;
         readonly string name;
         public virtual event Action<string> OnTerminalOutputUpdate;
 
@@ -68,7 +70,8 @@ namespace Frog.Domain
             this.name = name;
         }
 
-        public ExecTask(string app, string arguments, TaskReporter taskReporter, string name) : this(app, arguments, name)
+        public ExecTask(string app, string arguments, TaskReporter taskReporter, string name)
+            : this(app, arguments, name)
         {
             this.taskReporter = taskReporter;
         }
@@ -79,10 +82,12 @@ namespace Frog.Domain
             try
             {
                 process = new ProcessWrapper(app, arguments, sourceDrop.SourceDropLocation);
+                process.OnErrorOutput += s => { if (s != null) OnTerminalOutputUpdate("E>" + s + Environment.NewLine); };
+                process.OnStdOutput += s => { if (s != null) OnTerminalOutputUpdate("S>" + s + Environment.NewLine); };
                 process.Execute();
                 if (taskReporter != null) taskReporter.TaskStarted(process.ProcessInfo.Id);
                 var exitcode = process.WaitForProcess(60000);
-                if (exitcode == 1) throw new Win32Exception();
+                MonoBugFix(exitcode);
             }
             catch (Win32Exception)
             {
@@ -94,6 +99,11 @@ namespace Frog.Domain
                 return new ExecTaskResult(ExecutionStatus.Success, process.ProcessInfo.ExitCode);
             }
             return new ExecTaskResult(ExecutionStatus.Failure, -1);
+        }
+
+        void MonoBugFix(int exitcode)
+        {
+            if (exitcode == 1) throw new Win32Exception();
         }
 
         public string Name
