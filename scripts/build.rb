@@ -1,11 +1,5 @@
 #!/usr/bin/env ruby
 require 'fileutils'
-require 'rubygems'
-begin
-  require 'Win32/Console/ANSI' if RUBY_PLATFORM =~ /win32/
-rescue LoadError
-  raise 'You must gem install win32console to use color on Windows'
-end
 include FileUtils
 
 def colorize(text, color_code)
