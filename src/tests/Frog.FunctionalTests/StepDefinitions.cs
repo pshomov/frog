@@ -75,6 +75,12 @@ namespace Frog.FunctionalTests
                 () => Assert.That(World.browser.FindElement(By.CssSelector("#status")).Text, Is.EqualTo("Build complete")));
         }
 
+        [Then(@"The terminal output contains text from the build")]
+        public void ThenTheTerminalOutputContainsTextFromTheBuild()
+        {
+            AssertionHelpers.WithRetries(
+                () => Assert.That(World.browser.FindElement(By.CssSelector("#terminal")).Text.Length, Is.GreaterThan(2)));
+        }
 
         Uri U(string relativeUrl)
         {

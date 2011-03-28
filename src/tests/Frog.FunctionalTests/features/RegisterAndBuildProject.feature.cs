@@ -95,6 +95,8 @@ this.ScenarioSetup(scenarioInfo);
  testRunner.And("I am on the status page for the project");
 #line 18
  testRunner.Then("I see the build is completed");
+#line 19
+ testRunner.And("The terminal output contains text from the build");
 #line hidden
             testRunner.CollectScenarioErrors();
         }

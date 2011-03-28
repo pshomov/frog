@@ -15,4 +15,5 @@ Scenario: "Check for project updates" builds the project
 	Given I have registered the project
 	When I check for updates
 	And I am on the status page for the project
-	Then I see the build is completed 
+	Then I see the build is completed
+	And The terminal output contains text from the build 
