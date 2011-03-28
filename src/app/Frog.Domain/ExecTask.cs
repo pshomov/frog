@@ -42,16 +42,8 @@ namespace Frog.Domain
         }
     }
 
-    public interface TaskReporter
-    {
-        void TaskStarted(int pid);
-    }
-
-
     public class ExecTask
     {
-        readonly TaskReporter taskReporter;
-
         public enum ExecutionStatus
         {
             Success,
@@ -61,6 +53,7 @@ namespace Frog.Domain
         readonly string app;
         readonly string arguments;
         readonly string name;
+        public event Action<int> OnTaskStarted = pid => {};
         public virtual event Action<string> OnTerminalOutputUpdate;
 
         public ExecTask(string app, string arguments, string name)
@@ -68,12 +61,6 @@ namespace Frog.Domain
             this.app = app;
             this.arguments = arguments;
             this.name = name;
-        }
-
-        public ExecTask(string app, string arguments, TaskReporter taskReporter, string name)
-            : this(app, arguments, name)
-        {
-            this.taskReporter = taskReporter;
         }
 
         public virtual ExecTaskResult Perform(SourceDrop sourceDrop)
@@ -85,7 +72,7 @@ namespace Frog.Domain
                 process.OnErrorOutput += s => { if (s != null) OnTerminalOutputUpdate("E>" + s + Environment.NewLine); };
                 process.OnStdOutput += s => { if (s != null) OnTerminalOutputUpdate("S>" + s + Environment.NewLine); };
                 process.Execute();
-                if (taskReporter != null) taskReporter.TaskStarted(process.ProcessInfo.Id);
+                OnTaskStarted(process.ProcessInfo.Id);
                 var exitcode = process.WaitForProcess(60000);
                 MonoBugFix(exitcode);
             }

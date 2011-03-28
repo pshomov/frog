@@ -1,5 +1,4 @@
 using Frog.Specs.Support;
-using NSubstitute;
 using NUnit.Framework;
 
 namespace Frog.Domain.Specs.Task
@@ -8,12 +7,17 @@ namespace Frog.Domain.Specs.Task
     public class TaskReporting : BDD
     {
         ExecTask task;
-        TaskReporter reporter;
+        int taskStarted;
+        int pid;
 
         protected override void Given()
         {
-            reporter = Substitute.For<TaskReporter>();
-            task = new ExecTask("ruby", "-e 'exit 0'", reporter, "task_name");
+            task = new ExecTask("ruby", "-e 'exit 0'", "task_name");
+            task.OnTaskStarted += pid =>
+                                      {
+                                          taskStarted++;
+                                          this.pid = pid;
+                                      }; 
         }
 
         protected override void When()
@@ -24,7 +28,13 @@ namespace Frog.Domain.Specs.Task
         [Test]
         public void should_report_process_id_right_away()
         {
-            reporter.Received().TaskStarted(Arg.Is<int>(x => x > 0));
+            Assert.That(pid, Is.GreaterThan(0));
+        }
+
+        [Test]
+        public void should_trigger_event_only_once()
+        {
+            Assert.That(taskStarted, Is.EqualTo(1));
         }
 
     }
