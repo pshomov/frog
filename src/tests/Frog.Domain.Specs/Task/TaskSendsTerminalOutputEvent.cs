@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using Frog.Specs.Support;
 using NUnit.Framework;
 
@@ -53,6 +54,31 @@ namespace Frog.Domain.Specs.Task
         {
             AssertionHelpers.WithRetries(
                 () => Assert.That(errOutput, Is.EqualTo(string.Format("E>error output{0}", Environment.NewLine))));
+        }
+    }
+
+    [Ignore]
+    [TestFixture]
+    [Category(TestTypes.Integration)]
+    public class TaskTerminalOutputDoesNotNeedSubscribersToWork : BDD
+    {
+        ExecTask task;
+
+        protected override void Given()
+        {
+            task = new ExecTask("ruby", "-e ' STDERR.sync = true; $stderr.puts \"error output\";'", "name");
+        }
+
+        protected override void When()
+        {
+            task.Perform(new SourceDrop(""));
+        }
+
+        [Test]
+        public void should_perform_the_behaviour_under_test_without_exception()
+        {
+            Thread.Sleep(500);
+            // The exception right now happens on a different thread and that's why it does not trip this test but the goal is to have it do that
         }
     }
 }

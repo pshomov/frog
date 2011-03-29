@@ -54,7 +54,7 @@ namespace Frog.Domain
         readonly string arguments;
         readonly string name;
         public event Action<int> OnTaskStarted = pid => {};
-        public virtual event Action<string> OnTerminalOutputUpdate;
+        public virtual event Action<string> OnTerminalOutputUpdate = s => {};
 
         public ExecTask(string app, string arguments, string name)
         {
