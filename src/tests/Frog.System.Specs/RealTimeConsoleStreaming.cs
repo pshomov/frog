@@ -106,15 +106,15 @@ namespace Frog.System.Specs
                                          .Has(statuses => statuses,
                                               A.Check<Dictionary<string, PipelineStatusView.BuildStatus>>(
                                                   arg =>
-                                                  arg[repo.Url].CombinedTerminalOutput.Count > 0 &&
-                                                  arg[repo.Url].CombinedTerminalOutput[0].Combined ==
+                                                  arg[repo.Url].TaskState.Count > 0 &&
+                                                  arg[repo.Url].TaskState[0].terminalOutput.Combined ==
                                                   SystemWithConsoleOutput.TerminalOutput1 +
                                                   SystemWithConsoleOutput.TerminalOutput2))
                                          .Has(statuses => statuses,
                                               A.Check<Dictionary<string, PipelineStatusView.BuildStatus>>(
                                                   arg =>
-                                                  arg[repo.Url].CombinedTerminalOutput.Count > 1 &&
-                                                  arg[repo.Url].CombinedTerminalOutput[1].Combined ==
+                                                  arg[repo.Url].TaskState.Count > 1 &&
+                                                  arg[repo.Url].TaskState[1].terminalOutput.Combined ==
                                                   SystemWithConsoleOutput.TerminalOutput3 +
                                                   SystemWithConsoleOutput.TerminalOutput4))
                             ));

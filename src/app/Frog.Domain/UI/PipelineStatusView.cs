@@ -19,31 +19,33 @@ namespace Frog.Domain.UI
         public void Handle(BuildStarted message)
         {
             EnsureReportExistsForRepo(message.RepoUrl);
-            report[message.RepoUrl].Current = BuildStatus.Status.PipelineStarted;
-            report[message.RepoUrl].PipelineStatus = new PipelineStatus(message.Status);
-            report[message.RepoUrl].CombinedTerminalOutput.Clear();
+            var buildStatus = report[message.RepoUrl];
+            buildStatus.Current = BuildStatus.OverallStatus.PipelineStarted;
+            buildStatus.TaskState = new List<TaskState>();
+            foreach (var taskInfo in message.Status.Tasks)
+            {
+                buildStatus.TaskState.Add(new TaskState(taskInfo));
+            }
         }
 
         public void Handle(BuildUpdated message)
         {
             EnsureReportExistsForRepo(message.RepoUrl);
-            report[message.RepoUrl].PipelineStatus = new PipelineStatus(message.Status);
+            report[message.RepoUrl].UpdateTaskStatus(message.Status.Tasks);
         }
 
         public void Handle(BuildEnded message)
         {
             EnsureReportExistsForRepo(message.RepoUrl);
             report[message.RepoUrl].Current = message.TotalStatus == BuildTotalStatus.Success
-                                                  ? BuildStatus.Status.PipelineCompletedSuccess
-                                                  : BuildStatus.Status.PipelineCompletedFailure;
+                                                  ? BuildStatus.OverallStatus.PipelineCompletedSuccess
+                                                  : BuildStatus.OverallStatus.PipelineCompletedFailure;
         }
 
         public void Handle(TerminalUpdate message)
         {
             EnsureReportExistsForRepo(message.RepoUrl);
-            var combinedTerminalOutput = report[message.RepoUrl].CombinedTerminalOutput;
-            while (combinedTerminalOutput.Count <= message.TaskIndex) combinedTerminalOutput.Add(new TerminalOutput());
-            combinedTerminalOutput[message.TaskIndex].Add(message.ContentSequenceIndex, message.Content);
+            report[message.RepoUrl].TaskState[message.TaskIndex].terminalOutput.Add(message.ContentSequenceIndex, message.Content);
         }
 
         void EnsureReportExistsForRepo(string repoUrl)
@@ -53,7 +55,7 @@ namespace Frog.Domain.UI
 
         public class TerminalOutput
         {
-            List<string> contentPieces = new List<string>();
+            readonly List<string> contentPieces = new List<string>();
             public void Add(int sequnceIndex, string content)
             {
                 lock (contentPieces)
@@ -85,18 +87,43 @@ namespace Frog.Domain.UI
             }
         }
 
+        public class TaskState
+        {
+            TaskInfo status;
+            public readonly TerminalOutput terminalOutput;
+
+            public TaskState(TaskInfo status)
+            {
+                this.status = status;
+                terminalOutput = new TerminalOutput();
+            }
+
+            public TaskInfo Status
+            {
+                get { return status; }
+                set { status = value; }
+            }
+        }
+
         public class BuildStatus
         {
             public BuildStatus()
             {
-                Current = Status.NotStarted;
-                CombinedTerminalOutput = new List<TerminalOutput>();
+                Current = OverallStatus.NotStarted;
+                TaskState = new List<TaskState>();
             }
 
-            public PipelineStatus PipelineStatus { get; set; }
-            public IList<TerminalOutput> CombinedTerminalOutput { get; set; }
+            public IList<TaskState> TaskState;
 
-            public enum Status
+            public void UpdateTaskStatus(IList<TaskInfo> tasksStatus)
+            {
+                for (int i = 0; i < tasksStatus.Count; i++)
+                {
+                    TaskState[i].Status = tasksStatus[i];
+                }
+            }
+
+            public enum OverallStatus
             {
                 PipelineStarted,
                 NotStarted,
@@ -104,7 +131,7 @@ namespace Frog.Domain.UI
                 PipelineCompletedSuccess
             }
 
-            public Status Current { get; set; }
+            public OverallStatus Current { get; set; }
         }
     }
 }

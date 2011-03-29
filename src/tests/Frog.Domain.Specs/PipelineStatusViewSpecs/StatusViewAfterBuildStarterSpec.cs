@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Frog.Domain.UI;
 using KellermanSoftware.CompareNetObjects;
 using NUnit.Framework;
 
@@ -13,8 +16,8 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
                                  {
                                      Tasks =
                                          {
-                                             new TasksInfo
-                                                 {Name = "task1", Status = TasksInfo.TaskStatus.NotStarted}
+                                             new TaskInfo
+                                                 {Name = "task1", Status = TaskInfo.TaskStatus.NotStarted}
                                          }
                                  };
             View.Handle(new BuildStarted("http://repo", new PipelineStatus(PipelineStatus)));
@@ -24,13 +27,17 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
         public void should_set_status_to_BUILD_STARTED()
         {
             Assert.That(BuildStatuses["http://repo"].Current,
-                        Is.EqualTo(UI.PipelineStatusView.BuildStatus.Status.PipelineStarted));
+                        Is.EqualTo(PipelineStatusView.BuildStatus.OverallStatus.PipelineStarted));
         }
 
         [Test]
-        public void should_set_status_as_as_in_message()
+        public void should_set_task_status_as_as_in_message()
         {
-            Assert.True(new CompareObjects().Compare(BuildStatuses["http://repo"].PipelineStatus, PipelineStatus));
+            var comparator = new CompareObjects();
+            var taskStates = BuildStatuses["http://repo"].TaskState.ToList();
+            var equalItems = taskStates.Where(
+                (state, i) => comparator.Compare(state.Status, PipelineStatus.Tasks[i]));
+            Assert.That(equalItems.Count(), Is.EqualTo(taskStates.Count));
         }
     }
 }

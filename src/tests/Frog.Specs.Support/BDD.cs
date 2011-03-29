@@ -37,6 +37,6 @@ namespace Frog.Specs.Support
         protected virtual void GivenCleanup(){}
         protected virtual void WhenCleanup(){}
         [TearDown]
-        void CaseCleanup() {GivenCleanup(); WhenCleanup();}
+        public void CaseCleanup() {GivenCleanup(); WhenCleanup();}
     }
 }

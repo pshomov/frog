@@ -14,7 +14,7 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
         public void should_set_status_to_BUILD_COMPLETED()
         {
             Assert.That(BuildStatuses["http://fle"].Current,
-                        Is.EqualTo(UI.PipelineStatusView.BuildStatus.Status.PipelineCompletedFailure));
+                        Is.EqualTo(UI.PipelineStatusView.BuildStatus.OverallStatus.PipelineCompletedFailure));
         }
     }
 }

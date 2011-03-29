@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using Frog.Specs.Support;
 using Frog.Support;
 using NUnit.Framework;
 
@@ -12,7 +10,9 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
         protected override void Given()
         {
             base.Given();
-            View.Handle(new BuildStarted("http://fle", new PipelineStatus(Guid.NewGuid()) { Tasks = As.List(new TasksInfo(), new TasksInfo()) }));
+            View.Handle(new BuildStarted("http://fle",
+                                         new PipelineStatus(Guid.NewGuid())
+                                             {Tasks = As.List(new TaskInfo(), new TaskInfo())}));
         }
 
         protected override void When()
@@ -23,7 +23,13 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
         [Test]
         public void should_update_terminal_output_for_task_0()
         {
-            Assert.That(BuildStatuses["http://fle"].CombinedTerminalOutput[0].Combined, Is.EqualTo("content1"));
+            Assert.That(BuildStatuses["http://fle"].TaskState[0].terminalOutput.Combined, Is.EqualTo("content1"));
+        }
+
+        [Test]
+        public void should_return_empty_output_for_task_1()
+        {
+            Assert.That(BuildStatuses["http://fle"].TaskState[1].terminalOutput.Combined, Is.EqualTo(""));
         }
     }
 
@@ -33,20 +39,24 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
         protected override void Given()
         {
             base.Given();
-            View.Handle(new BuildStarted("http://fle", new PipelineStatus(Guid.NewGuid()) { Tasks = As.List(new TasksInfo(), new TasksInfo()) }));
+            View.Handle(new BuildStarted("http://fle",
+                                         new PipelineStatus(Guid.NewGuid())
+                                             {Tasks = As.List(new TaskInfo(), new TaskInfo())}));
             View.Handle(new TerminalUpdate("content1", 0, 0, "http://fle"));
             View.Handle(new BuildEnded("http://fle", BuildTotalStatus.Success));
         }
 
         protected override void When()
         {
-            View.Handle(new BuildStarted("http://fle", new PipelineStatus(Guid.NewGuid()) { Tasks = As.List(new TasksInfo(), new TasksInfo()) }));
+            View.Handle(new BuildStarted("http://fle",
+                                         new PipelineStatus(Guid.NewGuid())
+                                             {Tasks = As.List(new TaskInfo(), new TaskInfo(), new TaskInfo())}));
         }
 
         [Test]
         public void should_update_terminal_output_for_task_0()
         {
-            Assert.That(BuildStatuses["http://fle"].CombinedTerminalOutput.Count, Is.EqualTo(0));
+            Assert.That(BuildStatuses["http://fle"].TaskState.Count, Is.EqualTo(3));
         }
     }
 }

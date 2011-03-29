@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Frog.Domain.TaskSources;
 
 namespace Frog.Domain
@@ -46,31 +47,32 @@ namespace Frog.Domain
     {
         public PipelineStatus(Guid id)
         {
-            Tasks = new List<TasksInfo>();
+            Tasks = new List<TaskInfo>();
             PipelineId = id;
         }
 
         public PipelineStatus(PipelineStatus pipelineStatus)
         {
             PipelineId = pipelineStatus.PipelineId;
-            Tasks = new List<TasksInfo>();
-            pipelineStatus.Tasks.ForEach(info => Tasks.Add(new TasksInfo(info)));
+            Tasks = new List<TaskInfo>();
+
+            pipelineStatus.Tasks.ToList().ForEach(info => Tasks.Add(new TaskInfo(info)));
         }
 
         public Guid PipelineId;
-        public List<TasksInfo> Tasks;
+        public IList<TaskInfo> Tasks;
     }
 
-    public class TasksInfo
+    public class TaskInfo
     {
-        public TasksInfo()
+        public TaskInfo()
         {
         }
 
-        public TasksInfo(TasksInfo tasksInfo)
+        public TaskInfo(TaskInfo taskInfo)
         {
-            Name = tasksInfo.Name;
-            Status = tasksInfo.Status;
+            Name = taskInfo.Name;
+            Status = taskInfo.Status;
         }
 
         public enum TaskStatus
@@ -122,7 +124,7 @@ namespace Frog.Domain
             for (int i = 0; i < execTasks.Count; i++)
             {
                 var execTask = execTasks[i];
-                status.Tasks[i].Status = TasksInfo.TaskStatus.Started;
+                status.Tasks[i].Status = TaskInfo.TaskStatus.Started;
                 OnBuildUpdated(new PipelineStatus(status));
                 int sequneceIndex = 0;
                 Action<string> execTaskOnOnTerminalOutputUpdate = s => OnTerminalUpdate(new TerminalUpdateInfo(sequneceIndex++, s, i));
@@ -130,8 +132,8 @@ namespace Frog.Domain
                 lastTaskStatus = execTask.Perform(sourceDrop).ExecStatus;
                 execTask.OnTerminalOutputUpdate -= execTaskOnOnTerminalOutputUpdate;
                 status.Tasks[i].Status = lastTaskStatus == ExecTaskResult.Status.Error
-                                             ? TasksInfo.TaskStatus.FinishedError
-                                             : TasksInfo.TaskStatus.FinishedSuccess;
+                                             ? TaskInfo.TaskStatus.FinishedError
+                                             : TaskInfo.TaskStatus.FinishedSuccess;
                 OnBuildUpdated(new PipelineStatus(status));
                 if (lastTaskStatus != ExecTaskResult.Status.Success) break;
             }
@@ -156,8 +158,8 @@ namespace Frog.Domain
             var pipelineStatus = new PipelineStatus(Guid.NewGuid());
             foreach (var execTask in execTasks)
             {
-                pipelineStatus.Tasks.Add(new TasksInfo
-                                             {Name = execTask.Name, Status = TasksInfo.TaskStatus.NotStarted});
+                pipelineStatus.Tasks.Add(new TaskInfo
+                                             {Name = execTask.Name, Status = TaskInfo.TaskStatus.NotStarted});
             }
             return pipelineStatus;
         }

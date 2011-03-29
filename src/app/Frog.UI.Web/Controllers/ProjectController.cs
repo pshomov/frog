@@ -46,7 +46,7 @@ namespace Frog.UI.Web.Controllers
                         new
                             {
                                 terminalOutput =
-                            ServiceLocator.Report[projectUrl].CombinedTerminalOutput[taskIndex].Combined
+                            ServiceLocator.Report[projectUrl].TaskState[taskIndex].terminalOutput.Combined
                             });
             else
             {
