@@ -69,6 +69,12 @@ namespace Frog.Domain
         {
         }
 
+        public TaskInfo(string name)
+        {
+            Name = name;
+            Status = TaskStatus.NotStarted;
+        }
+
         public TaskInfo(TaskInfo taskInfo)
         {
             Name = taskInfo.Name;

@@ -69,6 +69,7 @@
     <Compile Include="Git\GitRepositoryGetRevisionSpecs.cs" />
     <Compile Include="Git\GitRepositoryCheckForLatestRev.cs" />
     <Compile Include="Git\GitRepositoryDriverCheckBase.cs" />
+    <Compile Include="PipelineStatusViewSpecs\BuildStatusUpdating.cs" />
     <Compile Include="PipelineStatusViewSpecs\StatusViewAfterBuildCompletedSuccessfullySpec.cs" />
     <Compile Include="PipelineStatusViewSpecs\StatusViewAfterBuildCompletedWithErrorSpec.cs" />
     <Compile Include="PipelineStatusViewSpecs\StatusViewAfterBuildStarterSpec.cs" />
