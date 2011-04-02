@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using Frog.Domain.UI;
-using KellermanSoftware.CompareNetObjects;
 using NUnit.Framework;
 
 namespace Frog.Domain.Specs.PipelineStatusViewSpecs
@@ -13,13 +12,13 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
         {
             base.Given();
             var pipelineStatus = new PipelineStatus(Guid.NewGuid())
-            {
-                Tasks =
-                                         {
-                                             new TaskInfo
-                                                 {Name = "task1", Status = TaskInfo.TaskStatus.NotStarted}
-                                         }
-            };
+                                     {
+                                         Tasks =
+                                             {
+                                                 new TaskInfo
+                                                     {Name = "task1", Status = TaskInfo.TaskStatus.NotStarted}
+                                             }
+                                     };
 
             View.Handle(new BuildStarted("http://dugh", pipelineStatus));
         }
@@ -47,7 +46,8 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
         [Test]
         public void should_set_task_status_as_as_in_message()
         {
-            Assert.That(BuildStatuses["http://dugh"].Tasks.ElementAt(0).Status, Is.EqualTo(TaskInfo.TaskStatus.FinishedError));
+            Assert.That(BuildStatuses["http://dugh"].Tasks.ElementAt(0).Status,
+                        Is.EqualTo(TaskInfo.TaskStatus.FinishedError));
         }
     }
 }
