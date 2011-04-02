@@ -10,73 +10,73 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
     [TestFixture]
     public class BuildStatusAfterBuildStarted : BDD
     {
-        BuildStatuz buildStatuz;
+        BuildStatus buildStatus;
 
         protected override void Given()
         {
-            buildStatuz = new BuildStatuz();
+            buildStatus = new BuildStatus();
         }
 
         protected override void When()
         {
-            buildStatuz.BuildStarted(As.List(new TaskInfo("task_name"), new TaskInfo("dd")));
+            buildStatus.BuildStarted(As.List(new TaskInfo("task_name"), new TaskInfo("dd")));
         }
 
         [Test]
         public void should_have_build_tasks_prepared()
         {
-            Assert.That(buildStatuz.Tasks.Count(), Is.EqualTo(2));
-            Assert.That(buildStatuz.Tasks.ElementAt(0).Name, Is.EqualTo("task_name"));
-            Assert.That(buildStatuz.Tasks.ElementAt(1).Name, Is.EqualTo("dd"));
+            Assert.That(buildStatus.Tasks.Count(), Is.EqualTo(2));
+            Assert.That(buildStatus.Tasks.ElementAt(0).Name, Is.EqualTo("task_name"));
+            Assert.That(buildStatus.Tasks.ElementAt(1).Name, Is.EqualTo("dd"));
         }
 
         [Test]
         public void should_set_the_task_output_to_empty()
         {
-            Assert.That(buildStatuz.Tasks.ElementAt(0).TerminalOutput, Is.EqualTo(""));
-            Assert.That(buildStatuz.Tasks.ElementAt(1).TerminalOutput, Is.EqualTo(""));
+            Assert.That(buildStatus.Tasks.ElementAt(0).TerminalOutput, Is.EqualTo(""));
+            Assert.That(buildStatus.Tasks.ElementAt(1).TerminalOutput, Is.EqualTo(""));
         }
 
         [Test]
         public void should_set_all_tasks_status_to_not_started()
         {
-            Assert.That(buildStatuz.Tasks.ElementAt(0).Status, Is.EqualTo(TaskInfo.TaskStatus.NotStarted));
-            Assert.That(buildStatuz.Tasks.ElementAt(1).Status, Is.EqualTo(TaskInfo.TaskStatus.NotStarted));
+            Assert.That(buildStatus.Tasks.ElementAt(0).Status, Is.EqualTo(TaskInfo.TaskStatus.NotStarted));
+            Assert.That(buildStatus.Tasks.ElementAt(1).Status, Is.EqualTo(TaskInfo.TaskStatus.NotStarted));
         }
     }
 
     [TestFixture]
     public class BuildStatusAfterBuildUpdated : BDD
     {
-        BuildStatuz buildStatuz;
+        BuildStatus buildStatus;
 
         protected override void Given()
         {
-            buildStatuz = new BuildStatuz();
-            buildStatuz.BuildStarted(As.List(new TaskInfo("task_name"), new TaskInfo("dd")));
+            buildStatus = new BuildStatus();
+            buildStatus.BuildStarted(As.List(new TaskInfo("task_name"), new TaskInfo("dd")));
         }
 
         protected override void When()
         {
-            buildStatuz.BuildUpdated(1, TaskInfo.TaskStatus.Started);
+            buildStatus.BuildUpdated(1, TaskInfo.TaskStatus.Started);
         }
 
         [Test]
         public void should_keep_the_tasks_count()
         {
-            Assert.That(buildStatuz.Tasks.Count(), Is.EqualTo(2));
+            Assert.That(buildStatus.Tasks.Count(), Is.EqualTo(2));
         }
 
         [Test]
         public void should_update_the_task_status_specified_by_the_index()
         {
-            Assert.That(buildStatuz.Tasks.ElementAt(1).Status, Is.EqualTo(TaskInfo.TaskStatus.Started));
+            Assert.That(buildStatus.Tasks.ElementAt(1).Status, Is.EqualTo(TaskInfo.TaskStatus.Started));
         }
 
         [Test]
         public void should_not_update_status_for_all_other_tasks()
         {
-            Assert.That(buildStatuz.Tasks.ElementAt(0).Status, Is.EqualTo(TaskInfo.TaskStatus.NotStarted));
+            Assert.That(buildStatus.Tasks.ElementAt(0).Status, Is.EqualTo(TaskInfo.TaskStatus.NotStarted));
         }
     }
 
@@ -84,36 +84,36 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
     [TestFixture]
     public class BuildStatusAfterBuildEndedSuccessfully : BDD
     {
-        BuildStatuz buildStatuz;
+        BuildStatus buildStatus;
 
         protected override void Given()
         {
-            buildStatuz = new BuildStatuz();
-            buildStatuz.BuildStarted(As.List(new TaskInfo("task_name"), new TaskInfo("dd")));
+            buildStatus = new BuildStatus();
+            buildStatus.BuildStarted(As.List(new TaskInfo("task_name"), new TaskInfo("dd")));
         }
 
         protected override void When()
         {
-            buildStatuz.BuildEnded(BuildTotalEndStatus.Success);
+            buildStatus.BuildEnded(BuildTotalEndStatus.Success);
         }
 
         [Test]
         public void should_keep_the_tasks_count()
         {
-            Assert.That(buildStatuz.Tasks.Count(), Is.EqualTo(2));
+            Assert.That(buildStatus.Tasks.Count(), Is.EqualTo(2));
         }
 
         [Test]
         public void should_not_update_tasks_statuses()
         {
-            Assert.That(buildStatuz.Tasks.ElementAt(1).Status, Is.EqualTo(TaskInfo.TaskStatus.NotStarted));
-            Assert.That(buildStatuz.Tasks.ElementAt(0).Status, Is.EqualTo(TaskInfo.TaskStatus.NotStarted));
+            Assert.That(buildStatus.Tasks.ElementAt(1).Status, Is.EqualTo(TaskInfo.TaskStatus.NotStarted));
+            Assert.That(buildStatus.Tasks.ElementAt(0).Status, Is.EqualTo(TaskInfo.TaskStatus.NotStarted));
         }
 
         [Test]
         public void should_set_total_status_to_specified_value()
         {
-            Assert.That(buildStatuz.Overall, Is.EqualTo(BuildTotalStatus.BuildEndedSuccess));
+            Assert.That(buildStatus.Overall, Is.EqualTo(BuildTotalStatus.BuildEndedSuccess));
         }
 
     }
@@ -121,36 +121,36 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
     [TestFixture]
     public class BuildStatusAfterBuildEndedFailure : BDD
     {
-        BuildStatuz buildStatuz;
+        BuildStatus buildStatus;
 
         protected override void Given()
         {
-            buildStatuz = new BuildStatuz();
-            buildStatuz.BuildStarted(As.List(new TaskInfo("task_name"), new TaskInfo("dd")));
+            buildStatus = new BuildStatus();
+            buildStatus.BuildStarted(As.List(new TaskInfo("task_name"), new TaskInfo("dd")));
         }
 
         protected override void When()
         {
-            buildStatuz.BuildEnded(BuildTotalEndStatus.Error);
+            buildStatus.BuildEnded(BuildTotalEndStatus.Error);
         }
 
         [Test]
         public void should_keep_the_tasks_count()
         {
-            Assert.That(buildStatuz.Tasks.Count(), Is.EqualTo(2));
+            Assert.That(buildStatus.Tasks.Count(), Is.EqualTo(2));
         }
 
         [Test]
         public void should_not_update_tasks_statuses()
         {
-            Assert.That(buildStatuz.Tasks.ElementAt(1).Status, Is.EqualTo(TaskInfo.TaskStatus.NotStarted));
-            Assert.That(buildStatuz.Tasks.ElementAt(0).Status, Is.EqualTo(TaskInfo.TaskStatus.NotStarted));
+            Assert.That(buildStatus.Tasks.ElementAt(1).Status, Is.EqualTo(TaskInfo.TaskStatus.NotStarted));
+            Assert.That(buildStatus.Tasks.ElementAt(0).Status, Is.EqualTo(TaskInfo.TaskStatus.NotStarted));
         }
 
         [Test]
         public void should_set_total_status_to_specified_value()
         {
-            Assert.That(buildStatuz.Overall, Is.EqualTo(BuildTotalStatus.BuildEndedError));
+            Assert.That(buildStatus.Overall, Is.EqualTo(BuildTotalStatus.BuildEndedError));
         }
 
     }

@@ -8,7 +8,7 @@ namespace Frog.Domain
     {
         protected readonly IBus TheBus;
         readonly WorkingAreaGoverner areaGoverner;
-        public ConcurrentDictionary<string, BuildStatuz> report { get; private set; }
+        public ConcurrentDictionary<string, BuildStatus> report { get; private set; }
         public RepositoryTracker repositoryTracker { get; private set; }
         Agent agent;
         Worker worker;
@@ -51,7 +51,7 @@ namespace Frog.Domain
 
         protected void SetupView()
         {
-            report = new ConcurrentDictionary<string, BuildStatuz>();
+            report = new ConcurrentDictionary<string, BuildStatus>();
             var statusView = new PipelineStatusView(report);
             TheBus.RegisterHandler<BuildStarted>(statusView.Handle);
             TheBus.RegisterHandler<BuildEnded>(statusView.Handle);

@@ -131,9 +131,9 @@ namespace Frog.System.Specs.Underware
             theTestSystem.repositoryTracker.CheckForUpdates();
         }
 
-        public Dictionary<string, BuildStatuz> GetView()
+        public Dictionary<string, BuildStatus> GetView()
         {
-            return new Dictionary<string, BuildStatuz>(theTestSystem.report);
+            return new Dictionary<string, BuildStatus>(theTestSystem.report);
         }
     }
 }

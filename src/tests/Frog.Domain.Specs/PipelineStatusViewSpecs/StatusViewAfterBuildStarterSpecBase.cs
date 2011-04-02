@@ -8,11 +8,11 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
     {
         protected PipelineStatusView View;
         protected PipelineStatus PipelineStatus;
-        protected ConcurrentDictionary<string, BuildStatuz> BuildStatuses;
+        protected ConcurrentDictionary<string, BuildStatus> BuildStatuses;
 
         protected override void Given()
         {
-            BuildStatuses = new ConcurrentDictionary<string, BuildStatuz>();
+            BuildStatuses = new ConcurrentDictionary<string, BuildStatus>();
             View = new PipelineStatusView(BuildStatuses);
         }
     }

@@ -1,19 +1,20 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace Frog.Domain.UI
 {
-    public class BuildStatuz
+    public class BuildStatus
     {
         public void BuildStarted(IEnumerable<TaskInfo> taskInfos)
         {
-            tasks = new List<TaskZtate>(from taskInfo in taskInfos select new TaskZtate(taskInfo.Name));
+            tasks = new List<TaskState>(from taskInfo in taskInfos select new TaskState(taskInfo.Name));
         }
 
-        List<TaskZtate> tasks;
+        List<TaskState> tasks;
         public BuildTotalStatus Overall { get; private set; }
 
-        public IEnumerable<TaskZtate> Tasks
+        public IEnumerable<TaskState> Tasks
         {
             get { return tasks; }
         }
@@ -36,10 +37,10 @@ namespace Frog.Domain.UI
         BuildEndedSuccess
     }
 
-    public class TaskZtate
+    public class TaskState
     {
         public string Name { get; private set; }
-        readonly PipelineStatusView.TerminalOutput terminalOutput;
+        readonly TerminalOutput terminalOutput;
         TaskInfo.TaskStatus status;
 
         public string TerminalOutput
@@ -62,11 +63,45 @@ namespace Frog.Domain.UI
             this.status = status;
         }
 
-        public TaskZtate(string name)
+        public TaskState(string name)
         {
             Name = name;
-            terminalOutput = new PipelineStatusView.TerminalOutput();
+            terminalOutput = new TerminalOutput();
             status = TaskInfo.TaskStatus.NotStarted;
+        }
+    }
+    public class TerminalOutput
+    {
+        readonly List<string> contentPieces = new List<string>();
+        public void Add(int sequnceIndex, string content)
+        {
+            lock (contentPieces)
+            {
+                if (contentPieces.Count <= sequnceIndex)
+                {
+                    int itemsToAllocate = sequnceIndex - contentPieces.Count + 1;
+                    for (var i = 0; i < itemsToAllocate; i++)
+                        contentPieces.Add(null);
+                }
+                contentPieces[sequnceIndex] = content;
+            }
+        }
+
+        public string Combined
+        {
+            get
+            {
+                lock (contentPieces)
+                {
+                    var buffer = new StringBuilder();
+                    foreach (var contentPiece in contentPieces)
+                    {
+                        if (contentPiece == null) break;
+                        buffer.Append(contentPiece);
+                    }
+                    return buffer.ToString();
+                }
+            }
         }
     }
 }

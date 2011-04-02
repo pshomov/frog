@@ -21,7 +21,6 @@ namespace Frog.Domain
     }
 
     public delegate void BuildStartedDelegate(PipelineStatus status);
-    public delegate void BuildUpdatedDelegate(int taskIndex, TaskInfo.TaskStatus status);
 
     public interface Pipeline
     {
@@ -126,28 +125,27 @@ namespace Frog.Domain
 
         void RunTasks(SourceDrop sourceDrop, List<ExecTask> execTasks)
         {
-            ExecTaskResult.Status lastTaskStatus = ExecTaskResult.Status.Success;
+            ExecTaskResult.Status execTaskStatus = ExecTaskResult.Status.Success;
             PipelineStatus status = GeneratePipelineStatus(execTasks);
-            OnBuildStarted(new PipelineStatus(status));
+            OnBuildStarted(status);
 
             for (int i = 0; i < execTasks.Count; i++)
             {
                 var execTask = execTasks[i];
-                status.Tasks[i].Status = TaskInfo.TaskStatus.Started;
                 OnBuildUpdated(i, TaskInfo.TaskStatus.Started);
                 int sequneceIndex = 0;
                 Action<string> execTaskOnOnTerminalOutputUpdate = s => OnTerminalUpdate(new TerminalUpdateInfo(sequneceIndex++, s, i));
                 execTask.OnTerminalOutputUpdate += execTaskOnOnTerminalOutputUpdate;
-                lastTaskStatus = execTask.Perform(sourceDrop).ExecStatus;
+                execTaskStatus = execTask.Perform(sourceDrop).ExecStatus;
                 execTask.OnTerminalOutputUpdate -= execTaskOnOnTerminalOutputUpdate;
-                status.Tasks[i].Status = lastTaskStatus == ExecTaskResult.Status.Error
+                var taskStatus = execTaskStatus == ExecTaskResult.Status.Error
                                              ? TaskInfo.TaskStatus.FinishedError
                                              : TaskInfo.TaskStatus.FinishedSuccess;
-                OnBuildUpdated(i, status.Tasks[i].Status);
-                if (lastTaskStatus != ExecTaskResult.Status.Success) break;
+                OnBuildUpdated(i, taskStatus);
+                if (execTaskStatus != ExecTaskResult.Status.Success) break;
             }
 
-            OnBuildEnded(lastTaskStatus == ExecTaskResult.Status.Error
+            OnBuildEnded(execTaskStatus == ExecTaskResult.Status.Error
                              ? BuildTotalEndStatus.Error
                              : BuildTotalEndStatus.Success);
         }
