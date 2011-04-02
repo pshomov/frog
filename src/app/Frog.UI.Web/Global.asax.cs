@@ -15,7 +15,10 @@ namespace Frog.UI.Web
 
         protected void Application_Start()
         {
-            mapPath = Server.MapPath("~/App_Data/Crash_");
+            var exceptionDumpster = Server.MapPath("~/App_Data");
+            Directory.CreateDirectory(exceptionDumpster);
+            mapPath = Path.Combine(exceptionDumpster, "Crash_");
+
             AppDomain.CurrentDomain.UnhandledException += CurrentDomainOnUnhandledException;
             AreaRegistration.RegisterAllAreas();
 
@@ -38,18 +41,17 @@ namespace Frog.UI.Web
 
         void CurrentDomainOnUnhandledException(object sender, UnhandledExceptionEventArgs unhandledExceptionEventArgs)
         {
+            var ex = (Exception) unhandledExceptionEventArgs.ExceptionObject;
             try
             {
-                Exception ex = (Exception) unhandledExceptionEventArgs.ExceptionObject;
                 Console.WriteLine("Exception is: \n" + ex);
-                using (var crashFile = new StreamWriter(mapPath + DateTime.UtcNow.ToString("yyyyMMdd") + ".log"))
-                    crashFile.WriteLine("<crash><time>" + DateTime.UtcNow.TimeOfDay + "</time><url>" +
-                                        HttpContext.Current.Request.Url + "</url><exception>" + ex +
+                using (var crashFile = new StreamWriter(mapPath + DateTime.UtcNow.ToString("yyyyMMdd") + ".log", true))
+                    crashFile.WriteLine("<crash><exception>" + ex +
                                         "</exception></crash>");
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                Console.WriteLine(string.Format("Storing information of unhandled exception failed. Here is the exception that stopped the processing of the original one:{0}{1}And here is the original exception:{2}", e, Environment.NewLine, ex));
             }
         }
 
@@ -105,8 +107,8 @@ namespace Frog.UI.Web
         {
             var fileFinder = new DefaultFileFinder(new PathFinder());
             return new PipelineOfTasks(new CompoundTaskSource(
-                                           new MSBuildDetector(fileFinder),
-                                           new NUnitTaskDetctor(fileFinder)
+                                           new MSBuildDetector(fileFinder)
+//                                           new NUnitTaskDetctor(fileFinder)
                                            ),
                                        new ExecTaskGenerator(new ExecTaskFactory()));
         }
