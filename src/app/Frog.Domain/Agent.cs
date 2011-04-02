@@ -95,7 +95,7 @@ namespace Frog.Domain
             Action<string> onUpdateFound =
                 s => theBus.Publish(new UpdateFound {RepoUrl = message.RepoUrl, Revision = s});
             Action<BuildTotalEndStatus> onBuildEnded = started => theBus.Publish(new BuildEnded(message.RepoUrl, started));
-            Action<PipelineStatus> onBuildStarted =
+            BuildStartedDelegate onBuildStarted =
                 started => theBus.Publish(new BuildStarted(status: started, repoUrl: message.RepoUrl));
             Action<int, TaskInfo.TaskStatus> onBuildUpdated =
                 (i, status) => theBus.Publish(new BuildUpdated(repoUrl: message.RepoUrl, taskIndex: i, newStatus: status));

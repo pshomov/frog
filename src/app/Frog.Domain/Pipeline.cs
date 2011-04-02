@@ -20,10 +20,13 @@ namespace Frog.Domain
         }
     }
 
+    public delegate void BuildStartedDelegate(PipelineStatus status);
+    public delegate void BuildUpdatedDelegate(int taskIndex, TaskInfo.TaskStatus status);
+
     public interface Pipeline
     {
         void Process(SourceDrop sourceDrop);
-        event Action<PipelineStatus> OnBuildStarted;
+        event BuildStartedDelegate OnBuildStarted;
         event Action<int, TaskInfo.TaskStatus> OnBuildUpdated;
         event Action<BuildTotalEndStatus> OnBuildEnded;
         event Action<TerminalUpdateInfo> OnTerminalUpdate;
@@ -116,7 +119,7 @@ namespace Frog.Domain
             RunTasks(sourceDrop, execTasks);
         }
 
-        public event Action<PipelineStatus> OnBuildStarted = status => {};
+        public event BuildStartedDelegate OnBuildStarted = status => {};
         public event Action<int, TaskInfo.TaskStatus> OnBuildUpdated = (i,status) => {};
         public event Action<BuildTotalEndStatus> OnBuildEnded = status => {};
         public event Action<TerminalUpdateInfo> OnTerminalUpdate = info => {};

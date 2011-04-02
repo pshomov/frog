@@ -14,7 +14,7 @@ namespace Frog.Domain.Specs.Pipeline
         protected TaskSource TaskSource;
         protected IExecTaskGenerator ExecTaskGenerator;
         protected MSBuildTaskDescriptions SrcTask1;
-        protected Action<PipelineStatus> PipelineOnBuildStarted;
+        protected BuildStartedDelegate PipelineOnBuildStarted;
         protected Action<BuildTotalEndStatus> PipelineOnBuildEnded;
         protected Action<int, TaskInfo.TaskStatus> PipelineOnBuildUpdated;
         protected Action<TerminalUpdateInfo> PipelineOnTerminalUpdate;
@@ -29,7 +29,7 @@ namespace Frog.Domain.Specs.Pipeline
 
         void ObservingEvents()
         {
-            PipelineOnBuildStarted = Substitute.For<Action<PipelineStatus>>();
+            PipelineOnBuildStarted = Substitute.For<BuildStartedDelegate>();
             PipelineOnBuildEnded = Substitute.For<Action<BuildTotalEndStatus>>();
             PipelineOnBuildUpdated = Substitute.For<Action<int, TaskInfo.TaskStatus>>();
             PipelineOnTerminalUpdate = Substitute.For<Action<TerminalUpdateInfo>>();
