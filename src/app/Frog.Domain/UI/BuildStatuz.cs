@@ -5,7 +5,6 @@ namespace Frog.Domain.UI
 {
     public class BuildStatuz
     {
-
         public void BuildStarted(IEnumerable<TaskInfo> taskInfos)
         {
             tasks = new List<TaskZtate>(from taskInfo in taskInfos select new TaskZtate(taskInfo.Name));
@@ -24,16 +23,23 @@ namespace Frog.Domain.UI
             tasks[taskIndex].UpdateTaskStatus(status);
         }
 
-        public void BuildEnded(BuildTotalStatus overall)
+        public void BuildEnded(BuildTotalEndStatus overall)
         {
-            Overall = overall;
+            Overall = overall  == BuildTotalEndStatus.Success ? BuildTotalStatus.BuildEndedSuccess : BuildTotalStatus.BuildEndedError;
         }
+    }
+
+    public enum BuildTotalStatus
+    {
+        BuildStarted,
+        BuildEndedError,
+        BuildEndedSuccess
     }
 
     public class TaskZtate
     {
         public string Name { get; private set; }
-        PipelineStatusView.TerminalOutput terminalOutput;
+        readonly PipelineStatusView.TerminalOutput terminalOutput;
         TaskInfo.TaskStatus status;
 
         public string TerminalOutput
@@ -41,11 +47,14 @@ namespace Frog.Domain.UI
             get { return terminalOutput.Combined; }
         }
 
+        public void AddTerminalOutput(int sequence, string content)
+        {
+            terminalOutput.Add(sequence, content);
+        }
+
         public TaskInfo.TaskStatus Status
         {
-            get {
-                return status;
-            }
+            get { return status; }
         }
 
         public void UpdateTaskStatus(TaskInfo.TaskStatus status)

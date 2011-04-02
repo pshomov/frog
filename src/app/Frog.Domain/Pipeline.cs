@@ -24,8 +24,8 @@ namespace Frog.Domain
     {
         void Process(SourceDrop sourceDrop);
         event Action<PipelineStatus> OnBuildStarted;
-        event Action<PipelineStatus> OnBuildUpdated;
-        event Action<BuildTotalStatus> OnBuildEnded;
+        event Action<int, TaskInfo.TaskStatus> OnBuildUpdated;
+        event Action<BuildTotalEndStatus> OnBuildEnded;
         event Action<TerminalUpdateInfo> OnTerminalUpdate;
     }
 
@@ -93,7 +93,7 @@ namespace Frog.Domain
         public TaskStatus Status { get; set; }
     }
 
-    public enum BuildTotalStatus
+    public enum BuildTotalEndStatus
     {
         Error,
         Success
@@ -117,8 +117,8 @@ namespace Frog.Domain
         }
 
         public event Action<PipelineStatus> OnBuildStarted = status => {};
-        public event Action<PipelineStatus> OnBuildUpdated = status => {};
-        public event Action<BuildTotalStatus> OnBuildEnded = status => {};
+        public event Action<int, TaskInfo.TaskStatus> OnBuildUpdated = (i,status) => {};
+        public event Action<BuildTotalEndStatus> OnBuildEnded = status => {};
         public event Action<TerminalUpdateInfo> OnTerminalUpdate = info => {};
 
         void RunTasks(SourceDrop sourceDrop, List<ExecTask> execTasks)
@@ -131,7 +131,7 @@ namespace Frog.Domain
             {
                 var execTask = execTasks[i];
                 status.Tasks[i].Status = TaskInfo.TaskStatus.Started;
-                OnBuildUpdated(new PipelineStatus(status));
+                OnBuildUpdated(i, TaskInfo.TaskStatus.Started);
                 int sequneceIndex = 0;
                 Action<string> execTaskOnOnTerminalOutputUpdate = s => OnTerminalUpdate(new TerminalUpdateInfo(sequneceIndex++, s, i));
                 execTask.OnTerminalOutputUpdate += execTaskOnOnTerminalOutputUpdate;
@@ -140,13 +140,13 @@ namespace Frog.Domain
                 status.Tasks[i].Status = lastTaskStatus == ExecTaskResult.Status.Error
                                              ? TaskInfo.TaskStatus.FinishedError
                                              : TaskInfo.TaskStatus.FinishedSuccess;
-                OnBuildUpdated(new PipelineStatus(status));
+                OnBuildUpdated(i, status.Tasks[i].Status);
                 if (lastTaskStatus != ExecTaskResult.Status.Success) break;
             }
 
             OnBuildEnded(lastTaskStatus == ExecTaskResult.Status.Error
-                             ? BuildTotalStatus.Error
-                             : BuildTotalStatus.Success);
+                             ? BuildTotalEndStatus.Error
+                             : BuildTotalEndStatus.Success);
         }
 
         List<ExecTask> GenerateTasks(SourceDrop sourceDrop)

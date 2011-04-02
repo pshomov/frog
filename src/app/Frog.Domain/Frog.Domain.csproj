@@ -43,7 +43,7 @@
     <Compile Include="Agent.cs" />
     <Compile Include="RepositoryTracker.cs" />
     <Compile Include="SystemBase.cs" />
-    <Compile Include="UI\BuildStatusUpdating.cs" />
+    <Compile Include="UI\BuildStatuz.cs" />
     <Compile Include="UI\PipelineStatusView.cs" />
     <Compile Include="TaskSources\CompoundTaskSource.cs" />
     <Compile Include="ExecTaskGenerator.cs" />

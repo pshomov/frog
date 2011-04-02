@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Frog.Domain;
 using Frog.Domain.CustomTasks;
 using Frog.Domain.UI;
@@ -104,20 +105,20 @@ namespace Frog.System.Specs
             var prober = new PollingProber(5000, 100);
             Assert.True(prober.check(Take.Snapshot(() => system.GetView())
                                          .Has(statuses => statuses,
-                                              A.Check<Dictionary<string, PipelineStatusView.BuildStatus>>(
+                                              A.Check<Dictionary<string, BuildStatuz>>(
                                                   arg =>
-                                                  arg[repo.Url].TaskState.Count > 0 &&
-                                                  arg[repo.Url].TaskState[0].terminalOutput.Combined ==
+                                                  arg[repo.Url].Tasks.Count() > 0 &&
+                                                  arg[repo.Url].Tasks.ElementAt(0).TerminalOutput ==
                                                   SystemWithConsoleOutput.TerminalOutput1 +
                                                   SystemWithConsoleOutput.TerminalOutput2))
                                          .Has(statuses => statuses,
-                                              A.Check<Dictionary<string, PipelineStatusView.BuildStatus>>(
+                                              A.Check<Dictionary<string, BuildStatuz>>(
                                                   arg =>
-                                                  arg[repo.Url].TaskState.Count > 1 &&
-                                                  arg[repo.Url].TaskState[1].terminalOutput.Combined ==
+                                                  arg[repo.Url].Tasks.Count() > 1 &&
+                                                  arg[repo.Url].Tasks.ElementAt(1).TerminalOutput ==
                                                   SystemWithConsoleOutput.TerminalOutput3 +
-                                                  SystemWithConsoleOutput.TerminalOutput4))
-                            ));
+                                                  SystemWithConsoleOutput.TerminalOutput4)))
+                            );
         }
     }
 }

@@ -24,8 +24,8 @@ namespace Frog.Domain.Specs.Agent
                                 Raise.Event<Action<PipelineStatus>>(new PipelineStatus(Guid.NewGuid()));
                             Worker.OnTerminalUpdates += Raise.Event<Action<TerminalUpdateInfo>>(new TerminalUpdateInfo(content: "content", taskIndex: 1, contentSequenceIndex: 1));
                             Worker.OnBuildUpdated +=
-                                Raise.Event<Action<PipelineStatus>>(new PipelineStatus(Guid.NewGuid()));
-                            Worker.OnBuildEnded += Raise.Event<Action<BuildTotalStatus>>(BuildTotalStatus.Success);
+                                Raise.Event<Action<int, TaskInfo.TaskStatus>>(0, TaskInfo.TaskStatus.Started);
+                            Worker.OnBuildEnded += Raise.Event<Action<BuildTotalEndStatus>>(BuildTotalEndStatus.Success);
                         });
             Agent = new Domain.Agent(Bus, Worker);
             Agent.JoinTheParty();

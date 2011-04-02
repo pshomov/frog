@@ -1,4 +1,5 @@
 ﻿using System.Collections.Concurrent;
+using Frog.Domain.UI;
 using Frog.Specs.Support;
 
 namespace Frog.Domain.Specs.PipelineStatusViewSpecs
@@ -7,11 +8,11 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
     {
         protected UI.PipelineStatusView View;
         protected PipelineStatus PipelineStatus;
-        protected ConcurrentDictionary<string, UI.PipelineStatusView.BuildStatus> BuildStatuses;
+        protected ConcurrentDictionary<string, BuildStatuz> BuildStatuses;
 
         protected override void Given()
         {
-            BuildStatuses = new ConcurrentDictionary<string, UI.PipelineStatusView.BuildStatus>();
+            BuildStatuses = new ConcurrentDictionary<string, BuildStatuz>();
             View = new UI.PipelineStatusView(BuildStatuses);
         }
     }

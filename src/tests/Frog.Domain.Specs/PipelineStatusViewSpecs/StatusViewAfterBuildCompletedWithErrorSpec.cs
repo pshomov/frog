@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using Frog.Domain.UI;
+using NUnit.Framework;
 
 namespace Frog.Domain.Specs.PipelineStatusViewSpecs
 {
@@ -7,14 +8,14 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
     {
         protected override void When()
         {
-            View.Handle(new BuildEnded("http://fle", BuildTotalStatus.Error));
+            View.Handle(new BuildEnded("http://fle", BuildTotalEndStatus.Error));
         }
 
         [Test]
         public void should_set_status_to_BUILD_COMPLETED()
         {
-            Assert.That(BuildStatuses["http://fle"].Current,
-                        Is.EqualTo(UI.PipelineStatusView.BuildStatus.OverallStatus.PipelineCompletedFailure));
+            Assert.That(BuildStatuses["http://fle"].Overall,
+                        Is.EqualTo(BuildTotalStatus.BuildEndedError));
         }
     }
 }

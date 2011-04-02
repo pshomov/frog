@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Web.Mvc;
 using Frog.UI.Web.HttpHelpers;
 
@@ -46,7 +47,7 @@ namespace Frog.UI.Web.Controllers
                         new
                             {
                                 terminalOutput =
-                            ServiceLocator.Report[projectUrl].TaskState[taskIndex].terminalOutput.Combined
+                            ServiceLocator.Report[projectUrl].Tasks.ElementAt(taskIndex).TerminalOutput
                             });
             else
             {

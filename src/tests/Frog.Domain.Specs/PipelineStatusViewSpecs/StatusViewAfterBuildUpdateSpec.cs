@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Frog.Domain.UI;
 using KellermanSoftware.CompareNetObjects;
 using NUnit.Framework;
 
@@ -33,24 +34,20 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
                                                  {Name = "task1", Status = TaskInfo.TaskStatus.Started}
                                          }
                                  };
-            View.Handle(new BuildUpdated("http://dugh", new PipelineStatus(PipelineStatus)));
+            View.Handle(new BuildUpdated("http://dugh", 0, TaskInfo.TaskStatus.FinishedError));
         }
 
         [Test]
         public void should_not_modify_build_status()
         {
-            Assert.That(BuildStatuses["http://dugh"].Current,
-                        Is.EqualTo(UI.PipelineStatusView.BuildStatus.OverallStatus.NotStarted));
+            Assert.That(BuildStatuses["http://dugh"].Overall,
+                        Is.EqualTo(BuildTotalStatus.BuildStarted));
         }
 
         [Test]
         public void should_set_task_status_as_as_in_message()
         {
-            var comparator = new CompareObjects();
-            var taskStates = BuildStatuses["http://dugh"].TaskState.ToList();
-            var equalItems = PipelineStatus.Tasks.Where(
-                (state, i) => comparator.Compare(state.Status, taskStates[i]));
-            Assert.That(equalItems.Count(), Is.EqualTo(PipelineStatus.Tasks.Count));
+            Assert.That(BuildStatuses["http://dugh"].Tasks.ElementAt(0).Status, Is.EqualTo(TaskInfo.TaskStatus.FinishedError));
         }
     }
 }

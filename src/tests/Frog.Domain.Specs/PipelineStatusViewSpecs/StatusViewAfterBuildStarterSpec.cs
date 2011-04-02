@@ -26,18 +26,8 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
         [Test]
         public void should_set_status_to_BUILD_STARTED()
         {
-            Assert.That(BuildStatuses["http://repo"].Current,
-                        Is.EqualTo(PipelineStatusView.BuildStatus.OverallStatus.PipelineStarted));
-        }
-
-        [Test]
-        public void should_set_task_status_as_as_in_message()
-        {
-            var comparator = new CompareObjects();
-            var taskStates = BuildStatuses["http://repo"].TaskState.ToList();
-            var equalItems = taskStates.Where(
-                (state, i) => comparator.Compare(state.Status, PipelineStatus.Tasks[i]));
-            Assert.That(equalItems.Count(), Is.EqualTo(taskStates.Count));
+            Assert.That(BuildStatuses["http://repo"].Overall,
+                        Is.EqualTo(BuildTotalStatus.BuildStarted));
         }
     }
 }

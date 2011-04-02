@@ -15,8 +15,8 @@ namespace Frog.Domain.Specs.Pipeline
         protected IExecTaskGenerator ExecTaskGenerator;
         protected MSBuildTaskDescriptions SrcTask1;
         protected Action<PipelineStatus> PipelineOnBuildStarted;
-        protected Action<BuildTotalStatus> PipelineOnBuildEnded;
-        protected Action<PipelineStatus> PipelineOnBuildUpdated;
+        protected Action<BuildTotalEndStatus> PipelineOnBuildEnded;
+        protected Action<int, TaskInfo.TaskStatus> PipelineOnBuildUpdated;
         protected Action<TerminalUpdateInfo> PipelineOnTerminalUpdate;
 
         protected override void Given()
@@ -30,8 +30,8 @@ namespace Frog.Domain.Specs.Pipeline
         void ObservingEvents()
         {
             PipelineOnBuildStarted = Substitute.For<Action<PipelineStatus>>();
-            PipelineOnBuildEnded = Substitute.For<Action<BuildTotalStatus>>();
-            PipelineOnBuildUpdated = Substitute.For<Action<PipelineStatus>>();
+            PipelineOnBuildEnded = Substitute.For<Action<BuildTotalEndStatus>>();
+            PipelineOnBuildUpdated = Substitute.For<Action<int, TaskInfo.TaskStatus>>();
             PipelineOnTerminalUpdate = Substitute.For<Action<TerminalUpdateInfo>>();
             Pipeline.OnBuildStarted += PipelineOnBuildStarted;
             Pipeline.OnBuildUpdated += PipelineOnBuildUpdated;

@@ -6,7 +6,7 @@ namespace Frog.UI.Web
 {
     public static class ServiceLocator
     {
-        public static ConcurrentDictionary<string, PipelineStatusView.BuildStatus> Report { get; set; }
+        public static ConcurrentDictionary<string, BuildStatuz> Report { get; set; }
 
         public static RepositoryTracker RepositoryTracker { get; set; }
     }

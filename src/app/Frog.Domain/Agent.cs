@@ -33,19 +33,24 @@ namespace Frog.Domain
 
     public class BuildUpdated : BuildEvent
     {
-        public readonly PipelineStatus Status;
+        public string RepoUrl { get; private set; }
+        public int TaskIndex { get; private set; }
 
-        public BuildUpdated(string repoUrl, PipelineStatus status) : base(repoUrl)
+        public TaskInfo.TaskStatus TaskStatus { get; private set; }
+
+        public BuildUpdated(string repoUrl, int taskIndex, TaskInfo.TaskStatus newStatus) : base(repoUrl)
         {
-            Status = status;
+            RepoUrl = repoUrl;
+            TaskIndex = taskIndex;
+            TaskStatus = newStatus;
         }
     }
 
     public class BuildEnded : BuildEvent
     {
-        public readonly BuildTotalStatus TotalStatus;
+        public readonly BuildTotalEndStatus TotalStatus;
 
-        public BuildEnded(string repoUrl, BuildTotalStatus totalStatus) : base(repoUrl)
+        public BuildEnded(string repoUrl, BuildTotalEndStatus totalStatus) : base(repoUrl)
         {
             TotalStatus = totalStatus;
         }
@@ -89,11 +94,11 @@ namespace Frog.Domain
         {
             Action<string> onUpdateFound =
                 s => theBus.Publish(new UpdateFound {RepoUrl = message.RepoUrl, Revision = s});
-            Action<BuildTotalStatus> onBuildEnded = started => theBus.Publish(new BuildEnded(message.RepoUrl, started));
+            Action<BuildTotalEndStatus> onBuildEnded = started => theBus.Publish(new BuildEnded(message.RepoUrl, started));
             Action<PipelineStatus> onBuildStarted =
                 started => theBus.Publish(new BuildStarted(status: started, repoUrl: message.RepoUrl));
-            Action<PipelineStatus> onBuildUpdated =
-                started => theBus.Publish(new BuildUpdated(status: started, repoUrl: message.RepoUrl));
+            Action<int, TaskInfo.TaskStatus> onBuildUpdated =
+                (i, status) => theBus.Publish(new BuildUpdated(repoUrl: message.RepoUrl, taskIndex: i, newStatus: status));
             worker.OnUpdateFound += onUpdateFound;
             Action<TerminalUpdateInfo> onTerminalUpdates = info => 
                                                          theBus.Publish(new TerminalUpdate(repoUrl: message.RepoUrl,

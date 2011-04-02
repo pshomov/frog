@@ -41,9 +41,9 @@ namespace Frog.Domain.Specs.Agent
         public void should_publish_BuildUpdated_event()
         {
             Bus.Received().Publish(
-                Arg.Is<BuildUpdated>(found => found.Status != null && found.RepoUrl == "http://fle"));
+                Arg.Is<BuildUpdated>(found => found.TaskIndex == 0 && found.TaskStatus == TaskInfo.TaskStatus.Started && found.RepoUrl == "http://fle"));
             Bus.Received().Publish(
-                Arg.Is<BuildUpdated>(found => found.Status != null && found.RepoUrl == "http://flo"));
+                Arg.Is<BuildUpdated>(found => found.TaskIndex == 0 && found.TaskStatus == TaskInfo.TaskStatus.Started && found.RepoUrl == "http://flo"));
         }
 
         [Test]
@@ -51,10 +51,10 @@ namespace Frog.Domain.Specs.Agent
         {
             Bus.Received().Publish(
                 Arg.Is<BuildEnded>(
-                    found => found.TotalStatus == BuildTotalStatus.Success && found.RepoUrl == "http://fle"));
+                    found => found.TotalStatus == BuildTotalEndStatus.Success && found.RepoUrl == "http://fle"));
             Bus.Received().Publish(
                 Arg.Is<BuildEnded>(
-                    found => found.TotalStatus == BuildTotalStatus.Success && found.RepoUrl == "http://flo"));
+                    found => found.TotalStatus == BuildTotalEndStatus.Success && found.RepoUrl == "http://flo"));
         }
     }
 }

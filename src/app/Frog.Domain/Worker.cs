@@ -49,7 +49,7 @@ namespace Frog.Domain
         public virtual event Action<string> OnUpdateFound = s => {};
         public virtual event Action<TerminalUpdateInfo> OnTerminalUpdates = info => {};
         public virtual event Action<PipelineStatus> OnBuildStarted = status => {};
-        public virtual event Action<PipelineStatus> OnBuildUpdated =  status => {};
-        public virtual event Action<BuildTotalStatus> OnBuildEnded = status => {};
+        public virtual event Action<int, TaskInfo.TaskStatus> OnBuildUpdated =  (i,status) => {};
+        public virtual event Action<BuildTotalEndStatus> OnBuildEnded = status => {};
     }
 }

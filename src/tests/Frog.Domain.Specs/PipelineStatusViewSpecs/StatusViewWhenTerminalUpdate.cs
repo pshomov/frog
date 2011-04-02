@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Frog.Support;
 using NUnit.Framework;
 
@@ -23,13 +24,13 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
         [Test]
         public void should_update_terminal_output_for_task_0()
         {
-            Assert.That(BuildStatuses["http://fle"].TaskState[0].terminalOutput.Combined, Is.EqualTo("content1"));
+            Assert.That(BuildStatuses["http://fle"].Tasks.ElementAt(0).TerminalOutput, Is.EqualTo("content1"));
         }
 
         [Test]
         public void should_return_empty_output_for_task_1()
         {
-            Assert.That(BuildStatuses["http://fle"].TaskState[1].terminalOutput.Combined, Is.EqualTo(""));
+            Assert.That(BuildStatuses["http://fle"].Tasks.ElementAt(1).TerminalOutput, Is.EqualTo(""));
         }
     }
 
@@ -43,7 +44,7 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
                                          new PipelineStatus(Guid.NewGuid())
                                              {Tasks = As.List(new TaskInfo(), new TaskInfo())}));
             View.Handle(new TerminalUpdate("content1", 0, 0, "http://fle"));
-            View.Handle(new BuildEnded("http://fle", BuildTotalStatus.Success));
+            View.Handle(new BuildEnded("http://fle", BuildTotalEndStatus.Success));
         }
 
         protected override void When()
@@ -56,7 +57,7 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
         [Test]
         public void should_update_terminal_output_for_task_0()
         {
-            Assert.That(BuildStatuses["http://fle"].TaskState.Count, Is.EqualTo(3));
+            Assert.That(BuildStatuses["http://fle"].Tasks.Count(), Is.EqualTo(3));
         }
     }
 }

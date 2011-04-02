@@ -50,38 +50,31 @@ namespace Frog.Domain.Specs.Pipeline
         [Test]
         public void should_update_build_status_when_task_starts()
         {
-            PipelineOnBuildUpdated.Received().Invoke(Arg.Is<PipelineStatus>(
-                started =>
-                started.Tasks.Count == 2 &&
-                started.Tasks[0].Status == TaskInfo.TaskStatus.Started &&
-                started.Tasks[1].Status == TaskInfo.TaskStatus.NotStarted));
+            PipelineOnBuildUpdated.Received().Invoke(Arg.Is(0), Arg.Is<TaskInfo.TaskStatus>(
+                status =>
+                status == TaskInfo.TaskStatus.Started));
         }
 
         [Test]
         public void should_update_build_status_when_task_finishes()
         {
-            PipelineOnBuildUpdated.Received().Invoke(Arg.Is<PipelineStatus>(
-                started =>
-                started.Tasks.Count == 2 &&
-                started.Tasks[0].Status == TaskInfo.TaskStatus.FinishedError &&
-                started.Tasks[1].Status == TaskInfo.TaskStatus.NotStarted));
+            PipelineOnBuildUpdated.Received().Invoke(Arg.Is(0), Arg.Is<TaskInfo.TaskStatus>(
+                status =>
+                status == TaskInfo.TaskStatus.FinishedError));
         }
 
         [Test]
         public void should_publish_build_ended_with_error()
         {
-            PipelineOnBuildEnded.Received().Invoke(Arg.Is<BuildTotalStatus>(
+            PipelineOnBuildEnded.Received().Invoke(Arg.Is<BuildTotalEndStatus>(
                 started =>
-                started == BuildTotalStatus.Error));
+                started == BuildTotalEndStatus.Error));
         }
 
         [Test]
         public void should_not_start_second_task_at_all()
         {
-            PipelineOnBuildUpdated.DidNotReceive().Invoke(Arg.Is<PipelineStatus>(
-                started =>
-                started.Tasks.Count == 2 &&
-                started.Tasks[1].Status == TaskInfo.TaskStatus.Started));
+            PipelineOnBuildUpdated.DidNotReceive().Invoke(Arg.Is(1), Arg.Any<TaskInfo.TaskStatus>());
         }
 
         [Test]

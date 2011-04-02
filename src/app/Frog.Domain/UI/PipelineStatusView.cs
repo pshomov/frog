@@ -9,9 +9,9 @@ namespace Frog.Domain.UI
 {
     public class PipelineStatusView : Handles<BuildStarted>, Handles<BuildEnded>, Handles<BuildUpdated>
     {
-        readonly ConcurrentDictionary<string, BuildStatus> report;
+        readonly ConcurrentDictionary<string, BuildStatuz> report;
 
-        public PipelineStatusView(ConcurrentDictionary<string, BuildStatus> report)
+        public PipelineStatusView(ConcurrentDictionary<string, BuildStatuz> report)
         {
             this.report = report;
         }
@@ -20,37 +20,30 @@ namespace Frog.Domain.UI
         {
             EnsureReportExistsForRepo(message.RepoUrl);
             var buildStatus = report[message.RepoUrl];
-            buildStatus.Current = BuildStatus.OverallStatus.PipelineStarted;
-            buildStatus.TaskState = new List<TaskState>();
-            foreach (var taskInfo in message.Status.Tasks)
-            {
-                buildStatus.TaskState.Add(new TaskState(taskInfo));
-            }
+            buildStatus.BuildStarted(message.Status.Tasks);
         }
 
         public void Handle(BuildUpdated message)
         {
             EnsureReportExistsForRepo(message.RepoUrl);
-            report[message.RepoUrl].UpdateTaskStatus(message.Status.Tasks);
+            report[message.RepoUrl].BuildUpdated(message.TaskIndex, message.TaskStatus);
         }
 
         public void Handle(BuildEnded message)
         {
             EnsureReportExistsForRepo(message.RepoUrl);
-            report[message.RepoUrl].Current = message.TotalStatus == BuildTotalStatus.Success
-                                                  ? BuildStatus.OverallStatus.PipelineCompletedSuccess
-                                                  : BuildStatus.OverallStatus.PipelineCompletedFailure;
+            report[message.RepoUrl].BuildEnded(message.TotalStatus);
         }
 
         public void Handle(TerminalUpdate message)
         {
             EnsureReportExistsForRepo(message.RepoUrl);
-            report[message.RepoUrl].TaskState[message.TaskIndex].terminalOutput.Add(message.ContentSequenceIndex, message.Content);
+            report[message.RepoUrl].Tasks.ElementAt(message.TaskIndex).AddTerminalOutput(message.ContentSequenceIndex, message.Content);
         }
 
         void EnsureReportExistsForRepo(string repoUrl)
         {
-            report.TryAdd(repoUrl, new BuildStatus());
+            report.TryAdd(repoUrl, new BuildStatuz());
         }
 
         public class TerminalOutput
