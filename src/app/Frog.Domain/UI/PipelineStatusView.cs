@@ -1,5 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using System.Linq;
+using System.Threading;
 using SimpleCQRS;
 
 namespace Frog.Domain.UI
@@ -22,6 +23,7 @@ namespace Frog.Domain.UI
 
         public void Handle(BuildUpdated message)
         {
+            Thread.Sleep(500); // ouch ...
             EnsureReportExistsForRepo(message.RepoUrl);
             report[message.RepoUrl].BuildUpdated(message.TaskIndex, message.TaskStatus);
         }
@@ -34,6 +36,7 @@ namespace Frog.Domain.UI
 
         public void Handle(TerminalUpdate message)
         {
+            Thread.Sleep(700); // and ouch again ...
             EnsureReportExistsForRepo(message.RepoUrl);
             report[message.RepoUrl].Tasks.ElementAt(message.TaskIndex).AddTerminalOutput(message.ContentSequenceIndex,
                                                                                          message.Content);

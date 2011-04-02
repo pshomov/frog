@@ -33,14 +33,12 @@ namespace Frog.Domain
 
     public class BuildUpdated : BuildEvent
     {
-        public string RepoUrl { get; private set; }
         public int TaskIndex { get; private set; }
 
         public TaskInfo.TaskStatus TaskStatus { get; private set; }
 
         public BuildUpdated(string repoUrl, int taskIndex, TaskInfo.TaskStatus newStatus) : base(repoUrl)
         {
-            RepoUrl = repoUrl;
             TaskIndex = taskIndex;
             TaskStatus = newStatus;
         }
