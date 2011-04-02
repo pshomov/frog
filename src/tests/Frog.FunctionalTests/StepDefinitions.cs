@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Frog.Domain.Specs;
 using Frog.Specs.Support;
 using Frog.Support;
@@ -16,8 +17,8 @@ namespace Frog.FunctionalTests
         string repo;
         IWebElement statusPageLink;
 
-        [Given(@"I have a \.NET simple project")]
-        public void GivenIHaveA_NETSimpleProject()
+        [Given(@"I have a \.NET simple non-working project")]
+        public void GivenIHaveA_NETSimpleNonWorkingProject()
         {
             basePath = OSHelpers.GetMeAWorkingFolder();
             repo = GitTestSupport.CreateDummyRepo(basePath, "testrepo");
@@ -68,11 +69,12 @@ namespace Frog.FunctionalTests
             statusPageLink.Click();
         }
 
-        [Then(@"I see the build is completed")]
-        public void ThenISeeTheBuildIsCompleted()
+        [Then(@"I see the build is completed with status (.*)$")]
+        public void ThenISeeTheBuildIsCompletedWithStatus(string status)
         {
+            var statuses = new Dictionary<string, string>() {{"FAILURE", "Build ended with a failure"}};
             AssertionHelpers.WithRetries(
-                () => Assert.That(World.browser.FindElement(By.CssSelector("#status")).Text, Is.EqualTo("Build complete")));
+                () => Assert.That(World.browser.FindElement(By.CssSelector("#status")).Text, Is.EqualTo(statuses[status])));
         }
 
         [Then(@"The terminal output contains text from the build")]

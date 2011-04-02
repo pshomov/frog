@@ -18,20 +18,18 @@
                 $.ajax({
                     url: "data",
                     success: function data(msg) {
-                        switch (msg.status.Current) {
+                        switch (msg.status.Overall) {
                             case 0: set_status("Build started", "yellow");
                                 break;
-                            case 1: set_status("Not started", "gray");
+                            case 1: set_status("Build ended with a failure", "red");
                                 break;
-                            case 2: set_status("Build complete", "red");
-                                break;
-                            case 3: set_status("Build complete", "green");
+                            case 2: set_status("Build ended with success", "green");
                                 break;
                             default:
                                 set_status("Unknown build status", "cyan");
                         }
 
-                        var tasks = msg.status.PipelineStatus.Tasks;
+                        var tasks = msg.status.Tasks;
                         update_tasks(tasks);
                     },
                     error: function () {

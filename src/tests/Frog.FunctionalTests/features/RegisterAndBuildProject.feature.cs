@@ -58,7 +58,7 @@ namespace Frog.FunctionalTests.Features
         {
 #line 6
 #line 7
- testRunner.Given("I have a .NET simple project");
+ testRunner.Given("I have a .NET simple non-working project");
 #line hidden
         }
         
@@ -94,7 +94,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 17
  testRunner.And("I am on the status page for the project");
 #line 18
- testRunner.Then("I see the build is completed");
+ testRunner.Then("I see the build is completed with status FAILURE");
 #line 19
  testRunner.And("The terminal output contains text from the build");
 #line hidden
