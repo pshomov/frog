@@ -5,7 +5,7 @@ namespace Frog.Domain
 {
     public class ExecTaskFactory
     {
-        public virtual ExecTask CreateTask(string app, string args, string name)
+        public virtual IExecTask CreateTask(string app, string args, string name)
         {
             if (Os.IsUnix)
                 return new ExecTask(app, args, name);

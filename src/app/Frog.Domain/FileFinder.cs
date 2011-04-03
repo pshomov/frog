@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace Frog.Domain
@@ -7,6 +8,7 @@ namespace Frog.Domain
     {
         List<string> FindAllNUnitAssemblies(string baseFolder);
         List<string> FindAllSolutionFiles(string baseFolder);
+        List<string> FindAllTestTaskFiles(string baseFolder);
     }
 
     public class DefaultFileFinder : FileFinder
@@ -33,6 +35,14 @@ namespace Frog.Domain
             var baseFolderFull = Path.GetFullPath(baseFolder);
             pathFinder.apply(s => slns.Add(s.Remove(0, baseFolderFull.Length + 1)), "*.sln", baseFolder);
             return slns;
+        }
+
+        public List<string> FindAllTestTaskFiles(string baseFolder)
+        {
+            var testtasks = new List<string>();
+            var baseFolderFull = Path.GetFullPath(baseFolder);
+            pathFinder.apply(s => testtasks.Add(s.Remove(0, baseFolderFull.Length + 1)), "*.testtask", baseFolder);
+            return testtasks;
         }
     }
 }

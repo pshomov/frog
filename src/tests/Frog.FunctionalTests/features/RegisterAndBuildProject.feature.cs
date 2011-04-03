@@ -58,7 +58,7 @@ namespace Frog.FunctionalTests.Features
         {
 #line 6
 #line 7
- testRunner.Given("I have .NET sample project with 1 unit testing project as \"p1\"");
+ testRunner.Given("I have .NET sample project with 1 testing project as \"p1\"");
 #line hidden
         }
         
@@ -93,9 +93,9 @@ this.ScenarioSetup(scenarioInfo);
 #line 17
  testRunner.And("I am on the status page for project \"p1\"");
 #line 18
- testRunner.Then("I see the build is completed with status FAILURE");
+ testRunner.Then("I see the build is completed with status SUCCESS");
 #line 19
- testRunner.And("The terminal output contains text from the build");
+ testRunner.And("The terminal output contains text \"S>sample output from task 1 on project p1\"");
 #line hidden
             testRunner.CollectScenarioErrors();
         }

@@ -61,11 +61,11 @@ namespace Frog.FunctionalTests.Features
 #line 6
 this.ScenarioSetup(scenarioInfo);
 #line 7
- testRunner.Given("I have .NET sample project with 1 unit testing project as \"p1\"");
+ testRunner.Given("I have .NET sample project with 1 testing project as \"p1\"");
 #line 8
- testRunner.And("I have .NET sample project with 2 unit testing project as \"p2\"");
+ testRunner.And("I have .NET sample project with 2 testing project as \"p2\"");
 #line 9
- testRunner.And("I have .NET sample project with 0 unit testing project as \"p3\"");
+ testRunner.And("I have .NET sample project with 3 testing project as \"p3\"");
 #line 10
  testRunner.And("I have registered project \"p1\"");
 #line 11
@@ -73,7 +73,28 @@ this.ScenarioSetup(scenarioInfo);
 #line 12
  testRunner.And("I have registered project \"p3\"");
 #line 13
- testRunner.And("I check for updates");
+ testRunner.When("I check for updates");
+#line 14
+ testRunner.Then("I am on the status page for project \"p1\"");
+#line 15
+ testRunner.And("I see the build is completed with status SUCCESS");
+#line 16
+ testRunner.And("The terminal output contains text \"S>sample output from task 1 on project p1\"");
+#line 17
+ testRunner.And("I am on the status page for project \"p2\"");
+#line 18
+ testRunner.And("I see the build is completed with status SUCCESS");
+#line 19
+ testRunner.And("The terminal output contains text \"S>sample output from task 1 on project p2\\nS>s" +
+                    "ample output from task 2 on project p2\"");
+#line 20
+ testRunner.And("I am on the status page for project \"p3\"");
+#line 21
+ testRunner.And("I see the build is completed with status SUCCESS");
+#line 22
+ testRunner.And("The terminal output contains text \"S>sample output from task 1 on project p3\\nS>s" +
+                    "ample output from task 2 on project p3\\nS>sample output from task 3 on project p" +
+                    "3\"");
 #line hidden
             testRunner.CollectScenarioErrors();
         }

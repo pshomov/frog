@@ -27,9 +27,9 @@ namespace Frog.System.Specs
             execTaskGenerator.GimeTasks(Arg.Any<ITask>()).Returns(tasks);
         }
 
-        IList<ExecTask> GetExecTasks()
+        IList<IExecTask> GetExecTasks()
         {
-            var task1 = Substitute.For<ExecTask>(null, null, null);
+            var task1 = Substitute.For<IExecTask>();
             task1.Perform(Arg.Any<SourceDrop>()).Returns(new ExecTaskResult(ExecTask.ExecutionStatus.Success, 0));
             task1.When(task => task.Perform(Arg.Any<SourceDrop>())).Do(
                 info =>
@@ -37,7 +37,7 @@ namespace Frog.System.Specs
                         task1.OnTerminalOutputUpdate += Raise.Event<Action<string>>(TerminalOutput1);
                         task1.OnTerminalOutputUpdate += Raise.Event<Action<string>>(TerminalOutput2);
                     });
-            var task2 = Substitute.For<ExecTask>(null, null, null);
+            var task2 = Substitute.For<IExecTask>();
             task2.Perform(Arg.Any<SourceDrop>()).Returns(new ExecTaskResult(ExecTask.ExecutionStatus.Success, 0));
             task2.When(task => task.Perform(Arg.Any<SourceDrop>())).Do(
                 info =>

@@ -4,7 +4,7 @@ namespace Frog.Domain.Specs.Task
 {
     public class TaskFailsToStart_Spec
     {
-        static ExecTask _task;
+        static IExecTask _task;
         static ExecTaskResult _taskResult;
 
         Establish context = () => _task = new ExecTask("ad43wsWasdasd", "", "task_name");
@@ -20,7 +20,7 @@ namespace Frog.Domain.Specs.Task
 
     public class TaskStartsButExitsWithNonZero_Spec
     {
-        static ExecTask _task;
+        static IExecTask _task;
         static ExecTaskResult _taskResult;
 
         Establish context = () => _task = new ExecTask("ruby", @"-e 'exit 4'", "task_name");
@@ -32,7 +32,7 @@ namespace Frog.Domain.Specs.Task
 
     public class TaskStartsAndFinishesWithExitCodeZero_Spec
     {
-        static ExecTask _task;
+        static IExecTask _task;
         static ExecTaskResult _taskResult;
 
         Establish context = () => _task = new ExecTask("ruby", @"-e 'exit 0'", "task_name");

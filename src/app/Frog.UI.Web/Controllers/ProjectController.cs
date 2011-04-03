@@ -23,6 +23,27 @@ namespace Frog.UI.Web.Controllers
             return GetTaskTerminalOutput(GetGithubProjectUrl(user, project), taskIndex);
         }
 
+        public ActionResult AllTerminalOutput(string user, string project)
+        {
+            return GetAllTaskTerminalOutput(GetGithubProjectUrl(user, project));
+        }
+
+        internal static ActionResult GetAllTaskTerminalOutput(string projectUrl)
+        {
+            if (ServiceLocator.Report.ContainsKey(projectUrl))
+                return
+                    MonoBugs.Json(
+                        new
+                        {
+                            terminalOutput =
+                        ServiceLocator.Report[projectUrl].Tasks.Select(state => state.TerminalOutput).Aggregate((s, s1) => s+s1)
+                        });
+            else
+            {
+                return new HttpNotFoundResult("Project does not Runz ;(");
+            }
+        }
+
         string GetGithubProjectUrl(string user, string project)
         {
             return String.Format("http://github.com/{0}/{1}.git", user, project);

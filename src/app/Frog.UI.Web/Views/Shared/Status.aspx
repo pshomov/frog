@@ -31,6 +31,7 @@
 
                         var tasks = msg.status.Tasks;
                         update_tasks(tasks);
+                        update_terminal_output();
                     },
                     error: function () {
                         $("#status").text("Nothing to see here, moving along");
@@ -54,11 +55,22 @@
             });
         };
 
+        function update_terminal_output() {
+            $.ajax({
+                url: "task",
+                success: function (msg) {
+                    $("#terminal").text(msg.terminalOutput);
+                },
+                error: function () {
+                    console.log("Error retriving the terminal output");
+                }
+            });
+        }
+
         function update_tasks(tasks) {
             paper.clear();
             var taskStatusToColor = { 0: "gray", 1: "yellow", 2: "green", 3: "red" };
             for (var i = 0; i < tasks.length; i++) {
-                get_console_output(i);
                 var r = paper.rect(-50, -25, 100, 50);
                 var text = paper.text(0, 0, tasks[i].Name);
                 text.attr("fill", "#f1f1f1");

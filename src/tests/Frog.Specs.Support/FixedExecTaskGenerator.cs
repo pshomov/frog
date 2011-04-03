@@ -9,16 +9,16 @@ namespace Frog.Specs.Support
 {
     public class FixedExecTaskGenerator : IExecTaskGenerator
     {
-        readonly ExecTask[] tasks;
+        readonly IExecTask[] tasks;
 
-        public FixedExecTaskGenerator(params ExecTask[] tasks)
+        public FixedExecTaskGenerator(params IExecTask[] tasks)
         {
             this.tasks = tasks;
         }
 
-        public List<ExecTask> GimeTasks(ITask task)
+        public List<IExecTask> GimeTasks(ITask task)
         {
-            return new List<ExecTask>(tasks);
+            return new List<IExecTask>(tasks);
         }
     }
 }

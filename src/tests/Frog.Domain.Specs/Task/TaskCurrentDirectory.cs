@@ -7,7 +7,7 @@ namespace Frog.Domain.Specs.Task
     [TestFixture]
     public class TaskCurrentDirectory : BDD
     {
-        ExecTask _task;
+        IExecTask _task;
         ExecTaskResult taskResult;
         private string _arguments;
 

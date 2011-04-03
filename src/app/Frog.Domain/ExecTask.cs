@@ -42,7 +42,14 @@ namespace Frog.Domain
         }
     }
 
-    public class ExecTask
+    public interface IExecTask
+    {
+        event Action<string> OnTerminalOutputUpdate;
+        string Name { get; }
+        ExecTaskResult Perform(SourceDrop sourceDrop);
+    }
+
+    public class ExecTask : IExecTask
     {
         public enum ExecutionStatus
         {

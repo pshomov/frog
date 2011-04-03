@@ -18,8 +18,10 @@ namespace Frog.FunctionalTests
 
         public Dictionary<string, string> StatusPages
         {
-            get { if (!ScenarioContext.Current.ContainsKey("status_pages"))
-                ScenarioContext.Current["status_pages"] = new Dictionary<string, string>();
+            get
+            {
+                if (!ScenarioContext.Current.ContainsKey("status_pages"))
+                    ScenarioContext.Current["status_pages"] = new Dictionary<string, string>();
                 return (Dictionary<string, string>) ScenarioContext.Current["status_pages"];
             }
         }
@@ -29,11 +31,11 @@ namespace Frog.FunctionalTests
             if (relative.StartsWith("/"))
             {
                 if (World.baseUrl.EndsWith("/"))
-                    return World.baseUrl.Remove(World.baseUrl.Length - 1)+relative;
+                    return World.baseUrl.Remove(World.baseUrl.Length - 1) + relative;
                 return World.baseUrl + relative;
             }
             string url = World.browser.Url;
-            return url.Substring(0, url.LastIndexOf('/'))+relative;
+            return url.Substring(0, url.LastIndexOf('/')) + relative;
         }
 
         [Given(@"I have registered project ""(.*)""")]
@@ -47,20 +49,24 @@ namespace Frog.FunctionalTests
         }
 
         [When(@"I am on the status page for project ""(.*)""")]
+        [Then(@"I am on the status page for project ""(.*)""")]
         public void WhenIAmOnTheStatusPageForProjectP1(string project)
         {
             World.browser.Navigate().GoToUrl(StatusPages[project]);
         }
 
-        [Given(@"I have \.NET sample project with 1 unit testing project as ""(.*)""")]
-        public void GivenIHave_NETSampleProjectWith1UnitTestingProjectAsP1(string project)
+        [Given(@"I have \.NET sample project with (.*) testing project as ""(.*)""")]
+        public void GivenIHave_NETSampleProjectWith1UnitTestingProjectAsP1(int numberOfTestTasks, string project)
         {
             basePath = OSHelpers.GetMeAWorkingFolder();
             var repo = GitTestSupport.CreateDummyRepo(basePath, "testrepo");
 
             var gen = new FileGenesis();
-            gen.File("build.sln", "invalid");
-            GitTestSupport.CommitChangeFiles(repo, gen.Root);
+            for (int i = 0; i < numberOfTestTasks; i++)
+            {
+                gen.File(string.Format("t{0}.testtask", i), string.Format("sample output from task {0} on project {1}", i+1, project));
+            }
+            GitTestSupport.CommitChangeFiles(repo, gen.Root, string.Format("commit on project {0} with number of tasks {1}", project, numberOfTestTasks));
             ScenarioContext.Current[project] = repo;
         }
 
@@ -94,17 +100,21 @@ namespace Frog.FunctionalTests
         [Then(@"I see the build is completed with status (.*)$")]
         public void ThenISeeTheBuildIsCompletedWithStatus(string status)
         {
-            var statuses = new Dictionary<string, string> {{"FAILURE", "Build ended with a failure"}};
+            var statuses = new Dictionary<string, string>
+                               {
+                                   {"FAILURE", "Build ended with a failure"},
+                                   {"SUCCESS", "Build ended with success"}
+                               };
             AssertionHelpers.WithRetries(
                 () =>
                 Assert.That(World.browser.FindElement(By.CssSelector("#status")).Text, Is.EqualTo(statuses[status])));
         }
 
-        [Then(@"The terminal output contains text from the build")]
-        public void ThenTheTerminalOutputContainsTextFromTheBuild()
+        [Then(@"The terminal output contains text ""(.*)""")]
+        public void ThenTheTerminalOutputContainsTextFromTheBuild(string text)
         {
             AssertionHelpers.WithRetries(
-                () => Assert.That(World.browser.FindElement(By.CssSelector("#terminal")).Text.Length, Is.GreaterThan(2)));
+                () => Assert.That(World.browser.FindElement(By.CssSelector("#terminal")).Text, Is.EqualTo(text.Replace("\\n", " "))));
         }
 
         Uri U(string relativeUrl)

@@ -10,7 +10,7 @@ namespace Frog.Domain.Specs.Task
     public class TaskSendsTerminalOutputEventWhenStdOutputChange : BDD
     {
         string stdOutput = "";
-        ExecTask task;
+        IExecTask task;
 
         protected override void Given()
         {
@@ -36,7 +36,7 @@ namespace Frog.Domain.Specs.Task
     public class TaskSendsTerminalOutputEventWhenErrOutputChange : BDD
     {
         string errOutput = "";
-        ExecTask task;
+        IExecTask task;
 
         protected override void Given()
         {
@@ -61,7 +61,7 @@ namespace Frog.Domain.Specs.Task
     [Category(TestTypes.Integration)]
     public class TaskTerminalOutputDoesNotNeedSubscribersToWork : BDD
     {
-        ExecTask task;
+        IExecTask task;
 
         protected override void Given()
         {

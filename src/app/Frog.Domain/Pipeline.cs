@@ -114,7 +114,7 @@ namespace Frog.Domain
 
         public void Process(SourceDrop sourceDrop)
         {
-            List<ExecTask> execTasks = GenerateTasks(sourceDrop);
+            List<IExecTask> execTasks = GenerateTasks(sourceDrop);
             RunTasks(sourceDrop, execTasks);
         }
 
@@ -123,7 +123,7 @@ namespace Frog.Domain
         public event Action<BuildTotalEndStatus> OnBuildEnded = status => {};
         public event Action<TerminalUpdateInfo> OnTerminalUpdate = info => {};
 
-        void RunTasks(SourceDrop sourceDrop, List<ExecTask> execTasks)
+        void RunTasks(SourceDrop sourceDrop, List<IExecTask> execTasks)
         {
             ExecTaskResult.Status execTaskStatus = ExecTaskResult.Status.Success;
             PipelineStatus status = GeneratePipelineStatus(execTasks);
@@ -150,9 +150,9 @@ namespace Frog.Domain
                              : BuildTotalEndStatus.Success);
         }
 
-        List<ExecTask> GenerateTasks(SourceDrop sourceDrop)
+        List<IExecTask> GenerateTasks(SourceDrop sourceDrop)
         {
-            var execTasks = new List<ExecTask>();
+            var execTasks = new List<IExecTask>();
             foreach (var task in tasksSource.Detect(sourceDrop.SourceDropLocation))
             {
                 execTasks.AddRange(execTaskGenerator.GimeTasks(task));
@@ -160,7 +160,7 @@ namespace Frog.Domain
             return execTasks;
         }
 
-        PipelineStatus GeneratePipelineStatus(List<ExecTask> execTasks)
+        PipelineStatus GeneratePipelineStatus(List<IExecTask> execTasks)
         {
             var pipelineStatus = new PipelineStatus(Guid.NewGuid());
             foreach (var execTask in execTasks)

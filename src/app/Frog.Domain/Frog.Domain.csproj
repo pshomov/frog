@@ -44,6 +44,7 @@
     <Compile Include="Agent.cs" />
     <Compile Include="RepositoryTracker.cs" />
     <Compile Include="SystemBase.cs" />
+    <Compile Include="TaskSources\TestTaskDetector.cs" />
     <Compile Include="UI\BuildStatus.cs" />
     <Compile Include="UI\PipelineStatusView.cs" />
     <Compile Include="TaskSources\CompoundTaskSource.cs" />

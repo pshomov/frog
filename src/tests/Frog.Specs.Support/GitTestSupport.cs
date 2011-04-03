@@ -21,10 +21,10 @@ namespace Frog.Domain.Specs
             return Path.Combine(basePath, repoName);
         }
 
-        public static void CommitChangeFiles(string repo, string fileset)
+        public static void CommitChangeFiles(string repo, string fileset, string commitMessage = "wind of change")
         {
             var scriptPath = Path.Combine(Underware.GitSupportScriptsLocation, "git_commit_files.rb");
-            var process = new ProcessWrapper("ruby", scriptPath + " " + repo + " " + fileset+"/.");
+            var process = new ProcessWrapper("ruby", scriptPath + " " + repo + " " + fileset+"/." + " "+commitMessage);
             process.Execute();
             process.WaitForProcess();
         }

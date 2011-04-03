@@ -9,8 +9,8 @@ namespace Frog.Domain.Specs.Pipeline
     public abstract class PipelineProcessSpecBase : BDD
     {
         protected Domain.Pipeline Pipeline;
-        protected ExecTask Task1;
-        protected ExecTask Task2;
+        protected IExecTask Task1;
+        protected IExecTask Task2;
         protected TaskSource TaskSource;
         protected IExecTaskGenerator ExecTaskGenerator;
         protected MSBuildTaskDescriptions SrcTask1;
