@@ -6,7 +6,7 @@ namespace Frog.Support
     public class ProcessWrapper
     {
         public event Action<string> OnErrorOutput = s => Console.WriteLine(String.Format("E>{0}", s));
-        public event Action<String> OnStdOutput = s => Console.WriteLine(String.Format("S>{0}", s));
+        public event Action<string> OnStdOutput = s => Console.WriteLine(String.Format("S>{0}", s));
 
         public ProcessWrapper(string cmdExe, string arguments) : this(cmdExe, arguments, System.IO.Directory.GetCurrentDirectory())
         {
@@ -59,6 +59,7 @@ namespace Frog.Support
         public int WaitForProcess(int timeoutMilliseconds)
         {
             process.WaitForExit(timeoutMilliseconds);
+            process.WaitForExit();
             return process.ExitCode;
         }
     }

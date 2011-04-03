@@ -57,7 +57,6 @@ namespace Frog.Domain.Specs.Task
         }
     }
 
-    [Ignore]
     [TestFixture]
     [Category(TestTypes.Integration)]
     public class TaskTerminalOutputDoesNotNeedSubscribersToWork : BDD
@@ -78,7 +77,7 @@ namespace Frog.Domain.Specs.Task
         public void should_perform_the_behaviour_under_test_without_exception()
         {
             Thread.Sleep(500);
-            // The exception right now happens on a different thread and that's why it does not trip this test but the goal is to have it do that
+            // Giving it some time so may be the exception will happen on some other thread
         }
     }
 }

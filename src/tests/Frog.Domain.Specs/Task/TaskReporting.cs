@@ -13,6 +13,7 @@ namespace Frog.Domain.Specs.Task
         protected override void Given()
         {
             task = new ExecTask("ruby", "-e 'exit 0'", "task_name");
+            taskStarted = 0;
             task.OnTaskStarted += pid =>
                                       {
                                           taskStarted++;
