@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using Frog.Domain.CustomTasks;
+using Frog.Domain.ExecTasks;
 using Frog.Domain.TaskSources;
 
 namespace Frog.Domain
@@ -23,9 +22,9 @@ namespace Frog.Domain
         public List<IExecTask> GimeTasks(ITask task)
         {
             var result = new List<IExecTask>();
-            if (task.GetType() == typeof (MSBuildTaskDescriptions))
+            if (task.GetType() == typeof (MSBuildTask))
             {
-                var mstask = (MSBuildTaskDescriptions) task;
+                var mstask = (MSBuildTask) task;
                 result.Add(execTaskGenerator.CreateTask("xbuild", mstask.SolutionFile, "build"));
             }
             if (task.GetType() == typeof (NUnitTask))
@@ -38,32 +37,6 @@ namespace Frog.Domain
                 result.Add(new TestExecTask((task as TestTaskDescription).path));
             }
             return result;
-        }
-    }
-
-    public class TestExecTask : IExecTask
-    {
-        readonly string path;
-
-        public TestExecTask(string path)
-        {
-            this.path = path;
-        }
-
-        public event Action<string> OnTerminalOutputUpdate;
-
-        public string Name
-        {
-            get { return "Test task"; }
-        }
-
-        public ExecTaskResult Perform(SourceDrop sourceDrop)
-        {
-            foreach(var line in File.ReadAllLines(Path.Combine(sourceDrop.SourceDropLocation, path)))
-            {
-                OnTerminalOutputUpdate("S>" + line+Environment.NewLine);
-            }
-            return new ExecTaskResult(ExecTask.ExecutionStatus.Success, 0);
         }
     }
 }

@@ -19,7 +19,7 @@ namespace Frog.Domain.Specs
 
         protected override void When()
         {
-            execTaskGenerator.GimeTasks(new MSBuildTaskDescriptions("fle.sln"));
+            execTaskGenerator.GimeTasks(new MSBuildTask("fle.sln"));
         }
 
         [Test]

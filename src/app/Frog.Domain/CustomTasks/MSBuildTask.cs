@@ -1,10 +1,10 @@
 ﻿namespace Frog.Domain.CustomTasks
 {
-    public class MSBuildTaskDescriptions : ITask
+    public class MSBuildTask : ITask
     {
         public readonly string SolutionFile;
 
-        public MSBuildTaskDescriptions(string solutionFile)
+        public MSBuildTask(string solutionFile)
         {
             SolutionFile = solutionFile;
         }

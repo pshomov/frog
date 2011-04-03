@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Frog.Domain;
 using Frog.Domain.CustomTasks;
+using Frog.Domain.ExecTasks;
 using Frog.Domain.UI;
 using Frog.Specs.Support;
 using Frog.Support;
@@ -22,7 +23,7 @@ namespace Frog.System.Specs
 
         public SystemWithConsoleOutput()
         {
-            tasksSource.Detect(Arg.Any<string>()).Returns(As.List<ITask>(new MSBuildTaskDescriptions("fle.sln")));
+            tasksSource.Detect(Arg.Any<string>()).Returns(As.List<ITask>(new MSBuildTask("fle.sln")));
             var tasks = GetExecTasks();
             execTaskGenerator.GimeTasks(Arg.Any<ITask>()).Returns(tasks);
         }
@@ -30,7 +31,7 @@ namespace Frog.System.Specs
         IList<IExecTask> GetExecTasks()
         {
             var task1 = Substitute.For<IExecTask>();
-            task1.Perform(Arg.Any<SourceDrop>()).Returns(new ExecTaskResult(ExecTask.ExecutionStatus.Success, 0));
+            task1.Perform(Arg.Any<SourceDrop>()).Returns(new ExecTaskResult(ExecutionStatus.Success, 0));
             task1.When(task => task.Perform(Arg.Any<SourceDrop>())).Do(
                 info =>
                     {
@@ -38,7 +39,7 @@ namespace Frog.System.Specs
                         task1.OnTerminalOutputUpdate += Raise.Event<Action<string>>(TerminalOutput2);
                     });
             var task2 = Substitute.For<IExecTask>();
-            task2.Perform(Arg.Any<SourceDrop>()).Returns(new ExecTaskResult(ExecTask.ExecutionStatus.Success, 0));
+            task2.Perform(Arg.Any<SourceDrop>()).Returns(new ExecTaskResult(ExecutionStatus.Success, 0));
             task2.When(task => task.Perform(Arg.Any<SourceDrop>())).Do(
                 info =>
                     {

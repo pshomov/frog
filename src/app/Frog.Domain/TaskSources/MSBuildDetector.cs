@@ -19,7 +19,7 @@ namespace Frog.Domain.TaskSources
         public IList<ITask> Detect(string projectFolder)
         {
             var allSolutionFiles = fileFinder.FindAllSolutionFiles(projectFolder);
-            if (allSolutionFiles.Count == 1) return As.List<ITask>(new MSBuildTaskDescriptions(allSolutionFiles[0]));
+            if (allSolutionFiles.Count == 1) return As.List<ITask>(new MSBuildTask(allSolutionFiles[0]));
             if (allSolutionFiles.Count > 0)
             {
                 var rootFolderSolutions =
@@ -28,9 +28,9 @@ namespace Frog.Domain.TaskSources
                     rootFolderSolutions.FindIndex(
                         s => s.Equals("build.sln", StringComparison.InvariantCultureIgnoreCase));
                 if (rootBuildSlnIdx > -1)
-                    return As.List<ITask>(new MSBuildTaskDescriptions(rootFolderSolutions[rootBuildSlnIdx]));
+                    return As.List<ITask>(new MSBuildTask(rootFolderSolutions[rootBuildSlnIdx]));
                 if (rootFolderSolutions.Count > 1) return new List<ITask>();
-                return As.List<ITask>(new MSBuildTaskDescriptions(rootFolderSolutions[0]));
+                return As.List<ITask>(new MSBuildTask(rootFolderSolutions[0]));
             }
 
             return new List<ITask>();

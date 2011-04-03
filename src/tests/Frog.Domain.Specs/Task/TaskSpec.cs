@@ -1,3 +1,4 @@
+using Frog.Domain.ExecTasks;
 using Machine.Specifications;
 
 namespace Frog.Domain.Specs.Task

@@ -1,5 +1,6 @@
 using System;
 using Frog.Domain.CustomTasks;
+using Frog.Domain.ExecTasks;
 using Frog.Support;
 using NSubstitute;
 using NUnit.Framework;
@@ -12,10 +13,10 @@ namespace Frog.Domain.Specs.Pipeline
         protected override void Given()
         {
             base.Given();
-            SrcTask1 = new MSBuildTaskDescriptions("");
+            SrcTask1 = new MSBuildTask("");
             TaskSource.Detect(Arg.Any<string>()).Returns(As.List<ITask>(SrcTask1));
-            Task1 = Substitute.For<ExecTask>("", "", "");
-            Task1.Perform(Arg.Any<SourceDrop>()).Returns(new ExecTaskResult(ExecTask.ExecutionStatus.Success, 4));
+            Task1 = Substitute.For<IExecTask>("", "", "");
+            Task1.Perform(Arg.Any<SourceDrop>()).Returns(new ExecTaskResult(ExecutionStatus.Success, 4));
             Task1.When(task => task.Perform(Arg.Any<SourceDrop>())).Do(info =>
                                                                            {
                                                                                Task1.OnTerminalOutputUpdate +=

@@ -13,7 +13,7 @@ namespace Frog.Domain.Specs.Pipeline
         protected IExecTask Task2;
         protected TaskSource TaskSource;
         protected IExecTaskGenerator ExecTaskGenerator;
-        protected MSBuildTaskDescriptions SrcTask1;
+        protected MSBuildTask SrcTask1;
         protected BuildStartedDelegate PipelineOnBuildStarted;
         protected Action<BuildTotalEndStatus> PipelineOnBuildEnded;
         protected Action<int, TaskInfo.TaskStatus> PipelineOnBuildUpdated;

@@ -42,9 +42,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Agent.cs" />
+    <Compile Include="IExecTask.cs" />
     <Compile Include="RepositoryTracker.cs" />
     <Compile Include="SystemBase.cs" />
     <Compile Include="TaskSources\TestTaskDetector.cs" />
+    <Compile Include="ExecTasks\TestExecTask.cs" />
     <Compile Include="UI\BuildStatus.cs" />
     <Compile Include="UI\PipelineStatusView.cs" />
     <Compile Include="TaskSources\CompoundTaskSource.cs" />
@@ -55,13 +57,13 @@
     <Compile Include="TaskSources\NUnitTaskDetctor.cs" />
     <Compile Include="PathFinder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ExecTask.cs" />
+    <Compile Include="ExecTasks\ExecTask.cs" />
     <Compile Include="GitDriver.cs" />
     <Compile Include="Pipeline.cs" />
     <Compile Include="ExecTaskFactory.cs" />
     <Compile Include="SubfolderWorkingArea.cs" />
     <Compile Include="TaskSources\MSBuildDetector.cs" />
-    <Compile Include="CustomTasks\MSBuildTaskDescriptions.cs" />
+    <Compile Include="CustomTasks\MSBuildTask.cs" />
     <Compile Include="TaskSources\TaskSource.cs" />
     <Compile Include="Worker.cs" />
     <Compile Include="WorkingAreaGoverner.cs" />
@@ -84,5 +86,6 @@
       <Name>SimpleCQRS</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

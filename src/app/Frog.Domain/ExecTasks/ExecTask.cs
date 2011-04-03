@@ -2,7 +2,7 @@ using System;
 using System.ComponentModel;
 using Frog.Support;
 
-namespace Frog.Domain
+namespace Frog.Domain.ExecTasks
 {
     public class ExecTaskResult
     {
@@ -12,10 +12,10 @@ namespace Frog.Domain
             Error
         } ;
 
-        readonly ExecTask.ExecutionStatus executionStatus;
+        readonly ExecutionStatus executionStatus;
         readonly int exitCode;
 
-        public ExecTaskResult(ExecTask.ExecutionStatus executionStatus, int exitCode)
+        public ExecTaskResult(ExecutionStatus executionStatus, int exitCode)
         {
             this.executionStatus = executionStatus;
             this.exitCode = exitCode;
@@ -25,7 +25,7 @@ namespace Frog.Domain
         {
             get
             {
-                if (executionStatus != ExecTask.ExecutionStatus.Success)
+                if (executionStatus != ExecutionStatus.Success)
                     throw new InvalidOperationException("Task did not execute, so there is no exit code");
                 return exitCode;
             }
@@ -33,7 +33,7 @@ namespace Frog.Domain
 
         public bool HasExecuted
         {
-            get { return executionStatus == ExecTask.ExecutionStatus.Success; }
+            get { return executionStatus == ExecutionStatus.Success; }
         }
 
         public Status ExecStatus
@@ -42,26 +42,13 @@ namespace Frog.Domain
         }
     }
 
-    public interface IExecTask
-    {
-        event Action<string> OnTerminalOutputUpdate;
-        string Name { get; }
-        ExecTaskResult Perform(SourceDrop sourceDrop);
-    }
-
     public class ExecTask : IExecTask
     {
-        public enum ExecutionStatus
-        {
-            Success,
-            Failure
-        }
-
         readonly string app;
         readonly string arguments;
         readonly string name;
         public event Action<int> OnTaskStarted = pid => {};
-        public virtual event Action<string> OnTerminalOutputUpdate = s => {};
+        public event Action<string> OnTerminalOutputUpdate = s => {};
 
         public ExecTask(string app, string arguments, string name)
         {
@@ -70,7 +57,7 @@ namespace Frog.Domain
             this.name = name;
         }
 
-        public virtual ExecTaskResult Perform(SourceDrop sourceDrop)
+        public ExecTaskResult Perform(SourceDrop sourceDrop)
         {
             ProcessWrapper process;
             try
@@ -109,5 +96,11 @@ namespace Frog.Domain
         {
             get { return name; }
         }
+    }
+
+    public enum ExecutionStatus
+    {
+        Success,
+        Failure
     }
 }
