@@ -14,18 +14,61 @@ namespace Frog.FunctionalTests
     public class StepDefinitions
     {
         string basePath;
-        string repo;
         IWebElement statusPageLink;
 
-        [Given(@"I have a \.NET simple non-working project")]
-        public void GivenIHaveA_NETSimpleNonWorkingProject()
+        public Dictionary<string, string> StatusPages
+        {
+            get { if (!ScenarioContext.Current.ContainsKey("status_pages"))
+                ScenarioContext.Current["status_pages"] = new Dictionary<string, string>();
+                return (Dictionary<string, string>) ScenarioContext.Current["status_pages"];
+            }
+        }
+
+        static string GetFullURLfromRelative(string relative)
+        {
+            if (relative.StartsWith("/"))
+            {
+                if (World.baseUrl.EndsWith("/"))
+                    return World.baseUrl.Remove(World.baseUrl.Length - 1)+relative;
+                return World.baseUrl + relative;
+            }
+            string url = World.browser.Url;
+            return url.Substring(0, url.LastIndexOf('/'))+relative;
+        }
+
+        [Given(@"I have registered project ""(.*)""")]
+        public void GivenIHaveRegisteredProjectP1(string project)
+        {
+            GivenIAmOnTheRegistrationPage();
+            GivenITypeInTheUrlInputTheP1RepositoryURLAndPressTheRegisterButton(project);
+            statusPageLink = AssertionHelpers.WithRetries(() => World.browser.FindElementById("newly_registered"));
+            string target = statusPageLink.GetAttribute("href");
+            StatusPages[project] = GetFullURLfromRelative(target);
+        }
+
+        [When(@"I am on the status page for project ""(.*)""")]
+        public void WhenIAmOnTheStatusPageForProjectP1(string project)
+        {
+            World.browser.Navigate().GoToUrl(StatusPages[project]);
+        }
+
+        [Given(@"I have \.NET sample project with 1 unit testing project as ""(.*)""")]
+        public void GivenIHave_NETSampleProjectWith1UnitTestingProjectAsP1(string project)
         {
             basePath = OSHelpers.GetMeAWorkingFolder();
-            repo = GitTestSupport.CreateDummyRepo(basePath, "testrepo");
+            var repo = GitTestSupport.CreateDummyRepo(basePath, "testrepo");
 
             var gen = new FileGenesis();
             gen.File("build.sln", "invalid");
             GitTestSupport.CommitChangeFiles(repo, gen.Root);
+            ScenarioContext.Current[project] = repo;
+        }
+
+        [Given(@"I type in the url input the ""(.*)"" repository URL and press the 'Register' button")]
+        public void GivenITypeInTheUrlInputTheP1RepositoryURLAndPressTheRegisterButton(string project)
+        {
+            World.browser.FindElement(By.Id("url")).SendKeys((string) ScenarioContext.Current[project]);
+            World.browser.FindElementById("reg_button").Click();
         }
 
         [Given(@"I am on the ""registration"" page")]
@@ -34,25 +77,10 @@ namespace Frog.FunctionalTests
             World.browser.Navigate().GoToUrl(U("Content/register.html"));
         }
 
-        [Given(@"I type in the url input the project's repository URL and press the 'Register' button")]
-        public void GivenITypeInTheUrlInputTheProjectSRepositoryURL_and_press_the_Register_button()
-        {
-            World.browser.FindElement(By.Id("url")).SendKeys(repo);
-            World.browser.FindElementById("reg_button").Click();
-        }
-
         [Then(@"I get a link to the status page for the project")]
         public void ThenIGetALinkToTheStatusPageForTheProject()
         {
             AssertionHelpers.WithRetries(() => World.browser.FindElementById("newly_registered"));
-        }
-
-        [Given(@"I have registered the project")]
-        public void GivenIHaveRegisteredTheProject()
-        {
-            GivenIAmOnTheRegistrationPage();
-            GivenITypeInTheUrlInputTheProjectSRepositoryURL_and_press_the_Register_button();
-            statusPageLink = AssertionHelpers.WithRetries(() => World.browser.FindElementById("newly_registered"));
         }
 
         [When(@"I check for updates")]
@@ -63,18 +91,13 @@ namespace Frog.FunctionalTests
             browser2.Quit();
         }
 
-        [When(@"I am on the status page for the project")]
-        public void WhenIAmOnTheStatusPageForTheProject()
-        {
-            statusPageLink.Click();
-        }
-
         [Then(@"I see the build is completed with status (.*)$")]
         public void ThenISeeTheBuildIsCompletedWithStatus(string status)
         {
-            var statuses = new Dictionary<string, string>() {{"FAILURE", "Build ended with a failure"}};
+            var statuses = new Dictionary<string, string> {{"FAILURE", "Build ended with a failure"}};
             AssertionHelpers.WithRetries(
-                () => Assert.That(World.browser.FindElement(By.CssSelector("#status")).Text, Is.EqualTo(statuses[status])));
+                () =>
+                Assert.That(World.browser.FindElement(By.CssSelector("#status")).Text, Is.EqualTo(statuses[status])));
         }
 
         [Then(@"The terminal output contains text from the build")]

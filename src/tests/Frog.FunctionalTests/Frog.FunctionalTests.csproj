@@ -67,6 +67,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="features\HandlingMultipleProjects.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>HandlingMultipleProjects.feature</DependentUpon>
+    </Compile>
     <Compile Include="World.cs" />
     <Compile Include="features\RegisterAndBuildProject.feature.cs">
       <AutoGen>True</AutoGen>
@@ -88,6 +93,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="features\HandlingMultipleProjects.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>HandlingMultipleProjects.feature.cs</LastGenOutput>
+    </None>
     <None Include="features\RegisterAndBuildProject.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>RegisterAndBuildProject.feature.cs</LastGenOutput>

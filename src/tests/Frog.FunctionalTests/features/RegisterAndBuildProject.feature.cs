@@ -58,7 +58,7 @@ namespace Frog.FunctionalTests.Features
         {
 #line 6
 #line 7
- testRunner.Given("I have a .NET simple non-working project");
+ testRunner.Given("I have .NET sample project with 1 unit testing project as \"p1\"");
 #line hidden
         }
         
@@ -72,8 +72,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 10
  testRunner.Given("I am on the \"registration\" page");
 #line 11
- testRunner.And("I type in the url input the project\'s repository URL and press the \'Register\' but" +
-                    "ton");
+ testRunner.And("I type in the url input the \"p1\" repository URL and press the \'Register\' button");
 #line 12
  testRunner.Then("I get a link to the status page for the project");
 #line hidden
@@ -88,11 +87,11 @@ this.ScenarioSetup(scenarioInfo);
 #line 14
 this.ScenarioSetup(scenarioInfo);
 #line 15
- testRunner.Given("I have registered the project");
+ testRunner.Given("I have registered project \"p1\"");
 #line 16
  testRunner.When("I check for updates");
 #line 17
- testRunner.And("I am on the status page for the project");
+ testRunner.And("I am on the status page for project \"p1\"");
 #line 18
  testRunner.Then("I see the build is completed with status FAILURE");
 #line 19
