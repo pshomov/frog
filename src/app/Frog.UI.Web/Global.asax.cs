@@ -107,8 +107,8 @@ namespace Frog.UI.Web
         {
             var fileFinder = new DefaultFileFinder(new PathFinder());
             return new PipelineOfTasks(new CompoundTaskSource(
-                                           new MSBuildDetector(fileFinder)
-//                                           new NUnitTaskDetctor(fileFinder)
+                                           new MSBuildDetector(fileFinder),
+                                           new NUnitTaskDetctor(fileFinder)
                                            ),
                                        new ExecTaskGenerator(new ExecTaskFactory()));
         }
