@@ -71,9 +71,12 @@ namespace Frog.Domain
                 process = new ProcessWrapper(app, arguments, sourceDrop.SourceDropLocation);
                 process.OnErrorOutput += s => { if (s != null) OnTerminalOutputUpdate("E>" + s + Environment.NewLine); };
                 process.OnStdOutput += s => { if (s != null) OnTerminalOutputUpdate("S>" + s + Environment.NewLine); };
+                OnTerminalOutputUpdate(string.Format("Runz>> Launching {0} with arguments {1} with currentFolder {2}",
+                                                     app, arguments, sourceDrop.SourceDropLocation)+Environment.NewLine);
                 process.Execute();
                 OnTaskStarted(process.ProcessInfo.Id);
                 var exitcode = process.WaitForProcess(60000);
+                process.WaitForProcess();
                 MonoBugFix(exitcode);
             }
             catch (Win32Exception)
@@ -83,6 +86,8 @@ namespace Frog.Domain
 
             if (process.ProcessInfo.HasExited)
             {
+                OnTerminalOutputUpdate(string.Format("Runz>> Process has exited with exitcode {0}",
+                                                     process.ProcessInfo.ExitCode) + Environment.NewLine);
                 return new ExecTaskResult(ExecutionStatus.Success, process.ProcessInfo.ExitCode);
             }
             return new ExecTaskResult(ExecutionStatus.Failure, -1);
