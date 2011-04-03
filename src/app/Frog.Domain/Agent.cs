@@ -106,12 +106,18 @@ namespace Frog.Domain
             worker.OnBuildStarted += onBuildStarted;
             worker.OnBuildUpdated += onBuildUpdated;
             worker.OnBuildEnded += onBuildEnded;
-            worker.CheckForUpdatesAndKickOffPipeline(new GitDriver(message.RepoUrl), message.Revision);
-            worker.OnBuildEnded -= onBuildEnded;
-            worker.OnBuildStarted -= onBuildStarted;
-            worker.OnBuildUpdated -= onBuildUpdated;
-            worker.OnUpdateFound -= onUpdateFound;
-            worker.OnTerminalUpdates -= onTerminalUpdates;
+            try
+            {
+                worker.CheckForUpdatesAndKickOffPipeline(new GitDriver(message.RepoUrl), message.Revision);
+            }
+            finally
+            {
+                worker.OnBuildEnded -= onBuildEnded;
+                worker.OnBuildStarted -= onBuildStarted;
+                worker.OnBuildUpdated -= onBuildUpdated;
+                worker.OnUpdateFound -= onUpdateFound;
+                worker.OnTerminalUpdates -= onTerminalUpdates;
+            }
         }
     }
 }

@@ -60,6 +60,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Agent\AgentChecksForUpdates.cs" />
+    <Compile Include="Agent\AgentHandlesException.cs" />
     <Compile Include="Agent\AgentHandlesTerminalUpdates.cs" />
     <Compile Include="Agent\AgentSpecsBase.cs" />
     <Compile Include="Agent\AgentSpecsWithTwoPeojects.cs" />
@@ -94,6 +95,7 @@
     <Compile Include="Task\TaskSendsTerminalOutputEvent.cs" />
     <Compile Include="TerminalOutputConsolidationMethod.cs" />
     <Compile Include="TestTypes.cs" />
+    <Compile Include="WorkerSpecs\WorkerHandlesExceptions.cs" />
     <Compile Include="WorkerSpecs\WorkerPropagetesTerminalUpdateEvents.cs" />
     <Compile Include="WorkerSpecs\WorkerDoesNothingWhenNoUpdates.cs" />
     <Compile Include="WorkerSpecs\WorkerKicksPipelineOffWhenSourceUpdates.cs" />

@@ -7,8 +7,14 @@ namespace Frog.Domain
 {
     public class CheckForUpdates : Command
     {
-        public string RepoUrl;
-        public string Revision;
+        public readonly string RepoUrl;
+        public readonly string Revision;
+
+        public CheckForUpdates(string repoUrl, string revision)
+        {
+            RepoUrl = repoUrl;
+            Revision = revision;
+        }
     }
 
     public class RepositoryTracker : Handles<UpdateFound>
@@ -42,7 +48,7 @@ namespace Frog.Domain
         public void CheckForUpdates()
         {
             trackedRepos.ToList().ForEach(
-                s => bus.Send(new CheckForUpdates {RepoUrl = s.Value.Url, Revision = s.Value.LastBuiltRevision}));
+                s => bus.Send(new CheckForUpdates(repoUrl : s.Value.Url, revision : s.Value.LastBuiltRevision)));
         }
 
         public void StartListeningForBuildUpdates()

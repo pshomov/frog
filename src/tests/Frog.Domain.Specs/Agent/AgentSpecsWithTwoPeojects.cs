@@ -9,8 +9,8 @@ namespace Frog.Domain.Specs.Agent
     {
         protected override void When()
         {
-            Agent.Handle(new CheckForUpdates {RepoUrl = "http://fle", Revision = "2"});
-            Agent.Handle(new CheckForUpdates {RepoUrl = "http://flo", Revision = "2"});
+            Agent.Handle(new CheckForUpdates(repoUrl: "http://fle", revision: "2"));
+            Agent.Handle(new CheckForUpdates(repoUrl: "http://flo", revision: "2"));
         }
 
         [Test]

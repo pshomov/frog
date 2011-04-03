@@ -39,11 +39,17 @@ namespace Frog.Domain
             pipeline.OnBuildStarted += OnBuildStarted;
             pipeline.OnBuildUpdated += OnBuildUpdated;
             pipeline.OnTerminalUpdate += OnTerminalUpdates;
-            pipeline.Process(new SourceDrop(allocatedWorkingArea));
-            pipeline.OnBuildEnded -= OnBuildEnded;
-            pipeline.OnBuildStarted -= OnBuildStarted;
-            pipeline.OnBuildUpdated -= OnBuildUpdated;
-            pipeline.OnTerminalUpdate -= OnTerminalUpdates;
+            try
+            {
+                pipeline.Process(new SourceDrop(allocatedWorkingArea));
+            }
+            finally
+            {
+                pipeline.OnBuildEnded -= OnBuildEnded;
+                pipeline.OnBuildStarted -= OnBuildStarted;
+                pipeline.OnBuildUpdated -= OnBuildUpdated;
+                pipeline.OnTerminalUpdate -= OnTerminalUpdates;
+            }
         }
 
         public virtual event Action<string> OnUpdateFound = s => {};
