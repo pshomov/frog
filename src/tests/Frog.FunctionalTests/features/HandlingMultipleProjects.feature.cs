@@ -54,10 +54,10 @@ namespace Frog.FunctionalTests.Features
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Build statuses for multiple projects")]
-        public virtual void BuildStatusesForMultipleProjects()
+        [NUnit.Framework.DescriptionAttribute("Build statuses for multiple successful projects")]
+        public virtual void BuildStatusesForMultipleSuccessfulProjects()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Build statuses for multiple projects", ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Build statuses for multiple successful projects", ((string[])(null)));
 #line 6
 this.ScenarioSetup(scenarioInfo);
 #line 7
@@ -104,6 +104,61 @@ this.ScenarioSetup(scenarioInfo);
  testRunner.And("I see the build is completed with status SUCCESS");
 #line 28
  testRunner.And("The terminal output contains text \"S>p3t1\\nS>p3t2\\nS>p3t3\"");
+#line hidden
+            testRunner.CollectScenarioErrors();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Build statuses for multiple successful and one failing projects")]
+        public virtual void BuildStatusesForMultipleSuccessfulAndOneFailingProjects()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Build statuses for multiple successful and one failing projects", ((string[])(null)));
+#line 30
+this.ScenarioSetup(scenarioInfo);
+#line 31
+ testRunner.Given("I have a project as \"p1\"");
+#line 32
+ testRunner.And("I add a test task \"t1\" with content \"p1t1\" to project \"p1\"");
+#line 33
+ testRunner.And("I have a project as \"p2\"");
+#line 34
+ testRunner.And("I add a test task \"t1\" with content \"p2t1\" to project \"p2\"");
+#line 35
+ testRunner.And("I add a test task \"t2\" with content \"exception\" to project \"p2\"");
+#line 36
+ testRunner.And("I have a project as \"p3\"");
+#line 37
+ testRunner.And("I add a test task \"t1\" with content \"p3t1\" to project \"p3\"");
+#line 38
+ testRunner.And("I add a test task \"t2\" with content \"p3t2\" to project \"p3\"");
+#line 39
+ testRunner.And("I add a test task \"t3\" with content \"p3t3\" to project \"p3\"");
+#line 40
+ testRunner.And("I have registered project \"p1\"");
+#line 41
+ testRunner.And("I have registered project \"p2\"");
+#line 42
+ testRunner.And("I have registered project \"p3\"");
+#line 43
+ testRunner.When("I check for updates");
+#line 44
+ testRunner.Then("I am on the status page for project \"p1\"");
+#line 45
+ testRunner.And("I see the build is completed with status SUCCESS");
+#line 46
+ testRunner.And("The terminal output has text \"S>p1t1\"");
+#line 47
+ testRunner.And("I am on the status page for project \"p2\"");
+#line 48
+ testRunner.And("I see the build is completed with status FAILURE");
+#line 49
+ testRunner.And("The terminal output contains text \"S>p2t1\\nS>exception\"");
+#line 50
+ testRunner.And("I am on the status page for project \"p3\"");
+#line 51
+ testRunner.And("I see the build is completed with status SUCCESS");
+#line 52
+ testRunner.And("The terminal output has text \"S>p3t1\\nS>p3t2\\nS>p3t3\"");
 #line hidden
             testRunner.CollectScenarioErrors();
         }

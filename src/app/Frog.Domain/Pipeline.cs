@@ -137,7 +137,15 @@ namespace Frog.Domain
                 int sequneceIndex = 0;
                 Action<string> execTaskOnOnTerminalOutputUpdate = s => OnTerminalUpdate(new TerminalUpdateInfo(sequneceIndex++, s, i));
                 execTask.OnTerminalOutputUpdate += execTaskOnOnTerminalOutputUpdate;
-                execTaskStatus = execTask.Perform(sourceDrop).ExecStatus;
+                try
+                {
+                    execTaskStatus = execTask.Perform(sourceDrop).ExecStatus;
+                }
+                catch(Exception e)
+                {
+                    execTaskStatus = ExecTaskResult.Status.Error;
+                    execTaskOnOnTerminalOutputUpdate("Runz>> Exception running the task:" + e);
+                }
                 execTask.OnTerminalOutputUpdate -= execTaskOnOnTerminalOutputUpdate;
                 var taskStatus = execTaskStatus == ExecTaskResult.Status.Error
                                              ? TaskInfo.TaskStatus.FinishedError

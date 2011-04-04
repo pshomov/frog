@@ -33,11 +33,12 @@ namespace Frog.Domain.ExecTasks
             {
                 var exits = new Dictionary<string, ExecutionStatus>
                                 {
-                                    {"OK", ExecutionStatus.Success}, 
+                                    {"OK", ExecutionStatus.Success},
                                     {"ERROR", ExecutionStatus.Failure}
                                 };
                 var lastItem = allLines.LastItem().ToUpper();
-                if (lastItem == "EXECEPTION") throw new Exception("Bad things happened here");
+                if (lastItem == "EXCEPTION") 
+                    throw new Exception("Bad things happened here");
                 if (exits.ContainsKey(lastItem))
                 {
                     execStatus = exits[lastItem];
