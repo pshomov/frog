@@ -80,5 +80,10 @@ namespace Frog.Support
         {
             return string.IsNullOrWhiteSpace(str);
         }
+
+        public static T LastItem<T>(this T[] ar )
+        {
+            return ar[ar.Length - 1];
+        }
     }
 }

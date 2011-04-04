@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using Frog.Support;
 
 namespace Frog.Domain.ExecTasks
 {
@@ -21,11 +23,27 @@ namespace Frog.Domain.ExecTasks
 
         public ExecTaskResult Perform(SourceDrop sourceDrop)
         {
-            foreach(var line in File.ReadAllLines(Path.Combine(sourceDrop.SourceDropLocation, path)))
+            var allLines = File.ReadAllLines(Path.Combine(sourceDrop.SourceDropLocation, path));
+            foreach (var line in allLines)
             {
-                OnTerminalOutputUpdate("S>" + line+Environment.NewLine);
+                OnTerminalOutputUpdate("S>" + line + Environment.NewLine);
             }
-            return new ExecTaskResult(ExecutionStatus.Success, 0);
+            var execStatus = ExecutionStatus.Success;
+            if (allLines.Length > 0)
+            {
+                var exits = new Dictionary<string, ExecutionStatus>
+                                {
+                                    {"OK", ExecutionStatus.Success}, 
+                                    {"ERROR", ExecutionStatus.Failure}
+                                };
+                var lastItem = allLines.LastItem().ToUpper();
+                if (lastItem == "EXECEPTION") throw new Exception("Bad things happened here");
+                if (exits.ContainsKey(lastItem))
+                {
+                    execStatus = exits[lastItem];
+                }
+            }
+            return new ExecTaskResult(execStatus, 0);
         }
     }
 }

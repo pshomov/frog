@@ -55,19 +55,22 @@ namespace Frog.FunctionalTests
             World.browser.Navigate().GoToUrl(StatusPages[project]);
         }
 
-        [Given(@"I have \.NET sample project with (.*) testing project as ""(.*)""")]
-        public void GivenIHave_NETSampleProjectWith1UnitTestingProjectAsP1(int numberOfTestTasks, string project)
+        [Given(@"I have a project as ""(.*)""")]
+        public void GivenIHave_NETSampleProjectWith1UnitTestingProjectAsP1(string project)
         {
             basePath = OSHelpers.GetMeAWorkingFolder();
             var repo = GitTestSupport.CreateDummyRepo(basePath, "testrepo");
-
-            var gen = new FileGenesis();
-            for (int i = 0; i < numberOfTestTasks; i++)
-            {
-                gen.File(string.Format("t{0}.testtask", i), string.Format("sample output from task {0} on project {1}", i+1, project));
-            }
-            GitTestSupport.CommitChangeFiles(repo, gen.Root, string.Format("commit on project {0} with number of tasks {1}", project, numberOfTestTasks));
             ScenarioContext.Current[project] = repo;
+        }
+
+        [Given(@"I add a test task ""(.*)"" with content ""(.*)"" to project ""(.*)""")]
+        public void Give_I_add_a_task(string taskName, string content, string project)
+        {
+            var repo = (string) ScenarioContext.Current[project];
+            var gen = new FileGenesis();
+            gen.File(string.Format("{0}.testtask", taskName), content.Replace("\\n", Environment.NewLine));
+            GitTestSupport.CommitChangeFiles(repo, gen.Root, string.Format("commit on project {0} for adding task {1}", project, taskName));
+
         }
 
         [Given(@"I type in the url input the ""(.*)"" repository URL and press the 'Register' button")]

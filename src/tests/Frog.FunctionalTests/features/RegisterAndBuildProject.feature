@@ -4,7 +4,8 @@
 	I want to be able to register the project
 
 Background:
-	Given I have .NET sample project with 1 testing project as "p1"
+	Given I have a project as "p1"
+	And I add a test task "t1" with content "testoutput" to project "p1"
 
 Scenario: New project registration
 	Given I am on the "registration" page
@@ -16,4 +17,4 @@ Scenario: "Check for project updates" builds the project
 	When I check for updates
 	And I am on the status page for project "p1"
 	Then I see the build is completed with status SUCCESS
-	And The terminal output contains text "S>sample output from task 1 on project p1"
+	And The terminal output contains text "S>testoutput"

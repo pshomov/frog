@@ -58,7 +58,9 @@ namespace Frog.FunctionalTests.Features
         {
 #line 6
 #line 7
- testRunner.Given("I have .NET sample project with 1 testing project as \"p1\"");
+ testRunner.Given("I have a project as \"p1\"");
+#line 8
+ testRunner.And("I add a test task \"t1\" with content \"testoutput\" to project \"p1\"");
 #line hidden
         }
         
@@ -67,13 +69,13 @@ namespace Frog.FunctionalTests.Features
         public virtual void NewProjectRegistration()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("New project registration", ((string[])(null)));
-#line 9
-this.ScenarioSetup(scenarioInfo);
 #line 10
- testRunner.Given("I am on the \"registration\" page");
+this.ScenarioSetup(scenarioInfo);
 #line 11
- testRunner.And("I type in the url input the \"p1\" repository URL and press the \'Register\' button");
+ testRunner.Given("I am on the \"registration\" page");
 #line 12
+ testRunner.And("I type in the url input the \"p1\" repository URL and press the \'Register\' button");
+#line 13
  testRunner.Then("I get a link to the status page for the project");
 #line hidden
             testRunner.CollectScenarioErrors();
@@ -84,18 +86,18 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void CheckForProjectUpdatesBuildsTheProject()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("\"Check for project updates\" builds the project", ((string[])(null)));
-#line 14
-this.ScenarioSetup(scenarioInfo);
 #line 15
- testRunner.Given("I have registered project \"p1\"");
+this.ScenarioSetup(scenarioInfo);
 #line 16
- testRunner.When("I check for updates");
+ testRunner.Given("I have registered project \"p1\"");
 #line 17
- testRunner.And("I am on the status page for project \"p1\"");
+ testRunner.When("I check for updates");
 #line 18
- testRunner.Then("I see the build is completed with status SUCCESS");
+ testRunner.And("I am on the status page for project \"p1\"");
 #line 19
- testRunner.And("The terminal output contains text \"S>sample output from task 1 on project p1\"");
+ testRunner.Then("I see the build is completed with status SUCCESS");
+#line 20
+ testRunner.And("The terminal output contains text \"S>testoutput\"");
 #line hidden
             testRunner.CollectScenarioErrors();
         }
