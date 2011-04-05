@@ -1,4 +1,6 @@
-﻿using System; 
+﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.IO;
 using System.Web;
 using System.Web.Mvc;
@@ -6,6 +8,7 @@ using System.Web.Routing;
 using Frog.Domain;
 using Frog.Domain.TaskSources;
 using Frog.Support;
+using SimpleCQRS;
 
 namespace Frog.UI.Web
 {
@@ -60,6 +63,7 @@ namespace Frog.UI.Web
             var system = new ProductionSystem();
             ServiceLocator.RepositoryTracker = system.repositoryTracker;
             ServiceLocator.Report = system.report;
+            ServiceLocator.AllMassages = system.AllMessages;
         }
     }
 
@@ -69,6 +73,8 @@ namespace Frog.UI.Web
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+            routes.MapRoute("diagnostics_all_messages", "diagnostics/messages",
+                            new { controller = "Diagnostics", action = "allmessages" });
             routes.MapRoute("task_all_terminal_output", "project/github/{user}/{project}/task",
                             new { controller = "Project", action = "allterminaloutput" });
             routes.MapRoute("task_terminal_output", "project/github/{user}/{project}/task/{taskIndex}",
@@ -100,6 +106,14 @@ namespace Frog.UI.Web
 
     public class ProductionSystem : SystemBase
     {
+        IBusDebug debug;
+        public readonly ConcurrentQueue<Message> AllMessages = new ConcurrentQueue<Message>();
+        public ProductionSystem()
+        {
+            debug = (IBusDebug) TheBus;
+            debug.OnMessage += message => AllMessages.Enqueue(message);
+        }
+
         protected override WorkingAreaGoverner SetupWorkingAreaGovernor()
         {
             var workingAreaPath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());

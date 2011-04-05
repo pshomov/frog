@@ -53,6 +53,7 @@
     <Reference Include="System.Web.Services" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\DiagnosticsController.cs" />
     <Compile Include="HttpHelpers\HttpNotFoundResult.cs" />
     <Compile Include="Controllers\TestSupport\TestProjectController.cs" />
     <Compile Include="Controllers\TestSupport\TestRegisterProjectController.cs" />
@@ -68,6 +69,8 @@
     <Compile Include="HttpHelpers\PathUrlConversion.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\diagnostics.html" />
+    <Content Include="Scripts\json-serialization.js" />
     <Content Include="Content\register.html" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
