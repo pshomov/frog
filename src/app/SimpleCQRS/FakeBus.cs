@@ -53,8 +53,8 @@ namespace SimpleCQRS
             {
                 //dispatch on thread pool for added awesomeness
                 var handler1 = handler;
-//                ThreadPool.QueueUserWorkItem(x => handler1(@event));
-                handler1(@event);
+                ThreadPool.QueueUserWorkItem(x => handler1(@event));
+//                handler1(@event);
             }
         }
 
