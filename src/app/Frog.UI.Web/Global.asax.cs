@@ -5,6 +5,7 @@ using System.IO;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using System.Web.Script.Serialization;
 using Frog.Domain;
 using Frog.Domain.TaskSources;
 using Frog.Support;
@@ -15,12 +16,13 @@ namespace Frog.UI.Web
     public class MvcApplication : HttpApplication
     {
         string mapPath;
+        string serviceArea;
 
         protected void Application_Start()
         {
-            var exceptionDumpster = Server.MapPath("~/App_Data");
-            Directory.CreateDirectory(exceptionDumpster);
-            mapPath = Path.Combine(exceptionDumpster, "Crash_");
+            serviceArea = Server.MapPath("~/App_Data");
+            Directory.CreateDirectory(serviceArea);
+            mapPath = Path.Combine(serviceArea, "Crash_");
 
             AppDomain.CurrentDomain.UnhandledException += CurrentDomainOnUnhandledException;
             AreaRegistration.RegisterAllAreas();
@@ -60,7 +62,7 @@ namespace Frog.UI.Web
 
         void WireUpApp()
         {
-            var system = new ProductionSystem();
+            var system = new ProductionSystem(serviceArea);
             ServiceLocator.RepositoryTracker = system.repositoryTracker;
             ServiceLocator.Report = system.report;
             ServiceLocator.AllMassages = system.AllMessages;
@@ -108,10 +110,16 @@ namespace Frog.UI.Web
     {
         IBusDebug debug;
         public readonly ConcurrentQueue<Message> AllMessages = new ConcurrentQueue<Message>();
-        public ProductionSystem()
+
+        public ProductionSystem(string serviceArea)
         {
+            var ser = new JavaScriptSerializer();
             debug = (IBusDebug) TheBus;
-            debug.OnMessage += message => AllMessages.Enqueue(message);
+            debug.OnMessage += message =>
+                                   {
+                                       File.AppendAllText(Path.Combine(serviceArea, "EventLog.json"), ser.Serialize(new {Type = message.GetType().Name, Fields = message}));
+                                       AllMessages.Enqueue(message);
+                                   };
         }
 
         protected override WorkingAreaGoverner SetupWorkingAreaGovernor()
