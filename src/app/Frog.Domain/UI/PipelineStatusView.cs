@@ -10,7 +10,6 @@ namespace Frog.Domain.UI
     public class PipelineStatusView : Handles<BuildStarted>, Handles<BuildEnded>, Handles<BuildUpdated>
     {
         readonly ConcurrentDictionary<string, BuildStatus> report;
-        JavaScriptSerializer javaScriptSerializer = new JavaScriptSerializer();
 
         public PipelineStatusView(ConcurrentDictionary<string, BuildStatus> report)
         {
@@ -38,7 +37,6 @@ namespace Frog.Domain.UI
 
         public void Handle(TerminalUpdate message)
         {
-            Console.WriteLine(javaScriptSerializer.Serialize(message));
             EnsureReportExistsForRepo(message.RepoUrl);
             report[message.RepoUrl].Tasks[message.TaskIndex].AddTerminalOutput(message.ContentSequenceIndex,
                                                                                          message.Content);
