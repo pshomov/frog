@@ -97,11 +97,11 @@ namespace Frog.Domain
                 started => theBus.Publish(new BuildStarted(status: started, repoUrl: message.RepoUrl));
             Action<int, TaskInfo.TaskStatus> onBuildUpdated =
                 (i, status) => theBus.Publish(new BuildUpdated(repoUrl: message.RepoUrl, taskIndex: i, newStatus: status));
-            worker.OnUpdateFound += onUpdateFound;
             Action<TerminalUpdateInfo> onTerminalUpdates = info => 
                                                          theBus.Publish(new TerminalUpdate(repoUrl: message.RepoUrl,
                                                                                            content: info.Content, taskIndex: info.TaskIndex,
                                                                                            contentSequenceIndex: info.ContentSequenceIndex));
+            worker.OnUpdateFound += onUpdateFound;
             worker.OnTerminalUpdates += onTerminalUpdates;
             worker.OnBuildStarted += onBuildStarted;
             worker.OnBuildUpdated += onBuildUpdated;
