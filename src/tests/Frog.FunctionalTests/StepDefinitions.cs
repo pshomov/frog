@@ -52,6 +52,8 @@ namespace Frog.FunctionalTests
         public void GivenIHaveRegisteredProjectURL(string url)
         {
             GivenIAmOnTheRegistrationPage();
+            url = String.Format(url, Environment.GetEnvironmentVariable("MY_GIT_USERNAME"),
+                                Environment.GetEnvironmentVariable("MY_GIT_PASSWORD"));
             register_url(url);
             statusPageLink = AssertionHelpers.WithRetries(() => World.browser.FindElementById("newly_registered"));
         }
