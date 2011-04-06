@@ -1,4 +1,5 @@
-﻿using OpenQA.Selenium.Firefox;
+﻿using System;
+using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.Remote;
 using TechTalk.SpecFlow;
 
@@ -14,7 +15,7 @@ namespace Frog.FunctionalTests
         public static void BeforeScenario()
         {
             browser = new FirefoxDriver();
-            baseUrl = "http://localhost:6502/";
+            baseUrl = Environment.GetEnvironmentVariable("ACCEPTANCE_TEST_URL") ?? "http://testbee1.runzhq.com/runz/";
         }
 
         [AfterScenario]

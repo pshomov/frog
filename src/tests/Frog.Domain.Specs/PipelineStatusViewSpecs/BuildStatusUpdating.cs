@@ -26,22 +26,22 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
         public void should_have_build_tasks_prepared()
         {
             Assert.That(buildStatus.Tasks.Count(), Is.EqualTo(2));
-            Assert.That(buildStatus.Tasks.ElementAt(0).Name, Is.EqualTo("task_name"));
-            Assert.That(buildStatus.Tasks.ElementAt(1).Name, Is.EqualTo("dd"));
+            Assert.That(buildStatus.Tasks[0].Name, Is.EqualTo("task_name"));
+            Assert.That(buildStatus.Tasks[1].Name, Is.EqualTo("dd"));
         }
 
         [Test]
         public void should_set_the_task_output_to_empty()
         {
-            Assert.That(buildStatus.Tasks.ElementAt(0).TerminalOutput, Is.EqualTo(""));
-            Assert.That(buildStatus.Tasks.ElementAt(1).TerminalOutput, Is.EqualTo(""));
+            Assert.That(buildStatus.Tasks[0].TerminalOutput, Is.EqualTo(""));
+            Assert.That(buildStatus.Tasks[1].TerminalOutput, Is.EqualTo(""));
         }
 
         [Test]
         public void should_set_all_tasks_status_to_not_started()
         {
-            Assert.That(buildStatus.Tasks.ElementAt(0).Status, Is.EqualTo(TaskInfo.TaskStatus.NotStarted));
-            Assert.That(buildStatus.Tasks.ElementAt(1).Status, Is.EqualTo(TaskInfo.TaskStatus.NotStarted));
+            Assert.That(buildStatus.Tasks[0].Status, Is.EqualTo(TaskInfo.TaskStatus.NotStarted));
+            Assert.That(buildStatus.Tasks[1].Status, Is.EqualTo(TaskInfo.TaskStatus.NotStarted));
         }
     }
 
@@ -70,13 +70,13 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
         [Test]
         public void should_update_the_task_status_specified_by_the_index()
         {
-            Assert.That(buildStatus.Tasks.ElementAt(1).Status, Is.EqualTo(TaskInfo.TaskStatus.Started));
+            Assert.That(buildStatus.Tasks[1].Status, Is.EqualTo(TaskInfo.TaskStatus.Started));
         }
 
         [Test]
         public void should_not_update_status_for_all_other_tasks()
         {
-            Assert.That(buildStatus.Tasks.ElementAt(0).Status, Is.EqualTo(TaskInfo.TaskStatus.NotStarted));
+            Assert.That(buildStatus.Tasks[0].Status, Is.EqualTo(TaskInfo.TaskStatus.NotStarted));
         }
     }
 
@@ -106,8 +106,8 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
         [Test]
         public void should_not_update_tasks_statuses()
         {
-            Assert.That(buildStatus.Tasks.ElementAt(1).Status, Is.EqualTo(TaskInfo.TaskStatus.NotStarted));
-            Assert.That(buildStatus.Tasks.ElementAt(0).Status, Is.EqualTo(TaskInfo.TaskStatus.NotStarted));
+            Assert.That(buildStatus.Tasks[1].Status, Is.EqualTo(TaskInfo.TaskStatus.NotStarted));
+            Assert.That(buildStatus.Tasks[0].Status, Is.EqualTo(TaskInfo.TaskStatus.NotStarted));
         }
 
         [Test]
@@ -143,8 +143,8 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
         [Test]
         public void should_not_update_tasks_statuses()
         {
-            Assert.That(buildStatus.Tasks.ElementAt(1).Status, Is.EqualTo(TaskInfo.TaskStatus.NotStarted));
-            Assert.That(buildStatus.Tasks.ElementAt(0).Status, Is.EqualTo(TaskInfo.TaskStatus.NotStarted));
+            Assert.That(buildStatus.Tasks[1].Status, Is.EqualTo(TaskInfo.TaskStatus.NotStarted));
+            Assert.That(buildStatus.Tasks[0].Status, Is.EqualTo(TaskInfo.TaskStatus.NotStarted));
         }
 
         [Test]

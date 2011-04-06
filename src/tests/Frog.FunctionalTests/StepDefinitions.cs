@@ -48,6 +48,14 @@ namespace Frog.FunctionalTests
             StatusPages[project] = GetFullURLfromRelative(target);
         }
 
+        [Given(@"I have registered project URL ""(.*)""")]
+        public void GivenIHaveRegisteredProjectURL(string url)
+        {
+            GivenIAmOnTheRegistrationPage();
+            register_url(url);
+            statusPageLink = AssertionHelpers.WithRetries(() => World.browser.FindElementById("newly_registered"));
+        }
+
         [When(@"I am on the status page for project ""(.*)""")]
         [Then(@"I am on the status page for project ""(.*)""")]
         public void WhenIAmOnTheStatusPageForProjectP1(string project)
@@ -76,7 +84,13 @@ namespace Frog.FunctionalTests
         [Given(@"I type in the url input the ""(.*)"" repository URL and press the 'Register' button")]
         public void GivenITypeInTheUrlInputTheP1RepositoryURLAndPressTheRegisterButton(string project)
         {
-            World.browser.FindElement(By.Id("url")).SendKeys((string) ScenarioContext.Current[project]);
+            var url = (string) ScenarioContext.Current[project];
+            register_url(url);
+        }
+
+        void register_url(string url)
+        {
+            World.browser.FindElement(By.Id("url")).SendKeys(url);
             World.browser.FindElementById("reg_button").Click();
         }
 

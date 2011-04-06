@@ -109,14 +109,14 @@ namespace Frog.System.Specs
                                               A.Check<Dictionary<string, BuildStatus>>(
                                                   arg =>
                                                   arg[repo.Url].Tasks.Count() > 0 &&
-                                                  arg[repo.Url].Tasks.ElementAt(0).TerminalOutput ==
+                                                  arg[repo.Url].Tasks[0].TerminalOutput ==
                                                   SystemWithConsoleOutput.TerminalOutput1 +
                                                   SystemWithConsoleOutput.TerminalOutput2))
                                          .Has(statuses => statuses,
                                               A.Check<Dictionary<string, BuildStatus>>(
                                                   arg =>
                                                   arg[repo.Url].Tasks.Count() > 1 &&
-                                                  arg[repo.Url].Tasks.ElementAt(1).TerminalOutput ==
+                                                  arg[repo.Url].Tasks[1].TerminalOutput ==
                                                   SystemWithConsoleOutput.TerminalOutput3 +
                                                   SystemWithConsoleOutput.TerminalOutput4)))
                             );

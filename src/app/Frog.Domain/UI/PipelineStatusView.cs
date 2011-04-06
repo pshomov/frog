@@ -1,6 +1,8 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Linq;
 using System.Threading;
+using System.Web.Script.Serialization;
 using SimpleCQRS;
 
 namespace Frog.Domain.UI
@@ -8,6 +10,7 @@ namespace Frog.Domain.UI
     public class PipelineStatusView : Handles<BuildStarted>, Handles<BuildEnded>, Handles<BuildUpdated>
     {
         readonly ConcurrentDictionary<string, BuildStatus> report;
+        JavaScriptSerializer javaScriptSerializer = new JavaScriptSerializer();
 
         public PipelineStatusView(ConcurrentDictionary<string, BuildStatus> report)
         {
@@ -23,7 +26,6 @@ namespace Frog.Domain.UI
 
         public void Handle(BuildUpdated message)
         {
-            Thread.Sleep(500); // ouch ...
             EnsureReportExistsForRepo(message.RepoUrl);
             report[message.RepoUrl].BuildUpdated(message.TaskIndex, message.TaskStatus);
         }
@@ -36,9 +38,9 @@ namespace Frog.Domain.UI
 
         public void Handle(TerminalUpdate message)
         {
-            Thread.Sleep(700); // and ouch again ...
+            Console.WriteLine(javaScriptSerializer.Serialize(message));
             EnsureReportExistsForRepo(message.RepoUrl);
-            report[message.RepoUrl].Tasks.ElementAt(message.TaskIndex).AddTerminalOutput(message.ContentSequenceIndex,
+            report[message.RepoUrl].Tasks[message.TaskIndex].AddTerminalOutput(message.ContentSequenceIndex,
                                                                                          message.Content);
         }
 

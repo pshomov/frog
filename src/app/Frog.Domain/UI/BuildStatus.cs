@@ -14,9 +14,9 @@ namespace Frog.Domain.UI
         List<TaskState> tasks;
         public BuildTotalStatus Overall { get; private set; }
 
-        public IEnumerable<TaskState> Tasks
+        public IList<TaskState> Tasks
         {
-            get { return tasks; }
+            get { return new List<TaskState>(tasks); }
         }
 
         public void BuildUpdated(int taskIndex, TaskInfo.TaskStatus status)

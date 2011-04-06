@@ -72,6 +72,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>HandlingMultipleProjects.feature</DependentUpon>
     </Compile>
+    <Compile Include="TheUsualSuspects.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TheUsualSuspects.feature</DependentUpon>
+    </Compile>
     <Compile Include="World.cs" />
     <Compile Include="features\RegisterAndBuildProject.feature.cs">
       <AutoGen>True</AutoGen>
@@ -100,6 +105,10 @@
     <None Include="features\RegisterAndBuildProject.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>RegisterAndBuildProject.feature.cs</LastGenOutput>
+    </None>
+    <None Include="TheUsualSuspects.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>TheUsualSuspects.feature.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -46,7 +46,7 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
         [Test]
         public void should_set_task_status_as_as_in_message()
         {
-            Assert.That(BuildStatuses["http://dugh"].Tasks.ElementAt(0).Status,
+            Assert.That(BuildStatuses["http://dugh"].Tasks[0].Status,
                         Is.EqualTo(TaskInfo.TaskStatus.FinishedError));
         }
     }
