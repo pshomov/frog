@@ -6,6 +6,7 @@ using NUnit.Framework;
 
 namespace Frog.Domain.Specs.PathGoble
 {
+    [Category(TestTypes.Integration)]
     [TestFixture]
     public class GobleTests
     {
@@ -23,6 +24,7 @@ namespace Frog.Domain.Specs.PathGoble
             Directory.CreateDirectory(workPlace);
             var genesis = new FileGenesis(workPlace);
             genesis.Folder("TestFixtures")
+                .File("notest.txt", "")
                 .File("test.txt", "")
                 .Folder("Goble")
                     .File("l0f1.txt", "")
@@ -46,7 +48,7 @@ namespace Frog.Domain.Specs.PathGoble
         [Test]
         public void should_find_file_down_a_folder_hieararchy()
         {
-            pathFinder.apply(s => list.Add(s.Remove(0, workPlace.Length+1)), "l1f1.txt", Path.Combine(workPlace, "TestFixtures"));
+            pathFinder.FindFilesRecursively(s => list.Add(s.Remove(0, workPlace.Length+1)), "l1f1.txt", Path.Combine(workPlace, "TestFixtures"));
 
             Assert.That(list.Count, Is.EqualTo(1));
             Assert.That(list[0],
@@ -56,7 +58,7 @@ namespace Frog.Domain.Specs.PathGoble
         [Test]
         public void should_find_multiple_files_at_the_same_level_down_the_hierarchy()
         {
-            pathFinder.apply(s => list.Add(s.Remove(0, workPlace.Length + 1)), "l2*.txt", Path.Combine(workPlace, "TestFixtures"));
+            pathFinder.FindFilesRecursively(s => list.Add(s.Remove(0, workPlace.Length + 1)), "l2*.txt", Path.Combine(workPlace, "TestFixtures"));
 
             Assert.That(list.Count, Is.EqualTo(2));
             Assert.That(list[0],
@@ -68,7 +70,7 @@ namespace Frog.Domain.Specs.PathGoble
         [Test]
         public void should_find_multiple_files_at_different_levels_down_the_hierarchy()
         {
-            pathFinder.apply(s => list.Add(s.Remove(0, workPlace.Length + 1)), "l?f*.txt", Path.Combine(workPlace, "TestFixtures"));
+            pathFinder.FindFilesRecursively(s => list.Add(s.Remove(0, workPlace.Length + 1)), "l?f*.txt", Path.Combine(workPlace, "TestFixtures"));
 
             Assert.That(list.Count, Is.EqualTo(6));
             Assert.That(list[0],
@@ -83,6 +85,24 @@ namespace Frog.Domain.Specs.PathGoble
                         Is.EqualTo(Os.DirChars("TestFixtures/Goble/l0f1.txt")));
             Assert.That(list[5],
                         Is.EqualTo(Os.DirChars("TestFixtures/Goble/l0f2.txt")));
+        }
+
+        [Test]
+        public void should_look_for_files_only_in_the_root_of_the_hierarchy()
+        {
+            pathFinder.FindFilesAtTheBase(s => list.Add(s.Remove(0, workPlace.Length + 1)), "l?f*.txt", Path.Combine(workPlace, "TestFixtures"));
+            Assert.That(list.Count, Is.EqualTo(0));
+        }
+
+        [Test]
+        public void should_find_files_that_are_at_the_root_of_the_hierarchy()
+        {
+            pathFinder.FindFilesAtTheBase(s => list.Add(s.Remove(0, workPlace.Length + 1)), "*.txt", Path.Combine(workPlace, "TestFixtures"));
+            Assert.That(list.Count, Is.EqualTo(2));
+            Assert.That(list[0],
+                        Is.EqualTo(Os.DirChars("TestFixtures/notest.txt")));
+            Assert.That(list[1],
+                        Is.EqualTo(Os.DirChars("TestFixtures/test.txt")));
         }
     }
 }

@@ -25,10 +25,10 @@ namespace Frog.Domain.Specs
         [Test]
         public void should_search_for_files_that_end_in_word_Test()
         {
-            pathFinder.Received().apply(Arg.Any<Action<string>>(),
+            pathFinder.Received().FindFilesRecursively(Arg.Any<Action<string>>(),
                                         Arg.Is<string>(
                                             s => s.Equals("*.Test.csproj", StringComparison.InvariantCultureIgnoreCase)), "basefolder");
-            pathFinder.Received().apply(Arg.Any<Action<string>>(),
+            pathFinder.Received().FindFilesRecursively(Arg.Any<Action<string>>(),
                                         Arg.Is<string>(
                                             s => s.Equals("*.Tests.csproj", StringComparison.InvariantCultureIgnoreCase)), "basefolder");
         }
@@ -54,7 +54,7 @@ namespace Frog.Domain.Specs
         [Test]
         public void should_search_for_all_files_with_extension_SLN()
         {
-            pathFinder.Received().apply(Arg.Any<Action<string>>(),
+            pathFinder.Received().FindFilesRecursively(Arg.Any<Action<string>>(),
                                         Arg.Is<string>(
                                             s => s.Equals("*.sln", StringComparison.InvariantCultureIgnoreCase)), "basefolder");
         }

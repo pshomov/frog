@@ -9,6 +9,7 @@ namespace Frog.Domain
         List<string> FindAllNUnitAssemblies(string baseFolder);
         List<string> FindAllSolutionFiles(string baseFolder);
         List<string> FindAllTestTaskFiles(string baseFolder);
+        List<string> FindRakeFile(string baseFolder);
     }
 
     public class DefaultFileFinder : FileFinder
@@ -24,8 +25,8 @@ namespace Frog.Domain
         {
             var dlls = new List<string>();
             var baseFolderFull = Path.GetFullPath(baseFolder);
-            pathFinder.apply(s => dlls.Add(s.Remove(0, baseFolderFull.Length + 1)), "*.TEST.CSPROJ", baseFolder);
-            pathFinder.apply(s => dlls.Add(s.Remove(0, baseFolderFull.Length + 1)), "*.TESTS.CSPROJ", baseFolder);
+            pathFinder.FindFilesRecursively(s => dlls.Add(s.Remove(0, baseFolderFull.Length + 1)), "*.TEST.CSPROJ", baseFolder);
+            pathFinder.FindFilesRecursively(s => dlls.Add(s.Remove(0, baseFolderFull.Length + 1)), "*.TESTS.CSPROJ", baseFolder);
             return dlls;
         }
 
@@ -33,7 +34,7 @@ namespace Frog.Domain
         {
             var slns = new List<string>();
             var baseFolderFull = Path.GetFullPath(baseFolder);
-            pathFinder.apply(s => slns.Add(s.Remove(0, baseFolderFull.Length + 1)), "*.sln", baseFolder);
+            pathFinder.FindFilesRecursively(s => slns.Add(s.Remove(0, baseFolderFull.Length + 1)), "*.sln", baseFolder);
             return slns;
         }
 
@@ -41,7 +42,15 @@ namespace Frog.Domain
         {
             var testtasks = new List<string>();
             var baseFolderFull = Path.GetFullPath(baseFolder);
-            pathFinder.apply(s => testtasks.Add(s.Remove(0, baseFolderFull.Length + 1)), "*.testtask", baseFolder);
+            pathFinder.FindFilesRecursively(s => testtasks.Add(s.Remove(0, baseFolderFull.Length + 1)), "*.testtask", baseFolder);
+            return testtasks;
+        }
+
+        public List<string> FindRakeFile(string baseFolder)
+        {
+            var testtasks = new List<string>();
+            var baseFolderFull = Path.GetFullPath(baseFolder);
+            pathFinder.FindFilesRecursively(s => testtasks.Add(s.Remove(0, baseFolderFull.Length + 1)), "*.testtask", baseFolder);
             return testtasks;
         }
     }

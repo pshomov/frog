@@ -7,7 +7,7 @@ namespace Frog.Domain
     {
         private string pattern;
 
-        public virtual void apply(Action<string> action, string pattern, string baseFolder)
+        public virtual void FindFilesRecursively(Action<string> action, string pattern, string baseFolder)
         {
             this.pattern = pattern;
             Diver(baseFolder, action); 
@@ -26,6 +26,13 @@ namespace Frog.Domain
                 foreach (string file in files)
                     action(file);
             }
+        }
+
+        public void FindFilesAtTheBase(Action<string> action, string pattern, string baseFolder)
+        {
+            string[] files = Directory.GetFiles(baseFolder, pattern);
+            foreach (string file in files)
+                action(file);
         }
     }
 }
