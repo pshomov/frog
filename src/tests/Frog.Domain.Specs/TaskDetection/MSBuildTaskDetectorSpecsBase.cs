@@ -1,15 +1,15 @@
 using Frog.Specs.Support;
 using NSubstitute;
 
-namespace Frog.Domain.Specs
+namespace Frog.Domain.Specs.TaskDetection
 {
     public abstract class MSBuildTaskDetectorSpecsBase : BDD
     {
-        protected FileFinder projectFileRepo;
+        protected FileFinder ProjectFileRepo;
 
         protected override void SetupDependencies()
         {
-            projectFileRepo = Substitute.For<FileFinder>();
+            ProjectFileRepo = Substitute.For<FileFinder>();
         }
     }
 }

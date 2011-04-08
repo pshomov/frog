@@ -43,9 +43,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Agent.cs" />
+    <Compile Include="CustomTasks\RakeTask.cs" />
     <Compile Include="IExecTask.cs" />
     <Compile Include="RepositoryTracker.cs" />
     <Compile Include="SystemBase.cs" />
+    <Compile Include="TaskSources\RakeTaskDetector.cs" />
     <Compile Include="TaskSources\TestTaskDetector.cs" />
     <Compile Include="ExecTasks\TestExecTask.cs" />
     <Compile Include="UI\BuildStatus.cs" />

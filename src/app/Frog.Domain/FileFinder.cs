@@ -50,7 +50,7 @@ namespace Frog.Domain
         {
             var testtasks = new List<string>();
             var baseFolderFull = Path.GetFullPath(baseFolder);
-            pathFinder.FindFilesRecursively(s => testtasks.Add(s.Remove(0, baseFolderFull.Length + 1)), "*.testtask", baseFolder);
+            pathFinder.FindFilesRecursively(s => testtasks.Add(s.Remove(0, baseFolderFull.Length + 1)), "RAKEFILE", baseFolder);
             return testtasks;
         }
     }

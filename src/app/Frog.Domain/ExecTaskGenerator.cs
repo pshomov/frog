@@ -36,6 +36,10 @@ namespace Frog.Domain
             {
                 result.Add(new TestExecTask((task as TestTaskDescription).path));
             }
+            if(task.GetType() == typeof(RakeTask))
+            {
+                result.Add(execTaskGenerator.CreateTask("rake.exe", null, "unit_test"));
+            }
             return result;
         }
     }

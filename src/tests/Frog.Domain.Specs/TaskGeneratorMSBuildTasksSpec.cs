@@ -1,4 +1,5 @@
 using Frog.Domain.CustomTasks;
+using Frog.Domain.TaskSources;
 using Frog.Specs.Support;
 using NSubstitute;
 using NUnit.Framework;
@@ -50,6 +51,30 @@ namespace Frog.Domain.Specs
         public void should_have_nunit_task()
         {
             execTaskFactory.Received().CreateTask("nunit", Arg.Any<string>(), "unit_test");
+        }
+    }
+
+    [TestFixture]
+    public class TaskGeneratorRakeTasksSpec : BDD
+    {
+        ExecTaskGenerator execTaskGenerator;
+        ExecTaskFactory execTaskFactory;
+
+        protected override void Given()
+        {
+            execTaskFactory = Substitute.For<ExecTaskFactory>();
+            execTaskGenerator = new ExecTaskGenerator(execTaskFactory);
+        }
+
+        protected override void When()
+        {
+            execTaskGenerator.GimeTasks(new RakeTask());
+        }
+
+        [Test]
+        public void should_have_rake_task()
+        {
+            execTaskFactory.Received().CreateTask("rake", Arg.Any<string>(), "unit_test");
         }
     }
 
