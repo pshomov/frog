@@ -68,6 +68,8 @@ this.ScenarioSetup(scenarioInfo);
  testRunner.And("I have registered project URL \"http://github.com/flq/MemBus.git\"");
 #line 10
  testRunner.And("I have registered project URL \"http://github.com/grahamrhay/NHamcrest.git\"");
+#line 11
+ testRunner.And("I have registered project URL \"http://github.com/sinatra/sinatra.git\"");
 #line hidden
             testRunner.CollectScenarioErrors();
         }

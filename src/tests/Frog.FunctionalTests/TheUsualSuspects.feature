@@ -8,3 +8,4 @@ Scenario: Register the usual suspects
 	And I have registered project URL "http://{0}:{1}@github.com/pshomov/frog.git"
 	And I have registered project URL "http://github.com/flq/MemBus.git"
 	And I have registered project URL "http://github.com/grahamrhay/NHamcrest.git"
+	And I have registered project URL "http://github.com/sinatra/sinatra.git"
