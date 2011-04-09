@@ -7,10 +7,15 @@ def install_packages():
     run("tar -xf rubygems-1.7.2.tgz")
     with cd("rubygems-1.7.2"):
         sudo("ruby setup.rb")
-    sudo("apt-get -y install libxml2 libxml2-dev")
-    sudo("apt-get -y install libxslt-ruby1.8 libxslt1-dev")
-    sudo("apt-get -y install rake")
+        
+    _install("ruby1.8-dev ruby1.8 ri1.8 rdoc1.8 irb1.8")
+    _install("libreadline-ruby1.8 libruby1.8 libopenssl-ruby")
+    _install("libxml2 libxml2-dev")
+    _install("libxslt-ruby1.8 libxslt1-dev")
+    _install("rake")
     sudo("gem install bundler rack")
     sudo("gem install therubyracer")
     
+def _install(packages):
+    sudo("apt-get -y install "+packages)
     
