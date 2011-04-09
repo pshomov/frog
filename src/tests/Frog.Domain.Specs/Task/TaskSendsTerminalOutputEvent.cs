@@ -28,7 +28,7 @@ namespace Frog.Domain.Specs.Task
         public void should_receive_the_terminal_output()
         {
             AssertionHelpers.WithRetries(
-                () => Assert.That(stdOutput, Is.EqualTo(string.Format("S>output{0}", Environment.NewLine))));
+                () => Assert.That(stdOutput, Is.StringContaining(string.Format("S>output{0}", Environment.NewLine))));
         }
     }
 
@@ -54,7 +54,7 @@ namespace Frog.Domain.Specs.Task
         public void should_receive_the_terminal_output()
         {
             AssertionHelpers.WithRetries(
-                () => Assert.That(errOutput, Is.EqualTo(string.Format("E>error output{0}", Environment.NewLine))));
+                () => Assert.That(errOutput, Is.StringContaining(string.Format("E>error output{0}", Environment.NewLine))));
         }
     }
 

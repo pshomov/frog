@@ -14,9 +14,9 @@ namespace Frog.Domain.Specs.Pipeline
             base.Given();
             SrcTask1 = new MSBuildTask("");
             TaskSource.Detect(Arg.Any<string>()).Returns(As.List<ITask>(SrcTask1));
-            Task1 = Substitute.For<ExecTask>("", "", "");
+            Task1 = Substitute.For<IExecTask>();
             Task1.Perform(Arg.Any<SourceDrop>()).Returns(new ExecTaskResult(ExecutionStatus.Success, 0));
-            Task2 = Substitute.For<ExecTask>("", "", "");
+            Task2 = Substitute.For<IExecTask>();
             Task2.Perform(Arg.Any<SourceDrop>()).Returns(new ExecTaskResult(ExecutionStatus.Success, 0));
             ExecTaskGenerator.GimeTasks(Arg.Any<ITask>()).Returns(As.List(Task1, Task2));
         }
