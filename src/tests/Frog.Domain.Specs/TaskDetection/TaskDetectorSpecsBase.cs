@@ -3,7 +3,7 @@ using NSubstitute;
 
 namespace Frog.Domain.Specs.TaskDetection
 {
-    public abstract class MSBuildTaskDetectorSpecsBase : BDD
+    public abstract class TaskDetectorSpecsBase : BDD
     {
         protected FileFinder ProjectFileRepo;
 

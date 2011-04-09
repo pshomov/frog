@@ -3,4 +3,8 @@
     public class RakeTask : ITask
     {
     }
+
+    public class BundlerTask : ITask
+    {
+    }
 }

@@ -43,7 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Agent.cs" />
-    <Compile Include="CustomTasks\RakeTask.cs" />
+    <Compile Include="CustomTasks\RubyTasks.cs" />
     <Compile Include="IExecTask.cs" />
     <Compile Include="RepositoryTracker.cs" />
     <Compile Include="SystemBase.cs" />

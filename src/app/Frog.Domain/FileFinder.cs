@@ -10,6 +10,7 @@ namespace Frog.Domain
         List<string> FindAllSolutionFiles(string baseFolder);
         List<string> FindAllTestTaskFiles(string baseFolder);
         List<string> FindRakeFile(string baseFolder);
+        bool FindBundlerFile(string baseFolder);
     }
 
     public class DefaultFileFinder : FileFinder
@@ -52,6 +53,11 @@ namespace Frog.Domain
             var baseFolderFull = Path.GetFullPath(baseFolder);
             pathFinder.FindFilesRecursively(s => testtasks.Add(s.Remove(0, baseFolderFull.Length + 1)), "RAKEFILE", baseFolder);
             return testtasks;
+        }
+
+        public bool FindBundlerFile(string baseFolder)
+        {
+            throw new NotImplementedException();
         }
     }
 }

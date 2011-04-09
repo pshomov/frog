@@ -16,8 +16,13 @@ namespace Frog.Domain.TaskSources
         public IList<ITask> Detect(string projectFolder)
         {
             var rakeFile = fileFinder.FindRakeFile(projectFolder);
+            var bundlerFile = fileFinder.FindBundlerFile(projectFolder);
             var tasks = new List<ITask>();
-            if (rakeFile.Exists(s => s == "Rakefile")) tasks.Add(new RakeTask());
+            if (rakeFile.Exists(s => s == "Rakefile"))
+            {
+                if (bundlerFile) tasks.Add(new BundlerTask());
+                tasks.Add(new RakeTask());
+            }
             return tasks;
         }
     }

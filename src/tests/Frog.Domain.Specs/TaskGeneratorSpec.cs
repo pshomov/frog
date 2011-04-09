@@ -1,5 +1,4 @@
 using Frog.Domain.CustomTasks;
-using Frog.Domain.TaskSources;
 using Frog.Specs.Support;
 using NSubstitute;
 using NUnit.Framework;
@@ -78,5 +77,27 @@ namespace Frog.Domain.Specs
         }
     }
 
+    [TestFixture]
+    public class TaskGeneratorBundlerTasksSpec : BDD
+    {
+        ExecTaskGenerator execTaskGenerator;
+        ExecTaskFactory execTaskFactory;
 
+        protected override void Given()
+        {
+            execTaskFactory = Substitute.For<ExecTaskFactory>();
+            execTaskGenerator = new ExecTaskGenerator(execTaskFactory);
+        }
+
+        protected override void When()
+        {
+            execTaskGenerator.GimeTasks(new BundlerTask());
+        }
+
+        [Test]
+        public void should_have_bundle_task()
+        {
+            execTaskFactory.Received().CreateTask("bundle", Arg.Any<string>(), "Bundler");
+        }
+    }
 }

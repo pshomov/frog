@@ -40,6 +40,10 @@ namespace Frog.Domain
             {
                 result.Add(execTaskGenerator.CreateTask("rake", null, "unit_test"));
             }
+            if(task.GetType() == typeof(BundlerTask))
+            {
+                result.Add(execTaskGenerator.CreateTask("bundle", null, "Bundler"));
+            }
             return result;
         }
     }

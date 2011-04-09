@@ -8,7 +8,7 @@ using NUnit.Framework;
 namespace Frog.Domain.Specs.TaskDetection
 {
     [TestFixture]
-    public class MSBuildTaskDetectorSpecs : MSBuildTaskDetectorSpecsBase
+    public class TaskDetectorSpecs : TaskDetectorSpecsBase
     {
         MSBuildDetector msbuildTaskDetecttor;
         IList<ITask> items;
@@ -35,7 +35,7 @@ namespace Frog.Domain.Specs.TaskDetection
     }
 
     [TestFixture]
-    public class MSBuildTaskDetectorMultipleSolutionsAtTheRootSpecs : MSBuildTaskDetectorSpecsBase
+    public class TaskDetectorMultipleSolutionsAtTheRootSpecs : TaskDetectorSpecsBase
     {
         MSBuildDetector msbuildTaskDetecttor;
         IList<ITask> items;
@@ -62,7 +62,7 @@ namespace Frog.Domain.Specs.TaskDetection
     }
 
     [TestFixture]
-    public class MSBuildTaskDetectorMultipleSolutionsAtTheRootWithBuildOneSpecs : MSBuildTaskDetectorSpecsBase
+    public class TaskDetectorMultipleSolutionsAtTheRootWithBuildOneSpecs : TaskDetectorSpecsBase
     {
         MSBuildDetector msbuildTaskDetecttor;
         IList<ITask> items;
@@ -91,7 +91,7 @@ namespace Frog.Domain.Specs.TaskDetection
     }
 
     [TestFixture]
-    public class NoSolutionsAtAllSpecs : MSBuildTaskDetectorSpecsBase
+    public class NoSolutionsAtAllSpecs : TaskDetectorSpecsBase
     {
         MSBuildDetector msbuildTaskDetecttor;
         IList<ITask> items;
@@ -115,7 +115,7 @@ namespace Frog.Domain.Specs.TaskDetection
     }
 
     [TestFixture]
-    public class OneSolutionAnywhereGetsSelectedForBuildSpecs : MSBuildTaskDetectorSpecsBase
+    public class OneSolutionAnywhereGetsSelectedForBuildSpecs : TaskDetectorSpecsBase
     {
         MSBuildDetector msbuildTaskDetecttor;
         IList<ITask> items;
