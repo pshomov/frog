@@ -5,11 +5,11 @@ namespace Frog.Domain.Specs.TaskDetection
 {
     public abstract class TaskDetectorSpecsBase : BDD
     {
-        protected FileFinder ProjectFileRepo;
+        protected TaskFileFinder _taskFileFinder;
 
         protected override void SetupDependencies()
         {
-            ProjectFileRepo = Substitute.For<FileFinder>();
+            _taskFileFinder = Substitute.For<TaskFileFinder>();
         }
     }
 }

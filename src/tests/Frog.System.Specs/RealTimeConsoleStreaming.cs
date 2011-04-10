@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Frog.Domain;
+using Frog.Domain.BuildSystems.Solution;
 using Frog.Domain.CustomTasks;
 using Frog.Domain.ExecTasks;
 using Frog.Domain.UI;

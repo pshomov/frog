@@ -2,22 +2,23 @@
 using System.IO;
 using System.Linq;
 using Frog.Domain.CustomTasks;
+using Frog.Domain.TaskSources;
 using Frog.Support;
 
-namespace Frog.Domain.TaskSources
+namespace Frog.Domain.BuildSystems.Solution
 {
     public class NUnitTaskDetector : TaskSource
     {
-        readonly FileFinder projectFileRepo;
+        readonly TaskFileFinder _projectTaskFileRepo;
 
-        public NUnitTaskDetector(FileFinder projectFileRepo)
+        public NUnitTaskDetector(TaskFileFinder _projectTaskFileRepo)
         {
-            this.projectFileRepo = projectFileRepo;
+            this._projectTaskFileRepo = _projectTaskFileRepo;
         }
 
         public IList<ITask> Detect(string projectFolder)
         {
-            var items = projectFileRepo.FindFiles(projectFolder);
+            var items = _projectTaskFileRepo.FindFiles(projectFolder);
             return items.Select(s => (ITask) new NUnitTask(ProjectPathToAssemblyPath(s))).ToList();
         }
 

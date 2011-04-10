@@ -1,4 +1,5 @@
 using System;
+using Frog.Domain.BuildSystems.Solution;
 using Frog.Specs.Support;
 using NSubstitute;
 using NUnit.Framework;
@@ -8,18 +9,18 @@ namespace Frog.Domain.Specs
     [TestFixture]
     public class NUnitFileFinderSpecs : BDD
     {
-        FileFinder fileFinder;
+        TaskFileFinder _taskFileFinder;
         PathFinder pathFinder;
 
         protected override void Given()
         {
             pathFinder = Substitute.For<PathFinder>();
-            fileFinder = new NUnitFileFinder(pathFinder);
+            _taskFileFinder = new NUnitTaskFileFinder(pathFinder);
         }
 
         protected override void When()
         {
-            fileFinder.FindFiles("basefolder");
+            _taskFileFinder.FindFiles("basefolder");
         }
 
         [Test]
@@ -37,18 +38,18 @@ namespace Frog.Domain.Specs
     [TestFixture]
     public class MSSolutionsFileFinderSpecs : BDD
     {
-        FileFinder fileFinder;
+        TaskFileFinder _taskFileFinder;
         PathFinder pathFinder;
 
         protected override void Given()
         {
             pathFinder = Substitute.For<PathFinder>();
-            fileFinder = new SolutionFileFinder(pathFinder);
+            _taskFileFinder = new SolutionTaskFileFinder(pathFinder);
         }
 
         protected override void When()
         {
-            fileFinder.FindAllSolutionFiles("basefolder");
+            _taskFileFinder.FindFiles("basefolder");
         }
 
         [Test]

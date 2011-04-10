@@ -7,6 +7,9 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.Script.Serialization;
 using Frog.Domain;
+using Frog.Domain.BuildSystems.FrogSystemTest;
+using Frog.Domain.BuildSystems.Rake;
+using Frog.Domain.BuildSystems.Solution;
 using Frog.Domain.TaskSources;
 using Frog.Support;
 using SimpleCQRS;
@@ -133,10 +136,10 @@ namespace Frog.UI.Web
         {
             var pathFinder = new PathFinder();
             return new PipelineOfTasks(new CompoundTaskSource(
-                                           new TestTaskDetector(new TestTaskFileFinder(pathFinder)),
-                                           new RakeTaskDetector(new RakeFileFinder(pathFinder)),
-                                           new MSBuildDetector(new SolutionFileFinder(pathFinder)),
-                                           new NUnitTaskDetector(new NUnitFileFinder(pathFinder))
+                                           new TestTaskDetector(new TestTaskTaskFileFinder(pathFinder)),
+                                           new RakeTaskDetector(new RakeTaskFileFinder(pathFinder), new BundlerFileFinder(pathFinder)),
+                                           new MSBuildDetector(new SolutionTaskFileFinder(pathFinder)),
+                                           new NUnitTaskDetector(new NUnitTaskFileFinder(pathFinder))
                                            ),
                                        new ExecTaskGenerator(new ExecTaskFactory()));
         }

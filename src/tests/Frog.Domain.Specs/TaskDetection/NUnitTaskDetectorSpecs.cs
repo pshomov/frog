@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Frog.Domain.BuildSystems.Solution;
 using Frog.Domain.CustomTasks;
 using Frog.Domain.TaskSources;
 using Frog.Specs.Support;
@@ -11,15 +12,15 @@ namespace Frog.Domain.Specs.TaskDetection
     [TestFixture]
     public class NUnitTaskDetectorAllAssembliesSpecs : BDD
     {
-        FileFinder projectFileRepo;
+        TaskFileFinder _projectTaskFileRepo;
         NUnitTaskDetector nunitTaskDetecttor;
         IList<ITask> items;
 
         protected override void Given()
         {
-            projectFileRepo = Substitute.For<FileFinder>();
-            nunitTaskDetecttor = new NUnitTaskDetector(projectFileRepo);
-            projectFileRepo.FindFiles("basefolder").Returns(As.List(Os.DirChars("l1\\l2\\l3\\fle.test.csproj"),
+            _projectTaskFileRepo = Substitute.For<TaskFileFinder>();
+            nunitTaskDetecttor = new NUnitTaskDetector(_projectTaskFileRepo);
+            _projectTaskFileRepo.FindFiles("basefolder").Returns(As.List(Os.DirChars("l1\\l2\\l3\\fle.test.csproj"),
                                                                      Os.DirChars("l1\\l2\\l4\\fle.test.csproj"),
                                                                      Os.DirChars("l1\\l2\\l3\\flo.tests.csproj")));
         }
