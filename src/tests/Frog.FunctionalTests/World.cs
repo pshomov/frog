@@ -15,7 +15,7 @@ namespace Frog.FunctionalTests
         public static void BeforeScenario()
         {
             browser = new FirefoxDriver();
-            baseUrl = Environment.GetEnvironmentVariable("ACCEPTANCE_TEST_URL") ?? "http://testbee1.runzhq.com/runz/";
+            baseUrl = Environment.GetEnvironmentVariable("ACCEPTANCE_TEST_URL") ?? "http://localhost:6502/";
         }
 
         [AfterScenario]
