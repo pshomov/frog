@@ -131,12 +131,12 @@ namespace Frog.UI.Web
 
         protected override PipelineOfTasks GetPipeline()
         {
-            var fileFinder = new DefaultFileFinder(new PathFinder());
+            var pathFinder = new PathFinder();
             return new PipelineOfTasks(new CompoundTaskSource(
-                                           new TestTaskDetector(fileFinder),
-                                           new RakeTaskDetector(fileFinder),
-                                           new MSBuildDetector(fileFinder),
-                                           new NUnitTaskDetctor(fileFinder)
+                                           new TestTaskDetector(new TestTaskFileFinder(pathFinder)),
+                                           new RakeTaskDetector(new RakeFileFinder(pathFinder)),
+                                           new MSBuildDetector(new SolutionFileFinder(pathFinder)),
+                                           new NUnitTaskDetector(new NUnitFileFinder(pathFinder))
                                            ),
                                        new ExecTaskGenerator(new ExecTaskFactory()));
         }

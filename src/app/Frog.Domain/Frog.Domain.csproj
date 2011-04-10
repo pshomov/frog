@@ -45,6 +45,7 @@
     <Compile Include="Agent.cs" />
     <Compile Include="CustomTasks\RubyTasks.cs" />
     <Compile Include="IExecTask.cs" />
+    <Compile Include="Java\TaskSource\MavenTaskDetector.cs" />
     <Compile Include="RepositoryTracker.cs" />
     <Compile Include="SystemBase.cs" />
     <Compile Include="TaskSources\RakeTaskDetector.cs" />
@@ -57,7 +58,7 @@
     <Compile Include="FileFinder.cs" />
     <Compile Include="CustomTasks\ITask.cs" />
     <Compile Include="CustomTasks\NUnitTask.cs" />
-    <Compile Include="TaskSources\NUnitTaskDetctor.cs" />
+    <Compile Include="TaskSources\NUnitTaskDetector.cs" />
     <Compile Include="PathFinder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ExecTasks\ExecTask.cs" />

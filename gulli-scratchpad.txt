@@ -2,3 +2,20 @@ Ubiquituos languange/metaphor maintenance. How are we going to do it?
 Frog does not connect with me.  
 Still have ValveSpecs, that are testing workers.
 Do we want to isolate drivers (e.g. Git, VS Solution specific stuff) early? Or just wait until we add a second...
+
+Functional categorisation v.s. domain categorisation?
+  - I.e. TaskSources and CustomTasks, but not VisualStudio, Rake, Maven, etc
+
+
+This interface stinks (i.e. smells badly of lack of ISP and SRP):
+
+    public interface FileFinder
+    {
+        List<string> FindAllNUnitAssemblies(string baseFolder);
+        List<string> FindAllSolutionFiles(string baseFolder);
+        List<string> FindAllTestTaskFiles(string baseFolder);
+        List<string> FindRakeFile(string baseFolder);
+        bool FindBundlerFile(string baseFolder);
+    }
+
+
