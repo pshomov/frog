@@ -75,8 +75,8 @@ namespace Frog.UI.Web
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
-            routes.MapRoute("diagnostics_all_messages", "diagnostics/messages",
-                            new { controller = "Diagnostics", action = "allmessages" });
+//            routes.MapRoute("diagnostics_all_messages", "diagnostics/messages",
+//                            new { controller = "Diagnostics", action = "allmessages" });
             routes.MapRoute("task_all_terminal_output", "project/github/{user}/{project}/task",
                             new { controller = "Project", action = "allterminaloutput" });
             routes.MapRoute("task_terminal_output", "project/github/{user}/{project}/task/{taskIndex}",
@@ -94,8 +94,8 @@ namespace Frog.UI.Web
     {
         public override void RegisterRoutes(RouteCollection routes)
         {
-            routes.MapRoute("test_all_task_terminal_output", "project/test/file/{projectUrl}/task",
-                            new {controller = "TestProject", action = "allterminaloutput"});
+//            routes.MapRoute("test_all_task_terminal_output", "project/test/file/{projectUrl}/task",
+//                            new {controller = "TestProject", action = "allterminaloutput"});
             routes.MapRoute("test_task_terminal_output", "project/test/file/{projectUrl}/task/{taskIndex}",
                             new {controller = "TestProject", action = "terminaloutput"});
             routes.MapRoute("test_repo_status", "project/test/file/{projectUrl}/{action}",
