@@ -66,7 +66,7 @@ namespace Frog.Domain.Specs
         [Test]
         public void should_register_repository()
         {
-            bus.Received().RegisterHandler(Arg.Any<Action<UpdateFound>>());
+            bus.Received().RegisterHandler(Arg.Any<Action<UpdateFound>>(), Arg.Any<string>());
         }
 
     }

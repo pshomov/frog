@@ -17,7 +17,7 @@ namespace Frog.Domain.IntegrationTests
 		public void should_send_mesage_and_receive_it(){
 			var msg = "";
 			var bus = new RabbitMQBus();
-			bus.RegisterHandler<MyEvent>(ev =>  msg = ev.Data);
+			bus.RegisterHandler<MyEvent>(ev =>  msg = ev.Data, "unit_test");
 			bus.Publish(new MyEvent{Data = "ff"});
 		    AssertionHelpers.WithRetries(() => Assert.That(msg, Is.EqualTo("ff")));
 		}

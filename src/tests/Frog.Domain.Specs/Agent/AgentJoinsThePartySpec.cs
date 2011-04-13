@@ -15,7 +15,7 @@ namespace Frog.Domain.Specs.Agent
         [Test]
         public void should_listen_for_CHECK_FOR_UPDATES_message()
         {
-            Bus.Received().RegisterHandler(Arg.Any<Action<CheckForUpdates>>());
+            Bus.Received().RegisterHandler(Arg.Any<Action<CheckForUpdates>>(), Arg.Any<string>());
         }
     }
 }

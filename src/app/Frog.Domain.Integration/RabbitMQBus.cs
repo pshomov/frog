@@ -18,11 +18,11 @@ namespace Frog.Domain.Integration
 		    connection = connectionFactory.CreateConnection();
 		}
 
-		public void RegisterHandler<T>(Action<T> handler) where T : Message
+		public void RegisterHandler<T>(Action<T> handler, string handlerId) where T : Message
 		{
 			var channel = connection.CreateModel();
 		    var topicName = typeof(T).Name;
-		    var queueName = string.Format("{0}_{1}", topicName, handler.Method.ReflectedType.GUID);
+		    var queueName = string.Format("{0}_{1}", topicName, handlerId);
 		    channel.ExchangeDeclare(topicName, ExchangeType.Fanout, true);
 			channel.QueueDeclare(queueName, false, false, false, null);
 			channel.QueueBind(queueName, topicName, "", null);

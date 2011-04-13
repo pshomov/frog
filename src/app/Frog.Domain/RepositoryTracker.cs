@@ -57,7 +57,7 @@ namespace Frog.Domain
 
         public void StartListeningForBuildUpdates()
         {
-            bus.RegisterHandler<UpdateFound>(Handle);
+            bus.RegisterHandler<UpdateFound>(Handle, "Repository_tracker");
         }
 
         public void Handle(UpdateFound message)

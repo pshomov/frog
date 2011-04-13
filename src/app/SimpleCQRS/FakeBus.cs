@@ -6,7 +6,7 @@ namespace SimpleCQRS
 {
     public interface IBus : ICommandSender, IEventPublisher
     {
-        void RegisterHandler<T>(Action<T> handler) where T : Message;
+        void RegisterHandler<T>(Action<T> handler, string handlerId) where T : Message;
     }
 
     public interface IBusDebug
@@ -18,7 +18,7 @@ namespace SimpleCQRS
     {
         private readonly Dictionary<Type, List<Action<Message>>> _routes = new Dictionary<Type, List<Action<Message>>>();
 
-        public void RegisterHandler<T>(Action<T> handler) where T : Message
+        public void RegisterHandler<T>(Action<T> handler, string handlerId) where T : Message
         {
             List<Action<Message>> handlers;
             if(!_routes.TryGetValue(typeof(T), out handlers))

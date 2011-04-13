@@ -53,10 +53,10 @@ namespace Frog.Domain
         {
             report = new ConcurrentDictionary<string, BuildStatus>();
             var statusView = new PipelineStatusView(report);
-            TheBus.RegisterHandler<BuildStarted>(statusView.Handle);
-            TheBus.RegisterHandler<BuildEnded>(statusView.Handle);
-            TheBus.RegisterHandler<BuildUpdated>(statusView.Handle);
-            TheBus.RegisterHandler<TerminalUpdate>(statusView.Handle);
+            TheBus.RegisterHandler<BuildStarted>(statusView.Handle, "UI");
+            TheBus.RegisterHandler<BuildEnded>(statusView.Handle, "UI");
+            TheBus.RegisterHandler<BuildUpdated>(statusView.Handle, "UI");
+            TheBus.RegisterHandler<TerminalUpdate>(statusView.Handle, "UI");
         }
 
         protected abstract PipelineOfTasks GetPipeline();

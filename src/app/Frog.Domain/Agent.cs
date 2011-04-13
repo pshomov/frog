@@ -99,7 +99,7 @@ namespace Frog.Domain
 
         public void JoinTheParty()
         {
-            theBus.RegisterHandler<CheckForUpdates>(Handle);
+            theBus.RegisterHandler<CheckForUpdates>(Handle, "Agent");
         }
 
         public void Handle(CheckForUpdates message)
