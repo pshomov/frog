@@ -7,8 +7,12 @@ namespace Frog.Domain
 {
     public class CheckForUpdates : Command
     {
-        public readonly string RepoUrl;
-        public readonly string Revision;
+        public string RepoUrl { get; set; }
+        public string Revision { get; set; }
+
+        public CheckForUpdates()
+        {
+        }
 
         public CheckForUpdates(string repoUrl, string revision)
         {

@@ -8,41 +8,34 @@ using System.Text;
 
 namespace Frog.Domain.Integration
 {
-	public class RabbitMQBus : IBus
+	public class RabbitMQBus : IBus, IBusDebug
 	{
 		IConnection connection;
 
 		public RabbitMQBus()
 		{
-			var connectionFactory = new ConnectionFactory ();
-			connectionFactory.HostName = "localhost";
-			connectionFactory.UserName = "justin";
-			connectionFactory.Password = "greatpass!";
-
-			connection = connectionFactory.CreateConnection();
+			var connectionFactory = new ConnectionFactory {HostName = "192.168.0.2", UserName = "guest", Password = "guest"};
+		    connection = connectionFactory.CreateConnection();
 		}
 
 		public void RegisterHandler<T>(Action<T> handler) where T : Message
 		{
-			IModel channel = connection.CreateModel();
-			string queueName = handler.GetType().Name;
-			string topicName = typeof(T).Name;
-			channel.ExchangeDeclare(topicName, ExchangeType.Fanout, true);
-			channel.QueueDeclare(queueName, true, false, false, null);
+			var channel = connection.CreateModel();
+		    var topicName = typeof(T).Name;
+		    var queueName = string.Format("{0}_{1}", topicName, handler.Method.ReflectedType.GUID);
+		    channel.ExchangeDeclare(topicName, ExchangeType.Fanout, true);
+			channel.QueueDeclare(queueName, false, false, false, null);
 			channel.QueueBind(queueName, topicName, "", null);
 
-			QueueingBasicConsumer consumer = new QueueingBasicConsumer (channel);
-			Thread job = new Thread (() => {
-					String consumerTag = channel.BasicConsume(queueName, false, consumer);
-					while (true) {
-						try {
-							RabbitMQ.Client.Events.BasicDeliverEventArgs e = 
-							(RabbitMQ.Client.Events.BasicDeliverEventArgs)
-							consumer.Queue.Dequeue();
-							IBasicProperties props = e.BasicProperties;
-							JavaScriptSerializer ser = new JavaScriptSerializer ();
-							byte[] body = e.Body;
-							var deserialized = ser.Deserialize<T>(Encoding.UTF8.GetString(body));
+			var consumer = new QueueingBasicConsumer (channel);
+			var job = new Thread (() => {
+					var consumerTag = channel.BasicConsume(queueName, false, consumer);
+			        var jsonSerializer = new JavaScriptSerializer ();
+			        while (true)
+					{
+					    try {
+							var e = (RabbitMQ.Client.Events.BasicDeliverEventArgs)consumer.Queue.Dequeue();
+					        var deserialized = jsonSerializer.Deserialize<T>(Encoding.UTF8.GetString(e.Body));
 							handler(deserialized);
 							channel.BasicAck(e.DeliveryTag, false);
 						} catch (OperationInterruptedException) {
@@ -55,12 +48,12 @@ namespace Frog.Domain.Integration
 		
 		void SendMessage<T>(T @event)
 		{
-				IModel channel = connection.CreateModel();
-				string topicName = typeof(T).Name;
-				JavaScriptSerializer ser = new JavaScriptSerializer ();
-				var serialized_form = ser.Serialize(@event);
-				IBasicProperties basicProperties = channel.CreateBasicProperties();
-				channel.BasicPublish(topicName, "", false, false, basicProperties, Encoding.UTF8.GetBytes(serialized_form));
+				var channel = connection.CreateModel();
+				var topicName = typeof(T).Name;
+				var ser = new JavaScriptSerializer ();
+				var serializedForm = ser.Serialize(@event);
+				var basicProperties = channel.CreateBasicProperties();
+				channel.BasicPublish(topicName, "", false, false, basicProperties, Encoding.UTF8.GetBytes(serializedForm));
 		}
 
 		public void Publish<T>(T @event) where T : Event
@@ -72,6 +65,8 @@ namespace Frog.Domain.Integration
 		{
 			SendMessage(command);
 		}
+
+	    public event Action<Message> OnMessage;
 	}
 }
 

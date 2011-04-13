@@ -48,6 +48,10 @@ namespace Frog.Domain
 
     public class PipelineStatus
     {
+        public PipelineStatus()
+        {
+        }
+
         public PipelineStatus(Guid id)
         {
             Tasks = new List<TaskInfo>();
@@ -63,7 +67,7 @@ namespace Frog.Domain
         }
 
         public Guid PipelineId;
-        public IList<TaskInfo> Tasks;
+        public List<TaskInfo> Tasks;
     }
 
     public class TaskInfo

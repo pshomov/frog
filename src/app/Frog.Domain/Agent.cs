@@ -6,7 +6,9 @@ namespace Frog.Domain
 {
     public class BuildEvent : Event
     {
-        public string RepoUrl { get; private set; }
+        public string RepoUrl { get;  set; }
+
+        public BuildEvent(){}
 
         public BuildEvent(string repoUrl)
         {
@@ -23,7 +25,11 @@ namespace Frog.Domain
 
     public class BuildStarted : BuildEvent
     {
-        public readonly PipelineStatus Status;
+        public PipelineStatus Status { get; set; }
+
+        public BuildStarted()
+        {
+        }
 
         public BuildStarted(string repoUrl, PipelineStatus status) : base(repoUrl)
         {
@@ -33,34 +39,42 @@ namespace Frog.Domain
 
     public class BuildUpdated : BuildEvent
     {
-        public int TaskIndex { get; private set; }
+        public int TaskIndex { get;  set; }
 
-        public TaskInfo.TaskStatus TaskStatus { get; private set; }
+        public TaskInfo.TaskStatus TaskStatus { get; set; }
 
         public BuildUpdated(string repoUrl, int taskIndex, TaskInfo.TaskStatus newStatus) : base(repoUrl)
         {
             TaskIndex = taskIndex;
             TaskStatus = newStatus;
         }
+
+        public BuildUpdated(){}
     }
 
     public class BuildEnded : BuildEvent
     {
-        public readonly BuildTotalEndStatus TotalStatus;
+        public BuildTotalEndStatus TotalStatus { get; set; }
 
         public BuildEnded(string repoUrl, BuildTotalEndStatus totalStatus) : base(repoUrl)
         {
             TotalStatus = totalStatus;
         }
+
+        public BuildEnded(){}
     }
 
     public class TerminalUpdate : BuildEvent
     {
-        public string Content { get; private set; }
+        public string Content { get;  set; }
 
-        public int TaskIndex { get; private set; }
+        public int TaskIndex { get;  set; }
 
-        public int ContentSequenceIndex { get; private set; }
+        public int ContentSequenceIndex { get;  set; }
+
+        public TerminalUpdate()
+        {
+        }
 
         public TerminalUpdate(string content, int taskIndex, int contentSequenceIndex, string repoUrl)
             : base(repoUrl)

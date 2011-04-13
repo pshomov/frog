@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.Script.Serialization;
 using Frog.Domain;
+using Frog.Domain.Integration;
 using Frog.Domain.TaskSources;
 using Frog.Support;
 using SimpleCQRS;
@@ -94,8 +95,8 @@ namespace Frog.UI.Web
     {
         public override void RegisterRoutes(RouteCollection routes)
         {
-//            routes.MapRoute("test_all_task_terminal_output", "project/test/file/{projectUrl}/task",
-//                            new {controller = "TestProject", action = "allterminaloutput"});
+            routes.MapRoute("test_all_task_terminal_output", "project/test/file/{projectUrl}/task",
+                            new {controller = "TestProject", action = "allterminaloutput"});
             routes.MapRoute("test_task_terminal_output", "project/test/file/{projectUrl}/task/{taskIndex}",
                             new {controller = "TestProject", action = "terminaloutput"});
             routes.MapRoute("test_repo_status", "project/test/file/{projectUrl}/{action}",
@@ -120,6 +121,11 @@ namespace Frog.UI.Web
                                        File.AppendAllText(Path.Combine(serviceArea, "EventLog.json"), ser.Serialize(new {Type = message.GetType().Name, Fields = message}));
                                        AllMessages.Enqueue(message);
                                    };
+        }
+
+        protected override IBus SetupBus()
+        {
+            return new RabbitMQBus();
         }
 
         protected override WorkingAreaGoverner SetupWorkingAreaGovernor()

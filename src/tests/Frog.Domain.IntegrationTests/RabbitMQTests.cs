@@ -1,4 +1,5 @@
 using System;
+using Frog.Specs.Support;
 using NUnit.Framework;
 using Frog.Domain.Integration;
 using SimpleCQRS;
@@ -6,18 +7,19 @@ using SimpleCQRS;
 namespace Frog.Domain.IntegrationTests
 {
 	class MyEvent : Event{
-		public string data;
+		public string Data;
 	}
+
 	[TestFixture]
 	public class RabbitMQTests
 	{
 		[Test]
-		public void should_send_mesages(){
+		public void should_send_mesage_and_receive_it(){
 			var msg = "";
 			var bus = new RabbitMQBus();
-			bus.RegisterHandler<MyEvent>((ev) =>  msg = ev.data);
-			bus.Publish(new MyEvent{data = "ff"});
-			Assert.That(msg, Is.EqualTo("ff"));
+			bus.RegisterHandler<MyEvent>(ev =>  msg = ev.Data);
+			bus.Publish(new MyEvent{Data = "ff"});
+		    AssertionHelpers.WithRetries(() => Assert.That(msg, Is.EqualTo("ff")));
 		}
 	}
 }

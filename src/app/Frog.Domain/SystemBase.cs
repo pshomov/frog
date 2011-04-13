@@ -25,7 +25,7 @@ namespace Frog.Domain
             SetupView();
         }
 
-        protected virtual FakeBus SetupBus()
+        protected virtual IBus SetupBus()
         {
             return new FakeBus();
         }
