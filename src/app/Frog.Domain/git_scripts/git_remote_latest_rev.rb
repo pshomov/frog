@@ -1,4 +1,4 @@
 #!/usr/bin/env ruby
-
-system "git ls-remote #{ARGV[0]} master"
+$stderr.puts("remote_latest repo url is #{ARGV[0]}")
+system "git ls-remote \"#{ARGV[0]}\" master"
 exit $?

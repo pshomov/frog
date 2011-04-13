@@ -26,7 +26,7 @@ namespace Frog.Domain
             string scriptPath = Path.Combine(Underware.GitProductionScriptsLocation, "git_remote_latest_rev.rb");
             Console.WriteLine("Repo url is: "+repoUrl);
             var process = new ProcessWrapper("ruby",
-                                             scriptPath + " " + repoUrl);
+                                             scriptPath + " \"" + repoUrl+"\"");
             string result = "";
             process.OnStdOutput +=
                 s =>
@@ -48,7 +48,7 @@ namespace Frog.Domain
         {
             var scriptPath = Path.Combine(Underware.GitProductionScriptsLocation, "git_fetch.rb");
             var process = new ProcessWrapper("ruby",
-                                             scriptPath + " " + repoUrl + " " + revision + " " + " " + workingArea);
+                                             scriptPath + " \"" + repoUrl + "\" " + revision + " " + " \"" + workingArea+"\"");
             process.Execute();
             var exitcode = process.WaitForProcess();
             if (exitcode != 0)
