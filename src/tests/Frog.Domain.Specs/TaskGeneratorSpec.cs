@@ -1,3 +1,5 @@
+using Frog.Domain.BuildSystems.Rake;
+using Frog.Domain.BuildSystems.Solution;
 using Frog.Domain.CustomTasks;
 using Frog.Specs.Support;
 using NSubstitute;

@@ -43,21 +43,29 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Agent.cs" />
-    <Compile Include="CustomTasks\RubyTasks.cs" />
+    <Compile Include="BuildSystems\FrogSystemTest\TestTaskDetector.cs" />
+    <Compile Include="BuildSystems\FrogSystemTest\TestTaskTaskFileFinder.cs" />
+    <Compile Include="BuildSystems\Rake\BundlerFileFinder.cs" />
+    <Compile Include="BuildSystems\Rake\RakeTaskDetector.cs" />
+    <Compile Include="BuildSystems\Rake\RakeTaskFileFinder.cs" />
+    <Compile Include="BuildSystems\Rake\RubyTasks.cs" />
+    <Compile Include="BuildSystems\Solution\MSBuildDetector.cs" />
+    <Compile Include="BuildSystems\Solution\MSBuildTask.cs" />
+    <Compile Include="BuildSystems\Solution\NUnitTask.cs" />
+    <Compile Include="BuildSystems\Solution\NUnitTaskDetector.cs" />
+    <Compile Include="BuildSystems\Solution\NUnitTaskFileFinder.cs" />
+    <Compile Include="BuildSystems\Solution\SolutionTaskFileFinder.cs" />
     <Compile Include="IExecTask.cs" />
+    <Compile Include="BuildSystems\Maven\TaskSource\MavenTaskDetector.cs" />
     <Compile Include="RepositoryTracker.cs" />
     <Compile Include="SystemBase.cs" />
-    <Compile Include="TaskSources\RakeTaskDetector.cs" />
-    <Compile Include="TaskSources\TestTaskDetector.cs" />
     <Compile Include="ExecTasks\TestExecTask.cs" />
     <Compile Include="UI\BuildStatus.cs" />
     <Compile Include="UI\PipelineStatusView.cs" />
     <Compile Include="TaskSources\CompoundTaskSource.cs" />
     <Compile Include="ExecTaskGenerator.cs" />
-    <Compile Include="FileFinder.cs" />
+    <Compile Include="TaskFileFinder.cs" />
     <Compile Include="CustomTasks\ITask.cs" />
-    <Compile Include="CustomTasks\NUnitTask.cs" />
-    <Compile Include="TaskSources\NUnitTaskDetctor.cs" />
     <Compile Include="PathFinder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ExecTasks\ExecTask.cs" />
@@ -65,8 +73,6 @@
     <Compile Include="Pipeline.cs" />
     <Compile Include="ExecTaskFactory.cs" />
     <Compile Include="SubfolderWorkingArea.cs" />
-    <Compile Include="TaskSources\MSBuildDetector.cs" />
-    <Compile Include="CustomTasks\MSBuildTask.cs" />
     <Compile Include="TaskSources\TaskSource.cs" />
     <Compile Include="Worker.cs" />
     <Compile Include="WorkingAreaGoverner.cs" />

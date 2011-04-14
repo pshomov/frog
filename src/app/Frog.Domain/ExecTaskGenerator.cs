@@ -1,4 +1,7 @@
 ﻿using System.Collections.Generic;
+using Frog.Domain.BuildSystems.FrogSystemTest;
+using Frog.Domain.BuildSystems.Rake;
+using Frog.Domain.BuildSystems.Solution;
 using Frog.Domain.CustomTasks;
 using Frog.Domain.ExecTasks;
 using Frog.Domain.TaskSources;

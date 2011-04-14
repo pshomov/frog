@@ -33,6 +33,15 @@ namespace Frog.Support
         }
     }
 
+    public class Empty
+    {
+        public static List<T> ListOf<T>(T itemExample)
+        {
+            var result = new List<T>();
+            return result;
+        }
+    }
+
     public class Os
     {
         public static bool IsUnix
