@@ -13,7 +13,7 @@ namespace Frog.Domain.IntegrationTests
 	[TestFixture]
 	public class RabbitMQTests
 	{
-        IBus bus = new RabbitMQBus();
+	    readonly IBus bus = new RabbitMQBus(Environment.GetEnvironmentVariable("RUNZ_TEST_RABBITMQ_SERVER") ?? "localhost");
 
         [Test]
 		public void should_send_mesage_and_receive_it(){

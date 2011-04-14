@@ -12,9 +12,9 @@ namespace Frog.Domain.Integration
 	{
 		IConnection connection;
 
-		public RabbitMQBus()
+		public RabbitMQBus(string server)
 		{
-			var connectionFactory = new ConnectionFactory {HostName = "192.168.0.2", UserName = "guest", Password = "guest"};
+			var connectionFactory = new ConnectionFactory {HostName = server, UserName = "guest", Password = "guest"};
 		    connection = connectionFactory.CreateConnection();
 		}
 

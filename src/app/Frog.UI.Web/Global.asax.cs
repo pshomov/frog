@@ -128,7 +128,7 @@ namespace Frog.UI.Web
 
         protected override IBus SetupBus()
         {
-            return new RabbitMQBus();
+            return new RabbitMQBus(Environment.GetEnvironmentVariable("RUNZ_RABBITMQ_SERVER") ?? "localhost");
         }
 
         protected override WorkingAreaGoverner SetupWorkingAreaGovernor()
