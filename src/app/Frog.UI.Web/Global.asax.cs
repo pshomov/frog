@@ -8,6 +8,9 @@ using System.Web.Routing;
 using System.Web.Script.Serialization;
 using Frog.Domain;
 using Frog.Domain.Integration;
+using Frog.Domain.BuildSystems.FrogSystemTest;
+using Frog.Domain.BuildSystems.Rake;
+using Frog.Domain.BuildSystems.Solution;
 using Frog.Domain.TaskSources;
 using Frog.Support;
 using SimpleCQRS;
@@ -137,12 +140,12 @@ namespace Frog.UI.Web
 
         protected override PipelineOfTasks GetPipeline()
         {
-            var fileFinder = new DefaultFileFinder(new PathFinder());
+            var pathFinder = new PathFinder();
             return new PipelineOfTasks(new CompoundTaskSource(
-                                           new TestTaskDetector(fileFinder),
-                                           new RakeTaskDetector(fileFinder),
-                                           new MSBuildDetector(fileFinder),
-                                           new NUnitTaskDetctor(fileFinder)
+                                           new TestTaskDetector(new TestTaskTaskFileFinder(pathFinder)),
+                                           new RakeTaskDetector(new RakeTaskFileFinder(pathFinder), new BundlerFileFinder(pathFinder)),
+                                           new MSBuildDetector(new SolutionTaskFileFinder(pathFinder)),
+                                           new NUnitTaskDetector(new NUnitTaskFileFinder(pathFinder))
                                            ),
                                        new ExecTaskGenerator(new ExecTaskFactory()));
         }

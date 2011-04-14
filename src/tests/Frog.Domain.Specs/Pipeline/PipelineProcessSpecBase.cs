@@ -1,4 +1,5 @@
 ﻿using System;
+using Frog.Domain.BuildSystems.Solution;
 using Frog.Domain.CustomTasks;
 using Frog.Domain.TaskSources;
 using Frog.Specs.Support;

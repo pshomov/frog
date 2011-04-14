@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Frog.Domain.BuildSystems.Rake;
 using Frog.Domain.CustomTasks;
 using Frog.Domain.TaskSources;
 using Frog.Support;
@@ -7,22 +8,30 @@ using NUnit.Framework;
 
 namespace Frog.Domain.Specs.TaskDetection
 {
-    [TestFixture]
-    public class AloneRakeTaskDetection : TaskDetectorSpecsBase
+    public class RakeTaskDetectorSpecsBase : TaskDetectorSpecsBase
     {
-        RakeTaskDetector taskDetector;
-        IList<ITask> tasks;
+        protected TaskFileFinder _bundlerFileFinder;
+        protected RakeTaskDetector taskDetector;
+        protected IList<ITask> tasks;
 
         protected override void Given()
         {
-            ProjectFileRepo.FindRakeFile("base").Returns(As.List("Rakefile"));
-            taskDetector = new RakeTaskDetector(ProjectFileRepo);
+            _taskFileFinder.FindFiles("base").Returns(As.List("Rakefile"));
+            _bundlerFileFinder = Substitute.For<TaskFileFinder>();
+            _bundlerFileFinder.FindFiles("base").Returns(Empty.ListOf("String"));
+            taskDetector = new RakeTaskDetector(_taskFileFinder, _bundlerFileFinder);
         }
 
         protected override void When()
         {
             tasks = taskDetector.Detect("base");
         }
+    }
+
+    
+    [TestFixture]
+    public class AloneRakeTaskDetection : RakeTaskDetectorSpecsBase
+    {
 
         [Test]
         public void should_generate_a_rake_task()
@@ -32,17 +41,16 @@ namespace Frog.Domain.Specs.TaskDetection
         }
     }
 
-    [TestFixture]
-    public class RakeAndBundlerComboTasksDetection : TaskDetectorSpecsBase
-    {
-        RakeTaskDetector taskDetector;
-        IList<ITask> tasks;
 
+    [TestFixture]
+    public class RakeAndBundlerComboTasksDetection : RakeTaskDetectorSpecsBase
+    { 
         protected override void Given()
         {
-            ProjectFileRepo.FindRakeFile("base").Returns(As.List("Rakefile"));
-            ProjectFileRepo.FindBundlerFile("base").Returns(true);
-            taskDetector = new RakeTaskDetector(ProjectFileRepo);
+            _taskFileFinder.FindFiles("base").Returns(As.List("Rakefile"));
+            _bundlerFileFinder = Substitute.For<TaskFileFinder>();
+            _bundlerFileFinder.FindFiles("base").Returns(As.List("Gemfile"));
+            taskDetector = new RakeTaskDetector(_taskFileFinder, _bundlerFileFinder);
         }
 
         protected override void When()
@@ -70,16 +78,12 @@ namespace Frog.Domain.Specs.TaskDetection
     }
 
     [TestFixture]
-    public class AloneBundlerTaskGetsIgnored : TaskDetectorSpecsBase
+    public class AloneBundlerTaskGetsIgnored : RakeTaskDetectorSpecsBase
     {
-        RakeTaskDetector taskDetector;
-        IList<ITask> tasks;
-
         protected override void Given()
         {
-            ProjectFileRepo.FindRakeFile("base").Returns(new List<string>());
-            ProjectFileRepo.FindBundlerFile("base").Returns(true);
-            taskDetector = new RakeTaskDetector(ProjectFileRepo);
+            _taskFileFinder.FindFiles("base").Returns(new List<string>());
+            taskDetector = new RakeTaskDetector(_taskFileFinder, _taskFileFinder);
         }
 
         protected override void When()
