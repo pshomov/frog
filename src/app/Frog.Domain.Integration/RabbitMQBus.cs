@@ -14,7 +14,7 @@ namespace Frog.Domain.Integration
 
 		public RabbitMQBus(string server)
 		{
-			var connectionFactory = new ConnectionFactory {HostName = server, UserName = "guest", Password = "guest"};
+			var connectionFactory = new ConnectionFactory {HostName = server, UserName = "guest", Password = "guest",Protocol = Protocols.AMQP_0_8};
 		    connection = connectionFactory.CreateConnection();
 		}
 
