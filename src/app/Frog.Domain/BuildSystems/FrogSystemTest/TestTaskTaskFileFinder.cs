@@ -20,10 +20,5 @@ namespace Frog.Domain.BuildSystems.FrogSystemTest
             pathFinder.FindFilesRecursively(s => testtasks.Add(s.Remove(0, baseFolderFull.Length + 1)), "*.testtask", baseFolder);
             return testtasks;
         }
-
-        public bool FindBundlerFile(string baseFolder)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

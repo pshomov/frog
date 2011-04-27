@@ -7,16 +7,16 @@ namespace Frog.Domain.BuildSystems.FrogSystemTest
 {
     public class TestTaskDetector : TaskSource
     {
-        readonly TaskFileFinder _taskFileFinder;
+        readonly TaskFileFinder taskFileFinder;
 
-        public TestTaskDetector(TaskFileFinder _taskFileFinder)
+        public TestTaskDetector(TaskFileFinder taskFileFinder)
         {
-            this._taskFileFinder = _taskFileFinder;
+            this.taskFileFinder = taskFileFinder;
         }
 
         public IList<ITask> Detect(string projectFolder)
         {
-            var testTaskFiles = _taskFileFinder.FindFiles(projectFolder);
+            var testTaskFiles = taskFileFinder.FindFiles(projectFolder);
             return testTaskFiles.Select(s => (ITask) new TestTaskDescription(s)).ToList();
         }
     }
