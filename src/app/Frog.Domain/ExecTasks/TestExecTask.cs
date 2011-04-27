@@ -14,7 +14,7 @@ namespace Frog.Domain.ExecTasks
             this.path = path;
         }
 
-        public event Action<string> OnTerminalOutputUpdate;
+        public event Action<string> OnTerminalOutputUpdate = s => Console.WriteLine(s);
 
         public string Name
         {

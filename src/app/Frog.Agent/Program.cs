@@ -20,6 +20,7 @@ namespace Frog.Agent
             var worker = new Worker(GetPipeline(), SetupWorkingAreaGovernor());
             var agent = new Domain.Agent(SetupBus(), worker);
             agent.JoinTheParty();
+            Console.ReadLine();
         }
 
         static PipelineOfTasks GetPipeline()
