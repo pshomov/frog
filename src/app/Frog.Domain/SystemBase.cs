@@ -30,12 +30,12 @@ namespace Frog.Domain
             return new FakeBus();
         }
 
-        protected void SetupWorker(PipelineOfTasks pipeline)
+        protected virtual void SetupWorker(PipelineOfTasks pipeline)
         {
             worker = new Worker(pipeline, areaGoverner);
         }
 
-        protected void SetupAgent()
+        protected virtual void SetupAgent()
         {
             agent = new Agent(TheBus, worker);
             agent.JoinTheParty();

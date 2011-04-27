@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.IO;
 using System.Web;
 using System.Web.Mvc;
@@ -8,10 +7,6 @@ using System.Web.Routing;
 using System.Web.Script.Serialization;
 using Frog.Domain;
 using Frog.Domain.Integration;
-using Frog.Domain.BuildSystems.FrogSystemTest;
-using Frog.Domain.BuildSystems.Rake;
-using Frog.Domain.BuildSystems.Solution;
-using Frog.Domain.TaskSources;
 using Frog.Support;
 using SimpleCQRS;
 
@@ -79,8 +74,8 @@ namespace Frog.UI.Web
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
-//            routes.MapRoute("diagnostics_all_messages", "diagnostics/messages",
-//                            new { controller = "Diagnostics", action = "allmessages" });
+            routes.MapRoute("diagnostics_all_messages", "diagnostics/messages",
+                            new { controller = "Diagnostics", action = "allmessages" });
             routes.MapRoute("task_all_terminal_output", "project/github/{user}/{project}/task",
                             new { controller = "Project", action = "allterminaloutput" });
             routes.MapRoute("task_terminal_output", "project/github/{user}/{project}/task/{taskIndex}",
@@ -133,22 +128,20 @@ namespace Frog.UI.Web
 
         protected override WorkingAreaGoverner SetupWorkingAreaGovernor()
         {
-            var workingAreaPath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
-            Directory.CreateDirectory(workingAreaPath);
-            return new SubfolderWorkingAreaGoverner(workingAreaPath);
+            return null;
         }
 
         protected override PipelineOfTasks GetPipeline()
         {
-            var pathFinder = new PathFinder();
-            return new PipelineOfTasks(new CompoundTaskSource(
-                                           new TestTaskDetector(new TestTaskTaskFileFinder(pathFinder)),
-                                           new RakeTaskDetector(new RakeTaskFileFinder(pathFinder), new BundlerFileFinder(pathFinder)),
-                                           new MSBuildDetector(new SolutionTaskFileFinder(pathFinder)),
-                                           new NUnitTaskDetector(new NUnitTaskFileFinder(pathFinder))
-                                           ),
-                                       new ExecTaskGenerator(new ExecTaskFactory()));
+            return null;
         }
 
+        protected override void SetupWorker(PipelineOfTasks pipeline)
+        {
+        }
+
+        protected override void SetupAgent()
+        {
+        }
     }
 }
