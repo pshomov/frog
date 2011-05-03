@@ -1,5 +1,7 @@
 ﻿using System.Web.Mvc;
+using Frog.Domain;
 using Frog.Support;
+using Frog.UI.Web.Controllers.TestSupport;
 
 namespace Frog.UI.Web.Controllers
 {
@@ -13,8 +15,8 @@ namespace Frog.UI.Web.Controllers
             {
                 return MonoBugs.Json(new {error = "Url was not provided"});
             }
-            ServiceLocator.RepositoryTracker.Track(url);
-            return MonoBugs.Json(new {projectUrl = Url.Action("status", "Project", new {user = "u", project = "p"})});
+            ServiceLocator.Bus.Send(new RegisterRepository { Repo = url });
+            return MonoBugs.Json(new { projectUrl = Url.Action("status", "Project", new { user = "u", project = "p" }) });
         }
     }
 }

@@ -5,6 +5,11 @@ using SimpleCQRS;
 
 namespace Frog.Domain
 {
+    public class RegisterRepository : Command
+    {
+        public string Repo;
+    }
+
     public class CheckForUpdates : Command
     {
         public string RepoUrl { get; set; }
@@ -21,7 +26,7 @@ namespace Frog.Domain
         }
     }
 
-    public class RepositoryTracker : Handles<UpdateFound>
+    public class RepositoryTracker : Handles<UpdateFound>, Handles<RegisterRepository>
     {
         public class RepositoryInfo
         {
@@ -44,7 +49,7 @@ namespace Frog.Domain
             trackedRepos = new ConcurrentDictionary<string, RepositoryInfo>();
         }
 
-        public void Track(string repoUrl)
+        private void Track(string repoUrl)
         {
             trackedRepos.TryAdd(repoUrl, new RepositoryInfo {Url = repoUrl, LastBuiltRevision = ""});
         }
@@ -55,9 +60,15 @@ namespace Frog.Domain
                 s => bus.Send(new CheckForUpdates(repoUrl : s.Value.Url, revision : s.Value.LastBuiltRevision)));
         }
 
-        public void StartListeningForBuildUpdates()
+        public void JoinTheMessageParty()
         {
             bus.RegisterHandler<UpdateFound>(Handle, "Repository_tracker");
+            bus.RegisterHandler<RegisterRepository>(Handle, "Repository_tracker");
+        }
+
+        public void Handle(RegisterRepository message)
+        {
+            Track(message.Repo);
         }
 
         public void Handle(UpdateFound message)

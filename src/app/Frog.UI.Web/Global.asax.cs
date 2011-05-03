@@ -62,7 +62,6 @@ namespace Frog.UI.Web
         void WireUpApp()
         {
             var system = new ProductionSystem(serviceArea);
-            ServiceLocator.RepositoryTracker = system.repositoryTracker;
             ServiceLocator.Report = system.report;
             ServiceLocator.AllMassages = system.AllMessages;
         }

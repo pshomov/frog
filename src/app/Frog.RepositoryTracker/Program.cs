@@ -13,7 +13,7 @@ namespace Frog.RepositoryTracker
         static void Main(string[] args)
         {
             var repoTracker = new Domain.RepositoryTracker(SetupBus());
-            repoTracker.StartListeningForBuildUpdates();
+            repoTracker.JoinTheMessageParty();
             while(true)
             {
                 repoTracker.CheckForUpdates();

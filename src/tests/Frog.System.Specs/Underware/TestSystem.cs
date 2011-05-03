@@ -123,7 +123,7 @@ namespace Frog.System.Specs.Underware
 
         public void RegisterNewProject(string repoUrl)
         {
-            theTestSystem.repositoryTracker.Track(repoUrl);
+            theTestSystem.repositoryTracker.Handle(new RegisterRepository{Repo = repoUrl});
         }
 
         public void CheckProjectsForUpdates()

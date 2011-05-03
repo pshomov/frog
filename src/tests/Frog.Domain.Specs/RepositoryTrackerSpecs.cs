@@ -24,7 +24,7 @@ namespace Frog.Domain.Specs
     {
         protected override void When()
         {
-            repositoryTracker.Track("http://fle");
+            repositoryTracker.Handle(new RegisterRepository {Repo = "http://fle"});
         }
 
         [Test]
@@ -42,8 +42,8 @@ namespace Frog.Domain.Specs
     {
         protected override void When()
         {
-            repositoryTracker.Track("http://fle");
-            repositoryTracker.Track("http://fle");
+            repositoryTracker.Handle(new RegisterRepository { Repo = "http://fle" });
+            repositoryTracker.Handle(new RegisterRepository { Repo = "http://fle" });
         }
 
         [Test]
@@ -60,13 +60,14 @@ namespace Frog.Domain.Specs
     {
         protected override void When()
         {
-            repositoryTracker.StartListeningForBuildUpdates();
+            repositoryTracker.JoinTheMessageParty();
         }
 
         [Test]
         public void should_register_repository()
         {
             bus.Received().RegisterHandler(Arg.Any<Action<UpdateFound>>(), Arg.Any<string>());
+            bus.Received().RegisterHandler(Arg.Any<Action<RegisterRepository>>(), Arg.Any<string>());
         }
 
     }
@@ -77,7 +78,7 @@ namespace Frog.Domain.Specs
         protected override void Given()
         {
             base.Given();
-            repositoryTracker.Track("http://fle");
+            repositoryTracker.Handle(new RegisterRepository { Repo = "http://fle" });
         }
 
         protected override void When()

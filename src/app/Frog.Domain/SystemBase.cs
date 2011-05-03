@@ -44,7 +44,7 @@ namespace Frog.Domain
         protected void SetupRepositoryTracker()
         {
             repositoryTracker = new RepositoryTracker(TheBus);
-            repositoryTracker.StartListeningForBuildUpdates();
+            repositoryTracker.JoinTheMessageParty();
         }
 
         protected abstract WorkingAreaGoverner SetupWorkingAreaGovernor();

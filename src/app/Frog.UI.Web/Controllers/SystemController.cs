@@ -15,9 +15,11 @@ namespace Frog.UI.Web.Controllers
         }
 
         [AcceptVerbs(HttpVerbs.Get)]
-        public void Check()
+        public ActionResult Check()
         {
-            ServiceLocator.RepositoryTracker.CheckForUpdates();
+            return
+                Content(
+                    "This method is obsolete now, the repository tracker is in its own app and has its own scheduler that is not accessible from the web app");
         }
     }
 }
