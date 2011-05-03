@@ -38,7 +38,7 @@ namespace Frog.Domain.Specs
     }
 
     [TestFixture]
-    public class RepositoryTrackerTracksProjectOnlyOnceSpecs : RepositoryTrackerSpecsBase
+    public class RepositoryTrackerMultipleProjectRegistrationSpecs : RepositoryTrackerSpecsBase
     {
         protected override void When()
         {
@@ -47,7 +47,7 @@ namespace Frog.Domain.Specs
         }
 
         [Test]
-        public void should_register_repository()
+        public void should_send_only_one_check_for_updates_command()
         {
             repositoryTracker.CheckForUpdates();
             Assert.That(bus.ReceivedCalls().Where(call => call.GetMethodInfo().Name == "Send").Count(), Is.EqualTo(1));
@@ -86,7 +86,7 @@ namespace Frog.Domain.Specs
         }
 
         [Test]
-        public void should_register_repository()
+        public void should_send_new_revision_as_latest_known_revision_number_on_subsecuen_checks_for_updates()
         {
             repositoryTracker.CheckForUpdates();
             bus.Received().Send(Arg.Is<CheckForUpdates>(updates => updates.RepoUrl == "http://fle" && updates.Revision == "12"));
