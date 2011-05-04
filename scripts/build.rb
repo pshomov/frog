@@ -21,6 +21,7 @@ end
 mkdir "../output"
 cp_r "../src/app/Frog.UI.Web", "../output/web"
 cp_r "../src/app/Frog.Agent/bin/Release", "../output/agent"
+cp_r "../src/app/Frog.RepositoryTracker/bin/Release", "../output/repotracker"
 rm Dir.glob('../output/web/**/*.cs')
 rm Dir.glob('../output/web/**/*.csproj')
 rm Dir.glob('../output/web/**/*.pidb')
