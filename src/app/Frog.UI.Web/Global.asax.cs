@@ -63,6 +63,7 @@ namespace Frog.UI.Web
         {
             var system = new ProductionSystem(serviceArea);
             ServiceLocator.Report = system.report;
+            ServiceLocator.Bus = system.Bus;
             ServiceLocator.AllMassages = system.AllMessages;
         }
     }
@@ -142,5 +143,7 @@ namespace Frog.UI.Web
         protected override void SetupAgent()
         {
         }
+
+        public IBus Bus { get { return TheBus; } }
     }
 }
