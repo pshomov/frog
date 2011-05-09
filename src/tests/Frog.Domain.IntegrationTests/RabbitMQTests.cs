@@ -40,7 +40,8 @@ namespace Frog.Domain.IntegrationTests
 			bus.RegisterHandler<MyEvent>(ev =>  msg = ev.Data, "unit_test0");
 			bus.Publish(new MyEvent{Data = "unit_test1"});
             AssertionHelpers.WithRetries(() => Assert.That(msg, Is.EqualTo("unit_test1")));
-		}
+            bus.UnregisterHandler<MyEvent>("unit_test0");
+        }
 
         [Test]
 		public void should_send_mesage_and_all_subscribers_should_receive_it(){
@@ -51,7 +52,9 @@ namespace Frog.Domain.IntegrationTests
 			bus.Publish(new MyEvent{Data = "unit_test2"});
             AssertionHelpers.WithRetries(() => Assert.That(msg1, Is.EqualTo("unit_test2")));
             AssertionHelpers.WithRetries(() => Assert.That(msg2, Is.EqualTo("unit_test2")));
-		}
+            bus.UnregisterHandler<MyEvent>("unit_test1");
+            bus.UnregisterHandler<MyEvent>("unit_test2");
+        }
 
         [Test]
 		public void should_send_mesage_and_only_one_subscriber_of_the_queue_will_receive_it(){
@@ -62,7 +65,8 @@ namespace Frog.Domain.IntegrationTests
             bus.Publish(new MyEvent { Data = "unit_test3" });
             Thread.Sleep(3000);
             AssertionHelpers.WithRetries(() => Assert.That(msg1 + msg2, Is.EqualTo("unit_test3")));
-		}
+            bus.UnregisterHandler<MyEvent>("unit_test3");
+        }
 
         [Test]
 		public void should_continue_handling_messages_after_particular_message_causes_exception(){
@@ -73,6 +77,7 @@ namespace Frog.Domain.IntegrationTests
             AssertionHelpers.WithRetries(() => Assert.That(msg1, Is.EqualTo("unit_test4_2")));
             bus.RegisterHandler<MyEvent>(ev => msg1 = ev.Data, "unit_test4");
             AssertionHelpers.WithRetries(() => Assert.That(msg1, Is.EqualTo("unit_test4_1")));
+            bus.UnregisterHandler<MyEvent>("unit_test4");
         }
 
         [Test]
@@ -98,6 +103,8 @@ namespace Frog.Domain.IntegrationTests
             bus.Publish(new YourEvent { Data = "unit_test5_2" });
             AssertionHelpers.WithRetries(() => Assert.That(messageAlreadyHandled, Is.EqualTo(2)));
             assertOtherMessageHasNotBeenHandledAlready();
+            bus.UnregisterHandler<MyEvent>("unit_test5");
+            bus.UnregisterHandler<YourEvent>("unit_test5");
         }
 	}
 }

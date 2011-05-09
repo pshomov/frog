@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading;
@@ -10,10 +11,11 @@ using SimpleCQRS;
 
 namespace Frog.Domain.Integration
 {
-    public class RabbitMQBus : IBus, IBusDebug, IDisposable
+    public class RabbitMQBus : IBus, IBusDebug, IDisposable, IBusManagement
     {
         private readonly IConnection connection;
-
+        private readonly Dictionary<string, Dictionary<string, Action<BasicDeliverEventArgs>>> queueHandlers = new Dictionary<string, Dictionary<string, Action<BasicDeliverEventArgs>>>();
+            
         public RabbitMQBus(string server)
         {
             var connectionFactory = new ConnectionFactory
@@ -28,45 +30,58 @@ namespace Frog.Domain.Integration
 
         public void RegisterHandler<T>(Action<T> handler, string handlerId) where T : Message
         {
-            IModel channel = connection.CreateModel();
-            string topicName = typeof (T).Name;
-            string queueName = handlerId;
+            var jsonSerializer = new JavaScriptSerializer();
+            var channel = connection.CreateModel();
+            var topicName = typeof (T).Name;
+            var queueName = handlerId;
             channel.ExchangeDeclare(topicName, ExchangeType.Fanout, true);
             channel.QueueDeclare(queueName, false, false, false, null);
             channel.QueueBind(queueName, topicName, "", null);
-
-            var consumer = new QueueingBasicConsumer(channel);
-            var job = new Thread(() =>
-                                     {
-                                         string consumerTag = channel.BasicConsume(queueName, false, consumer);
-                                         var jsonSerializer = new JavaScriptSerializer();
-                                         while (true)
+            var startThread = false;
+            if (!queueHandlers.ContainsKey(queueName))
+            {
+                queueHandlers.Add(queueName, new Dictionary<string, Action<BasicDeliverEventArgs>>());
+                startThread = true;
+            }
+            queueHandlers[queueName][topicName] = eventArgs =>
+                                                       {
+                                                           var deserialized =
+                                                               jsonSerializer.Deserialize<T>(
+                                                                   Encoding.UTF8.GetString(eventArgs.Body));
+                                                           handler(deserialized);
+                                                       };
+            if (startThread)
+            {
+                var consumer = new QueueingBasicConsumer(channel);
+                var job = new Thread(() =>
                                          {
-                                             BasicDeliverEventArgs e = null;
-                                             try
+                                             channel.BasicConsume(queueName, false, consumer);
+                                             while (true)
                                              {
-                                                 e = (BasicDeliverEventArgs)consumer.Queue.Dequeue();
-                                                 var deserialized =
-                                                     jsonSerializer.Deserialize<T>(Encoding.UTF8.GetString(e.Body));
-                                                 handler(deserialized);
-                                                 channel.BasicAck(e.DeliveryTag, false);
+                                                 BasicDeliverEventArgs e = null;
+                                                 try
+                                                 {
+                                                     e = (BasicDeliverEventArgs) consumer.Queue.Dequeue();
+                                                     queueHandlers[queueName][e.Exchange](e);
+                                                     channel.BasicAck(e.DeliveryTag, false);
+                                                 }
+                                                 catch (EndOfStreamException)
+                                                 {
+                                                     break;
+                                                 }
+                                                 catch (OperationInterruptedException)
+                                                 {
+                                                     break;
+                                                 }
+                                                 catch (Exception ex)
+                                                 {
+                                                     HandleBadMessage(e, ex);
+                                                     channel.BasicReject(e.DeliveryTag, true);
+                                                 }
                                              }
-                                             catch(EndOfStreamException)
-                                             {
-                                                 break;
-                                             }
-                                             catch (OperationInterruptedException)
-                                             {
-                                                 break;
-                                             }
-                                             catch (Exception ex)
-                                             {
-                                                 HandleBadMessage(e, ex);
-                                                 channel.BasicReject(e.DeliveryTag, true);
-                                             }
-                                         }
-                                     });
-            job.Start();
+                                         });
+                job.Start();
+            }
         }
 
         public void Publish<T>(T @event) where T : Event
@@ -77,6 +92,14 @@ namespace Frog.Domain.Integration
         public void Send<T>(T command) where T : Command
         {
             SendMessage(command);
+        }
+
+        public void UnregisterHandler<T>(string handlerId)
+        {
+            IModel channel = connection.CreateModel();
+            string topicName = typeof(T).Name;
+            string queueName = handlerId;
+            channel.QueueUnbind(queueName, topicName, "", null);
         }
 
         public event Action<Message> OnMessage;
@@ -102,5 +125,10 @@ namespace Frog.Domain.Integration
             connection.Close();
             connection.Dispose();
         }
+    }
+
+    public interface IBusManagement
+    {
+        void UnregisterHandler<T>(string handlerId);
     }
 }
