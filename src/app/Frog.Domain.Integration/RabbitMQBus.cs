@@ -96,10 +96,12 @@ namespace Frog.Domain.Integration
 
         public void UnregisterHandler<T>(string handlerId)
         {
-            IModel channel = connection.CreateModel();
-            string topicName = typeof(T).Name;
-            string queueName = handlerId;
-            channel.QueueUnbind(queueName, topicName, "", null);
+            using(IModel channel = connection.CreateModel())
+            {
+                string topicName = typeof(T).Name;
+                string queueName = handlerId;
+                channel.QueueUnbind(queueName, topicName, "", null);
+            }
         }
 
         public event Action<Message> OnMessage;

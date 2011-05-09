@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -106,6 +107,21 @@ namespace Frog.Domain.IntegrationTests
             bus.UnregisterHandler<MyEvent>("unit_test5");
             bus.UnregisterHandler<YourEvent>("unit_test5");
         }
-	}
+    
+        [Test]
+        [Ignore]
+        public void should_not_go_connection_crazy()
+        {
+            var msgs = 0;
+            bus.RegisterHandler<MyEvent>(ev => msgs++, "unit_test6");
+            Enumerable.Range(1, 10).ToList().ForEach(i =>
+                                                         {
+                                                             bus.Publish(new MyEvent {Data = "unit_test66"});
+                                                             Thread.Sleep(2000);
+                                                         });
+            AssertionHelpers.WithRetries(() => Assert.That(msgs, Is.EqualTo(10)));
+            bus.UnregisterHandler<MyEvent>("unit_test6");
+        }
+    }
 }
 
