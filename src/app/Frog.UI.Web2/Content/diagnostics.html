@@ -1,0 +1,30 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Runz diagnostics info</title>
+    <script type="text/javascript" src="../Scripts/jquery-1.5.1.js"></script>
+    <script type="text/javascript" src="../Scripts/json-serialization.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            update_messages_view();
+        });
+
+        function update_messages_view() {
+            $.ajax({
+                url: "../diagnostics/messages",
+                success: function (data) {
+                    $('#messages').text(JSON.stringify(data));
+                },
+                error: function () {
+                    $('#messages').text("Error retrieving the messages");
+                }
+
+            });
+        }
+    </script>
+</head>
+<body>
+
+<div id="messages"></div>
+</body>
+</html>
