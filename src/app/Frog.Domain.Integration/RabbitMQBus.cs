@@ -114,12 +114,14 @@ namespace Frog.Domain.Integration
 
         private void SendMessage<T>(T @event)
         {
-            IModel channel = connection.CreateModel();
-            string topicName = typeof (T).Name;
-            var ser = new JavaScriptSerializer();
-            string serializedForm = ser.Serialize(@event);
-            IBasicProperties basicProperties = channel.CreateBasicProperties();
-            channel.BasicPublish(topicName, "", false, false, basicProperties, Encoding.UTF8.GetBytes(serializedForm));
+            using (IModel channel = connection.CreateModel())
+            {
+                string topicName = typeof(T).Name;
+                var ser = new JavaScriptSerializer();
+                string serializedForm = ser.Serialize(@event);
+                IBasicProperties basicProperties = channel.CreateBasicProperties();
+                channel.BasicPublish(topicName, "", false, false, basicProperties, Encoding.UTF8.GetBytes(serializedForm));
+            }
         }
 
         public void Dispose()
