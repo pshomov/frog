@@ -13,8 +13,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleCQRS", "src\app\Simpl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frog.Support", "src\app\Frog.Support\Frog.Support.csproj", "{893935D3-935A-418F-A656-5D6A203D87ED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frog.UI.Web", "src\app\Frog.UI.Web\Frog.UI.Web.csproj", "{F80D113C-6423-4FC2-AC0B-A0626A5B3EB1}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frog.FunctionalTests", "src\tests\Frog.FunctionalTests\Frog.FunctionalTests.csproj", "{024F4C63-F0F0-4414-BFB2-69FC1969BB32}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frog.Domain.Integration", "src\app\Frog.Domain.Integration\Frog.Domain.Integration.csproj", "{34D94FDA-6971-43A3-ABDE-B97CEA82CF26}"
@@ -25,7 +23,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frog.Agent", "src\app\Frog.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frog.RepositoryTracker", "src\app\Frog.RepositoryTracker\Frog.RepositoryTracker.csproj", "{9DB46CDD-F31C-46C2-B0CC-351125AF766B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frog.UI.Web2", "src\app\Frog.UI.Web2\Frog.UI.Web2.csproj", "{87D8D4E3-F24A-4452-809C-2E1417B03D3D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frog.UI.Web", "src\app\Frog.UI.Web2\Frog.UI.Web.csproj", "{87D8D4E3-F24A-4452-809C-2E1417B03D3D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -97,16 +95,6 @@ Global
 		{893935D3-935A-418F-A656-5D6A203D87ED}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{893935D3-935A-418F-A656-5D6A203D87ED}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{893935D3-935A-418F-A656-5D6A203D87ED}.Release|x86.ActiveCfg = Release|Any CPU
-		{F80D113C-6423-4FC2-AC0B-A0626A5B3EB1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F80D113C-6423-4FC2-AC0B-A0626A5B3EB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F80D113C-6423-4FC2-AC0B-A0626A5B3EB1}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{F80D113C-6423-4FC2-AC0B-A0626A5B3EB1}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{F80D113C-6423-4FC2-AC0B-A0626A5B3EB1}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{F80D113C-6423-4FC2-AC0B-A0626A5B3EB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F80D113C-6423-4FC2-AC0B-A0626A5B3EB1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F80D113C-6423-4FC2-AC0B-A0626A5B3EB1}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{F80D113C-6423-4FC2-AC0B-A0626A5B3EB1}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{F80D113C-6423-4FC2-AC0B-A0626A5B3EB1}.Release|x86.ActiveCfg = Release|Any CPU
 		{024F4C63-F0F0-4414-BFB2-69FC1969BB32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{024F4C63-F0F0-4414-BFB2-69FC1969BB32}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{024F4C63-F0F0-4414-BFB2-69FC1969BB32}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
