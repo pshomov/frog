@@ -1,9 +1,16 @@
 body
 {
-    font-size: 75%;
-    font-family: Verdana, Tahoma, Arial, "Helvetica Neue", Helvetica, Sans-Serif;
+    font-size: .85em;
+    font-family: "Trebuchet MS", Verdana, Helvetica, Sans-Serif;
     color: #232323;
     background-color: #fff;
+}
+
+header,
+footer,
+nav,
+section {
+    display: block;
 }
 
 /* Styles for basic forms

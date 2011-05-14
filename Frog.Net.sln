@@ -23,7 +23,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frog.Agent", "src\app\Frog.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frog.RepositoryTracker", "src\app\Frog.RepositoryTracker\Frog.RepositoryTracker.csproj", "{9DB46CDD-F31C-46C2-B0CC-351125AF766B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frog.UI.Web", "src\app\Frog.UI.Web2\Frog.UI.Web.csproj", "{87D8D4E3-F24A-4452-809C-2E1417B03D3D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frog.UI.Web", "src\app\Frog.UI.Web\Frog.UI.Web.csproj", "{87D8D4E3-F24A-4452-809C-2E1417B03D3D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.IO;
-using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.Script.Serialization;
@@ -12,10 +11,30 @@ using SimpleCQRS;
 
 namespace Frog.UI.Web
 {
-    public class MvcApplication : HttpApplication
+    // Note: For instructions on enabling IIS6 or IIS7 classic mode, 
+    // visit http://go.microsoft.com/?LinkId=9394801
+
+    public class MvcApplication : System.Web.HttpApplication
     {
         string mapPath;
         string serviceArea;
+
+        public static void RegisterGlobalFilters(GlobalFilterCollection filters)
+        {
+            filters.Add(new HandleErrorAttribute());
+        }
+
+        public static void RegisterRoutes(RouteCollection routes)
+        {
+            routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
+
+            routes.MapRoute(
+                "Default", // Route name
+                "{controller}/{action}/{id}", // URL with parameters
+                new { controller = "Home", action = "Index", id = UrlParameter.Optional } // Parameter defaults
+            );
+
+        }
 
         protected void Application_Start()
         {
@@ -26,6 +45,7 @@ namespace Frog.UI.Web
             AppDomain.CurrentDomain.UnhandledException += CurrentDomainOnUnhandledException;
             AreaRegistration.RegisterAllAreas();
 
+            RegisterGlobalFilters(GlobalFilters.Filters);
             WireUpApp();
 
             WebFrontendSetup frontendSetup = GetWebFrontendSetup();
@@ -38,14 +58,14 @@ namespace Frog.UI.Web
             WebFrontendSetup setup;
             if (!mode.IsNullOrEmpty() && mode == "ACCEPTANCE")
                 setup = new AcceptanceTestWebFrontendSetup();
-            else 
+            else
                 setup = new WebFrontendSetup();
             return setup;
         }
 
         void CurrentDomainOnUnhandledException(object sender, UnhandledExceptionEventArgs unhandledExceptionEventArgs)
         {
-            var ex = (Exception) unhandledExceptionEventArgs.ExceptionObject;
+            var ex = (Exception)unhandledExceptionEventArgs.ExceptionObject;
             try
             {
                 Console.WriteLine("Exception is: \n" + ex);
@@ -67,7 +87,6 @@ namespace Frog.UI.Web
             ServiceLocator.AllMassages = system.AllMessages;
         }
     }
-
     internal class WebFrontendSetup
     {
         public virtual void RegisterRoutes(RouteCollection routes)
@@ -81,11 +100,11 @@ namespace Frog.UI.Web
             routes.MapRoute("task_terminal_output", "project/github/{user}/{project}/task/{taskIndex}",
                             new { controller = "Project", action = "terminaloutput" });
             routes.MapRoute("github_status", "project/github/{user}/{project}/{action}",
-                            new {controller = "Project"});
+                            new { controller = "Project" });
             routes.MapRoute("github_register_project", "project/register",
-                            new {controller = "RegisterProject", action = "index"});
+                            new { controller = "RegisterProject", action = "index" });
             routes.MapRoute("check_projects_for_updates", "system/check",
-                            new {controller = "System", action = "check"});
+                            new { controller = "System", action = "check" });
         }
     }
 
@@ -94,13 +113,13 @@ namespace Frog.UI.Web
         public override void RegisterRoutes(RouteCollection routes)
         {
             routes.MapRoute("test_all_task_terminal_output", "project/test/file/{projectUrl}/task",
-                            new {controller = "TestProject", action = "allterminaloutput"});
+                            new { controller = "TestProject", action = "allterminaloutput" });
             routes.MapRoute("test_task_terminal_output", "project/test/file/{projectUrl}/task/{taskIndex}",
-                            new {controller = "TestProject", action = "terminaloutput"});
+                            new { controller = "TestProject", action = "terminaloutput" });
             routes.MapRoute("test_repo_status", "project/test/file/{projectUrl}/{action}",
-                            new {controller = "TestProject"});
+                            new { controller = "TestProject" });
             routes.MapRoute("test_register_project", "project/register",
-                            new {controller = "TestRegisterProject", action = "Index"});
+                            new { controller = "TestRegisterProject", action = "Index" });
             base.RegisterRoutes(routes);
         }
     }
@@ -113,12 +132,12 @@ namespace Frog.UI.Web
         public ProductionSystem(string serviceArea)
         {
             var ser = new JavaScriptSerializer();
-            debug = (IBusDebug) TheBus;
+            debug = (IBusDebug)TheBus;
             debug.OnMessage += message =>
-                                   {
-                                       File.AppendAllText(Path.Combine(serviceArea, "EventLog.json"), ser.Serialize(new {Type = message.GetType().Name, Fields = message}));
-                                       AllMessages.Enqueue(message);
-                                   };
+            {
+                File.AppendAllText(Path.Combine(serviceArea, "EventLog.json"), ser.Serialize(new { Type = message.GetType().Name, Fields = message }));
+                AllMessages.Enqueue(message);
+            };
         }
 
         protected override IBus SetupBus()
@@ -146,4 +165,5 @@ namespace Frog.UI.Web
 
         public IBus Bus { get { return TheBus; } }
     }
+
 }
