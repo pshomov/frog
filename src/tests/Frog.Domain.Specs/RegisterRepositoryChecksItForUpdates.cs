@@ -20,7 +20,7 @@ namespace Frog.Domain.Specs
     }
 
     [TestFixture]
-    public class RepositoryTrackerSpecs : RepositoryTrackerSpecsBase
+    public class RegisterRepositoryChecksItForUpdates : RepositoryTrackerSpecsBase
     {
         protected override void When()
         {
@@ -38,7 +38,7 @@ namespace Frog.Domain.Specs
     }
 
     [TestFixture]
-    public class RepositoryTrackerMultipleProjectRegistrationSpecs : RepositoryTrackerSpecsBase
+    public class RegisterSameRepoTwiceNoDuplication : RepositoryTrackerSpecsBase
     {
         protected override void When()
         {
@@ -51,6 +51,30 @@ namespace Frog.Domain.Specs
         {
             repositoryTracker.CheckForUpdates();
             Assert.That(bus.ReceivedCalls().Where(call => call.GetMethodInfo().Name == "Send").Count(), Is.EqualTo(1));
+        }
+
+    }
+
+    [TestFixture]
+    public class ChecksForUpdatesAllRegisteredRepositories : RepositoryTrackerSpecsBase
+    {
+        protected override void When()
+        {
+            repositoryTracker.Handle(new RegisterRepository { Repo = "http://fle1" });
+            repositoryTracker.Handle(new RegisterRepository { Repo = "http://fle2" });
+            repositoryTracker.Handle(new RegisterRepository { Repo = "http://fle3" });
+        }
+
+        [Test]
+        public void should_send_only_one_check_for_updates_command()
+        {
+            repositoryTracker.CheckForUpdates();
+            bus.Received().Send(Arg.Is<CheckForUpdates>(updates =>
+                updates.RepoUrl == "http://fle1" && updates.Revision == ""));
+            bus.Received().Send(Arg.Is<CheckForUpdates>(updates =>
+                updates.RepoUrl == "http://fle2" && updates.Revision == ""));
+            bus.Received().Send(Arg.Is<CheckForUpdates>(updates =>
+                updates.RepoUrl == "http://fle3" && updates.Revision == ""));
         }
 
     }
@@ -73,7 +97,7 @@ namespace Frog.Domain.Specs
     }
 
     [TestFixture]
-    public class RepositoryUpdatesLastRevisionInfoSpecs : RepositoryTrackerSpecsBase
+    public class RepositoryUpdateLastRevisionNumber : RepositoryTrackerSpecsBase
     {
         protected override void Given()
         {
