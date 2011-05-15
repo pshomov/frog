@@ -41,7 +41,7 @@ namespace Frog.Domain
             agent.JoinTheParty();
         }
 
-        protected void SetupRepositoryTracker()
+        protected virtual void SetupRepositoryTracker()
         {
             repositoryTracker = new RepositoryTracker(TheBus);
             repositoryTracker.JoinTheMessageParty();

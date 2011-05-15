@@ -163,6 +163,10 @@ namespace Frog.UI.Web
         {
         }
 
+        protected override void SetupRepositoryTracker()
+        {
+        }
+
         public IBus Bus { get { return TheBus; } }
     }
 
