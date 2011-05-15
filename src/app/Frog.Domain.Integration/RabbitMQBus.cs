@@ -45,10 +45,10 @@ namespace Frog.Domain.Integration
             }
             queueHandlers[queueName][topicName] = eventArgs =>
                                                        {
-                                                           var deserialized =
+                                                           var message =
                                                                jsonSerializer.Deserialize<T>(
                                                                    Encoding.UTF8.GetString(eventArgs.Body));
-                                                           handler(deserialized);
+                                                           handler(message);
                                                        };
             if (startThread)
             {
@@ -81,6 +81,9 @@ namespace Frog.Domain.Integration
                                              }
                                          });
                 job.Start();
+            } else
+            {
+                channel.Dispose();
             }
         }
 
