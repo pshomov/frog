@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]-->
+<!--[if IE 7 ]>    <html lang="en" class="no-js ie7"> <![endif]-->
+<!--[if IE 8 ]>    <html lang="en" class="no-js ie8"> <![endif]-->
+<!--[if IE 9 ]>    <html lang="en" class="no-js ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html lang="en" class="no-js"> <!--<![endif]-->
+<head>
+	<meta charset="utf-8">
+	<title>Runz</title>
+	<link href="css/960.css" media="screen" rel="stylesheet" type="text/css">
+	<link href="css/site.css" media="screen" rel="stylesheet" type="text/css">
+			
+	<script type="text/javascript" src="js/lib/head.min.js"></script>
+</head>
+<body>
+	<div id="app">
+		<div class="message"></div>
+		<div class="title">
+			<h1>Runz</h1>
+		</div>
+		<div id="content"></div>
+	</div>
+		
+	<script type="text/html" id="projectEdit">
+	<form>
+	    <input name="projecturl" placeholder="Runz your project!" type="text" />
+	    <button type="button">Runz</button>
+	</form>
+	</script>
+	
+	<script type="text/javascript">
+	var ts = +new Date;
+	head.js(
+		"js/lib/jquery-1.6.min.js",
+		"js/lib/json2.js",
+		"js/lib/underscore.min.js",
+		"js/lib/backbone.min.js",
+		"js/lib/ICanHaz.min.js",
+		"js/app.js?" + ts,
+		"js/projects.js?" + ts);
+	
+	head(function() {
+	        new App.Controllers.Projects();
+			Backbone.history.start();
+	    });
+	</script>
+</body>
+
+</html>
