@@ -38,7 +38,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="RabbitMQTests.cs" />
+    <Compile Include="MessageBusChecksIfShouldContinue.cs" />
+    <Compile Include="RabbitMQBasicMessagingTest.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

@@ -19,7 +19,7 @@ namespace Frog.Domain.IntegrationTests
 	}
 
 	[TestFixture]
-	public class RabbitMQTests
+	public class RabbitMQBasicMessagingTest
 	{
 	    private RabbitMQBus bus1;
 	    private RabbitMQBus bus2;
@@ -35,6 +35,7 @@ namespace Frog.Domain.IntegrationTests
         public void TearDown()
         {
             bus1.Dispose();
+            bus2.Dispose();
         }
 
         [Test]

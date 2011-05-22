@@ -15,6 +15,7 @@ namespace Frog.Domain.Integration
     {
         private readonly IConnection connection;
         private readonly Dictionary<string, Dictionary<string, Action<BasicDeliverEventArgs>>> queueHandlers = new Dictionary<string, Dictionary<string, Action<BasicDeliverEventArgs>>>();
+        private readonly List<Thread> threads = new List<Thread>(); 
             
         public RabbitMQBus(string server)
         {
@@ -26,7 +27,10 @@ namespace Frog.Domain.Integration
                                             Protocol = Protocols.AMQP_0_9_1
                                         };
             connection = connectionFactory.CreateConnection();
+            StopHandling = () => false;
         }
+
+        public Func<bool> StopHandling { get; set; }
 
         public void RegisterHandler<T>(Action<T> handler, string handlerId) where T : Message
         {
@@ -78,9 +82,11 @@ namespace Frog.Domain.Integration
                                                      HandleBadMessage(e, ex);
                                                      channel.BasicReject(e.DeliveryTag, true);
                                                  }
+                                                 if (StopHandling()) break;
                                              }
                                          });
                 job.Start();
+                threads.Add(job);
             } else
             {
                 channel.Dispose();
@@ -104,6 +110,14 @@ namespace Frog.Domain.Integration
                 string topicName = typeof(T).Name;
                 string queueName = handlerId;
                 channel.QueueUnbind(queueName, topicName, "", null);
+            }
+        }
+
+        public void PurgeQueue(string handlerId)
+        {
+            using(var channel = connection.CreateModel())
+            {
+                channel.QueuePurge(handlerId);
             }
         }
 
@@ -132,10 +146,16 @@ namespace Frog.Domain.Integration
             connection.Close();
             connection.Dispose();
         }
+
+        public void WaitForHandlersToFinish(int i)
+        {
+            threads.ForEach(thread => {if (!thread.Join(i)) throw new TimeoutException("Waiting for message bus handler threads to complete did not finish properly"); });
+        }
     }
 
     public interface IBusManagement
     {
         void UnregisterHandler<T>(string handlerId);
+        void PurgeQueue(string handlerId);
     }
 }
