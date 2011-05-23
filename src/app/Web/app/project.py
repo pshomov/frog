@@ -1,10 +1,14 @@
 import bobo
 import webob
 import json
+import hashlib
 
 from riak import RiakClient
 from riak import RiakPbcTransport
 riak_client = RiakClient('127.0.0.1', 8087, transport_class=RiakPbcTransport)
+
+def generate_id(posted):
+    return hashlib.sha224(posted['projecturl']).hexdigest()
 
 @bobo.post('/projects', content_type="application/json")
 def post_project(bobo_request):    
@@ -15,8 +19,7 @@ def post_project(bobo_request):
     # add the revision key
     posted['revision'] = 0
     proj_bucket = riak_client.bucket('projects')
-    # TODO: think a bit about generating the key of the new project
-    stored_obj = proj_bucket.new("some_id", posted)
+    stored_obj = proj_bucket.new(generate_id(posted), posted)
     stored_obj.store()
     return {'result': 'success'}
     
