@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using System.Web;
 using Frog.Domain;
+using Frog.Domain.RepositoryTracker;
 using Frog.Support;
 
 namespace Frog.UI.Web.Controllers.TestSupport

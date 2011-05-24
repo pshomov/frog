@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using Frog.Domain;
+using Frog.Domain.RepositoryTracker;
 using Frog.Domain.Specs;
 using Frog.Domain.TaskSources;
 using Frog.Domain.UI;

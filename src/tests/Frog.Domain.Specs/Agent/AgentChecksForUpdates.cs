@@ -1,4 +1,5 @@
-﻿using NSubstitute;
+﻿using Frog.Domain.RepositoryTracker;
+using NSubstitute;
 using NUnit.Framework;
 
 namespace Frog.Domain.Specs.Agent

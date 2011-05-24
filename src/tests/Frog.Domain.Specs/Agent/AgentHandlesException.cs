@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Frog.Domain.RepositoryTracker;
 using NSubstitute;
 using NUnit.Framework;
 

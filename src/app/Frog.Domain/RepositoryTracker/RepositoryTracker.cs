@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Linq;
 using SimpleCQRS;
 
-namespace Frog.Domain
+namespace Frog.Domain.RepositoryTracker
 {
     public class RegisterRepository : Command
     {
@@ -27,43 +25,10 @@ namespace Frog.Domain
         }
     }
 
-    public class ProjectsRepository
-    {
-        private readonly ConcurrentDictionary<string, RepositoryTracker.RepositoryInfo> trackedRepos;
-
-        public ProjectsRepository()
-        {
-            trackedRepos = new ConcurrentDictionary<string, RepositoryTracker.RepositoryInfo>();
-        }
-
-        public void TrackRepository(string repoUrl)
-        {
-            trackedRepos.TryAdd(repoUrl, new RepositoryTracker.RepositoryInfo { Url = repoUrl, LastBuiltRevision = "" });
-        }
-
-        public RepositoryTracker.RepositoryInfo this[string repoUrl]{
-            get { return trackedRepos[repoUrl]; }
-        }
-
-        public IEnumerable<RepositoryTracker.RepositoryInfo> AllProjects { get { return trackedRepos.Values; } }
-    }
-
     public class RepositoryTracker : Handles<UpdateFound>, Handles<RegisterRepository>
     {
-        public class RepositoryInfo
-        {
-            public RepositoryInfo()
-            {
-                Id = Guid.NewGuid();
-            }
-
-            public Guid Id { get; private set; }
-            public string Url;
-            public string LastBuiltRevision;
-        }
-
         readonly IBus bus;
-        private ProjectsRepository projectsRepository;
+        readonly IProjectsRepository projectsRepository;
 
         public RepositoryTracker(IBus bus)
         {

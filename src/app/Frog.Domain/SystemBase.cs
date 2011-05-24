@@ -9,7 +9,7 @@ namespace Frog.Domain
         protected readonly IBus TheBus;
         readonly WorkingAreaGoverner areaGoverner;
         public ConcurrentDictionary<string, BuildStatus> report { get; private set; }
-        public RepositoryTracker repositoryTracker { get; private set; }
+        public RepositoryTracker.RepositoryTracker repositoryTracker { get; private set; }
         Agent agent;
         Worker worker;
 
@@ -43,7 +43,7 @@ namespace Frog.Domain
 
         protected virtual void SetupRepositoryTracker()
         {
-            repositoryTracker = new RepositoryTracker(TheBus);
+            repositoryTracker = new RepositoryTracker.RepositoryTracker(TheBus);
             repositoryTracker.JoinTheMessageParty();
         }
 
