@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 using SimpleCQRS;
 
@@ -26,6 +27,27 @@ namespace Frog.Domain
         }
     }
 
+    public class ProjectsRepository
+    {
+        private readonly ConcurrentDictionary<string, RepositoryTracker.RepositoryInfo> trackedRepos;
+
+        public ProjectsRepository()
+        {
+            trackedRepos = new ConcurrentDictionary<string, RepositoryTracker.RepositoryInfo>();
+        }
+
+        public void TrackRepository(string repoUrl)
+        {
+            trackedRepos.TryAdd(repoUrl, new RepositoryTracker.RepositoryInfo { Url = repoUrl, LastBuiltRevision = "" });
+        }
+
+        public RepositoryTracker.RepositoryInfo this[string repoUrl]{
+            get { return trackedRepos[repoUrl]; }
+        }
+
+        public IEnumerable<RepositoryTracker.RepositoryInfo> AllProjects { get { return trackedRepos.Values; } }
+    }
+
     public class RepositoryTracker : Handles<UpdateFound>, Handles<RegisterRepository>
     {
         public class RepositoryInfo
@@ -41,23 +63,23 @@ namespace Frog.Domain
         }
 
         readonly IBus bus;
-        readonly ConcurrentDictionary<string, RepositoryInfo> trackedRepos;
+        private ProjectsRepository projectsRepository;
 
         public RepositoryTracker(IBus bus)
         {
             this.bus = bus;
-            trackedRepos = new ConcurrentDictionary<string, RepositoryInfo>();
+            projectsRepository = new ProjectsRepository();
         }
 
         private void Track(string repoUrl)
         {
-            trackedRepos.TryAdd(repoUrl, new RepositoryInfo {Url = repoUrl, LastBuiltRevision = ""});
+            projectsRepository.TrackRepository(repoUrl);
         }
 
         public void CheckForUpdates()
         {
-            trackedRepos.ToList().ForEach(
-                s => bus.Send(new CheckForUpdates(repoUrl : s.Value.Url, revision : s.Value.LastBuiltRevision)));
+            projectsRepository.AllProjects.ToList().ForEach(
+                s => bus.Send(new CheckForUpdates(repoUrl : s.Url, revision : s.LastBuiltRevision)));
         }
 
         public void JoinTheMessageParty()
@@ -73,7 +95,7 @@ namespace Frog.Domain
 
         public void Handle(UpdateFound message)
         {
-            trackedRepos[message.RepoUrl].LastBuiltRevision = message.Revision;
+            projectsRepository[message.RepoUrl].LastBuiltRevision = message.Revision;
         }
     }
 }
