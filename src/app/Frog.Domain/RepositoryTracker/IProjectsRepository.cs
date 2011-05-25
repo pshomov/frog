@@ -7,6 +7,7 @@ namespace Frog.Domain.RepositoryTracker
         public string Url;
         public string LastBuiltRevision;
     }
+
     public interface IProjectsRepository
     {
         void TrackRepository(string repoUrl);

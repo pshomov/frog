@@ -57,7 +57,7 @@
     <Compile Include="IExecTask.cs" />
     <Compile Include="BuildSystems\Maven\TaskSource\MavenTaskDetector.cs" />
     <Compile Include="RepositoryTracker\IProjectsRepository.cs" />
-    <Compile Include="RepositoryTracker\ProjectsRepository.cs" />
+    <Compile Include="RepositoryTracker\InMemoryProjectsRepository.cs" />
     <Compile Include="RepositoryTracker\RepositoryTracker.cs" />
     <Compile Include="SystemBase.cs" />
     <Compile Include="ExecTasks\TestExecTask.cs" />

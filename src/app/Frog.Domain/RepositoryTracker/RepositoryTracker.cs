@@ -33,7 +33,7 @@ namespace Frog.Domain.RepositoryTracker
         public RepositoryTracker(IBus bus)
         {
             this.bus = bus;
-            projectsRepository = new ProjectsRepository();
+            projectsRepository = new InMemoryProjectsRepository();
         }
 
         private void Track(string repoUrl)
