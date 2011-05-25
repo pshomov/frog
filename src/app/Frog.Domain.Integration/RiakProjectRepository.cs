@@ -26,19 +26,14 @@ namespace Frog.Domain.Integration
                                                           Key = KeyGenerator(repoUrl),
                                                           Content = new RiakContent
                                                                         {
-                                                                            Value = jsonBridge.Serialize(new RepositoryInfo{LastBuiltRevision = "" , Url = repoUrl}).GetBytes()
+                                                                            Value = jsonBridge.Serialize(new RepositoryDocument{LastBuiltRevision = "" , Url = repoUrl}).GetBytes()
                                                                         }
                                                       }
                 );
             if (response.ResponseCode != RiakResponseCode.Successful) throw new Exception("ouch, where is my data?");
         }
 
-        public RepositoryInfo this[string repoUrl]
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        public IEnumerable<RepositoryInfo> AllProjects
+        public IEnumerable<RepositoryDocument> AllProjects
         {
             get
             {
@@ -52,8 +47,13 @@ namespace Frog.Domain.Integration
                 var riakResponse =
                     riakContentRepository.Find(new RiakFindRequest()
                                                    {Bucket = BUCKET, Keys = keysFor.Result, ReadValue = 1});
-                return riakResponse.Result.Select(document => jsonBridge.Deserialize<RepositoryInfo>(document.Value));
+                return riakResponse.Result.Select(document => jsonBridge.Deserialize<RepositoryDocument>(document.Value));
             }
+        }
+
+        public void UpdateLastKnownRevision(string repoUrl, string revision)
+        {
+            throw new NotImplementedException();
         }
 
         private string KeyGenerator(string repoUrl)

@@ -2,7 +2,7 @@
 
 namespace Frog.Domain.RepositoryTracker
 {
-    public class RepositoryInfo
+    public class RepositoryDocument
     {
         public string Url;
         public string LastBuiltRevision;
@@ -11,7 +11,7 @@ namespace Frog.Domain.RepositoryTracker
     public interface IProjectsRepository
     {
         void TrackRepository(string repoUrl);
-        RepositoryInfo this[string repoUrl] { get; }
-        IEnumerable<RepositoryInfo> AllProjects { get; }
+        IEnumerable<RepositoryDocument> AllProjects { get; }
+        void UpdateLastKnownRevision(string repoUrl, string revision);
     }
 }

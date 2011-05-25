@@ -60,7 +60,7 @@ namespace Frog.Domain.RepositoryTracker
 
         public void Handle(UpdateFound message)
         {
-            projectsRepository[message.RepoUrl].LastBuiltRevision = message.Revision;
+            projectsRepository.UpdateLastKnownRevision(message.RepoUrl, message.Revision);
         }
     }
 }

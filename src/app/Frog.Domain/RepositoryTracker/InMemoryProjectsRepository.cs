@@ -1,26 +1,27 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 
 namespace Frog.Domain.RepositoryTracker
 {
     public class InMemoryProjectsRepository : IProjectsRepository
     {
-        private readonly ConcurrentDictionary<string, RepositoryInfo> trackedRepos;
+        private readonly ConcurrentDictionary<string, RepositoryDocument> trackedRepos;
 
         public InMemoryProjectsRepository()
         {
-            trackedRepos = new ConcurrentDictionary<string, RepositoryInfo>();
+            trackedRepos = new ConcurrentDictionary<string, RepositoryDocument>();
         }
 
         public void TrackRepository(string repoUrl)
         {
-            trackedRepos.TryAdd(repoUrl, new RepositoryInfo { Url = repoUrl, LastBuiltRevision = "" });
+            trackedRepos.TryAdd(repoUrl, new RepositoryDocument { Url = repoUrl, LastBuiltRevision = "" });
         }
 
-        public RepositoryInfo this[string repoUrl]{
-            get { return trackedRepos[repoUrl]; }
+        public IEnumerable<RepositoryDocument> AllProjects { get { return trackedRepos.Values; } }
+        public void UpdateLastKnownRevision(string repoUrl, string revision)
+        {
+            trackedRepos[repoUrl].LastBuiltRevision = revision;
         }
-
-        public IEnumerable<RepositoryInfo> AllProjects { get { return trackedRepos.Values; } }
     }
 }
