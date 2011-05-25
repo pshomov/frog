@@ -20,5 +20,14 @@ namespace Frog.Domain.IntegrationTests.Riak
             Assert.That(riakProject.AllProjects.ToArray()[0].LastBuiltRevision, Is.Empty);
         }
 
+        [Test]
+        public void should_update_repo_revision_when_new_one_specified()
+        {
+            var riakProject = new RiakProjectRepository();
+            riakProject.TrackRepository("http://fle");
+            riakProject.UpdateLastKnownRevision("http://fle", "123");
+            Assert.That(riakProject.AllProjects.ToArray()[0].LastBuiltRevision, Is.EqualTo("123"));
+        }
+
     }
 }

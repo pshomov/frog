@@ -53,7 +53,13 @@ namespace Frog.Domain.Integration
 
         public void UpdateLastKnownRevision(string repoUrl, string revision)
         {
-            throw new NotImplementedException();
+            var connectionManager = RiakConnectionManager.FromConfiguration;
+            connectionManager.AddConnection("10.0.2.2", 8087);
+            var riakConnection = new RiakContentRepository(connectionManager);
+            var riakResponse = riakConnection.Find(new RiakFindRequest() { Bucket = BUCKET, Keys = new []{KeyGenerator(repoUrl)}, ReadValue = 1 });
+            var doc = jsonBridge.Deserialize<RepositoryDocument>(riakResponse.Result[0].Value);
+            doc.LastBuiltRevision = revision;
+            riakConnection.Persist(new RiakPersistRequest(){Bucket = BUCKET, Key = KeyGenerator(repoUrl), Content = new RiakContent(){Value = jsonBridge.Serialize(doc).GetBytes()}});
         }
 
         private string KeyGenerator(string repoUrl)
