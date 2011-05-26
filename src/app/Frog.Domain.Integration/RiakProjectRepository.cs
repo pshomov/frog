@@ -13,6 +13,8 @@ namespace Frog.Domain.Integration
     public class RiakProjectRepository : IProjectsRepository
     {
         private const string BUCKET = "projects_test1";
+        private const string RIAK_SERVER = "10.0.2.2";
+        private const int RIAK_PORT = 8087;
         readonly JavaScriptSerializer jsonBridge = new JavaScriptSerializer();
 
         public void TrackRepository(string repoUrl)
@@ -61,7 +63,7 @@ namespace Frog.Domain.Integration
         private static RiakConnectionManager GetConnectionManager()
         {
             var connectionManager = RiakConnectionManager.FromConfiguration;
-            connectionManager.AddConnection("10.0.2.2", 8087);
+            connectionManager.AddConnection(RIAK_SERVER, RIAK_PORT);
             return connectionManager;
         }
 
