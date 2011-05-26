@@ -12,10 +12,17 @@ namespace Frog.Domain.Integration
 {
     public class RiakProjectRepository : IProjectsRepository
     {
-        private const string BUCKET = "projects_test1";
-        private const string RIAK_SERVER = "10.0.2.2";
-        private const int RIAK_PORT = 8087;
+        private readonly string host;
+        private readonly int port;
+        private readonly string bucket;
         readonly JavaScriptSerializer jsonBridge = new JavaScriptSerializer();
+
+        public RiakProjectRepository(string host, int port, string bucket)
+        {
+            this.host = host;
+            this.port = port;
+            this.bucket = bucket;
+        }
 
         public void TrackRepository(string repoUrl)
         {
@@ -23,7 +30,7 @@ namespace Frog.Domain.Integration
             var riakConnection = new RiakContentRepository(connectionManager);
             var response = riakConnection.Persist(new RiakPersistRequest
                                                       {
-                                                          Bucket = BUCKET,
+                                                          Bucket = bucket,
                                                           Key = KeyGenerator(repoUrl),
                                                           Content = new RiakContent
                                                                         {
@@ -40,12 +47,12 @@ namespace Frog.Domain.Integration
             {
                 var connectionManager = GetConnectionManager();
                 var riakConnection = new RiakBucketRepository(connectionManager);
-                var keysFor = riakConnection.ListKeysFor(new ListKeysRequest {Bucket = BUCKET.GetBytes()});
+                var keysFor = riakConnection.ListKeysFor(new ListKeysRequest {Bucket = bucket.GetBytes()});
                 if (keysFor.ResponseCode != RiakResponseCode.Successful)
                     throw new Exception("ouch, where is my data?");
                 var riakContentRepository = new RiakContentRepository(connectionManager);
                 var riakResponse =
-                    riakContentRepository.Find(new RiakFindRequest {Bucket = BUCKET, Keys = keysFor.Result, ReadValue = 1});
+                    riakContentRepository.Find(new RiakFindRequest {Bucket = bucket, Keys = keysFor.Result, ReadValue = 1});
                 return riakResponse.Result.Select(document => jsonBridge.Deserialize<RepositoryDocument>(document.Value));
             }
         }
@@ -54,16 +61,16 @@ namespace Frog.Domain.Integration
         {
             RiakConnectionManager connectionManager = GetConnectionManager();
             var riakConnection = new RiakContentRepository(connectionManager);
-            var riakResponse = riakConnection.Find(new RiakFindRequest { Bucket = BUCKET, Keys = new []{KeyGenerator(repoUrl)}, ReadValue = 1 });
+            var riakResponse = riakConnection.Find(new RiakFindRequest { Bucket = bucket, Keys = new []{KeyGenerator(repoUrl)}, ReadValue = 1 });
             var doc = jsonBridge.Deserialize<RepositoryDocument>(riakResponse.Result[0].Value);
             doc.LastBuiltRevision = revision;
-            riakConnection.Persist(new RiakPersistRequest {Bucket = BUCKET, Key = KeyGenerator(repoUrl), Content = new RiakContent {Value = jsonBridge.Serialize(doc).GetBytes()}});
+            riakConnection.Persist(new RiakPersistRequest {Bucket = bucket, Key = KeyGenerator(repoUrl), Content = new RiakContent {Value = jsonBridge.Serialize(doc).GetBytes()}});
         }
 
-        private static RiakConnectionManager GetConnectionManager()
+        private RiakConnectionManager GetConnectionManager()
         {
             var connectionManager = RiakConnectionManager.FromConfiguration;
-            connectionManager.AddConnection(RIAK_SERVER, RIAK_PORT);
+            connectionManager.AddConnection(host, port);
             return connectionManager;
         }
 
