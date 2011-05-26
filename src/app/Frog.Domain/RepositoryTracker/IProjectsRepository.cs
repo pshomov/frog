@@ -4,8 +4,8 @@ namespace Frog.Domain.RepositoryTracker
 {
     public class RepositoryDocument
     {
-        public string Url;
-        public string LastBuiltRevision;
+        public string projecturl;
+        public string revision;
     }
 
     public interface IProjectsRepository

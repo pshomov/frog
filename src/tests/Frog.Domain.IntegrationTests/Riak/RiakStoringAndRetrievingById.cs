@@ -27,8 +27,8 @@ namespace Frog.Domain.IntegrationTests.Riak
         {
             riakProject.TrackRepository("http://fle");
             Assert.That(riakProject.AllProjects.Count(), Is.EqualTo(1));
-            Assert.That(riakProject.AllProjects.ToArray()[0].Url, Is.EqualTo("http://fle"));
-            Assert.That(riakProject.AllProjects.ToArray()[0].LastBuiltRevision, Is.Empty);
+            Assert.That(riakProject.AllProjects.ToArray()[0].projecturl, Is.EqualTo("http://fle"));
+            Assert.That(riakProject.AllProjects.ToArray()[0].revision, Is.Empty);
         }
 
         [Test]
@@ -36,7 +36,7 @@ namespace Frog.Domain.IntegrationTests.Riak
         {
             riakProject.TrackRepository("http://fle");
             riakProject.UpdateLastKnownRevision("http://fle", "123");
-            Assert.That(riakProject.AllProjects.ToArray()[0].LastBuiltRevision, Is.EqualTo("123"));
+            Assert.That(riakProject.AllProjects.ToArray()[0].revision, Is.EqualTo("123"));
         }
 
     }

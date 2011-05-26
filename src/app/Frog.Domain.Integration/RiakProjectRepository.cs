@@ -34,7 +34,7 @@ namespace Frog.Domain.Integration
                                                           Key = KeyGenerator(repoUrl),
                                                           Content = new RiakContent
                                                                         {
-                                                                            Value = jsonBridge.Serialize(new RepositoryDocument{LastBuiltRevision = "" , Url = repoUrl}).GetBytes()
+                                                                            Value = jsonBridge.Serialize(new RepositoryDocument{revision = "" , projecturl = repoUrl}).GetBytes()
                                                                         }
                                                       }
                 );
@@ -63,7 +63,7 @@ namespace Frog.Domain.Integration
             var riakConnection = new RiakContentRepository(connectionManager);
             var riakResponse = riakConnection.Find(new RiakFindRequest { Bucket = bucket, Keys = new []{KeyGenerator(repoUrl)}, ReadValue = 1 });
             var doc = jsonBridge.Deserialize<RepositoryDocument>(riakResponse.Result[0].Value);
-            doc.LastBuiltRevision = revision;
+            doc.revision = revision;
             riakConnection.Persist(new RiakPersistRequest {Bucket = bucket, Key = KeyGenerator(repoUrl), Content = new RiakContent {Value = jsonBridge.Serialize(doc).GetBytes()}});
         }
 
