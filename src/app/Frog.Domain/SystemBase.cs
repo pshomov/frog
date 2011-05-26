@@ -1,4 +1,5 @@
 ﻿using System.Collections.Concurrent;
+using Frog.Domain.RepositoryTracker;
 using Frog.Domain.UI;
 using SimpleCQRS;
 
@@ -43,7 +44,7 @@ namespace Frog.Domain
 
         protected virtual void SetupRepositoryTracker()
         {
-            repositoryTracker = new RepositoryTracker.RepositoryTracker(TheBus);
+            repositoryTracker = new RepositoryTracker.RepositoryTracker(TheBus, new InMemoryProjectsRepository());
             repositoryTracker.JoinTheMessageParty();
         }
 

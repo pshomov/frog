@@ -30,10 +30,10 @@ namespace Frog.Domain.RepositoryTracker
         readonly IBus bus;
         readonly IProjectsRepository projectsRepository;
 
-        public RepositoryTracker(IBus bus)
+        public RepositoryTracker(IBus bus, IProjectsRepository projectsRepository)
         {
             this.bus = bus;
-            projectsRepository = new InMemoryProjectsRepository();
+            this.projectsRepository = projectsRepository;
         }
 
         private void Track(string repoUrl)

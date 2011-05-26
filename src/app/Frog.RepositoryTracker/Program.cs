@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using Frog.Domain.Integration;
+using Frog.Domain.RepositoryTracker;
 using SimpleCQRS;
 
 namespace Frog.RepositoryTracker
@@ -12,7 +13,7 @@ namespace Frog.RepositoryTracker
     {
         static void Main(string[] args)
         {
-            var repoTracker = new Domain.RepositoryTracker.RepositoryTracker(SetupBus());
+            var repoTracker = new Domain.RepositoryTracker.RepositoryTracker(SetupBus(), new RiakProjectRepository(Environment.GetEnvironmentVariable("RUNZ_RIAK_HOST") ?? "localhost", Int32.Parse(Environment.GetEnvironmentVariable("RUNZ_RIAK_PORT") ?? "8087"), "projects"));
             repoTracker.JoinTheMessageParty();
             while(true)
             {

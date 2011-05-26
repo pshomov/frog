@@ -16,7 +16,7 @@ namespace Frog.Domain.Specs
         protected override void Given()
         {
             bus = Substitute.For<IBus>();
-            repositoryTracker = new RepositoryTracker.RepositoryTracker(bus);
+            repositoryTracker = new RepositoryTracker.RepositoryTracker(bus, new InMemoryProjectsRepository());
         }
     }
 
