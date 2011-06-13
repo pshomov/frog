@@ -1,3 +1,4 @@
+import os
 import bobo
 import webob
 import json
@@ -5,7 +6,7 @@ import hashlib
 
 from riak import RiakClient
 from riak import RiakPbcTransport
-riak_client = RiakClient('127.0.0.1', 8087, transport_class=RiakPbcTransport)
+riak_client = RiakClient(os.getenv('RUNZ_RIAK_HOST') or '127.0.0.1', 8087, transport_class=RiakPbcTransport)
 
 def generate_id(posted):
     return hashlib.md5(posted['projecturl']).hexdigest()
