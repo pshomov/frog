@@ -25,6 +25,7 @@ App.Views.ProjectEdit = Backbone.View.extend({
         "click button": "addProject"
     },
     render: function() {
+        ich.grabTemplates();
         this.el = ich.projectEdit(new Project());
         $('#content').html(this.el);
         return this;
