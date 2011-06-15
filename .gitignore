@@ -10,3 +10,5 @@ output/
 tmp/
 *.log
 SyncToy*
+*.pidb
+.idea/
