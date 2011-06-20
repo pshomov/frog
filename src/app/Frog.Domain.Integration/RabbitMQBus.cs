@@ -35,12 +35,14 @@ namespace Frog.Domain.Integration
         public void RegisterHandler<T>(Action<T> handler, string handlerId) where T : Message
         {
             var jsonSerializer = new JavaScriptSerializer();
-            var channel = connection.CreateModel();
             var topicName = typeof (T).Name;
             var queueName = handlerId;
-            channel.ExchangeDeclare(topicName, ExchangeType.Fanout, true);
-            channel.QueueDeclare(queueName, false, false, false, null);
-            channel.QueueBind(queueName, topicName, "", null);
+            using(var channel = connection.CreateModel())
+            {
+                channel.ExchangeDeclare(topicName, ExchangeType.Fanout, true);
+                channel.QueueDeclare(queueName, false, false, false, null);
+                channel.QueueBind(queueName, topicName, "", null);
+            }
             var startThread = false;
             if (!queueHandlers.ContainsKey(queueName))
             {
@@ -56,40 +58,40 @@ namespace Frog.Domain.Integration
                                                        };
             if (startThread)
             {
-                var consumer = new QueueingBasicConsumer(channel);
                 var job = new Thread(() =>
                                          {
-                                             channel.BasicConsume(queueName, false, consumer);
-                                             while (true)
+                                             using(var channel = connection.CreateModel())
                                              {
-                                                 BasicDeliverEventArgs e = null;
-                                                 try
+                                                 var consumer = new QueueingBasicConsumer(channel);
+                                                 channel.BasicConsume(queueName, false, consumer);
+                                                 while (true)
                                                  {
-                                                     e = (BasicDeliverEventArgs) consumer.Queue.Dequeue();
-                                                     queueHandlers[queueName][e.Exchange](e);
-                                                     channel.BasicAck(e.DeliveryTag, false);
+                                                     BasicDeliverEventArgs e = null;
+                                                     try
+                                                     {
+                                                         e = (BasicDeliverEventArgs)consumer.Queue.Dequeue();
+                                                         queueHandlers[queueName][e.Exchange](e);
+                                                         channel.BasicAck(e.DeliveryTag, false);
+                                                     }
+                                                     catch (EndOfStreamException)
+                                                     {
+                                                         break;
+                                                     }
+                                                     catch (OperationInterruptedException)
+                                                     {
+                                                         break;
+                                                     }
+                                                     catch (Exception ex)
+                                                     {
+                                                         HandleBadMessage(e, ex);
+                                                         channel.BasicReject(e.DeliveryTag, true);
+                                                     }
+                                                     if (StopHandling()) break;
                                                  }
-                                                 catch (EndOfStreamException)
-                                                 {
-                                                     break;
-                                                 }
-                                                 catch (OperationInterruptedException)
-                                                 {
-                                                     break;
-                                                 }
-                                                 catch (Exception ex)
-                                                 {
-                                                     HandleBadMessage(e, ex);
-                                                     channel.BasicReject(e.DeliveryTag, true);
-                                                 }
-                                                 if (StopHandling()) break;
                                              }
                                          });
                 job.Start();
                 threads.Add(job);
-            } else
-            {
-                channel.Dispose();
             }
         }
 
