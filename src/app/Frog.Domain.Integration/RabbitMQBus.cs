@@ -136,6 +136,7 @@ namespace Frog.Domain.Integration
             using (IModel channel = connection.CreateModel())
             {
                 string topicName = typeof(T).Name;
+                channel.ExchangeDeclare(topicName, ExchangeType.Fanout, true);
                 var ser = new JavaScriptSerializer();
                 string serializedForm = ser.Serialize(@event);
                 IBasicProperties basicProperties = channel.CreateBasicProperties();
