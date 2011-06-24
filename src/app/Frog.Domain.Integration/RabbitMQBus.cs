@@ -42,6 +42,7 @@ namespace Frog.Domain.Integration
                 channel.ExchangeDeclare(topicName, ExchangeType.Fanout, true);
                 channel.QueueDeclare(queueName, false, false, false, null);
                 channel.QueueBind(queueName, topicName, "", null);
+                channel.TxSelect();
             }
             var startThread = false;
             if (!queueHandlers.ContainsKey(queueName))
@@ -133,10 +134,13 @@ namespace Frog.Domain.Integration
 
         private void SendMessage<T>(T @event)
         {
+            string topicName = typeof(T).Name;
             using (IModel channel = connection.CreateModel())
             {
-                string topicName = typeof(T).Name;
                 channel.ExchangeDeclare(topicName, ExchangeType.Fanout, true);
+            }
+            using (IModel channel = connection.CreateModel())
+            {
                 var ser = new JavaScriptSerializer();
                 string serializedForm = ser.Serialize(@event);
                 IBasicProperties basicProperties = channel.CreateBasicProperties();
