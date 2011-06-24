@@ -138,6 +138,7 @@ namespace Frog.Domain.Integration
             using (IModel channel = connection.CreateModel())
             {
                 channel.ExchangeDeclare(topicName, ExchangeType.Fanout, true);
+                channel.TxCommit();
             }
             using (IModel channel = connection.CreateModel())
             {
