@@ -12,3 +12,5 @@ tmp/
 SyncToy*
 *.pidb
 .idea/
+*.userprefs
+*.pyc
