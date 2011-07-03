@@ -25,6 +25,7 @@ namespace Frog.Domain.BuildSystems.Solution
             {
                 var rootFolderSolutions =
                     allSolutionFiles.Where(slnPath => slnPath.IndexOf(Path.DirectorySeparatorChar) == -1).ToList();
+				if (rootFolderSolutions.Count == 0) return new List<ITask>();
                 var rootBuildSlnIdx =
                     rootFolderSolutions.FindIndex(
                         s => s.Equals("build.sln", StringComparison.InvariantCultureIgnoreCase));

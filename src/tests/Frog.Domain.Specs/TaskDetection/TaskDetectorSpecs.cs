@@ -139,4 +139,30 @@ namespace Frog.Domain.Specs.TaskDetection
             Assert.That((items[0] as MSBuildTask).SolutionFile, Is.EqualTo(Os.DirChars("fle\\flo\\a.sln")));
         }
     }
+	
+    [TestFixture]
+    public class MultipleSplutionsButNoneAtTheRootSpecs : TaskDetectorSpecsBase
+    {
+        MSBuildDetector msbuildTaskDetecttor;
+        IList<ITask> items;
+
+        protected override void Given()
+        {
+            msbuildTaskDetecttor = new MSBuildDetector(_taskFileFinder);
+            _taskFileFinder.FindFiles("basefolder").Returns(As.List(Os.DirChars("a1\\a2.sln"),
+                                                                    Os.DirChars("a2\\asdas\\asd\\b.sln")));
+        }
+
+        protected override void When()
+        {
+            items = msbuildTaskDetecttor.Detect("basefolder");
+        }
+
+        [Test]
+        public void should_prefer_root_file_sln_over_any_other_down_the_hierarchy()
+        {
+            Assert.That(items.Count, Is.EqualTo(0));
+        }
+    }
+	
 }
