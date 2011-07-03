@@ -9,7 +9,7 @@ Project = Backbone.Model.extend({
 
 App.Projects = Backbone.Collection.extend({
    model: Project,
-   url: '/projects' 
+   url: 'projects'
 });
 
 window.Projects = new App.Projects;
