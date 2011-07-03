@@ -118,18 +118,18 @@ namespace Frog.Domain.Specs.TaskDetection
     [TestFixture]
     public class OneSolutionAnywhereGetsSelectedForBuildSpecs : TaskDetectorSpecsBase
     {
-        MSBuildDetector msbuildTaskDetecttor;
+        MSBuildDetector msbuildTaskDetector;
         IList<ITask> items;
 
         protected override void Given()
         {
-            msbuildTaskDetecttor = new MSBuildDetector(_taskFileFinder);
+            msbuildTaskDetector = new MSBuildDetector(_taskFileFinder);
             _taskFileFinder.FindFiles("basefolder").Returns(As.List(Os.DirChars("fle\\flo\\a.sln")));
         }
 
         protected override void When()
         {
-            items = msbuildTaskDetecttor.Detect("basefolder");
+            items = msbuildTaskDetector.Detect("basefolder");
         }
 
         [Test]
