@@ -1,7 +1,7 @@
 using Frog.Domain.BuildSystems.Rake;
 using Frog.Domain.BuildSystems.Solution;
-using Frog.Domain.CustomTasks;
 using Frog.Specs.Support;
+using Frog.Support;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -76,6 +76,7 @@ namespace Frog.Domain.Specs
         public void should_have_rake_task()
         {
             execTaskFactory.Received().CreateTask("rake", Arg.Any<string>(), "unit_test");
+            execTaskFactory.Received().CreateTask("rvm", Arg.Is<string>(s => !s.IsNullOrEmpty() && s.StartsWith("use")), "prepare_for_rake");
         }
     }
 

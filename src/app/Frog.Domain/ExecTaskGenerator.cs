@@ -41,6 +41,7 @@ namespace Frog.Domain
             }
             if(task.GetType() == typeof(RakeTask))
             {
+                result.Add(execTaskGenerator.CreateTask("rvm", "use 1.9.2", "prepare_for_rake"));
                 result.Add(execTaskGenerator.CreateTask("rake", null, "unit_test"));
             }
             if(task.GetType() == typeof(BundlerTask))
