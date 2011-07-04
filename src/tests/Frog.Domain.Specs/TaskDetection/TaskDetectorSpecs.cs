@@ -16,8 +16,8 @@ namespace Frog.Domain.Specs.TaskDetection
 
         protected override void Given()
         {
-            msbuildTaskDetecttor = new MSBuildDetector(_taskFileFinder);
-            _taskFileFinder.FindFiles("basefolder").Returns(As.List(Os.DirChars("a1.sln"),
+            msbuildTaskDetecttor = new MSBuildDetector(taskFileFinder);
+            taskFileFinder.FindFiles("basefolder").Returns(As.List(Os.DirChars("a1.sln"),
                                                                              Os.DirChars("a1\\a2.sln"),
                                                                              Os.DirChars("a2\\asdas\\asd\\b.sln")));
         }
@@ -43,8 +43,8 @@ namespace Frog.Domain.Specs.TaskDetection
 
         protected override void Given()
         {
-            msbuildTaskDetecttor = new MSBuildDetector(_taskFileFinder);
-            _taskFileFinder.FindFiles("basefolder").Returns(As.List(Os.DirChars("a1.sln"),
+            msbuildTaskDetecttor = new MSBuildDetector(taskFileFinder);
+            taskFileFinder.FindFiles("basefolder").Returns(As.List(Os.DirChars("a1.sln"),
                                                                              Os.DirChars("a2.sln"),
                                                                              Os.DirChars(
                                                                                  "a2\\asdas\\asd\\build.sln")));
@@ -70,8 +70,8 @@ namespace Frog.Domain.Specs.TaskDetection
 
         protected override void Given()
         {
-            msbuildTaskDetecttor = new MSBuildDetector(_taskFileFinder);
-            _taskFileFinder.FindFiles("basefolder").Returns(As.List(Os.DirChars("a1.sln"),
+            msbuildTaskDetecttor = new MSBuildDetector(taskFileFinder);
+            taskFileFinder.FindFiles("basefolder").Returns(As.List(Os.DirChars("a1.sln"),
                                                                              Os.DirChars("a2.sln"),
                                                                              Os.DirChars("Build.sln"),
                                                                              Os.DirChars(
@@ -99,8 +99,8 @@ namespace Frog.Domain.Specs.TaskDetection
 
         protected override void Given()
         {
-            msbuildTaskDetecttor = new MSBuildDetector(_taskFileFinder);
-            _taskFileFinder.FindFiles("basefolder").Returns(new List<string>());
+            msbuildTaskDetecttor = new MSBuildDetector(taskFileFinder);
+            taskFileFinder.FindFiles("basefolder").Returns(new List<string>());
         }
 
         protected override void When()
@@ -123,8 +123,8 @@ namespace Frog.Domain.Specs.TaskDetection
 
         protected override void Given()
         {
-            msbuildTaskDetector = new MSBuildDetector(_taskFileFinder);
-            _taskFileFinder.FindFiles("basefolder").Returns(As.List(Os.DirChars("fle\\flo\\a.sln")));
+            msbuildTaskDetector = new MSBuildDetector(taskFileFinder);
+            taskFileFinder.FindFiles("basefolder").Returns(As.List(Os.DirChars("fle\\flo\\a.sln")));
         }
 
         protected override void When()
@@ -148,8 +148,8 @@ namespace Frog.Domain.Specs.TaskDetection
 
         protected override void Given()
         {
-            msbuildTaskDetecttor = new MSBuildDetector(_taskFileFinder);
-            _taskFileFinder.FindFiles("basefolder").Returns(As.List(Os.DirChars("a1\\a2.sln"),
+            msbuildTaskDetecttor = new MSBuildDetector(taskFileFinder);
+            taskFileFinder.FindFiles("basefolder").Returns(As.List(Os.DirChars("a1\\a2.sln"),
                                                                     Os.DirChars("a2\\asdas\\asd\\b.sln")));
         }
 

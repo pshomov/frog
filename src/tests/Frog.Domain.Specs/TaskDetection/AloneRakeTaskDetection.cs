@@ -10,16 +10,16 @@ namespace Frog.Domain.Specs.TaskDetection
 {
     public class RakeTaskDetectorSpecsBase : TaskDetectorSpecsBase
     {
-        protected TaskFileFinder _bundlerFileFinder;
+        protected TaskFileFinder bundlerFileFinder;
         protected RakeTaskDetector taskDetector;
         protected IList<ITask> tasks;
 
         protected override void Given()
         {
-            _taskFileFinder.FindFiles("base").Returns(As.List("Rakefile"));
-            _bundlerFileFinder = Substitute.For<TaskFileFinder>();
-            _bundlerFileFinder.FindFiles("base").Returns(Empty.ListOf("String"));
-            taskDetector = new RakeTaskDetector(_taskFileFinder, _bundlerFileFinder);
+            taskFileFinder.FindFiles("base").Returns(As.List("Rakefile"));
+            bundlerFileFinder = Substitute.For<TaskFileFinder>();
+            bundlerFileFinder.FindFiles("base").Returns(Empty.ListOf("String"));
+            taskDetector = new RakeTaskDetector(taskFileFinder, bundlerFileFinder);
         }
 
         protected override void When()
@@ -47,10 +47,10 @@ namespace Frog.Domain.Specs.TaskDetection
     { 
         protected override void Given()
         {
-            _taskFileFinder.FindFiles("base").Returns(As.List("Rakefile"));
-            _bundlerFileFinder = Substitute.For<TaskFileFinder>();
-            _bundlerFileFinder.FindFiles("base").Returns(As.List("Gemfile"));
-            taskDetector = new RakeTaskDetector(_taskFileFinder, _bundlerFileFinder);
+            taskFileFinder.FindFiles("base").Returns(As.List("Rakefile"));
+            bundlerFileFinder = Substitute.For<TaskFileFinder>();
+            bundlerFileFinder.FindFiles("base").Returns(As.List("Gemfile"));
+            taskDetector = new RakeTaskDetector(taskFileFinder, bundlerFileFinder);
         }
 
         protected override void When()
@@ -82,8 +82,8 @@ namespace Frog.Domain.Specs.TaskDetection
     {
         protected override void Given()
         {
-            _taskFileFinder.FindFiles("base").Returns(new List<string>());
-            taskDetector = new RakeTaskDetector(_taskFileFinder, _taskFileFinder);
+            taskFileFinder.FindFiles("base").Returns(new List<string>());
+            taskDetector = new RakeTaskDetector(taskFileFinder, taskFileFinder);
         }
 
         protected override void When()
