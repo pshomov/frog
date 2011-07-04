@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Frog.Domain.CustomTasks;
 using Frog.Domain.TaskSources;
 
@@ -20,7 +21,7 @@ namespace Frog.Domain.BuildSystems.Rake
             var rakeFile = _rakeTaskFileFinder.FindFiles(projectFolder);
             var bundlerFile = _bundlerFileFinder.FindFiles(projectFolder);
             var tasks = new List<ITask>();
-            if (rakeFile.Exists(s => s == "Rakefile"))
+            if (rakeFile.Exists(s => s.Equals("Rakefile",StringComparison.InvariantCultureIgnoreCase) || s.Equals("Rakefile.rb", StringComparison.InvariantCultureIgnoreCase)))
             {
                 if (bundlerFile.Count>0) tasks.Add(new BundlerTask());
                 tasks.Add(new RakeTask());

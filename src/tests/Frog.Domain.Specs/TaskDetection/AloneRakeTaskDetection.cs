@@ -8,6 +8,32 @@ using NUnit.Framework;
 
 namespace Frog.Domain.Specs.TaskDetection
 {
+    public class RakeTaskDetectorAlternativeFilenameSpecs : TaskDetectorSpecsBase
+    {
+        protected TaskFileFinder bundlerFileFinder;
+        protected RakeTaskDetector taskDetector;
+        protected IList<ITask> tasks;
+
+        protected override void Given()
+        {
+            taskFileFinder.FindFiles("base").Returns(As.List("Rakefile.rb"));
+            bundlerFileFinder = Substitute.For<TaskFileFinder>();
+            bundlerFileFinder.FindFiles("base").Returns(Empty.ListOf("String"));
+            taskDetector = new RakeTaskDetector(taskFileFinder, bundlerFileFinder);
+        }
+
+        protected override void When()
+        {
+            tasks = taskDetector.Detect("base");
+        }
+
+        [Test]
+        public void should_generate_a_rake_task()
+        {
+            Assert.That(tasks.Count, Is.EqualTo(1));
+            Assert.That(tasks[0].GetType(), Is.EqualTo(typeof(RakeTask)));
+        }
+    }
     public class RakeTaskDetectorSpecsBase : TaskDetectorSpecsBase
     {
         protected TaskFileFinder bundlerFileFinder;
