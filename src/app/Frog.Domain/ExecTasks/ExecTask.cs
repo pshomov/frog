@@ -69,8 +69,8 @@ namespace Frog.Domain.ExecTasks
                                                      app, arguments, sourceDrop.SourceDropLocation)+Environment.NewLine);
                 process.Execute();
                 OnTaskStarted(process.ProcessInfo.Id);
-                var exitcode = process.WaitForProcess(60000);
-                process.WaitForProcess();
+                process.WaitForProcess(60000);
+                var exitcode = process.WaitForProcess();
                 MonoBugFix(exitcode);
             }
             catch (Win32Exception)

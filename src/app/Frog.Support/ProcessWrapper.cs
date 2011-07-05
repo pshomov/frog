@@ -56,11 +56,9 @@ namespace Frog.Support
 
         Process process;
 
-        public int WaitForProcess(int timeoutMilliseconds)
+        public void WaitForProcess(int timeoutMilliseconds)
         {
             process.WaitForExit(timeoutMilliseconds);
-            process.WaitForExit();
-            return process.ExitCode;
         }
     }
 }
