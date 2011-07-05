@@ -28,7 +28,7 @@ namespace Frog.Domain
             }
         }
 
-        public void FindFilesAtTheBase(Action<string> action, string pattern, string baseFolder)
+        public virtual void FindFilesAtTheBase(Action<string> action, string pattern, string baseFolder)
         {
             string[] files = Directory.GetFiles(baseFolder, pattern);
             foreach (string file in files)

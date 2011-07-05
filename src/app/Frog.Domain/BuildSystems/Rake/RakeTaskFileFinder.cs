@@ -17,7 +17,8 @@ namespace Frog.Domain.BuildSystems.Rake
         {
             var rakeFile = new List<string>();
             var baseFolderFull = Path.GetFullPath(baseFolder);
-            pathFinder.FindFilesRecursively(s => rakeFile.Add(s.Remove(0, baseFolderFull.Length + 1)), "RAKEFILE", baseFolder);
+            pathFinder.FindFilesAtTheBase(s => rakeFile.Add(s.Remove(0, baseFolderFull.Length + 1)), "RAKEFILE", baseFolder);
+            if (rakeFile.Count == 0) pathFinder.FindFilesAtTheBase(s => rakeFile.Add(s.Remove(0, baseFolderFull.Length + 1)), "RAKEFILE.RB", baseFolder);
             return rakeFile;
         }
 
