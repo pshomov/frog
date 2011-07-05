@@ -1,4 +1,5 @@
 using Frog.Domain.ExecTasks;
+using Frog.Support;
 using Machine.Specifications;
 
 namespace Frog.Domain.Specs.Task
@@ -8,7 +9,7 @@ namespace Frog.Domain.Specs.Task
         static IExecTask _task;
         static ExecTaskResult _taskResult;
 
-        Establish context = () => _task = new ExecTask("ad43wsWasdasd", "", "task_name");
+        Establish context = () => _task = new ExecTask("ad43wsWasdasd", "", "task_name", (p1, p2, p3) => new ProcessWrapper(p1, p2, p3));
 
         Because of = () => _taskResult = _task.Perform(new SourceDrop(""));
         It should_report_task_execution_status = () => _taskResult.HasExecuted.ShouldBeFalse();
@@ -24,7 +25,7 @@ namespace Frog.Domain.Specs.Task
         static IExecTask _task;
         static ExecTaskResult _taskResult;
 
-        Establish context = () => _task = new ExecTask("ruby", @"-e 'exit 4'", "task_name");
+        Establish context = () => _task = new ExecTask("ruby", @"-e 'exit 4'", "task_name", (p1, p2, p3) => new ProcessWrapper(p1, p2, p3));
         Because of = () => _taskResult = _task.Perform(new SourceDrop(""));
         It should_report_task_execution_status = () => _taskResult.HasExecuted.ShouldBeTrue();
         It should_match_exit_code_value_from_program = () => _taskResult.ExitCode.ShouldEqual(4);
@@ -36,7 +37,7 @@ namespace Frog.Domain.Specs.Task
         static IExecTask _task;
         static ExecTaskResult _taskResult;
 
-        Establish context = () => _task = new ExecTask("ruby", @"-e 'exit 0'", "task_name");
+        Establish context = () => _task = new ExecTask("ruby", @"-e 'exit 0'", "task_name", (p1, p2, p3) => new ProcessWrapper(p1, p2, p3));
 
         Because of = () => _taskResult = _task.Perform(new SourceDrop(""));
         It should_report_task_execution_status = () => _taskResult.HasExecuted.ShouldBeTrue();

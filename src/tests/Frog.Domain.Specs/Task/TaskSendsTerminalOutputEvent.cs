@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using Frog.Domain.ExecTasks;
 using Frog.Specs.Support;
+using Frog.Support;
 using NUnit.Framework;
 
 namespace Frog.Domain.Specs.Task
@@ -15,7 +16,7 @@ namespace Frog.Domain.Specs.Task
 
         protected override void Given()
         {
-            task = new ExecTask("ruby", "-e ' STDOUT.sync = true; puts \"output\";'", "name");
+            task = new ExecTask("ruby", "-e ' STDOUT.sync = true; puts \"output\";'", "name", (p1, p2, p3) => new ProcessWrapper(p1, p2, p3));
             task.OnTerminalOutputUpdate += s => stdOutput += s;
         }
 
@@ -41,7 +42,7 @@ namespace Frog.Domain.Specs.Task
 
         protected override void Given()
         {
-            task = new ExecTask("ruby", "-e ' STDERR.sync = true; $stderr.puts \"error output\";'", "name");
+            task = new ExecTask("ruby", "-e ' STDERR.sync = true; $stderr.puts \"error output\";'", "name", (p1, p2, p3) => new ProcessWrapper(p1, p2, p3));
             task.OnTerminalOutputUpdate += s => errOutput += s;
         }
 
@@ -66,7 +67,7 @@ namespace Frog.Domain.Specs.Task
 
         protected override void Given()
         {
-            task = new ExecTask("ruby", "-e ' STDERR.sync = true; $stderr.puts \"error output\";'", "name");
+            task = new ExecTask("ruby", "-e ' STDERR.sync = true; $stderr.puts \"error output\";'", "name", (p1, p2, p3) => new ProcessWrapper(p1, p2, p3));
         }
 
         protected override void When()
