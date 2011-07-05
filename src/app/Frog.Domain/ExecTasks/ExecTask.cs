@@ -74,8 +74,9 @@ namespace Frog.Domain.ExecTasks
                 var exitcode = process.WaitForProcess();
                 MonoBugFix(exitcode);
             }
-            catch (Win32Exception)
+            catch (Win32Exception e)
             {
+                OnTerminalOutputUpdate(string.Format("E>Process exited with error: {0}", e));
                 return new ExecTaskResult(ExecutionStatus.Failure, -1);
             }
 
