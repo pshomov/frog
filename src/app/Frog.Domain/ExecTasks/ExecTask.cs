@@ -47,15 +47,14 @@ namespace Frog.Domain.ExecTasks
         readonly string app;
         readonly string arguments;
         readonly string name;
-        private readonly Func<string, string, string, ProcessWrapper> processWrapperFactory;
         public event Action<int> OnTaskStarted = pid => {};
         public event Action<string> OnTerminalOutputUpdate = s => {};
-        public ExecTask(string app, string arguments, string name, Func<string, string, string, ProcessWrapper> processWrapperFactory)
+
+        public ExecTask(string app, string arguments, string name)
         {
             this.app = app;
             this.arguments = arguments;
             this.name = name;
-            this.processWrapperFactory = processWrapperFactory;
         }
 
         public ExecTaskResult Perform(SourceDrop sourceDrop)
@@ -63,7 +62,7 @@ namespace Frog.Domain.ExecTasks
             ProcessWrapper process;
             try
             {
-                process = processWrapperFactory(app, arguments, sourceDrop.SourceDropLocation);
+                process = new ProcessWrapper(app, arguments, sourceDrop.SourceDropLocation);
                 process.OnErrorOutput += s => { if (s != null) OnTerminalOutputUpdate("E>" + s + Environment.NewLine); };
                 process.OnStdOutput += s => { if (s != null) OnTerminalOutputUpdate("S>" + s + Environment.NewLine); };
                 OnTerminalOutputUpdate(string.Format("Runz>> Launching {0} with arguments {1} with currentFolder {2}",
