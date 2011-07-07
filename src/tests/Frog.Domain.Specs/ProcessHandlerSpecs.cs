@@ -1,3 +1,5 @@
+using System;
+using System.ComponentModel;
 using System.Text;
 using Frog.Support;
 using NUnit.Framework;
@@ -36,10 +38,25 @@ namespace Frog.Domain.Specs
         [Test]
         public void should_run_when_no_std_error_output_is_captured()
         {
-            var err = new StringBuilder();
             var pw = new ProcessWrapper("ruby", "-e '$stderr.puts(\"fle\")'");
             pw.Execute();
             pw.WaitForProcess();
+        }
+
+        [Test]
+        public void should_throw_exception_when_executable_not_found()
+        {
+            var pw = new ProcessWrapper("rubyyyyyy", "-e '$stderr.puts(\"fle\")'");
+            try
+            {
+                pw.Execute();
+                pw.WaitForProcess();
+                Assert.Fail("Should have thrown an exception");
+            }
+            catch (Win32Exception e)
+            {
+                
+            }
         }
     }
 }
