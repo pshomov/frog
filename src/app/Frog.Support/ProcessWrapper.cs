@@ -1,5 +1,7 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 
 namespace Frog.Support
 {
@@ -8,7 +10,7 @@ namespace Frog.Support
         public event Action<string> OnErrorOutput = s => Console.WriteLine(String.Format("E>{0}", s));
         public event Action<string> OnStdOutput = s => Console.WriteLine(String.Format("S>{0}", s));
 
-        public ProcessWrapper(string cmdExe, string arguments) : this(cmdExe, arguments, System.IO.Directory.GetCurrentDirectory())
+        public ProcessWrapper(string cmdExe, string arguments) : this(cmdExe, arguments, Directory.GetCurrentDirectory())
         {
         }
 
@@ -45,6 +47,7 @@ namespace Frog.Support
         public int WaitForProcess()
         {
             process.WaitForExit();
+            MonoBugFix(process.ExitCode);
             return process.ExitCode;
         }
 
@@ -59,6 +62,11 @@ namespace Frog.Support
         public void WaitForProcess(int timeoutMilliseconds)
         {
             process.WaitForExit(timeoutMilliseconds);
+        }
+
+        private static void MonoBugFix(int exitcode)
+        {
+            if (exitcode == 1) throw new Win32Exception();
         }
     }
 }

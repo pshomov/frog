@@ -72,7 +72,6 @@ namespace Frog.Domain.ExecTasks
                 OnTaskStarted(process.ProcessInfo.Id);
                 process.WaitForProcess(60000);
                 var exitcode = process.WaitForProcess();
-                MonoBugFix(exitcode);
             }
             catch (Win32Exception e)
             {
@@ -87,11 +86,6 @@ namespace Frog.Domain.ExecTasks
                 return new ExecTaskResult(ExecutionStatus.Success, process.ProcessInfo.ExitCode);
             }
             return new ExecTaskResult(ExecutionStatus.Failure, -1);
-        }
-
-        void MonoBugFix(int exitcode)
-        {
-            if (exitcode == 1) throw new Win32Exception();
         }
 
         public string Name
