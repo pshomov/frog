@@ -53,7 +53,7 @@ namespace Frog.Domain.Specs
                 pw.WaitForProcess();
                 Assert.Fail("Should have thrown an exception");
             }
-            catch (Win32Exception e)
+            catch (ApplicationNotFoundException e)
             {
                 
             }

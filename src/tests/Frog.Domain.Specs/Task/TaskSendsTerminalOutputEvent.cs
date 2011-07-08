@@ -77,7 +77,7 @@ namespace Frog.Domain.Specs.Task
         }
 
         [Test]
-        public void should_receive_the_terminal_output()
+        public void should_receive_error_message_on_terminal_output()
         {
             AssertionHelpers.WithRetries(
                 () => Assert.That(errOutput, Is.StringContaining(string.Format("E>Process exited with error"))));

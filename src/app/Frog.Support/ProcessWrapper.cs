@@ -36,7 +36,14 @@ namespace Frog.Support
                 WorkingDirectory = workingDirectory
             };
 
-            process = Process.Start(psi);
+            try
+            {
+                process = Process.Start(psi);
+            }
+            catch (Win32Exception e)
+            {
+                throw new ApplicationNotFoundException(cmdExe, e);
+            }
             process.ErrorDataReceived += (sender, args) => OnErrorOutput(args.Data);
             process.OutputDataReceived += (sender, args) => OnStdOutput(args.Data);
 
@@ -67,6 +74,13 @@ namespace Frog.Support
         private static void MonoBugFix(int exitcode)
         {
             if (exitcode == 1) throw new Win32Exception();
+        }
+    }
+
+    public class ApplicationNotFoundException : Exception
+    {
+        public ApplicationNotFoundException(string application, Exception inner) : base(string.Format("Error launching application {0}", application), inner)
+        {
         }
     }
 }

@@ -73,7 +73,7 @@ namespace Frog.Domain.ExecTasks
                 process.WaitForProcess(60000);
                 var exitcode = process.WaitForProcess();
             }
-            catch (Win32Exception e)
+            catch (ApplicationNotFoundException e)
             {
                 OnTerminalOutputUpdate(string.Format("E>Process exited with error: {0}", e));
                 return new ExecTaskResult(ExecutionStatus.Failure, -1);
