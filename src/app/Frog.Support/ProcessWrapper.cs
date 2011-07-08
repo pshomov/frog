@@ -28,7 +28,19 @@ namespace Frog.Support
 
         public TimeSpan TotalProcessorTime
         {
-            get { return process.TotalProcessorTime; }
+            get {
+				if (Os.IsUnix){
+					var p = new ProcessWrapper("ps", string.Format("-p {0} -o time=", process.Id));
+					var time = "";
+					p.OnStdOutput += s => time = s ?? "";
+					p.Execute();
+					p.WaitForProcess();
+					if (time.Length > 0){
+						return TimeSpan.Parse(time);
+					} else return new TimeSpan(0);
+				} else
+				return process.TotalProcessorTime; 
+			}
         }
 
         public void Execute()
