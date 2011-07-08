@@ -60,7 +60,7 @@ namespace Frog.Domain.Specs
         }
 
         [Test]
-        public void should_provide_info_on_cpu_usage()
+        public void should_indicate_cpu_usage_when_process_consumes_one()
         {
             var pw = new ProcessWrapper("ruby", "-e '100000000.times {|e| e}'");
             pw.Execute();
@@ -70,8 +70,20 @@ namespace Frog.Domain.Specs
             var tpt1 = pw.TotalProcessorTime;
             pw.Kill();
 			
-			Console.WriteLine(tpt.ToString());
             Assert.That(tpt, Is.LessThan(tpt1));
+        }
+        [Test]
+        public void should_indicate_no_cpu_usage_when_process_does_nothing()
+        {
+            var pw = new ProcessWrapper("ruby", "-e 'sleep 30'");
+            pw.Execute();
+            pw.WaitForProcess(10);
+            var tpt = pw.TotalProcessorTime;
+            pw.WaitForProcess(100);
+            var tpt1 = pw.TotalProcessorTime;
+            pw.Kill();
+			
+            Assert.That(tpt, Is.EqualTo(tpt1));
         }
     }
 }
