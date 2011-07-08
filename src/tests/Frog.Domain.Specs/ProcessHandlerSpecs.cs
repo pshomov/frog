@@ -58,5 +58,18 @@ namespace Frog.Domain.Specs
                 
             }
         }
+
+        [Test]
+        public void should_provide_info_on_cpu_usage()
+        {
+            var pw = new ProcessWrapper("ruby", "-e '100000000.times {|e| e}'");
+            pw.Execute();
+            pw.WaitForProcess(1);
+            var tpt = pw.TotalProcessorTime;
+            pw.WaitForProcess(1);
+            var tpt1 = pw.TotalProcessorTime;
+            pw.Kill();
+            Assert.That(tpt, Is.LessThan(tpt1));
+        }
     }
 }

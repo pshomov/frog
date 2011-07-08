@@ -26,6 +26,11 @@ namespace Frog.Support
             get { return process; }
         }
 
+        public TimeSpan TotalProcessorTime
+        {
+            get { return process.TotalProcessorTime; }
+        }
+
         public void Execute()
         {
             var psi = new ProcessStartInfo(cmdExe, arguments)
@@ -74,6 +79,17 @@ namespace Frog.Support
         private static void MonoBugFix(int exitcode)
         {
             if (exitcode == 1) throw new Win32Exception();
+        }
+
+        public void Kill()
+        {
+            try
+            {
+                process.Kill();
+            }
+            catch (InvalidOperationException e)
+            {
+            }
         }
     }
 
