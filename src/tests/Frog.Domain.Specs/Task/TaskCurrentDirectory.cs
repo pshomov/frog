@@ -1,3 +1,5 @@
+using System;
+using System.IO;
 using Frog.Domain.ExecTasks;
 using Frog.Specs.Support;
 using NUnit.Framework;
@@ -10,20 +12,19 @@ namespace Frog.Domain.Specs.Task
     {
         IExecTask _task;
         ExecTaskResult taskResult;
-        private string _arguments;
+        private DirectoryInfo parent;
 
         protected override void Given()
         {
-            string _app = "adasdasd";
-            if (Os.IsWindows) {_app = @"cmd.exe"; _arguments=@"/c if %CD%==c:\ exit /b 41";}
-            if (Os.IsUnix) {_app = "/bin/bash"; _arguments = @"-c ""test `pwd` == '/usr/bin' && (echo 'matches'; exit 41)""";}
-            _task = new ExecTask(_app, _arguments, "task_name", (p1, p2, p3) => new ProcessWrapper(p1, p2, p3));
+            parent = Directory.GetParent(Directory.GetCurrentDirectory());
+            var _app = "ruby"; 
+            var arguments=string.Format(@"-e 'puts Dir.pwd; if (Dir.pwd.tr(""/"", ""\\"") == ""{0}"") then puts ""got it""; exit 41; end '", parent.FullName.Replace("\\", "\\\\"));
+            _task = new ExecTask(_app, arguments, "task_name", (p1, p2, p3) => new ProcessWrapper(p1, p2, p3));
         }
 
         protected override void When()
         {
-            if (Os.IsWindows) taskResult = _task.Perform(new SourceDrop(@"c:\"));
-            if (Os.IsUnix) taskResult = _task.Perform(new SourceDrop(@"/usr/bin"));
+            taskResult = _task.Perform(new SourceDrop(parent.FullName));
         }
 
         [Test]
