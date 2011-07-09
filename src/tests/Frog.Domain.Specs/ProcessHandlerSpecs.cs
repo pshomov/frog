@@ -72,6 +72,7 @@ namespace Frog.Domain.Specs
 			
             Assert.That(tpt, Is.LessThan(tpt1));
         }
+		
         [Test]
         public void should_indicate_no_cpu_usage_when_process_does_nothing()
         {
