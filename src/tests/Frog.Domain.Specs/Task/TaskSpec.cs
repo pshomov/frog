@@ -1,47 +1,117 @@
+using System;
 using Frog.Domain.ExecTasks;
+using Frog.Specs.Support;
 using Frog.Support;
-using Machine.Specifications;
+using NUnit.Framework;
 
 namespace Frog.Domain.Specs.Task
 {
-    public class TaskFailsToStart_Spec
+    public class TaskFailsToStartSpec : BDD
     {
-        static IExecTask _task;
-        static ExecTaskResult _taskResult;
+        private static IExecTask _task;
+        private static ExecTaskResult _taskResult;
 
-        Establish context = () => _task = new ExecTask("ad43wsWasdasd", "", "task_name", (p1, p2, p3) => new ProcessWrapper(p1, p2, p3));
+        protected override void Given()
+        {
+            _task = new ExecTask("ad43wsWasdasd", "", "task_name", (p1, p2, p3) => new ProcessWrapper(p1, p2, p3));
+        }
 
-        Because of = () => _taskResult = _task.Perform(new SourceDrop(""));
-        It should_report_task_execution_status = () => _taskResult.HasExecuted.ShouldBeFalse();
+        protected override void When()
+        {
+            _taskResult = _task.Perform(new SourceDrop(""));
+        }
 
-        It should_throw_an_exception_when_trying_to_access_exitcode_value =
-            () => Catch.Exception(() => { var a = _taskResult.ExitCode; }).ShouldNotBeNull();
+        [Test]
+        public void should_report_task_execution_status()
+        {
+            Assert.That(!_taskResult.HasExecuted);
+        }
 
-        It should_have_status_set_to_falure = () => _taskResult.ExecStatus.ShouldEqual(ExecTaskResult.Status.Error);
+        [Test]
+        public void should_throw_an_exception_when_trying_to_access_exitcode_value()
+        {
+            try
+            {
+                var a = _taskResult.ExitCode;
+                Assert.Fail("should have thrown an exception");
+            }
+            catch (InvalidOperationException e)
+            {
+            }
+        }
+
+        [Test]
+        public void should_have_status_set_to_falure()
+        {
+            Assert.That(_taskResult.ExecStatus, Is.EqualTo(ExecTaskResult.Status.Error));
+        }
     }
 
-    public class TaskStartsButExitsWithNonZero_Spec
+    public class TaskStartsButExitsWithNonZeroSpec : BDD
     {
-        static IExecTask _task;
-        static ExecTaskResult _taskResult;
+        private static IExecTask _task;
+        private static ExecTaskResult _taskResult;
 
-        Establish context = () => _task = new ExecTask("ruby", @"-e 'exit 4'", "task_name", (p1, p2, p3) => new ProcessWrapper(p1, p2, p3));
-        Because of = () => _taskResult = _task.Perform(new SourceDrop(""));
-        It should_report_task_execution_status = () => _taskResult.HasExecuted.ShouldBeTrue();
-        It should_match_exit_code_value_from_program = () => _taskResult.ExitCode.ShouldEqual(4);
-        It should_have_status_set_to_success = () => _taskResult.ExecStatus.ShouldEqual(ExecTaskResult.Status.Error);
+        protected override void Given()
+        {
+            _task = new ExecTask("ruby", @"-e 'exit 4'", "task_name", (p1, p2, p3) => new ProcessWrapper(p1, p2, p3));
+        }
+
+        protected override void When()
+        {
+            _taskResult = _task.Perform(new SourceDrop(""));
+        }
+
+        [Test]
+        public void should_report_task_execution_status()
+        {
+            Assert.That(_taskResult.HasExecuted);
+        }
+
+        [Test]
+        public void should_match_exit_code_value_from_program()
+        {
+            Assert.That(_taskResult.ExitCode, Is.EqualTo(4));
+        }
+
+        [Test]
+        public void should_have_status_set_to_success()
+        {
+            Assert.That(_taskResult.ExecStatus, Is.EqualTo(ExecTaskResult.Status.Error));
+        }
     }
 
-    public class TaskStartsAndFinishesWithExitCodeZero_Spec
+    public class TaskStartsAndFinishesWithExitCodeZeroSpec : BDD
     {
-        static IExecTask _task;
-        static ExecTaskResult _taskResult;
+        private static IExecTask _task;
+        private static ExecTaskResult _taskResult;
 
-        Establish context = () => _task = new ExecTask("ruby", @"-e 'exit 0'", "task_name", (p1, p2, p3) => new ProcessWrapper(p1, p2, p3));
+        protected override void Given()
+        {
+            _task = new ExecTask("ruby", @"-e 'exit 0'", "task_name", (p1, p2, p3) => new ProcessWrapper(p1, p2, p3));
+        }
 
-        Because of = () => _taskResult = _task.Perform(new SourceDrop(""));
-        It should_report_task_execution_status = () => _taskResult.HasExecuted.ShouldBeTrue();
-        It should_match_exit_code_value_from_program = () => _taskResult.ExitCode.ShouldEqual(0);
-        It should_have_status_set_to_success = () => _taskResult.ExecStatus.ShouldEqual(ExecTaskResult.Status.Success);
+        protected override void When()
+        {
+            _taskResult = _task.Perform(new SourceDrop(""));
+        }
+
+        [Test]
+        public void should_report_task_execution_status()
+        {
+            Assert.That(_taskResult.HasExecuted);
+        }
+
+        [Test]
+        public void should_match_exit_code_value_from_program()
+        {
+            Assert.That(_taskResult.ExitCode, Is.EqualTo(0));
+        }
+
+        [Test]
+        public void should_have_status_set_to_success()
+        {
+            Assert.That(_taskResult.ExecStatus, Is.EqualTo(ExecTaskResult.Status.Success));
+        }
     }
 }
