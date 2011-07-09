@@ -91,7 +91,20 @@ namespace Frog.Domain.Specs
             var pw = new ProcessWrapper("ruby", "-e 'sleep 30'");
             pw.Execute();
             pw.Kill();
-            Assert.That(pw.ExitCode, Is.EqualTo(-1));
+            Assert.That(ProcessHasExited(pw));
+        }
+
+        private bool ProcessHasExited(ProcessWrapper processWrapper)
+        {
+            try
+            {
+                var exitcode = processWrapper.ExitCode;
+                return true;
+            }
+            catch (InvalidOperationException e)
+            {
+                return false;
+            }
         }
     }
 }
