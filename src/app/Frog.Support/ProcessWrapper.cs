@@ -39,8 +39,13 @@ namespace Frog.Support
 						return TimeSpan.Parse(time);
 					} else return new TimeSpan(0);
 				} else
-				return process.TotalProcessorTime; 
-			}
+                    return process.TotalProcessorTime;
+            }
+        }
+
+        public int ExitCode
+        {
+            get { return process.ExitCode; }
         }
 
         public void Execute()
@@ -98,6 +103,7 @@ namespace Frog.Support
             try
             {
                 process.Kill();
+                process.WaitForExit();
             }
             catch (InvalidOperationException)
             {

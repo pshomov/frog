@@ -85,5 +85,13 @@ namespace Frog.Domain.Specs
 			
             Assert.That(tpt, Is.EqualTo(tpt1));
         }
+        [Test]
+        public void should_make_the_process_invalid_after_killing_it()
+        {
+            var pw = new ProcessWrapper("ruby", "-e 'sleep 30'");
+            pw.Execute();
+            pw.Kill();
+            Assert.That(pw.ExitCode, Is.EqualTo(-1));
+        }
     }
 }
