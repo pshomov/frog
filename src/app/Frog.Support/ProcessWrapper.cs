@@ -88,9 +88,9 @@ namespace Frog.Support
             process.WaitForExit(timeoutMilliseconds);
         }
 
-        private static void MonoBugFix(int exitcode)
+        private void MonoBugFix(int exitcode)
         {
-            if (exitcode == 1) throw new Win32Exception();
+            if (exitcode == 1) throw new ApplicationNotFoundException(cmdExe,null);
         }
 
         public void Kill()
@@ -99,7 +99,7 @@ namespace Frog.Support
             {
                 process.Kill();
             }
-            catch (InvalidOperationException e)
+            catch (InvalidOperationException)
             {
             }
         }
