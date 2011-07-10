@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Frog.Domain.ExecTasks;
 using Frog.Specs.Support;
 using Frog.Support;
@@ -28,7 +29,9 @@ namespace Frog.Domain.Specs.Task
         [Test]
         public void should_kill_process_after_timeout()
         {
-            processWrapper.Received().WaitForProcess(Arg<int>.Any());
+            Assert.That(
+                processWrapper.ReceivedCalls().Where(call => call.GetMethodInfo().Name == "WaitForProcess" && call.GetArguments().Count() == 1).Count(),
+                Is.EqualTo(3));
             processWrapper.Received().Kill();
         }
 
