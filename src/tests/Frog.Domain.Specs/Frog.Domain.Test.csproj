@@ -86,6 +86,7 @@
     <Compile Include="TaskGeneratorSpec.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Task\ObservesProcessForHangingBehaviour.cs" />
     <Compile Include="Task\TaskCurrentDirectory.cs" />
     <Compile Include="Task\TaskReporting.cs" />
     <Compile Include="TaskDetection\NUnitTaskDetectorSpecs.cs" />

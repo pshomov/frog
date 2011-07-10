@@ -47,20 +47,22 @@ namespace Frog.Domain.ExecTasks
         readonly string app;
         readonly string arguments;
         readonly string name;
-        private readonly Func<string, string, string, ProcessWrapper> processWrapperFactory;
+        private readonly Func<string, string, string, IProcessWrapper> processWrapperFactory;
+        private readonly int period;
         public event Action<int> OnTaskStarted = pid => {};
         public event Action<string> OnTerminalOutputUpdate = s => {};
-        public ExecTask(string app, string arguments, string name, Func<string, string, string, ProcessWrapper> processWrapperFactory)
+        public ExecTask(string app, string arguments, string name, Func<string, string, string, IProcessWrapper> processWrapperFactory, int period = 20000)
         {
             this.app = app;
             this.arguments = arguments;
             this.name = name;
             this.processWrapperFactory = processWrapperFactory;
+            this.period = period;
         }
 
         public ExecTaskResult Perform(SourceDrop sourceDrop)
         {
-            ProcessWrapper process;
+            IProcessWrapper process;
             try
             {
                 process = processWrapperFactory(app, arguments, sourceDrop.SourceDropLocation);
@@ -69,8 +71,12 @@ namespace Frog.Domain.ExecTasks
                 OnTerminalOutputUpdate(string.Format("Runz>> Launching {0} with arguments {1} with currentFolder {2}",
                                                      app, arguments, sourceDrop.SourceDropLocation)+Environment.NewLine);
                 process.Execute();
-                OnTaskStarted(process.ProcessInfo.Id);
-                process.WaitForProcess(60000);
+                OnTaskStarted(process.Id);
+                for (int i = 0; i < 3; i++)
+                {
+                    process.WaitForProcess(period);
+                }
+                process.Kill();
                 var exitcode = process.WaitForProcess();
             }
             catch (ApplicationNotFoundException e)
@@ -79,11 +85,11 @@ namespace Frog.Domain.ExecTasks
                 return new ExecTaskResult(ExecutionStatus.Failure, -1);
             }
 
-            if (process.ProcessInfo.HasExited)
+            if (process.HasExited)
             {
                 OnTerminalOutputUpdate(string.Format("Runz>> Process has exited with exitcode {0}",
-                                                     process.ProcessInfo.ExitCode) + Environment.NewLine);
-                return new ExecTaskResult(ExecutionStatus.Success, process.ProcessInfo.ExitCode);
+                                                     process.ExitCode) + Environment.NewLine);
+                return new ExecTaskResult(ExecutionStatus.Success, process.ExitCode);
             }
             return new ExecTaskResult(ExecutionStatus.Failure, -1);
         }

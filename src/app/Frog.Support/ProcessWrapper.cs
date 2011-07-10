@@ -5,7 +5,21 @@ using System.IO;
 
 namespace Frog.Support
 {
-    public class ProcessWrapper
+    public interface IProcessWrapper
+    {
+        event Action<string> OnErrorOutput;
+        event Action<string> OnStdOutput;
+        TimeSpan TotalProcessorTime { get; }
+        int ExitCode { get; }
+        int Id { get; }
+        bool HasExited { get; }
+        void Execute();
+        bool WaitForProcess(int timeoutMilliseconds);
+        void Kill();
+        int WaitForProcess();
+    }
+
+    public class ProcessWrapper : IProcessWrapper
     {
         public event Action<string> OnErrorOutput = s => Console.WriteLine(String.Format("E>{0}", s));
         public event Action<string> OnStdOutput = s => Console.WriteLine(String.Format("S>{0}", s));
@@ -88,9 +102,9 @@ namespace Frog.Support
 
         Process process;
 
-        public void WaitForProcess(int timeoutMilliseconds)
+        public bool WaitForProcess(int timeoutMilliseconds)
         {
-            process.WaitForExit(timeoutMilliseconds);
+            return process.WaitForExit(timeoutMilliseconds);
         }
 
         private void MonoBugFix(int exitcode)
@@ -109,6 +123,9 @@ namespace Frog.Support
             {
             }
         }
+
+        public int Id { get { return process.Id; } }
+        public bool HasExited { get { return process.HasExited; } }
     }
 
     public class ApplicationNotFoundException : Exception
