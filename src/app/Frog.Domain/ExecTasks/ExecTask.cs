@@ -1,5 +1,4 @@
 using System;
-using System.ComponentModel;
 using Frog.Support;
 
 namespace Frog.Domain.ExecTasks
@@ -74,10 +73,7 @@ namespace Frog.Domain.ExecTasks
                                                      app, arguments, sourceDrop.SourceDropLocation)+Environment.NewLine);
                 process.Execute();
                 OnTaskStarted(process.Id);
-                for (int i = 0; i < quotaNrPeriods; i++)
-                {
-                    process.WaitForProcess(periodLengthMs);
-                }
+                ObserveProcess(process);
                 process.Kill();
                 var exitcode = process.WaitForProcess();
             }
@@ -94,6 +90,18 @@ namespace Frog.Domain.ExecTasks
                 return new ExecTaskResult(ExecutionStatus.Success, process.ExitCode);
             }
             return new ExecTaskResult(ExecutionStatus.Failure, -1);
+        }
+
+        private void ObserveProcess(IProcessWrapper process)
+        {
+            var lastQuotaCPU = TimeSpan.FromTicks(0);
+            for (int i = 0; i < quotaNrPeriods; i++)
+            {
+                process.WaitForProcess(periodLengthMs);
+                var latestQuotaCPU = process.TotalProcessorTime;
+                if (latestQuotaCPU == lastQuotaCPU) break;
+                lastQuotaCPU = latestQuotaCPU;
+            }
         }
 
         public string Name

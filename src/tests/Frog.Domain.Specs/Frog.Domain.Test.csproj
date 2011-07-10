@@ -86,11 +86,12 @@
     <Compile Include="TaskGeneratorSpec.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Task\ObservesProcessForHangingBehaviour.cs" />
+    <Compile Include="Task\TasksHaveQuotaOnRunTime.cs" />
     <Compile Include="Task\TaskCurrentDirectory.cs" />
     <Compile Include="Task\TaskReporting.cs" />
     <Compile Include="TaskDetection\NUnitTaskDetectorSpecs.cs" />
     <Compile Include="Task\TaskSendsTerminalOutputEvent.cs" />
+    <Compile Include="Task\TasksGetKilledIfTheyHaveNoActivity.cs" />
     <Compile Include="TerminalOutputConsolidationMethod.cs" />
     <Compile Include="TestTypes.cs" />
     <Compile Include="WorkerSpecs\WorkerHandlesExceptions.cs" />
