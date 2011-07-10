@@ -3,7 +3,7 @@ using Frog.Domain.ExecTasks;
 using Frog.Specs.Support;
 using Frog.Support;
 using NUnit.Framework;
-using Rhino.Mocks;
+using NSubstitute;
 
 namespace Frog.Domain.Specs.Task
 {
@@ -14,10 +14,8 @@ namespace Frog.Domain.Specs.Task
 
         protected override void Given()
         {
-            processWrapper = MockRepository.GenerateMock<IProcessWrapper>();
-            processWrapper.Expect(wrapper => wrapper.TotalProcessorTime).Return(TimeSpan.FromMinutes(1.0));
-            processWrapper.Expect(wrapper => wrapper.TotalProcessorTime).Return(TimeSpan.FromMinutes(2.0));
-            processWrapper.Expect(wrapper => wrapper.TotalProcessorTime).Return(TimeSpan.FromMinutes(3.0));
+            processWrapper = Substitute.For<IProcessWrapper>();
+            processWrapper.TotalProcessorTime.Returns(TimeSpan.FromMinutes(1.0), TimeSpan.FromMinutes(2.0), TimeSpan.FromMinutes(3.0));
             task = new ExecTask("fle", "flo", "name",
                                 (s, s1, arg3) => processWrapper, periodLengthMs: 1000, quotaNrPeriods: 3);
         }
@@ -30,15 +28,14 @@ namespace Frog.Domain.Specs.Task
         [Test]
         public void should_kill_process_after_timeout()
         {
-            processWrapper.AssertWasCalled(wrapper => wrapper.WaitForProcess(Arg<int>.Is.Anything),
-                                           options => options.Repeat.Times(3));
-            processWrapper.AssertWasCalled(wrapper => wrapper.Kill());
+            processWrapper.Received().WaitForProcess(Arg<int>.Any());
+            processWrapper.Received().Kill();
         }
 
         [Test]
         public void should_wait_for_process_some_time()
         {
-            processWrapper.AssertWasCalled(wrapper => wrapper.WaitForProcess(1000));
+            processWrapper.Received().WaitForProcess(1000);
         }
     }
 }

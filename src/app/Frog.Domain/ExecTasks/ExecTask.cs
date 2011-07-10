@@ -97,10 +97,10 @@ namespace Frog.Domain.ExecTasks
             var lastQuotaCPU = TimeSpan.FromTicks(0);
             for (int i = 0; i < quotaNrPeriods; i++)
             {
-                process.WaitForProcess(periodLengthMs);
-                var latestQuotaCPU = process.TotalProcessorTime;
-                if (latestQuotaCPU == lastQuotaCPU) break;
-                lastQuotaCPU = latestQuotaCPU;
+                if (process.WaitForProcess(periodLengthMs)) break;
+                var currentQuotaCPU = process.TotalProcessorTime;
+                if (currentQuotaCPU == lastQuotaCPU) break;
+                lastQuotaCPU = currentQuotaCPU;
             }
         }
 
