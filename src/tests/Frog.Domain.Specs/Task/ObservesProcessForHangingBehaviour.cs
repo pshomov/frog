@@ -22,7 +22,7 @@ namespace Frog.Domain.Specs.Task
             processWrapper.Expect(wrapper => wrapper.TotalProcessorTime).Return(TimeSpan.FromMinutes(2.0));
             processWrapper.Expect(wrapper => wrapper.TotalProcessorTime).Return(TimeSpan.FromMinutes(3.0));
             task = new ExecTask("fle", "flo", "name",
-                                (s, s1, arg3) => processWrapper, periodLengthMs:1000);
+                                (s, s1, arg3) => processWrapper, periodLengthMs:1000, quotaNrPeriods:3);
         }
 
         protected override void When()

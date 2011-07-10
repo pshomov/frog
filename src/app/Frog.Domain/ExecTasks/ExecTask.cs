@@ -49,15 +49,17 @@ namespace Frog.Domain.ExecTasks
         readonly string name;
         private readonly Func<string, string, string, IProcessWrapper> processWrapperFactory;
         private readonly int periodLengthMs;
+        private readonly int quotaNrPeriods;
         public event Action<int> OnTaskStarted = pid => {};
         public event Action<string> OnTerminalOutputUpdate = s => {};
-        public ExecTask(string app, string arguments, string name, Func<string, string, string, IProcessWrapper> processWrapperFactory, int periodLengthMs = 20000)
+        public ExecTask(string app, string arguments, string name, Func<string, string, string, IProcessWrapper> processWrapperFactory, int periodLengthMs = 5000, int quotaNrPeriods = 60)
         {
             this.app = app;
             this.arguments = arguments;
             this.name = name;
             this.processWrapperFactory = processWrapperFactory;
             this.periodLengthMs = periodLengthMs;
+            this.quotaNrPeriods = quotaNrPeriods;
         }
 
         public ExecTaskResult Perform(SourceDrop sourceDrop)
@@ -72,7 +74,7 @@ namespace Frog.Domain.ExecTasks
                                                      app, arguments, sourceDrop.SourceDropLocation)+Environment.NewLine);
                 process.Execute();
                 OnTaskStarted(process.Id);
-                for (int i = 0; i < 3; i++)
+                for (int i = 0; i < quotaNrPeriods; i++)
                 {
                     process.WaitForProcess(periodLengthMs);
                 }
