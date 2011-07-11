@@ -80,7 +80,7 @@ namespace Frog.Domain.Specs.Task
         public void should_receive_error_message_on_terminal_output()
         {
             AssertionHelpers.WithRetries(
-                () => Assert.That(errOutput, Is.StringContaining(string.Format("E>Process exited with error"))));
+                () => Assert.That(errOutput, Is.StringContaining(string.Format("E> Task has exited with error"))));
         }
     }
 
