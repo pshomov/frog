@@ -67,7 +67,7 @@ namespace Frog.Domain.Specs
             pw.Execute();
             pw.WaitForProcess(1);
             var tpt = pw.TotalProcessorTime;
-            pw.WaitForProcess(100);
+            pw.WaitForProcess(500);
             var tpt1 = pw.TotalProcessorTime;
             pw.Kill();
 			
