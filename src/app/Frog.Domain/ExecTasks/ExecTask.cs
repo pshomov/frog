@@ -1,5 +1,4 @@
 using System;
-using System.ComponentModel;
 using Frog.Support;
 
 namespace Frog.Domain.ExecTasks
@@ -47,55 +46,93 @@ namespace Frog.Domain.ExecTasks
         readonly string app;
         readonly string arguments;
         readonly string name;
+        private readonly Func<string, string, string, IProcessWrapper> processWrapperFactory;
+        private readonly int periodLengthMs;
+        private readonly int quotaNrPeriods;
+        private IProcessWrapper process;
         public event Action<int> OnTaskStarted = pid => {};
         public event Action<string> OnTerminalOutputUpdate = s => {};
-
-        public ExecTask(string app, string arguments, string name)
+        public ExecTask(string app, string arguments, string name, Func<string, string, string, IProcessWrapper> processWrapperFactory, int periodLengthMs = 5000, int quotaNrPeriods = 60)
         {
             this.app = app;
             this.arguments = arguments;
             this.name = name;
+            this.processWrapperFactory = processWrapperFactory;
+            this.periodLengthMs = periodLengthMs;
+            this.quotaNrPeriods = quotaNrPeriods;
         }
 
         public ExecTaskResult Perform(SourceDrop sourceDrop)
         {
-            ProcessWrapper process;
+            process = processWrapperFactory(app, arguments, sourceDrop.SourceDropLocation);
+            process.OnErrorOutput += s => { if (s != null) OnTerminalOutputUpdate("E>" + s + Environment.NewLine); };
+            process.OnStdOutput += s => { if (s != null) OnTerminalOutputUpdate("S>" + s + Environment.NewLine); };
+            OnTerminalOutputUpdate(string.Format("Runz>> Launching {0} with arguments {1} with currentFolder {2}",
+                                                 app, arguments, sourceDrop.SourceDropLocation) + Environment.NewLine);
             try
             {
-                process = new ProcessWrapper(app, arguments, sourceDrop.SourceDropLocation);
-                process.OnErrorOutput += s => { if (s != null) OnTerminalOutputUpdate("E>" + s + Environment.NewLine); };
-                process.OnStdOutput += s => { if (s != null) OnTerminalOutputUpdate("S>" + s + Environment.NewLine); };
-                OnTerminalOutputUpdate(string.Format("Runz>> Launching {0} with arguments {1} with currentFolder {2}",
-                                                     app, arguments, sourceDrop.SourceDropLocation)+Environment.NewLine);
                 process.Execute();
-                OnTaskStarted(process.ProcessInfo.Id);
-                var exitcode = process.WaitForProcess(60000);
-                process.WaitForProcess();
-                MonoBugFix(exitcode);
+                OnTaskStarted(process.Id);
+                ObserveTask();
+                process.MakeSureTerminalOutputIsFlushed();
             }
-            catch (Win32Exception)
+            catch(HangingProcessDetectedException)
             {
+                process.Kill();
+                process.MakeSureTerminalOutputIsFlushed();
+                OnTerminalOutputUpdate(string.Format("Runz>> It looks like task is hanging without doing much. Task was killed. Exit code: {0}",
+                                                        process.ExitCode) + Environment.NewLine);
+                return new ExecTaskResult(ExecutionStatus.Failure, process.ExitCode);
+            }
+            catch(TaskQuotaConsumedException)
+            {
+                process.Kill();
+                process.MakeSureTerminalOutputIsFlushed();
+                OnTerminalOutputUpdate(string.Format("Runz>> Task has consumed all its quota. Task was killed. Exit code: {0}",
+                                                     process.ExitCode) + Environment.NewLine);
+                return new ExecTaskResult(ExecutionStatus.Failure, process.ExitCode);
+            }
+            catch (ApplicationNotFoundException e)
+            {
+                OnTerminalOutputUpdate(string.Format("E> Task has exited with error: {0}", e));
                 return new ExecTaskResult(ExecutionStatus.Failure, -1);
             }
 
-            if (process.ProcessInfo.HasExited)
-            {
-                OnTerminalOutputUpdate(string.Format("Runz>> Process has exited with exitcode {0}",
-                                                     process.ProcessInfo.ExitCode) + Environment.NewLine);
-                return new ExecTaskResult(ExecutionStatus.Success, process.ProcessInfo.ExitCode);
-            }
-            return new ExecTaskResult(ExecutionStatus.Failure, -1);
+            OnTerminalOutputUpdate(string.Format("Runz>> Task has exited with exitcode {0}",
+                                                    process.ExitCode) + Environment.NewLine);
+            return new ExecTaskResult(ExecutionStatus.Success, process.ExitCode);
         }
 
-        void MonoBugFix(int exitcode)
+        private void ObserveTask()
         {
-            if (exitcode == 1) throw new Win32Exception();
+            var lastQuotaCPU = TimeSpan.FromTicks(0);
+            for (int i = 0; i < quotaNrPeriods; i++)
+            {
+                if (process.WaitForProcess(periodLengthMs)) return;
+                var currentQuotaCPU = process.TotalProcessorTime;
+                if (HnagingTaskDetector(lastQuotaCPU, currentQuotaCPU)) throw new HangingProcessDetectedException();
+                lastQuotaCPU = currentQuotaCPU;
+            }
+            throw new TaskQuotaConsumedException();
+        }
+
+        private static bool HnagingTaskDetector(TimeSpan lastQuotaCPU, TimeSpan currentQuotaCPU)
+        {
+            return currentQuotaCPU == lastQuotaCPU;
         }
 
         public string Name
         {
             get { return name; }
         }
+    }
+
+    internal class HangingProcessDetectedException : Exception
+    {
+    }
+
+    internal class TaskQuotaConsumedException : Exception
+    {
     }
 
     public enum ExecutionStatus

@@ -3,6 +3,7 @@ using NUnit.Framework;
 
 namespace Frog.Specs.Support
 {
+    [TestFixture]
     public abstract class BDD
     {
         [SetUp]
