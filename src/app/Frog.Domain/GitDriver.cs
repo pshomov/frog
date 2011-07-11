@@ -15,6 +15,7 @@ namespace Frog.Domain
     {
         const string RevisionExtractingRegex = @"^([a-f,0-9]*)\s*refs/heads/master";
         readonly string repoUrl;
+        public const int GitTimeoutInMs = 120000;
 
         public GitDriver(string repo)
         {
@@ -38,8 +39,9 @@ namespace Frog.Domain
                         }
                     };
             process.Execute();
-            var exitcode = process.WaitForProcess();
-            if (exitcode != 0)
+            process.WaitForProcess(GitTimeoutInMs);
+            process.Kill();
+            if (process.ExitCode != 0)
                 throw new InvalidProgramException("script failed, see log for details");
             return result;
         }
@@ -50,11 +52,10 @@ namespace Frog.Domain
             var process = new ProcessWrapper("ruby",
                                              scriptPath + " \"" + repoUrl + "\" " + revision + " " + " \"" + workingArea+"\"");
             process.Execute();
-            var exitcode = process.WaitForProcess();
-            if (exitcode != 0)
-            {
+            process.WaitForProcess(GitTimeoutInMs);
+            process.Kill();
+            if (process.ExitCode != 0)
                 throw new InvalidProgramException("script failed, see log for details");
-            }
         }
     }
 }

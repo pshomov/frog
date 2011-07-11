@@ -74,12 +74,12 @@ namespace Frog.Domain.ExecTasks
                 process.Execute();
                 OnTaskStarted(process.Id);
                 ObserveTask();
-                MakeSureTerminalOutputIsFlushed(process);
+                process.MakeSureTerminalOutputIsFlushed();
             }
             catch(HangingProcessDetectedException)
             {
                 process.Kill();
-                MakeSureTerminalOutputIsFlushed(process);
+                process.MakeSureTerminalOutputIsFlushed();
                 OnTerminalOutputUpdate(string.Format("Runz>> It looks like task is hanging without doing much. Task was killed. Exit code: {0}",
                                                         process.ExitCode) + Environment.NewLine);
                 return new ExecTaskResult(ExecutionStatus.Failure, process.ExitCode);
@@ -87,7 +87,7 @@ namespace Frog.Domain.ExecTasks
             catch(TaskQuotaConsumedException)
             {
                 process.Kill();
-                MakeSureTerminalOutputIsFlushed(process);
+                process.MakeSureTerminalOutputIsFlushed();
                 OnTerminalOutputUpdate(string.Format("Runz>> Task has consumed all its quota. Task was killed. Exit code: {0}",
                                                      process.ExitCode) + Environment.NewLine);
                 return new ExecTaskResult(ExecutionStatus.Failure, process.ExitCode);
@@ -101,11 +101,6 @@ namespace Frog.Domain.ExecTasks
             OnTerminalOutputUpdate(string.Format("Runz>> Task has exited with exitcode {0}",
                                                     process.ExitCode) + Environment.NewLine);
             return new ExecTaskResult(ExecutionStatus.Success, process.ExitCode);
-        }
-
-        private static void MakeSureTerminalOutputIsFlushed(IProcessWrapper process)
-        {
-            process.WaitForProcess();
         }
 
         private void ObserveTask()

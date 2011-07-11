@@ -19,7 +19,8 @@ namespace Frog.Domain.Specs
             pw.OnStdOutput += output => std.Append(output);
 
             pw.Execute();
-            pw.WaitForProcess();
+            pw.WaitForProcess(5000);
+            pw.MakeSureTerminalOutputIsFlushed();
 
             Assert.That(std.ToString(), Is.Not.Empty);
         }
@@ -31,7 +32,7 @@ namespace Frog.Domain.Specs
             var pw = new ProcessWrapper("ruby", "-e '$stderr.puts(\"fle\")'");
             pw.OnErrorOutput += output => err.Append(output);
             pw.Execute();
-            pw.WaitForProcess();
+            pw.WaitForProcess(5000);
             Assert.That(err.ToString(), Is.Not.Empty);
         }
 
@@ -40,7 +41,7 @@ namespace Frog.Domain.Specs
         {
             var pw = new ProcessWrapper("ruby", "-e '$stderr.puts(\"fle\")'");
             pw.Execute();
-            pw.WaitForProcess();
+            pw.WaitForProcess(5000);
         }
 
         [Test]
@@ -50,7 +51,7 @@ namespace Frog.Domain.Specs
             try
             {
                 pw.Execute();
-                pw.WaitForProcess();
+                pw.WaitForProcess(5000);
                 Assert.Fail("Should have thrown an exception");
             }
             catch (ApplicationNotFoundException e)

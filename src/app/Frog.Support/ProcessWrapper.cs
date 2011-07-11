@@ -12,11 +12,10 @@ namespace Frog.Support
         TimeSpan TotalProcessorTime { get; }
         int ExitCode { get; }
         int Id { get; }
-        bool HasExited { get; }
         void Execute();
         bool WaitForProcess(int timeoutMilliseconds);
         void Kill();
-        int WaitForProcess();
+        void MakeSureTerminalOutputIsFlushed();
     }
 
     public class ProcessWrapper : IProcessWrapper
@@ -44,7 +43,7 @@ namespace Frog.Support
         {
             get {
 				if (Os.IsUnix){
-					var p = new ProcessWrapper("ps", string.Format("-p {0} -o time=", process.Id));
+					var p = new ProcessWrapper("ps", String.Format("-p {0} -o time=", process.Id));
 					var time = "";
 					p.OnStdOutput += s => time = s ?? "";
 					p.Execute();
@@ -126,6 +125,11 @@ namespace Frog.Support
 
         public int Id { get { return process.Id; } }
         public bool HasExited { get { return process.HasExited; } }
+
+        public void MakeSureTerminalOutputIsFlushed()
+        {
+            WaitForProcess();
+        }
     }
 
     public class ApplicationNotFoundException : Exception
