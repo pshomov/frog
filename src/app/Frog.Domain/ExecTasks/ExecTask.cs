@@ -49,6 +49,7 @@ namespace Frog.Domain.ExecTasks
         private readonly Func<string, string, string, IProcessWrapper> processWrapperFactory;
         private readonly int periodLengthMs;
         private readonly int quotaNrPeriods;
+        private IProcessWrapper process;
         public event Action<int> OnTaskStarted = pid => {};
         public event Action<string> OnTerminalOutputUpdate = s => {};
         public ExecTask(string app, string arguments, string name, Func<string, string, string, IProcessWrapper> processWrapperFactory, int periodLengthMs = 5000, int quotaNrPeriods = 60)
@@ -63,7 +64,6 @@ namespace Frog.Domain.ExecTasks
 
         public ExecTaskResult Perform(SourceDrop sourceDrop)
         {
-            IProcessWrapper process;
             process = processWrapperFactory(app, arguments, sourceDrop.SourceDropLocation);
             process.OnErrorOutput += s => { if (s != null) OnTerminalOutputUpdate("E>" + s + Environment.NewLine); };
             process.OnStdOutput += s => { if (s != null) OnTerminalOutputUpdate("S>" + s + Environment.NewLine); };
@@ -73,7 +73,7 @@ namespace Frog.Domain.ExecTasks
             {
                 process.Execute();
                 OnTaskStarted(process.Id);
-                ObserveProcess(process);
+                ObserveTask();
             }
             catch(HangingProcessDetectedException)
             {
@@ -105,7 +105,7 @@ namespace Frog.Domain.ExecTasks
             process.WaitForProcess();
         }
 
-        private void ObserveProcess(IProcessWrapper process)
+        private void ObserveTask()
         {
             try
             {
