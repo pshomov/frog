@@ -1,5 +1,6 @@
 using Frog.Domain.ExecTasks;
 using Frog.Specs.Support;
+using Frog.Support;
 using NUnit.Framework;
 
 namespace Frog.Domain.Specs.Task
@@ -13,7 +14,7 @@ namespace Frog.Domain.Specs.Task
 
         protected override void Given()
         {
-            task = new ExecTask("ruby", "-e 'exit 0'", "task_name");
+            task = new ExecTask("ruby", "-e 'exit 0'", "task_name", (p1, p2, p3) => new ProcessWrapper(p1, p2, p3));
             taskStarted = 0;
             task.OnTaskStarted += pid =>
                                       {
