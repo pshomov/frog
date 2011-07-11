@@ -74,10 +74,12 @@ namespace Frog.Domain.ExecTasks
                 process.Execute();
                 OnTaskStarted(process.Id);
                 ObserveTask();
+                MakeSureTerminalOutputIsFlushed(process);
             }
             catch(HangingProcessDetectedException)
             {
                 process.Kill();
+                MakeSureTerminalOutputIsFlushed(process);
                 OnTerminalOutputUpdate(string.Format("Runz>> It looks like task is hanging without doing much. Task was killed. Exit code: {0}",
                                                         process.ExitCode) + Environment.NewLine);
                 return new ExecTaskResult(ExecutionStatus.Failure, process.ExitCode);
@@ -85,6 +87,7 @@ namespace Frog.Domain.ExecTasks
             catch(TaskQuotaConsumedException)
             {
                 process.Kill();
+                MakeSureTerminalOutputIsFlushed(process);
                 OnTerminalOutputUpdate(string.Format("Runz>> Task has consumed all its quota. Task was killed. Exit code: {0}",
                                                      process.ExitCode) + Environment.NewLine);
                 return new ExecTaskResult(ExecutionStatus.Failure, process.ExitCode);
@@ -107,22 +110,15 @@ namespace Frog.Domain.ExecTasks
 
         private void ObserveTask()
         {
-            try
+            var lastQuotaCPU = TimeSpan.FromTicks(0);
+            for (int i = 0; i < quotaNrPeriods; i++)
             {
-                var lastQuotaCPU = TimeSpan.FromTicks(0);
-                for (int i = 0; i < quotaNrPeriods; i++)
-                {
-                    if (process.WaitForProcess(periodLengthMs)) return;
-                    var currentQuotaCPU = process.TotalProcessorTime;
-                    if (HnagingTaskDetector(lastQuotaCPU, currentQuotaCPU)) throw new HangingProcessDetectedException();
-                    lastQuotaCPU = currentQuotaCPU;
-                }
-                throw new TaskQuotaConsumedException();
+                if (process.WaitForProcess(periodLengthMs)) return;
+                var currentQuotaCPU = process.TotalProcessorTime;
+                if (HnagingTaskDetector(lastQuotaCPU, currentQuotaCPU)) throw new HangingProcessDetectedException();
+                lastQuotaCPU = currentQuotaCPU;
             }
-            finally
-            {
-                MakeSureTerminalOutputIsFlushed(process);
-            }
+            throw new TaskQuotaConsumedException();
         }
 
         private static bool HnagingTaskDetector(TimeSpan lastQuotaCPU, TimeSpan currentQuotaCPU)
