@@ -77,7 +77,7 @@ namespace Frog.Domain.Specs.Task
         }
 
         [Test]
-        public void should_have_status_set_to_success()
+        public void should_have_status_set_to_error()
         {
             Assert.That(_taskResult.ExecStatus, Is.EqualTo(ExecTaskResult.Status.Error));
         }
