@@ -60,7 +60,7 @@ namespace Frog.Support
             {
                 if (Os.IsUnix)
                 {
-                    return UnixSpecific.UnixTotalProcessorTime(process.Handle.ToInt32());
+                    return UnixSpecific.UnixTotalProcessorTime(process.Id);
                 }
                 else
                     return WindowsTotalProcessorTime();

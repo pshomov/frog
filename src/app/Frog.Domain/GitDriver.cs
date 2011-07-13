@@ -41,6 +41,7 @@ namespace Frog.Domain
             process.Execute();
             process.WaitForProcess(GitTimeoutInMs);
             process.Kill();
+			process.MakeSureTerminalOutputIsFlushed();
             if (process.ExitCode != 0)
                 throw new InvalidProgramException("script failed, see log for details");
             return result;
@@ -54,6 +55,7 @@ namespace Frog.Domain
             process.Execute();
             process.WaitForProcess(GitTimeoutInMs);
             process.Kill();
+			process.MakeSureTerminalOutputIsFlushed();
             if (process.ExitCode != 0)
                 throw new InvalidProgramException("script failed, see log for details");
         }
