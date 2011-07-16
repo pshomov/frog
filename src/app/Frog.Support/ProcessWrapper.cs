@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
@@ -104,14 +104,12 @@ namespace Frog.Support
 
         public void Kill()
         {
-            try
-            {
-                process.Kill();
-                process.WaitForExit();
-            }
-            catch (InvalidOperationException)
-            {
-            }
+			string paramz = Path.Combine(Underware.SupportScriptsLocation,"killtree.py") + " " +process.Id.ToString();
+            using(var killProcess = Process.Start("python", paramz))
+			{
+				killProcess.Start();
+				killProcess.WaitForExit();
+			}
         }
 
         public int Id

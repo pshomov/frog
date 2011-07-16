@@ -21,6 +21,11 @@ namespace Frog.Support
         {
             get { return GitScriptsLocation("git_support_scripts"); }
         }
+
+		public static string SupportScriptsLocation
+        {
+            get { return GitScriptsLocation("support_scripts"); }
+        }
     }
 
     public class As

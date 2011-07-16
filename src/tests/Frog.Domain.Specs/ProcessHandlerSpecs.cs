@@ -89,7 +89,7 @@ namespace Frog.Domain.Specs
         [Test]
         public void should_make_the_process_invalid_after_killing_it()
         {
-            var pw = new ProcessWrapper("ruby", "-e 'sleep 30'");
+            var pw = new ProcessWrapper("ruby", @"-e ""system(\""ruby -e 'sleep 300'\"")""");
             pw.Execute();
             pw.Kill();
             Assert.That(ProcessHasExited(pw));
