@@ -105,11 +105,14 @@ namespace Frog.Support
         public void Kill()
         {
 			string paramz = Path.Combine(Underware.SupportScriptsLocation,"killtree.py") + " " +process.Id.ToString();
-            using(var killProcess = Process.Start("python", paramz))
-			{
-				killProcess.Start();
-				killProcess.WaitForExit();
-			}
+            if (!process.HasExited)
+            {
+                using (var killProcess = Process.Start("python", paramz))
+                {
+                    killProcess.Start();
+                    killProcess.WaitForExit();
+                }
+            }
         }
 
         public int Id
