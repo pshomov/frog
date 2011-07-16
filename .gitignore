@@ -14,3 +14,5 @@ SyncToy*
 .idea/
 *.userprefs
 *.pyc
+test-results/
+scripts/webz_virtenv/
