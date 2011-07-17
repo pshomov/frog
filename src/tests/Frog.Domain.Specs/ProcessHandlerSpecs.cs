@@ -51,12 +51,10 @@ namespace Frog.Domain.Specs
             try
             {
                 pw.Execute();
-                pw.WaitForProcess(5000);
                 Assert.Fail("Should have thrown an exception");
             }
-            catch (ApplicationNotFoundException e)
+            catch (ApplicationNotFoundException)
             {
-                
             }
         }
 

@@ -167,16 +167,10 @@ namespace Frog.Support
             return process.TotalProcessorTime;
         }
 
-        public int WaitForProcess()
+        private int WaitForProcess()
         {
             process.WaitForExit();
-            MonoBugFix(process.ExitCode);
             return process.ExitCode;
-        }
-
-        private void MonoBugFix(int exitcode)
-        {
-            if (exitcode == 1) throw new ApplicationNotFoundException(cmdExe, null);
         }
     }
 

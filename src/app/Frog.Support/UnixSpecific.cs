@@ -14,7 +14,7 @@ namespace Frog.Support
             var processStrings = new List<String>();
             p.OnStdOutput += s => { if (!s.IsNullOrEmpty()) processStrings.Add(s); };
             p.Execute();
-            p.WaitForProcess();
+            p.WaitForProcess(10000);
             var processes = ParsePSInfo(processStrings);
             var cputime = GetTotalCpuTime(processes, processId);
             return cputime;
