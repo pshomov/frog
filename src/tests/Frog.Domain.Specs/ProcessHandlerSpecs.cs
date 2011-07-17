@@ -76,9 +76,9 @@ namespace Frog.Domain.Specs
         {
             var pw = new ProcessWrapper("ruby", "-e 'sleep 30'");
             pw.Execute();
-            pw.WaitForProcess(10);
-            var tpt = pw.TotalProcessorTime;
             pw.WaitForProcess(100);
+            var tpt = pw.TotalProcessorTime;
+            pw.WaitForProcess(200);
             var tpt1 = pw.TotalProcessorTime;
             pw.Kill();
 			
