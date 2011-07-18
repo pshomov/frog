@@ -42,10 +42,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\libs\NHamcrest\NHamcrest.dll</HintPath>
     </Reference>
-    <Reference Include="NSubstitute, Version=1.0.0.0, Culture=neutral, PublicKeyToken=92dd2e9066daa5ca">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\libs\NSubstitute\NSubstitute.dll</HintPath>
-    </Reference>
     <Reference Include="nunit.framework, Version=2.5.6.10205, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\libs\NUnit\nunit.framework.dll</HintPath>
@@ -53,6 +49,10 @@
     <Reference Include="xray, Version=1.0.4031.8793, Culture=neutral, PublicKeyToken=null">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\libs\Xray\xray.dll</HintPath>
+    </Reference>
+    <Reference Include="NSubstitute, Version=1.1.0.0, Culture=neutral, PublicKeyToken=92dd2e9066daa5ca">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\libs\NSubstitute\NSubstitute.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
