@@ -120,7 +120,7 @@ namespace Frog.Domain.Specs
     }
 
     [TestFixture]
-    public class RepositoryUpdaterDoesNotSendMoreThenOneCommandForAGivenRevision : RepositoryTrackerSpecsBase
+    public class RepositoryUpdaterChecksForUpdateTwiceInARow : RepositoryTrackerSpecsBase
     {
         protected override void Given()
         {
@@ -142,5 +142,27 @@ namespace Frog.Domain.Specs
         }
     }
 
-   
+    [TestFixture]
+    public class RepositoryUpdaterChecksForUpdateThenGetsResponseAndChecksAgain : RepositoryTrackerSpecsBase
+    {
+        protected override void Given()
+        {
+            base.Given();
+            repositoryTracker.Handle(new RegisterRepository { Repo = "http://fle" });
+            repositoryTracker.CheckForUpdates();
+            repositoryTracker.Handle(new UpdateFound {RepoUrl = "http://fle", Revision = "123"});
+            bus.ClearReceivedCalls();
+        }
+
+        protected override void When()
+        {
+            repositoryTracker.CheckForUpdates();
+        }
+
+        [Test]
+        public void should_send_a_new_command_to_check_for_updates()
+        {
+            bus.Received().Send(Arg.Any<CheckForUpdates>());
+        }
+    }
 }
