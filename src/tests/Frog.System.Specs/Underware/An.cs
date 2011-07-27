@@ -62,10 +62,6 @@ namespace Frog.System.Specs.Underware
         {
             return new EventMatcher<T>(matchers);
         }
-        public static IMatcher<List<Message>> Command<T>(params NHamcrest.Func<T, bool>[] matchers) where T : Command
-        {
-            return new CommandMatcher<T>(matchers);
-        }
     }
 
     public static class A
@@ -73,6 +69,11 @@ namespace Frog.System.Specs.Underware
         public static IMatcher<T> Check<T>(NHamcrest.Func<T, bool> matchers)
         {
             return new InlineMatcher<T>(matchers);
+        }
+
+        public static IMatcher<List<Message>> Command<T>(params NHamcrest.Func<T, bool>[] matchers) where T : Command
+        {
+            return new CommandMatcher<T>(matchers);
         }
     }
 }
