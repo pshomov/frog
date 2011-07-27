@@ -1,4 +1,3 @@
-using Frog.Domain;
 using Frog.Domain.RepositoryTracker;
 using Frog.Specs.Support;
 using Frog.System.Specs.Underware;
@@ -34,8 +33,9 @@ namespace Frog.System.Specs
             new Agent(TheBus).JoinTheParty();
         }
     }
+
     [TestFixture]
-    public class CheckingForUpdatesOnlyOnceUntilgettingAResponse : BDD
+    public class CheckkingForUpdatesTwiceInARowWithoutAnyResponseInBetween : BDD
     {
         SystemDriver<SystemWithNoAgent> system;
         RepositoryDriver repo;

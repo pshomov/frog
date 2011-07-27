@@ -57,7 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CheckingForUpdates.cs" />
-    <Compile Include="CheckingForUpdatesOnlyOnceUntilGettingAResponse.cs" />
+    <Compile Include="CheckkingForUpdatesTwiceInARowWithoutAnyResponseInBetween.cs" />
     <Compile Include="RealTimeConsoleStreaming.cs" />
     <Compile Include="Underware\An.cs" />
     <Compile Include="Underware\EventedProber.cs" />
