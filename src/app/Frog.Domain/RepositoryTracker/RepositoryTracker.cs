@@ -43,8 +43,12 @@ namespace Frog.Domain.RepositoryTracker
 
         public void CheckForUpdates()
         {
-            projectsRepository.AllProjects.ToList().ForEach(
-                s => bus.Send(new CheckForUpdates(repoUrl : s.projecturl, revision : s.revision)));
+            projectsRepository.AllProjects.Where(document => !document.CheckForUpdateRequested). ToList().ForEach(
+                 document =>
+                     {
+                         document.CheckForUpdateRequested = true;
+                         bus.Send(new CheckForUpdates(repoUrl: document.projecturl, revision: document.revision));
+                     });
         }
 
         public void JoinTheMessageParty()

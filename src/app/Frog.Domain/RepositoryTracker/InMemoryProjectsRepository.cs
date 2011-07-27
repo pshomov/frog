@@ -15,13 +15,14 @@ namespace Frog.Domain.RepositoryTracker
 
         public void TrackRepository(string repoUrl)
         {
-            trackedRepos.TryAdd(repoUrl, new RepositoryDocument { projecturl = repoUrl, revision = "" });
+            trackedRepos.TryAdd(repoUrl, new RepositoryDocument { projecturl = repoUrl, revision = "", CheckForUpdateRequested = false});
         }
 
         public IEnumerable<RepositoryDocument> AllProjects { get { return trackedRepos.Values; } }
         public void UpdateLastKnownRevision(string repoUrl, string revision)
         {
             trackedRepos[repoUrl].revision = revision;
+            trackedRepos[repoUrl].CheckForUpdateRequested = false;
         }
     }
 }

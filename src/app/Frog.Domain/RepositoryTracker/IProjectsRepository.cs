@@ -6,6 +6,7 @@ namespace Frog.Domain.RepositoryTracker
     {
         public string projecturl;
         public string revision;
+        public bool CheckForUpdateRequested;
     }
 
     public interface IProjectsRepository

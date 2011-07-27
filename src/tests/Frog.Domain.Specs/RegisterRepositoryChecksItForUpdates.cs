@@ -118,4 +118,29 @@ namespace Frog.Domain.Specs
             bus.Received().Send(Arg.Is<CheckForUpdates>(updates => updates.RepoUrl == "http://fle" && updates.Revision == "12"));
         }
     }
+
+    [TestFixture]
+    public class RepositoryUpdaterDoesNotSendMoreThenOneCommandForAGivenRevision : RepositoryTrackerSpecsBase
+    {
+        protected override void Given()
+        {
+            base.Given();
+            repositoryTracker.Handle(new RegisterRepository { Repo = "http://fle" });
+            repositoryTracker.CheckForUpdates();
+            bus.ClearReceivedCalls();
+        }
+
+        protected override void When()
+        {
+            repositoryTracker.CheckForUpdates();
+        }
+
+        [Test]
+        public void should_not_send_a_new_command_to_check_for_updates_since_it_already_has_asked_before()
+        {
+            bus.DidNotReceive().Send(Arg.Any<CheckForUpdates>());
+        }
+    }
+
+   
 }
