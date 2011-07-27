@@ -24,31 +24,33 @@ namespace Frog.System.Specs.Underware
 
     public class MessageMatcher<T> : Matcher<List<Message>> where T : class
     {
+        private readonly int occurences;
         private NHamcrest.Func<T, bool>[] matchers;
 
-        public MessageMatcher(params NHamcrest.Func<T, bool>[] matchers)
+        public MessageMatcher(int occurences, params NHamcrest.Func<T, bool>[] matchers)
         {
+            this.occurences = occurences;
             this.matchers = matchers;
         }
 
         public override bool Matches(List<Message> messages)
         {
             return
-                messages.Where(message => message.GetType() == typeof (T)).Any(
-                    message => matchers.All(func => func(message as T)));
+                messages.Where(message => message.GetType() == typeof (T)).Where(
+                    message => matchers.All(func => func(message as T))).Count() == occurences;
         }
     }
 
     public class EventMatcher<T> : MessageMatcher<T> where T : Event
     {
-        public EventMatcher(params NHamcrest.Func<T, bool>[] matchers) : base(matchers)
+        public EventMatcher(int occurances = 1, params NHamcrest.Func<T, bool>[] matchers) : base(occurances, matchers)
         {
         }
     }
 
     public class CommandMatcher<T> : MessageMatcher<T> where T : Command
     {
-        public CommandMatcher(params NHamcrest.Func<T, bool>[] matchers) : base(matchers)
+        public CommandMatcher(params NHamcrest.Func<T, bool>[] matchers) : base(1, matchers)
         {
         }
     }
@@ -57,7 +59,7 @@ namespace Frog.System.Specs.Underware
     {
         public static IMatcher<List<Message>> Event<T>(params NHamcrest.Func<T, bool>[] matchers) where T : Event
         {
-            return new EventMatcher<T>(matchers);
+            return new EventMatcher<T>(1, matchers);
         }
     }
 
