@@ -27,6 +27,7 @@ namespace Frog.Domain.RepositoryTracker
 
     public class RepositoryTracker : Handles<UpdateFound>, Handles<RegisterRepository>
     {
+        private const string RepositoryTrackerQueueId = "Repository_tracker";
         readonly IBus bus;
         readonly IProjectsRepository projectsRepository;
 
@@ -53,8 +54,8 @@ namespace Frog.Domain.RepositoryTracker
 
         public void JoinTheMessageParty()
         {
-            bus.RegisterHandler<UpdateFound>(Handle, "Repository_tracker");
-            bus.RegisterHandler<RegisterRepository>(Handle, "Repository_tracker");
+            bus.RegisterHandler<UpdateFound>(Handle, RepositoryTrackerQueueId);
+            bus.RegisterHandler<RegisterRepository>(Handle, RepositoryTrackerQueueId);
         }
 
         public void Handle(RegisterRepository message)
