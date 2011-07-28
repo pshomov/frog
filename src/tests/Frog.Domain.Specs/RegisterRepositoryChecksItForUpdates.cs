@@ -165,4 +165,28 @@ namespace Frog.Domain.Specs
             bus.Received().Send(Arg.Any<CheckForUpdates>());
         }
     }
+
+    [TestFixture]
+    public class RepositoryUpdaterChecksForUpdateThenGetsFailureResponseAndChecksAgain : RepositoryTrackerSpecsBase
+    {
+        protected override void Given()
+        {
+            base.Given();
+            repositoryTracker.Handle(new RegisterRepository { Repo = "http://fle" });
+            repositoryTracker.CheckForUpdates();
+            repositoryTracker.Handle(new CheckForUpdateFailed{repoUrl = "http://fle"});
+            bus.ClearReceivedCalls();
+        }
+
+        protected override void When()
+        {
+            repositoryTracker.CheckForUpdates();
+        }
+
+        [Test]
+        public void should_send_a_new_command_to_check_for_updates()
+        {
+            bus.Received().Send(Arg.Any<CheckForUpdates>());
+        }
+    }
 }

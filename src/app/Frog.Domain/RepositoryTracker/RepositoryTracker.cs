@@ -25,7 +25,7 @@ namespace Frog.Domain.RepositoryTracker
         }
     }
 
-    public class RepositoryTracker : Handles<UpdateFound>, Handles<RegisterRepository>
+    public class RepositoryTracker : Handles<UpdateFound>, Handles<RegisterRepository>, Handles<CheckForUpdateFailed>
     {
         private const string RepositoryTrackerQueueId = "Repository_tracker";
         readonly IBus bus;
@@ -56,6 +56,7 @@ namespace Frog.Domain.RepositoryTracker
         {
             bus.RegisterHandler<UpdateFound>(Handle, RepositoryTrackerQueueId);
             bus.RegisterHandler<RegisterRepository>(Handle, RepositoryTrackerQueueId);
+            bus.RegisterHandler<CheckForUpdateFailed>(Handle, RepositoryTrackerQueueId);
         }
 
         public void Handle(RegisterRepository message)
@@ -66,6 +67,12 @@ namespace Frog.Domain.RepositoryTracker
         public void Handle(UpdateFound message)
         {
             projectsRepository.UpdateLastKnownRevision(message.RepoUrl, message.Revision);
+        }
+
+        public void Handle(CheckForUpdateFailed message)
+        {
+            projectsRepository.AllProjects.Single(document => document.projecturl == message.repoUrl).
+                CheckForUpdateRequested = false;
         }
     }
 }

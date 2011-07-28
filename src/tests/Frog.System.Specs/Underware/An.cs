@@ -35,9 +35,9 @@ namespace Frog.System.Specs.Underware
 
         public override bool Matches(List<Message> messages)
         {
-            return
-                messages.Where(message => message.GetType() == typeof (T)).Where(
-                    message => matchers.All(func => func(message as T))).Count() == occurences;
+            var matchedMessages = messages.Where(message => message.GetType() == typeof (T)).Where(
+                message => matchers.All(func => func(message as T)));
+            return matchedMessages.Count() == occurences;
         }
     }
 
@@ -50,7 +50,7 @@ namespace Frog.System.Specs.Underware
 
     public class CommandMatcher<T> : MessageMatcher<T> where T : Command
     {
-        public CommandMatcher(params NHamcrest.Func<T, bool>[] matchers) : base(1, matchers)
+        public CommandMatcher(int occurances, params NHamcrest.Func<T, bool>[] matchers) : base(occurances, matchers)
         {
         }
     }
@@ -72,7 +72,14 @@ namespace Frog.System.Specs.Underware
 
         public static IMatcher<List<Message>> Command<T>(params NHamcrest.Func<T, bool>[] matchers) where T : Command
         {
-            return new CommandMatcher<T>(matchers);
+            return new CommandMatcher<T>(1, matchers);
+        }
+    }
+    public static class Two
+    {
+        public static IMatcher<List<Message>> Commands<T>(params NHamcrest.Func<T, bool>[] matchers) where T : Command
+        {
+            return new CommandMatcher<T>(2, matchers);
         }
     }
 }
