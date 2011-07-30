@@ -51,10 +51,7 @@ namespace SimpleCQRS
             if (!_routes.TryGetValue(@event.GetType(), out handlers)) return;
             foreach(var handler in handlers)
             {
-                var handler1 = handler;
-                var runner = new Thread(() => handler1(@event));
-                runner.Start();
-                // don't give a s**t about disposing of the threads properly, this is not production code
+				handler(@event);
             }
         }
 
