@@ -51,10 +51,10 @@ namespace SimpleCQRS
             if (!_routes.TryGetValue(@event.GetType(), out handlers)) return;
             foreach(var handler in handlers)
             {
-                //dispatch on thread pool for added awesomeness
                 var handler1 = handler;
-                ThreadPool.QueueUserWorkItem(x => handler1(@event));
-//                handler1(@event);
+                var runner = new Thread(() => handler1(@event));
+                runner.Start();
+                // don't give a s**t about disposing of the threads properly, this is not production code
             }
         }
 
