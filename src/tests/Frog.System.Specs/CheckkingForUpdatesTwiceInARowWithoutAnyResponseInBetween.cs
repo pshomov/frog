@@ -7,11 +7,11 @@ using xray;
 
 namespace Frog.System.Specs
 {
-    internal class Agent : Handles<CheckForUpdates>
+    internal class AgentWhichDoesNotAnswer : Handles<CheckForUpdates>
     {
         private readonly IBus theBus;
 
-        public Agent(IBus theBus)
+        public AgentWhichDoesNotAnswer(IBus theBus)
         {
             this.theBus = theBus;
         }
@@ -26,24 +26,24 @@ namespace Frog.System.Specs
         }
     }
 
-    internal class SystemWithNoAgent : TestSystem
+    internal class SystemWithAgentWhichDoesNotAnswer : TestSystem
     {
         protected override void SetupAgent()
         {
-            new Agent(TheBus).JoinTheParty();
+            new AgentWhichDoesNotAnswer(TheBus).JoinTheParty();
         }
     }
 
     [TestFixture]
     public class CheckkingForUpdatesTwiceInARowWithoutAnyResponseInBetween : BDD
     {
-        SystemDriver<SystemWithNoAgent> system;
+        SystemDriver<SystemWithAgentWhichDoesNotAnswer> system;
         RepositoryDriver repo;
 
         protected override void Given()
         {
             repo = RepositoryDriver.GetNewRepository();
-            system = SystemDriver<SystemWithNoAgent>.GetCleanSystem();
+            system = SystemDriver<SystemWithAgentWhichDoesNotAnswer>.GetCleanSystem();
             system.RegisterNewProject(repo.Url);
             system.CheckProjectsForUpdates();
         }
