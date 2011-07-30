@@ -9,8 +9,8 @@ namespace Frog.Domain.Specs.Task
     [TestFixture]
     public class TaskFailsToStartSpec : BDD
     {
-        private static IExecTask _task;
-        private static ExecTaskResult _taskResult;
+        private IExecTask _task;
+        private ExecTaskResult _taskResult;
 
         protected override void Given()
         {
@@ -51,8 +51,8 @@ namespace Frog.Domain.Specs.Task
     [TestFixture]
     public class TaskStartsButExitsWithNonZeroSpec : BDD
     {
-        private static IExecTask _task;
-        private static ExecTaskResult _taskResult;
+        private IExecTask _task;
+        private ExecTaskResult _taskResult;
 
         protected override void Given()
         {
@@ -86,8 +86,8 @@ namespace Frog.Domain.Specs.Task
     [TestFixture]
     public class TaskStartsAndFinishesWithExitCodeZeroSpec : BDD
     {
-        private static IExecTask _task;
-        private static ExecTaskResult _taskResult;
+        private IExecTask _task;
+        private ExecTaskResult _taskResult;
 
         protected override void Given()
         {
