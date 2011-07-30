@@ -3,6 +3,7 @@
 	As a Runz tester
 	I want to be setup the whole thing quickly
 
+@ignore
 Scenario: Register the usual suspects
 	Given I have registered project URL "http://github.com/pshomov/xray.git"
 	And I have registered project URL "http://runzci:sans3r1f@github.com/pshomov/frog.git"

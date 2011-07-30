@@ -56,21 +56,23 @@ namespace Frog.FunctionalTests
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Register the usual suspects")]
+        [NUnit.Framework.IgnoreAttribute()]
         public virtual void RegisterTheUsualSuspects()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Register the usual suspects", ((string[])(null)));
-#line 6
-this.ScenarioSetup(scenarioInfo);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Register the usual suspects", new string[] {
+                        "ignore"});
 #line 7
- testRunner.Given("I have registered project URL \"http://github.com/pshomov/xray.git\"");
+this.ScenarioSetup(scenarioInfo);
 #line 8
+ testRunner.Given("I have registered project URL \"http://github.com/pshomov/xray.git\"");
+#line 9
  testRunner.And("I have registered project URL \"http://runzci:sans3r1f@github.com/pshomov/frog.git" +
                     "\"");
-#line 9
- testRunner.And("I have registered project URL \"http://github.com/flq/MemBus.git\"");
 #line 10
- testRunner.And("I have registered project URL \"http://github.com/grahamrhay/NHamcrest.git\"");
+ testRunner.And("I have registered project URL \"http://github.com/flq/MemBus.git\"");
 #line 11
+ testRunner.And("I have registered project URL \"http://github.com/grahamrhay/NHamcrest.git\"");
+#line 12
  testRunner.And("I have registered project URL \"http://github.com/sinatra/sinatra.git\"");
 #line hidden
             testRunner.CollectScenarioErrors();
