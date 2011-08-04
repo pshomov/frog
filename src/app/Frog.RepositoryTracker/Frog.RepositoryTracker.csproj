@@ -58,6 +58,10 @@
       <Project>{9FAA6168-F131-420F-81C1-2228FD151BC7}</Project>
       <Name>SimpleCQRS</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Frog.Support\Frog.Support.csproj">
+      <Project>{893935D3-935A-418F-A656-5D6A203D87ED}</Project>
+      <Name>Frog.Support</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using Frog.Domain.Integration;
+using Frog.Support;
 using SimpleCQRS;
 
 namespace Frog.RepositoryTracker
@@ -15,10 +16,13 @@ namespace Frog.RepositoryTracker
                                                                                  Port(),
                                                                                  "projects"));
             repoTracker.JoinTheMessageParty();
+            var SleepPeriod = 60 * 1000;
+            string mode = Environment.GetEnvironmentVariable("RUNZ_ACCEPTANCE_MODE");
+            if (!mode.IsNullOrEmpty() && mode == "ACCEPTANCE") SleepPeriod = 1000;
             while (true)
             {
                 repoTracker.CheckForUpdates();
-                Thread.Sleep(60*1000);
+                Thread.Sleep(SleepPeriod);
             }
         }
 
