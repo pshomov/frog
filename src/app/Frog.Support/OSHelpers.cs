@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 
 namespace Frog.Support
 {
@@ -36,5 +37,17 @@ namespace Frog.Support
             return changeset;
         }
 
+        public static int RiakPort()
+        {
+            return Int32.Parse(
+                Environment.GetEnvironmentVariable(
+                    "RUNZ_RIAK_PORT") ?? "8087");
+        }
+
+        public static string RiakHost()
+        {
+            return Environment.GetEnvironmentVariable(
+                "RUNZ_RIAK_HOST") ?? "localhost";
+        }
     }
 }

@@ -12,31 +12,18 @@ namespace Frog.RepositoryTracker
         {
             var repoTracker = new Domain.RepositoryTracker.RepositoryTracker(SetupBus(),
                                                                              new RiakProjectRepository(
-                                                                                 Host(),
-                                                                                 Port(),
+                                                                                 OSHelpers.RiakHost(),
+                                                                                 OSHelpers.RiakPort(),
                                                                                  "projects"));
             repoTracker.JoinTheMessageParty();
-            var SleepPeriod = 60 * 1000;
+            var sleepPeriod = 60 * 1000;
             string mode = Environment.GetEnvironmentVariable("RUNZ_ACCEPTANCE_MODE");
-            if (!mode.IsNullOrEmpty() && mode == "ACCEPTANCE") SleepPeriod = 1000;
+            if (!mode.IsNullOrEmpty() && mode == "ACCEPTANCE") sleepPeriod = 4 * 1000;
             while (true)
             {
                 repoTracker.CheckForUpdates();
-                Thread.Sleep(SleepPeriod);
+                Thread.Sleep(sleepPeriod);
             }
-        }
-
-        private static int Port()
-        {
-            return Int32.Parse(
-                Environment.GetEnvironmentVariable(
-                    "RUNZ_RIAK_PORT") ?? "8087");
-        }
-
-        private static string Host()
-        {
-            return Environment.GetEnvironmentVariable(
-                "RUNZ_RIAK_HOST") ?? "localhost";
         }
 
         private static IBus SetupBus()

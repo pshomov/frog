@@ -6,6 +6,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Web.Script.Serialization;
 using Frog.Domain.RepositoryTracker;
+using riak.net.Models;
 using riak.net.ProtoModels;
 
 namespace Frog.Domain.Integration
@@ -65,6 +66,13 @@ namespace Frog.Domain.Integration
             var doc = jsonBridge.Deserialize<RepositoryDocument>(riakResponse.Result[0].Value);
             doc.revision = revision;
             riakConnection.Persist(new RiakPersistRequest {Bucket = bucket, Key = KeyGenerator(repoUrl), Content = new RiakContent {Value = jsonBridge.Serialize(doc).GetBytes()}});
+        }
+
+        public void RemoveProject(string repoUrl)
+        {
+            RiakConnectionManager connectionManager = GetConnectionManager();
+            var riakConnection = new RiakContentRepository(connectionManager);
+            riakConnection.Detach(new RiakDetachRequest() { Bucket = bucket, Key = KeyGenerator(repoUrl) });
         }
 
         private RiakConnectionManager GetConnectionManager()
