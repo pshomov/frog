@@ -30,7 +30,7 @@ namespace Frog.UI.Web.Controllers.TestSupport
         {
             if (Os.IsWindows)
                 projectUrl = HttpUtility.UrlDecode(projectUrl);
-            return ProjectController.GetAllTaskTerminalOutput(projectUrl);            
+            return ProjectController.GetAllTaskTerminalOutput(PathUrlConversion.Url2Path(projectUrl));            
         }
     }
 }
