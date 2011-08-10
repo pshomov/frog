@@ -19,7 +19,7 @@ namespace Frog.FunctionalTests
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [NUnit.Framework.TestFixtureAttribute()]
     [NUnit.Framework.DescriptionAttribute("Lazy Petar")]
-    [NUnit.Framework.CategoryAttribute("no-clean")]
+    [NUnit.Framework.CategoryAttribute("no_clean")]
     public partial class LazyPetarFeature
     {
         

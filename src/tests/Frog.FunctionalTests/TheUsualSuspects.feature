@@ -1,4 +1,4 @@
-﻿@no-clean
+﻿@no_clean
 Feature: Lazy Petar
 	In order to avoid retyping urls to register builds over and over agian
 	As a Runz tester

@@ -39,11 +39,12 @@ namespace Frog.FunctionalTests
         [AfterScenario]
         public static void AfterScenarioProjectCleanUp()
         {
-            if (!FeatureContext.Current.FeatureInfo.Tags.Contains("no-clean")) RemoveAllProjects(); 
+            if (FeatureContext.Current.FeatureInfo.Tags == null || !FeatureContext.Current.FeatureInfo.Tags.Contains("no_clean")) RemoveAllProjects(); 
         }
 
         private static void RemoveAllProjects()
         {
+			Console.WriteLine("Wiping out the data store ....");
             var riak = new RiakProjectRepository(
                 OSHelpers.RiakHost(),
                 OSHelpers.RiakPort(),
