@@ -34,7 +34,7 @@ namespace Frog.FunctionalTests
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
             TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Lazy Petar", "In order to avoid retyping urls to register builds over and over agian\nAs a Runz " +
                     "tester\nI want to be setup the whole thing quickly", GenerationTargetLanguage.CSharp, new string[] {
-                        "no-clean"});
+                        "no_clean"});
             testRunner.OnFeatureStart(featureInfo);
         }
         
