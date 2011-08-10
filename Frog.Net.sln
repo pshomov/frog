@@ -25,8 +25,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frog.RepositoryTracker", "s
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frog.UI.Web", "src\app\Frog.UI.Web\Frog.UI.Web.csproj", "{87D8D4E3-F24A-4452-809C-2E1417B03D3D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Support.CleanAllProjects", "src\app\Support.CleanAllProjects\Support.CleanAllProjects.csproj", "{D1EDA76D-1961-40B3-A5D1-7D069B2D834C}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -157,16 +155,6 @@ Global
 		{87D8D4E3-F24A-4452-809C-2E1417B03D3D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{87D8D4E3-F24A-4452-809C-2E1417B03D3D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{87D8D4E3-F24A-4452-809C-2E1417B03D3D}.Release|x86.ActiveCfg = Release|Any CPU
-		{D1EDA76D-1961-40B3-A5D1-7D069B2D834C}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{D1EDA76D-1961-40B3-A5D1-7D069B2D834C}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{D1EDA76D-1961-40B3-A5D1-7D069B2D834C}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{D1EDA76D-1961-40B3-A5D1-7D069B2D834C}.Debug|x86.ActiveCfg = Debug|x86
-		{D1EDA76D-1961-40B3-A5D1-7D069B2D834C}.Debug|x86.Build.0 = Debug|x86
-		{D1EDA76D-1961-40B3-A5D1-7D069B2D834C}.Release|Any CPU.ActiveCfg = Release|x86
-		{D1EDA76D-1961-40B3-A5D1-7D069B2D834C}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{D1EDA76D-1961-40B3-A5D1-7D069B2D834C}.Release|Mixed Platforms.Build.0 = Release|x86
-		{D1EDA76D-1961-40B3-A5D1-7D069B2D834C}.Release|x86.ActiveCfg = Release|x86
-		{D1EDA76D-1961-40B3-A5D1-7D069B2D834C}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
