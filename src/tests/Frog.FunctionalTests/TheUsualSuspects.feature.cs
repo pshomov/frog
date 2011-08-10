@@ -19,6 +19,7 @@ namespace Frog.FunctionalTests
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [NUnit.Framework.TestFixtureAttribute()]
     [NUnit.Framework.DescriptionAttribute("Lazy Petar")]
+    [NUnit.Framework.CategoryAttribute("no-clean")]
     public partial class LazyPetarFeature
     {
         
@@ -32,7 +33,8 @@ namespace Frog.FunctionalTests
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
             TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Lazy Petar", "In order to avoid retyping urls to register builds over and over agian\nAs a Runz " +
-                    "tester\nI want to be setup the whole thing quickly", GenerationTargetLanguage.CSharp, ((string[])(null)));
+                    "tester\nI want to be setup the whole thing quickly", GenerationTargetLanguage.CSharp, new string[] {
+                        "no-clean"});
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -61,18 +63,18 @@ namespace Frog.FunctionalTests
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Register the usual suspects", new string[] {
                         "ignore"});
-#line 7
-this.ScenarioSetup(scenarioInfo);
 #line 8
- testRunner.Given("I have registered project URL \"http://github.com/pshomov/xray.git\"");
+this.ScenarioSetup(scenarioInfo);
 #line 9
+ testRunner.Given("I have registered project URL \"http://github.com/pshomov/xray.git\"");
+#line 10
  testRunner.And("I have registered project URL \"http://runzci:sans3r1f@github.com/pshomov/frog.git" +
                     "\"");
-#line 10
- testRunner.And("I have registered project URL \"http://github.com/flq/MemBus.git\"");
 #line 11
- testRunner.And("I have registered project URL \"http://github.com/grahamrhay/NHamcrest.git\"");
+ testRunner.And("I have registered project URL \"http://github.com/flq/MemBus.git\"");
 #line 12
+ testRunner.And("I have registered project URL \"http://github.com/grahamrhay/NHamcrest.git\"");
+#line 13
  testRunner.And("I have registered project URL \"http://github.com/sinatra/sinatra.git\"");
 #line hidden
             testRunner.CollectScenarioErrors();

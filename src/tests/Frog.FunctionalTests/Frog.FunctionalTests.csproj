@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -88,6 +88,14 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <ProjectReference Include="..\..\app\Frog.Domain.Integration\Frog.Domain.Integration.csproj">
+      <Project>{34D94FDA-6971-43A3-ABDE-B97CEA82CF26}</Project>
+      <Name>Frog.Domain.Integration</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\app\Frog.Domain\Frog.Domain.csproj">
+      <Project>{8A446F8C-6B38-4153-A996-CC162DACF795}</Project>
+      <Name>Frog.Domain</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\app\Frog.Support\Frog.Support.csproj">
       <Project>{893935D3-935A-418F-A656-5D6A203D87ED}</Project>
       <Name>Frog.Support</Name>
