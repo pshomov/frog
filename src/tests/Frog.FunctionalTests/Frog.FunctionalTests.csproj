@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -41,9 +41,6 @@
     <Reference Include="nunit.framework, Version=2.5.6.10205, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77">
       <HintPath>..\..\..\libs\NUnit\nunit.framework.dll</HintPath>
     </Reference>
-    <Reference Include="TechTalk.SpecFlow, Version=1.5.0.0, Culture=neutral, PublicKeyToken=0778194805d6db41">
-      <HintPath>..\..\..\libs\SpecFlow\TechTalk.SpecFlow.dll</HintPath>
-    </Reference>
     <Reference Include="WebDriver.Chrome, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\..\..\libs\WebDriver\WebDriver.Chrome.dll</HintPath>
     </Reference>
@@ -64,6 +61,10 @@
     </Reference>
     <Reference Include="Webdriver.Support, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\..\..\libs\WebDriver\Webdriver.Support.dll</HintPath>
+    </Reference>
+    <Reference Include="TechTalk.SpecFlow, Version=1.7.0.0, Culture=neutral, PublicKeyToken=0778194805d6db41">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\libs\SpecFlow\TechTalk.SpecFlow.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
