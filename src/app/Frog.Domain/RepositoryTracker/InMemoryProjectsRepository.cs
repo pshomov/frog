@@ -30,5 +30,15 @@ namespace Frog.Domain.RepositoryTracker
             RepositoryDocument value;
             trackedRepos.TryRemove(repoUrl, out value);
         }
+
+        public void ProjectCheckInProgress(string repoUrl)
+        {
+            trackedRepos[repoUrl].CheckForUpdateRequested = true;
+        }
+
+        public void ProjectCheckComplete(string repoUrl)
+        {
+            trackedRepos[repoUrl].CheckForUpdateRequested = false;
+        }
     }
 }

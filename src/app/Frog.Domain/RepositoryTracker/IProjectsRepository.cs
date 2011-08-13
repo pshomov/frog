@@ -15,5 +15,7 @@ namespace Frog.Domain.RepositoryTracker
         IEnumerable<RepositoryDocument> AllProjects { get; }
         void UpdateLastKnownRevision(string repoUrl, string revision);
         void RemoveProject(string repoUrl);
+        void ProjectCheckInProgress(string repoUrl);
+        void ProjectCheckComplete(string repoUrl);
     }
 }

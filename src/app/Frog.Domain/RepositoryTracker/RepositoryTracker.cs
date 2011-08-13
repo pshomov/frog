@@ -47,7 +47,7 @@ namespace Frog.Domain.RepositoryTracker
             projectsRepository.AllProjects.Where(document => !document.CheckForUpdateRequested). ToList().ForEach(
                  document =>
                      {
-                         document.CheckForUpdateRequested = true;
+                         projectsRepository.ProjectCheckInProgress(document.projecturl);
                          bus.Send(new CheckForUpdates(repoUrl: document.projecturl, revision: document.revision));
                      });
         }
@@ -71,8 +71,7 @@ namespace Frog.Domain.RepositoryTracker
 
         public void Handle(CheckForUpdateFailed message)
         {
-            projectsRepository.AllProjects.Single(document => document.projecturl == message.repoUrl).
-                CheckForUpdateRequested = false;
+            projectsRepository.ProjectCheckComplete(message.repoUrl);
         }
     }
 }

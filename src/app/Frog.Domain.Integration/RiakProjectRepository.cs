@@ -75,6 +75,26 @@ namespace Frog.Domain.Integration
             riakConnection.Detach(new RiakDetachRequest() { Bucket = bucket, Key = KeyGenerator(repoUrl) });
         }
 
+        public void ProjectCheckInProgress(string repoUrl)
+        {
+            RiakConnectionManager connectionManager = GetConnectionManager();
+            var riakConnection = new RiakContentRepository(connectionManager);
+            var riakResponse = riakConnection.Find(new RiakFindRequest { Bucket = bucket, Keys = new[] { KeyGenerator(repoUrl) }, ReadValue = 1 });
+            var doc = jsonBridge.Deserialize<RepositoryDocument>(riakResponse.Result[0].Value);
+            doc.CheckForUpdateRequested = true;
+            riakConnection.Persist(new RiakPersistRequest { Bucket = bucket, Key = KeyGenerator(repoUrl), Content = new RiakContent { Value = jsonBridge.Serialize(doc).GetBytes() } });
+        }
+
+        public void ProjectCheckComplete(string repoUrl)
+        {
+            RiakConnectionManager connectionManager = GetConnectionManager();
+            var riakConnection = new RiakContentRepository(connectionManager);
+            var riakResponse = riakConnection.Find(new RiakFindRequest { Bucket = bucket, Keys = new[] { KeyGenerator(repoUrl) }, ReadValue = 1 });
+            var doc = jsonBridge.Deserialize<RepositoryDocument>(riakResponse.Result[0].Value);
+            doc.CheckForUpdateRequested = false;
+            riakConnection.Persist(new RiakPersistRequest { Bucket = bucket, Key = KeyGenerator(repoUrl), Content = new RiakContent { Value = jsonBridge.Serialize(doc).GetBytes() } });
+        }
+
         private RiakConnectionManager GetConnectionManager()
         {
             var connectionManager = RiakConnectionManager.FromConfiguration;
