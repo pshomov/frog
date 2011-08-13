@@ -10,7 +10,7 @@ def red(text); colorize(text, "31"); end
 def green(text); colorize(text, "32"); end
 
 remove_dir "../output", :force => true
-build_mode="Debug"
+build_mode="Release"
 system "xbuild ../Frog.Net.sln /target:rebuild /property:Configuration=#{build_mode}"
 status = $?.exitstatus
 if status != 0
