@@ -26,11 +26,11 @@ namespace Frog.UI.Web.Controllers.TestSupport
             return new ProjectController().GetTaskTerminalOutput(PathUrlConversion.Url2Path(projectUrl), taskIndex);
         }
 
-        public ActionResult AllTerminalOutput(string projectUrl, int lastOutputChunkIndex)
+        public ActionResult AllTerminalOutput(string projectUrl, int lastOutputChunkIndex, int taskIndex)
         {
             if (Os.IsWindows)
                 projectUrl = HttpUtility.UrlDecode(projectUrl);
-            return ProjectController.GetAllTaskTerminalOutput(PathUrlConversion.Url2Path(projectUrl), lastOutputChunkIndex);            
+            return ProjectController.GetAllTaskTerminalOutput(PathUrlConversion.Url2Path(projectUrl), lastOutputChunkIndex, taskIndex);            
         }
     }
 }

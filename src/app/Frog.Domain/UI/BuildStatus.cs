@@ -43,9 +43,9 @@ namespace Frog.Domain.UI
         readonly TerminalOutput terminalOutput;
         TaskInfo.TaskStatus status;
 
-        public string TerminalOutput
+        public TerminalOutput.Info GetTerminalOutput(int sinceIndex = 0)
         {
-            get { return terminalOutput.Combined.Content; }
+            return terminalOutput.GetContent(sinceIndex);
         }
 
         public void AddTerminalOutput(int sequence, string content)
@@ -92,22 +92,20 @@ namespace Frog.Domain.UI
             }
         }
 
-        public Info Combined
+        public Info GetContent(int sinceIndex)
         {
-            get
+            lock (contentPieces)
             {
-                lock (contentPieces)
+                var buffer = new StringBuilder();
+                var lastChunkIndex = sinceIndex;
+                for (int index = sinceIndex; index < contentPieces.Count; index++)
                 {
-                    var buffer = new StringBuilder();
-                    var lastChunkIndex = -1;
-                    foreach (var contentPiece in contentPieces)
-                    {
-                        if (contentPiece == null) break;
-                        lastChunkIndex++;
-                        buffer.Append(contentPiece);
-                    }
-                    return new Info {Content = buffer.ToString(), LastChunkIndex = lastChunkIndex};
+                    var contentPiece = contentPieces[index];
+                    if (contentPiece == null) break;
+                    lastChunkIndex = index+1;
+                    buffer.Append(contentPiece);
                 }
+                return new Info {Content = buffer.ToString(), LastChunkIndex = lastChunkIndex};
             }
         }
     }

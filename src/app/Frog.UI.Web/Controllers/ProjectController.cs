@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Text;
 using System.Web.Mvc;
 
 namespace Frog.UI.Web.Controllers
@@ -22,21 +23,35 @@ namespace Frog.UI.Web.Controllers
             return GetTaskTerminalOutput(GetGithubProjectUrl(user, project), taskIndex);
         }
 
-        public ActionResult AllTerminalOutput(string user, string project, int lastOuputChunkIndex)
+        public ActionResult AllTerminalOutput(string user, string project, int lastOuputChunkIndex, int taskIndex)
         {
-            return GetAllTaskTerminalOutput(GetGithubProjectUrl(user, project), lastOuputChunkIndex);
+            return GetAllTaskTerminalOutput(GetGithubProjectUrl(user, project), lastOuputChunkIndex, taskIndex);
         }
 
-        internal static ActionResult GetAllTaskTerminalOutput(string projectUrl, int lastKnownIndex)
+        internal static ActionResult GetAllTaskTerminalOutput(string projectUrl, int lastChunkIndex, int taskIndex)
         {
             if (ServiceLocator.Report.ContainsKey(projectUrl))
+            {
+                var tasks = ServiceLocator.Report[projectUrl].Tasks;
+                var activeTask = -1;
+                var content = new StringBuilder();
+                for (var i = taskIndex; i < tasks.Count; i++)
+                {
+                    var sinceIndex = i == taskIndex ? lastChunkIndex : 0;
+                    var terminalOutput = tasks[i].GetTerminalOutput(sinceIndex);
+                    if (terminalOutput.LastChunkIndex <= sinceIndex) continue;
+                    activeTask = i;
+                    lastChunkIndex = terminalOutput.LastChunkIndex;
+                    content.Append(terminalOutput.Content);
+                }
                 return
                     MonoBugs.Json(
                         new
-                        {
-                            terminalOutput =
-                        ServiceLocator.Report[projectUrl].Tasks.Select(state => state.TerminalOutput).Aggregate((s, s1) => s+s1)
-                        });
+                            {
+                                terminalOutput = content.ToString(), activeTask, lastChunkIndex
+                            });
+                
+            }
             else
             {
                 return new HttpNotFoundResult("Project does not Runz ;(");
@@ -67,7 +82,7 @@ namespace Frog.UI.Web.Controllers
                         new
                             {
                                 terminalOutput =
-                            ServiceLocator.Report[projectUrl].Tasks[taskIndex].TerminalOutput
+                            ServiceLocator.Report[projectUrl].Tasks[taskIndex].GetTerminalOutput()
                             });
             else
             {
