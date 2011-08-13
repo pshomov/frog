@@ -45,7 +45,7 @@ namespace Frog.Domain.UI
 
         public string TerminalOutput
         {
-            get { return terminalOutput.Combined; }
+            get { return terminalOutput.Combined.Content; }
         }
 
         public void AddTerminalOutput(int sequence, string content)
@@ -72,6 +72,11 @@ namespace Frog.Domain.UI
     }
     public class TerminalOutput
     {
+        public struct Info
+        {
+            public string Content;
+            public int LastChunkIndex;
+        }
         readonly List<string> contentPieces = new List<string>();
         public void Add(int sequnceIndex, string content)
         {
@@ -87,19 +92,21 @@ namespace Frog.Domain.UI
             }
         }
 
-        public string Combined
+        public Info Combined
         {
             get
             {
                 lock (contentPieces)
                 {
                     var buffer = new StringBuilder();
+                    var lastChunkIndex = -1;
                     foreach (var contentPiece in contentPieces)
                     {
                         if (contentPiece == null) break;
+                        lastChunkIndex++;
                         buffer.Append(contentPiece);
                     }
-                    return buffer.ToString();
+                    return new Info {Content = buffer.ToString(), LastChunkIndex = lastChunkIndex};
                 }
             }
         }

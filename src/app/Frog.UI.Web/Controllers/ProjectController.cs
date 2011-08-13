@@ -22,12 +22,12 @@ namespace Frog.UI.Web.Controllers
             return GetTaskTerminalOutput(GetGithubProjectUrl(user, project), taskIndex);
         }
 
-        public ActionResult AllTerminalOutput(string user, string project)
+        public ActionResult AllTerminalOutput(string user, string project, int lastOuputChunkIndex)
         {
-            return GetAllTaskTerminalOutput(GetGithubProjectUrl(user, project));
+            return GetAllTaskTerminalOutput(GetGithubProjectUrl(user, project), lastOuputChunkIndex);
         }
 
-        internal static ActionResult GetAllTaskTerminalOutput(string projectUrl)
+        internal static ActionResult GetAllTaskTerminalOutput(string projectUrl, int lastKnownIndex)
         {
             if (ServiceLocator.Report.ContainsKey(projectUrl))
                 return
