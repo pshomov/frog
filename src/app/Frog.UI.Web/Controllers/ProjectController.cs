@@ -33,7 +33,7 @@ namespace Frog.UI.Web.Controllers
             if (ServiceLocator.Report.ContainsKey(projectUrl))
             {
                 var tasks = ServiceLocator.Report[projectUrl].Tasks;
-                var activeTask = -1;
+                var activeTask = taskIndex;
                 var content = new StringBuilder();
                 for (var i = taskIndex; i < tasks.Count; i++)
                 {

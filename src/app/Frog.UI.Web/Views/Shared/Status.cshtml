@@ -10,7 +10,7 @@
     <script type="text/javascript" src="../../../../Scripts/raphael-min.js"></script>
     <script type="text/javascript" language="javascript">
         var paper;
-        var lastOuputChunkIndex = 0;
+        var lastOutputChunkIndex = 0;
         var taskIndex = 0;
         $(
             function () {
@@ -62,13 +62,14 @@
         };
 
         function update_terminal_output() {
+        	console.log("requesting terminal output");
             $.ajax({
                 url: "task",
-                data: { "lastOutputChunkIndex": lastOutputChunkIndex, "taskIndex": taskIndex },
+                data: { lastOutputChunkIndex: lastOutputChunkIndex, taskIndex: taskIndex },
                 success: function (msg) {
                     $("#terminal").append(msg.terminalOutput);
-                    lastOuputChunkIndex = msg.lastOutputChunkIndex;
-                    taskIndex = msg.taskIndex;
+                    lastOutputChunkIndex = msg.lastChunkIndex;
+                    taskIndex = msg.activeTask;
                 },
                 error: function () {
                     console.log("Error retriving the terminal output");
