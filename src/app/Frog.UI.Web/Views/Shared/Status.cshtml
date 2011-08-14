@@ -10,6 +10,8 @@
     <script type="text/javascript" src="../../../../Scripts/raphael-min.js"></script>
     <script type="text/javascript" language="javascript">
         var paper;
+        var lastOuputChunkIndex = 0;
+        var taskIndex = 0;
         $(
             function () {
                 paper = Raphael("tasks", 640, 400);
@@ -62,8 +64,11 @@
         function update_terminal_output() {
             $.ajax({
                 url: "task",
+                data: { "lastOutputChunkIndex": lastOutputChunkIndex, "taskIndex": taskIndex },
                 success: function (msg) {
-                    $("#terminal").text(msg.terminalOutput);
+                    $("#terminal").append(msg.terminalOutput);
+                    lastOuputChunkIndex = msg.lastOutputChunkIndex;
+                    taskIndex = msg.taskIndex;
                 },
                 error: function () {
                     console.log("Error retriving the terminal output");
