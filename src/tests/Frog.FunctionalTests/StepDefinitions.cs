@@ -133,14 +133,14 @@ namespace Frog.FunctionalTests
         public void ThenTheTerminalOutputHasTextFromTheBuild(string text)
         {
             AssertionHelpers.WithRetries(
-                () => Assert.That(World.browser.FindElement(By.CssSelector("#terminal")).Text, Is.EqualTo(text.Replace("\\n", " "))));
+                () => Assert.That(World.browser.FindElement(By.CssSelector("#terminal")).Text, Is.EqualTo(text.Replace("\\n", Environment.NewLine))));
         }
 
         [Then(@"The terminal output contains text ""(.*)""")]
         public void ThenTheTerminalOutputContainsTextFromTheBuild(string text)
         {
             AssertionHelpers.WithRetries(
-                () => Assert.That(World.browser.FindElement(By.CssSelector("#terminal")).Text, Is.StringContaining(text.Replace("\\n", " "))));
+                () => Assert.That(World.browser.FindElement(By.CssSelector("#terminal")).Text, Is.StringContaining(text.Replace("\\n", Environment.NewLine))));
         }
 
         Uri U(string relativeUrl)

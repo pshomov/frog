@@ -8,6 +8,7 @@
     <title>Check status</title>
     <script type="text/javascript" src="../../../../Scripts/jquery-1.5.1.js"></script>
     <script type="text/javascript" src="../../../../Scripts/raphael-min.js"></script>
+    <link media="screen" rel="stylesheet" type="text/css" href="../../../../Content/Site.css" />
     <script type="text/javascript" language="javascript">
         var paper;
         var lastOutputChunkIndex = 0;
@@ -67,7 +68,7 @@
                 url: "task",
                 data: { lastOutputChunkIndex: lastOutputChunkIndex, taskIndex: taskIndex },
                 success: function (msg) {
-                    $("#terminal").append(msg.terminalOutput);
+                    $("#terminal").append("<p>"+msg.terminalOutput.replace(/\r\n/g,'</p><p>')+"</p>");
                     lastOutputChunkIndex = msg.lastChunkIndex;
                     taskIndex = msg.activeTask;
                 },
@@ -98,6 +99,6 @@
     <body>
         <div id="status"></div>
         <div id="tasks"></div>
-        <textarea id="terminal" style="width:100%;height:30%;margin-bottom:0;" rows="20" readonly="readonly"></textarea>
+        <div id="terminal" style="width:100%;height:30%;margin-bottom:0;"></div>
     </body>
 </html>
