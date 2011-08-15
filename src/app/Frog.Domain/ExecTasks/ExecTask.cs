@@ -65,10 +65,10 @@ namespace Frog.Domain.ExecTasks
         public ExecTaskResult Perform(SourceDrop sourceDrop)
         {
             process = processWrapperFactory(app, arguments, sourceDrop.SourceDropLocation);
-            process.OnErrorOutput += s => { if (s != null) OnTerminalOutputUpdate("E>" + s + Environment.NewLine); };
-            process.OnStdOutput += s => { if (s != null) OnTerminalOutputUpdate("S>" + s + Environment.NewLine); };
+            process.OnErrorOutput += s => { if (s != null) OnTerminalOutputUpdate("E>" + s + "\r\n"); };
+            process.OnStdOutput += s => { if (s != null) OnTerminalOutputUpdate("S>" + s + "\r\n"); };
             OnTerminalOutputUpdate(string.Format("Runz>> Launching {0} with arguments {1} with currentFolder {2}",
-                                                 app, arguments, sourceDrop.SourceDropLocation) + Environment.NewLine);
+                                                 app, arguments, sourceDrop.SourceDropLocation) + "\r\n");
             try
             {
                 process.Execute();
@@ -81,7 +81,7 @@ namespace Frog.Domain.ExecTasks
                 process.Kill();
                 process.MakeSureTerminalOutputIsFlushed();
                 OnTerminalOutputUpdate(string.Format("Runz>> It looks like task is hanging without doing much. Task was killed. Exit code: {0}",
-                                                        process.ExitCode) + Environment.NewLine);
+                                                        process.ExitCode) + "\r\n");
                 return new ExecTaskResult(ExecutionStatus.Failure, process.ExitCode);
             }
             catch(TaskQuotaConsumedException)
@@ -89,7 +89,7 @@ namespace Frog.Domain.ExecTasks
                 process.Kill();
                 process.MakeSureTerminalOutputIsFlushed();
                 OnTerminalOutputUpdate(string.Format("Runz>> Task has consumed all its quota. Task was killed. Exit code: {0}",
-                                                     process.ExitCode) + Environment.NewLine);
+                                                     process.ExitCode) + "\r\n");
                 return new ExecTaskResult(ExecutionStatus.Failure, process.ExitCode);
             }
             catch (ApplicationNotFoundException e)
@@ -99,7 +99,7 @@ namespace Frog.Domain.ExecTasks
             }
 
             OnTerminalOutputUpdate(string.Format("Runz>> Task has exited with exitcode {0}",
-                                                    process.ExitCode) + Environment.NewLine);
+                                                    process.ExitCode) + "\r\n");
             return new ExecTaskResult(ExecutionStatus.Success, process.ExitCode);
         }
 

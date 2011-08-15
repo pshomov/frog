@@ -26,7 +26,7 @@ namespace Frog.Domain.ExecTasks
             var allLines = File.ReadAllLines(Path.Combine(sourceDrop.SourceDropLocation, path));
             foreach (var line in allLines)
             {
-                OnTerminalOutputUpdate("S>" + line + Environment.NewLine);
+                OnTerminalOutputUpdate("S>" + line + "\r\n");
             }
             var execStatus = ExecutionStatus.Success;
             if (allLines.Length > 0)
