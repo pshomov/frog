@@ -23,9 +23,9 @@ namespace Frog.UI.Web.Controllers
             return GetTaskTerminalOutput(GetGithubProjectUrl(user, project), taskIndex);
         }
 
-        public ActionResult AllTerminalOutput(string user, string project, int lastOuputChunkIndex, int taskIndex)
+        public ActionResult AllTerminalOutput(string user, string project, int lastOutputChunkIndex, int taskIndex)
         {
-            return GetAllTaskTerminalOutput(GetGithubProjectUrl(user, project), lastOuputChunkIndex, taskIndex);
+            return GetAllTaskTerminalOutput(GetGithubProjectUrl(user, project), lastOutputChunkIndex, taskIndex);
         }
 
         internal static ActionResult GetAllTaskTerminalOutput(string projectUrl, int lastChunkIndex, int taskIndex)
