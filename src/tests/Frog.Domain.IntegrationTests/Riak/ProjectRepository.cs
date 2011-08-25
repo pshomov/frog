@@ -3,24 +3,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Frog.Domain.Integration;
+using Frog.Domain.RepositoryTracker;
 using NUnit.Framework;
 
 namespace Frog.Domain.IntegrationTests.Riak
 {
     [TestFixture]
-    public class RiakStoringAndRetrievingById
+    public abstract class ProjectRepository
     {
-        private const string BUCKET = "projects_test1";
-        private const string RIAK_SERVER = "10.0.2.2";
-        private const int RIAK_PORT = 8087;
+        protected const string BUCKET = "projects_test1";
+        protected const string RIAK_SERVER = "10.0.2.2";
+        protected const int RIAK_PORT = 8087;
 
-        private RiakProjectRepository riakProject;
+        private IProjectsRepository riakProject;
 
         [SetUp]
         public void Setup()
         {
-            riakProject = new RiakProjectRepository(RIAK_SERVER, RIAK_PORT, BUCKET);
+            riakProject = GetProjectRepository();
         }
+
+        protected abstract Integration.RiakProjectRepository GetProjectRepository();
 
         [Test]
         public void should_find_document_by_id()
@@ -39,5 +42,13 @@ namespace Frog.Domain.IntegrationTests.Riak
             Assert.That(riakProject.AllProjects.ToArray()[0].revision, Is.EqualTo("123"));
         }
 
+    }
+
+    class RiakProjectRepository : ProjectRepository
+    {
+        protected override Integration.RiakProjectRepository GetProjectRepository()
+        {
+            return new Integration.RiakProjectRepository(RIAK_SERVER, RIAK_PORT, BUCKET);
+        }
     }
 }
