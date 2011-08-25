@@ -1,20 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Frog.Domain.Integration;
+﻿using System.Linq;
 using Frog.Domain.RepositoryTracker;
 using NUnit.Framework;
 
-namespace Frog.Domain.IntegrationTests.Riak
+namespace Frog.Domain.IntegrationTests.ProjectRepository
 {
     [TestFixture]
     public abstract class ProjectRepository
     {
-        protected const string BUCKET = "projects_test1";
-        protected const string RIAK_SERVER = "10.0.2.2";
-        protected const int RIAK_PORT = 8087;
-
         private IProjectsRepository riakProject;
 
         [SetUp]
@@ -23,7 +15,7 @@ namespace Frog.Domain.IntegrationTests.Riak
             riakProject = GetProjectRepository();
         }
 
-        protected abstract Integration.RiakProjectRepository GetProjectRepository();
+        protected abstract IProjectsRepository GetProjectRepository();
 
         [Test]
         public void should_find_document_by_id()
@@ -42,13 +34,13 @@ namespace Frog.Domain.IntegrationTests.Riak
             Assert.That(riakProject.AllProjects.ToArray()[0].revision, Is.EqualTo("123"));
         }
 
-    }
-
-    class RiakProjectRepository : ProjectRepository
-    {
-        protected override Integration.RiakProjectRepository GetProjectRepository()
+        [Test]
+        public void should_not_have_project_listed_after_its_deleted()
         {
-            return new Integration.RiakProjectRepository(RIAK_SERVER, RIAK_PORT, BUCKET);
+            riakProject.TrackRepository("http://12123123");
+            riakProject.RemoveProject("http://12123123");
+            Assert.That(riakProject.AllProjects.Where(document => document.projecturl == "http://12123123").Count(), Is.EqualTo(0));
         }
+
     }
 }
