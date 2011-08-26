@@ -53,5 +53,14 @@ namespace Frog.Domain.IntegrationTests.ProjectRepository
             Assert.That(riakProject.AllProjects.Single(document => document.projecturl == projectId).CheckForUpdateRequested, Is.False);
         }
 
+        [Test]
+        public void should_mark_project_as_CHECK_COMPLETE_when_check_is_being_marked_as_complete()
+        {
+            riakProject.TrackRepository(projectId);
+            riakProject.ProjectCheckInProgress(projectId);
+            riakProject.ProjectCheckComplete(projectId);
+            Assert.That(riakProject.AllProjects.Single(document => document.projecturl == projectId).CheckForUpdateRequested, Is.False);
+        }
+
     }
 }
