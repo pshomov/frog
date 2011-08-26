@@ -65,6 +65,7 @@ namespace Frog.Domain.Integration
             var riakResponse = riakConnection.Find(new RiakFindRequest { Bucket = bucket, Keys = new []{KeyGenerator(repoUrl)}, ReadValue = 1 });
             var doc = jsonBridge.Deserialize<RepositoryDocument>(riakResponse.Result[0].Value);
             doc.revision = revision;
+            doc.CheckForUpdateRequested = false;
             riakConnection.Persist(new RiakPersistRequest {Bucket = bucket, Key = KeyGenerator(repoUrl), Content = new RiakContent {Value = jsonBridge.Serialize(doc).GetBytes()}});
         }
 

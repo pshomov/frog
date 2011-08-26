@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Frog.Domain.RepositoryTracker;
 using NUnit.Framework;
 
@@ -8,11 +9,13 @@ namespace Frog.Domain.IntegrationTests.ProjectRepository
     public abstract class ProjectRepository
     {
         private IProjectsRepository riakProject;
+        private string projectId;
 
         [SetUp]
         public void Setup()
         {
             riakProject = GetProjectRepository();
+            projectId = Guid.NewGuid().ToString();
         }
 
         protected abstract IProjectsRepository GetProjectRepository();
@@ -20,26 +23,34 @@ namespace Frog.Domain.IntegrationTests.ProjectRepository
         [Test]
         public void should_find_document_by_id()
         {
-            riakProject.TrackRepository("http://fle");
-            Assert.That(riakProject.AllProjects.Count(), Is.EqualTo(1));
-            Assert.That(riakProject.AllProjects.ToArray()[0].projecturl, Is.EqualTo("http://fle"));
-            Assert.That(riakProject.AllProjects.ToArray()[0].revision, Is.Empty);
+            riakProject.TrackRepository(projectId);
+            Assert.That(riakProject.AllProjects.Where(document => document.projecturl == projectId).Count(), Is.EqualTo(1));
+            Assert.That(riakProject.AllProjects.Single(document => document.projecturl == projectId).revision, Is.Empty);
         }
 
         [Test]
         public void should_update_repo_revision_when_new_one_specified()
         {
-            riakProject.TrackRepository("http://fle");
-            riakProject.UpdateLastKnownRevision("http://fle", "123");
-            Assert.That(riakProject.AllProjects.ToArray()[0].revision, Is.EqualTo("123"));
+            riakProject.TrackRepository(projectId);
+            riakProject.UpdateLastKnownRevision(projectId, "123");
+            Assert.That(riakProject.AllProjects.Single(document => document.projecturl == projectId).revision, Is.EqualTo("123"));
         }
 
         [Test]
         public void should_not_have_project_listed_after_its_deleted()
         {
-            riakProject.TrackRepository("http://12123123");
-            riakProject.RemoveProject("http://12123123");
-            Assert.That(riakProject.AllProjects.Where(document => document.projecturl == "http://12123123").Count(), Is.EqualTo(0));
+            riakProject.TrackRepository(projectId);
+            riakProject.RemoveProject(projectId);
+            Assert.That(riakProject.AllProjects.Where(document => document.projecturl == projectId).Count(), Is.EqualTo(0));
+        }
+
+        [Test]
+        public void should_mark_project_as_CHECK_COMPLETE_when_updateing_revision_number()
+        {
+            riakProject.TrackRepository(projectId);
+            riakProject.ProjectCheckInProgress(projectId);
+            riakProject.UpdateLastKnownRevision(projectId, "as");
+            Assert.That(riakProject.AllProjects.Single(document => document.projecturl == projectId).CheckForUpdateRequested, Is.False);
         }
 
     }
