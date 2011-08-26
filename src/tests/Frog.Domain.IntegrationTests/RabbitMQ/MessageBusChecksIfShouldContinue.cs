@@ -58,7 +58,14 @@ namespace Frog.Domain.IntegrationTests
         private void PurgeMessages(string queue)
         {
             IBusManagement busManagement = bus;
-            busManagement.PurgeQueue(queue);
+            try
+            {
+                busManagement.PurgeQueue(queue);
+            }
+            catch
+            {
+                // if it fails, it is not a big deal. Probably means queue did not exist
+            }
         }
     }
 }
