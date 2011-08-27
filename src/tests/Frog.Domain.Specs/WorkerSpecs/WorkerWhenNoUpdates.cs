@@ -4,14 +4,18 @@ using NUnit.Framework;
 namespace Frog.Domain.Specs.WorkerSpecs
 {
     [TestFixture]
-    public class WorkerDoesNothingWhenNoUpdates : WorkerSpecsBase
+    public class WorkerWhenNoUpdates : WorkerSpecsBase
     {
+        private string revisions;
+
         protected override void Given()
         {
             base.Given();
             SourceRepoDriver.GetLatestRevision().Returns("2344");
             WorkingAreaGovernor.AllocateWorkingArea().Returns("dugh");
             Worker = new Worker(Pipeline, WorkingAreaGovernor);
+            Worker.OnUpdateFound += s => { revisions = s; };
+            revisions = "";
         }
 
         protected override void When()
@@ -42,5 +46,12 @@ namespace Frog.Domain.Specs.WorkerSpecs
         {
             WorkingAreaGovernor.DidNotReceive().DeallocateWorkingArea(Arg.Any<string>());
         }
+
+        [Test]
+        public void should_send_retrieved_revision()
+        {
+            Assert.That(revisions, Is.EqualTo("2344"));
+        }
+
     }
 }

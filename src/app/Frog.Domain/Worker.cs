@@ -22,10 +22,10 @@ namespace Frog.Domain
 
         public virtual void CheckForUpdatesAndKickOffPipeline(SourceRepoDriver repositoryDriver, string revision)
         {
-            string latestRevision;
-            if ((latestRevision = repositoryDriver.GetLatestRevision()) != revision)
+            string latestRevision = repositoryDriver.GetLatestRevision();
+            OnUpdateFound(latestRevision);
+            if (latestRevision != revision)
             {
-                OnUpdateFound(latestRevision);
                 var allocatedWorkingArea = workingAreaGoverner.AllocateWorkingArea();
                 repositoryDriver.GetSourceRevision(latestRevision, allocatedWorkingArea);
                 ProcessPipeline(allocatedWorkingArea);
