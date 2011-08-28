@@ -1,8 +1,10 @@
+using System;
 using System.Threading;
 using Frog.Domain;
 using Frog.Domain.RepositoryTracker;
 using Frog.Specs.Support;
 using Frog.System.Specs.Underware;
+using NSubstitute;
 using NUnit.Framework;
 using SimpleCQRS;
 using xray;
@@ -29,26 +31,30 @@ namespace Frog.System.Specs
         }
     }
 
-    internal class SystemWithFaultingAgent : TestSystem
-    {
-        protected override void SetupAgent()
-        {
-            new AgentFailsToCheckForUpdate(TheBus).JoinTheParty();
-        }
-    }
+//    internal class SystemWithFaultingAgent : TestSystem
+//    {
+//        protected override void SetupAgent()
+//        {
+//            new AgentFailsToCheckForUpdate(TheBus).JoinTheParty();
+//        }
+//    }
 
     [TestFixture]
     public class CheckkingForUpdatesTwiceInARowWithErrorResponseInBetween : BDD
     {
-        SystemDriver<SystemWithFaultingAgent> system;
-        RepositoryDriver repo;
+        SystemDriver system;
         private PollingProber prober;
 
         protected override void Given()
         {
-            repo = RepositoryDriver.GetNewRepository();
-            system = SystemDriver<SystemWithFaultingAgent>.GetCleanSystem();
-            system.RegisterNewProject(repo.Url);
+            var sourceRepoDriver = Substitute.For<SourceRepoDriver>();
+            sourceRepoDriver.GetLatestRevision().Returns(info =>
+                                                             {
+                                                                 throw new NullReferenceException("fake one");
+                                                             });
+            var workingAreaGoverner = Substitute.For<WorkingAreaGoverner>();
+            system = SystemDriver.GetCleanSystem(() => new TestSystem(workingAreaGoverner, url => sourceRepoDriver));
+            system.RegisterNewProject("http://123");
             system.CheckProjectsForUpdates();
             prober = new PollingProber(5000, 100);
             Assert.True(prober.check(Take.Snapshot(() => system.GetEventsSnapshot())

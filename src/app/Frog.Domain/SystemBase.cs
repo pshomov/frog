@@ -14,14 +14,14 @@ namespace Frog.Domain
         Agent agent;
         Worker worker;
 
-        protected SystemBase()
+        protected SystemBase(WorkingAreaGoverner governer, SourceRepoDriverFactory sourceRepoDriverFactory)
         {
             TheBus = SetupBus();
 
-            areaGoverner = SetupWorkingAreaGovernor();
+            areaGoverner = governer;
             SetupWorker(GetPipeline());
             SetupRepositoryTracker();
-            SetupAgent();
+            SetupAgent(sourceRepoDriverFactory);
 
             SetupView();
         }
@@ -36,9 +36,9 @@ namespace Frog.Domain
             worker = new Worker(pipeline, areaGoverner);
         }
 
-        protected virtual void SetupAgent()
+        protected virtual void SetupAgent(SourceRepoDriverFactory sourceRepoDriverFactory)
         {
-            agent = new Agent(TheBus, worker);
+            agent = new Agent(TheBus, worker, sourceRepoDriverFactory);
             agent.JoinTheParty();
         }
 
@@ -47,8 +47,6 @@ namespace Frog.Domain
             repositoryTracker = new RepositoryTracker.RepositoryTracker(TheBus, new InMemoryProjectsRepository());
             repositoryTracker.JoinTheMessageParty();
         }
-
-        protected abstract WorkingAreaGoverner SetupWorkingAreaGovernor();
 
         protected void SetupView()
         {

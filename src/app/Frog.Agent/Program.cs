@@ -18,7 +18,7 @@ namespace Frog.Agent
         static void Main(string[] args)
         {
             var worker = new Worker(GetPipeline(), SetupWorkingAreaGovernor());
-            var agent = new Domain.Agent(SetupBus(), worker);
+            var agent = new Domain.Agent(SetupBus(), worker, url => new GitDriver(url));
             agent.JoinTheParty();
             Console.ReadLine();
         }

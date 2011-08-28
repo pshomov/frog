@@ -15,6 +15,10 @@ namespace Frog.System.Specs.Underware
 {
     public abstract class TestSystemBase : SystemBase
     {
+        protected TestSystemBase(WorkingAreaGoverner governer, SourceRepoDriverFactory sourceRepoDriverFactory) : base(governer, sourceRepoDriverFactory)
+        {
+        }
+
         public abstract List<Message> GetMessagesSoFar();
     }
 
@@ -25,18 +29,18 @@ namespace Frog.System.Specs.Underware
         protected IExecTaskGenerator execTaskGenerator;
         protected TaskSource tasksSource;
 
-        public TestSystem()
+        public TestSystem(WorkingAreaGoverner governer, SourceRepoDriverFactory sourceRepoDriverFactory) : base(governer, sourceRepoDriverFactory)
         {
             messages = new List<Message>();
             SetupAllEventLogging();
         }
 
-        protected override WorkingAreaGoverner SetupWorkingAreaGovernor()
-        {
-            workingAreaPath = Path.Combine(GitTestSupport.GetTempPath(), Path.GetRandomFileName());
-            Directory.CreateDirectory(workingAreaPath);
-            return new SubfolderWorkingAreaGoverner(workingAreaPath);
-        }
+//        protected override WorkingAreaGoverner SetupWorkingAreaGovernor()
+//        {
+//            workingAreaPath = Path.Combine(GitTestSupport.GetTempPath(), Path.GetRandomFileName());
+//            Directory.CreateDirectory(workingAreaPath);
+//            return new SubfolderWorkingAreaGoverner(workingAreaPath);
+//        }
 
         protected override PipelineOfTasks GetPipeline()
         {
@@ -103,18 +107,18 @@ namespace Frog.System.Specs.Underware
         }
     }
 
-    public class SystemDriver<TSystem> where  TSystem : TestSystemBase, new()
+    public class SystemDriver
     {
-        readonly TSystem theTestSystem;
+        readonly TestSystemBase theTestSystem;
 
-        SystemDriver()
+        SystemDriver(TestSystemBase system)
         {
-            theTestSystem = new TSystem();
+            theTestSystem = system;
         }
 
-        public static SystemDriver<TSystem> GetCleanSystem()
+        public static SystemDriver GetCleanSystem(Func<TestSystemBase> factory)
         {
-            return new SystemDriver<TSystem>();
+            return new SystemDriver(factory());
         }
 
         public List<Message> GetEventsSnapshot()

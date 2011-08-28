@@ -20,7 +20,7 @@ namespace Frog.Domain.Specs.Agent
             Worker.When(
                 worker => worker.CheckForUpdatesAndKickOffPipeline(Arg.Any<SourceRepoDriver>(), Arg.Is("3"))).Do(
                     callInfo => WorkerWithEvents.CheckForUpdatesAndKickOffPipeline(null,null));
-            Agent = new Domain.Agent(Bus, Worker);
+            Agent = new Domain.Agent(Bus, Worker, url => null);
             try
             {
                 Agent.Handle(new CheckForUpdates("asda", "2"));

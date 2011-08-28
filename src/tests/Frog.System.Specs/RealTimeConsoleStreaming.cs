@@ -15,52 +15,60 @@ using xray;
 
 namespace Frog.System.Specs
 {
-    public class SystemWithConsoleOutput : TestSystem
+    public class SystemWithConsoleOutput
     {
         public const string TerminalOutput1 = "Terminal output 1";
         public const string TerminalOutput2 = "Terminal output 2";
         public const string TerminalOutput3 = "Terminal output 3";
         public const string TerminalOutput4 = "Terminal output 4";
-
-        public SystemWithConsoleOutput()
-        {
-            tasksSource.Detect(Arg.Any<string>()).Returns(As.List<ITask>(new MSBuildTask("fle.sln")));
-            var tasks = GetExecTasks();
-            execTaskGenerator.GimeTasks(Arg.Any<ITask>()).Returns(tasks);
-        }
-
-        IList<IExecTask> GetExecTasks()
-        {
-            var task1 = Substitute.For<IExecTask>();
-            task1.Perform(Arg.Any<SourceDrop>()).Returns(new ExecTaskResult(ExecutionStatus.Success, 0));
-            task1.When(task => task.Perform(Arg.Any<SourceDrop>())).Do(
-                info =>
-                    {
-                        task1.OnTerminalOutputUpdate += Raise.Event<Action<string>>(TerminalOutput1);
-                        task1.OnTerminalOutputUpdate += Raise.Event<Action<string>>(TerminalOutput2);
-                    });
-            var task2 = Substitute.For<IExecTask>();
-            task2.Perform(Arg.Any<SourceDrop>()).Returns(new ExecTaskResult(ExecutionStatus.Success, 0));
-            task2.When(task => task.Perform(Arg.Any<SourceDrop>())).Do(
-                info =>
-                    {
-                        task2.OnTerminalOutputUpdate += Raise.Event<Action<string>>(TerminalOutput3);
-                        task2.OnTerminalOutputUpdate += Raise.Event<Action<string>>(TerminalOutput4);
-                    });
-            return As.List(task1, task2);
-        }
     }
+
+//    public class SystemWithConsoleOutput : TestSystem
+//    {
+//        public const string TerminalOutput1 = "Terminal output 1";
+//        public const string TerminalOutput2 = "Terminal output 2";
+//        public const string TerminalOutput3 = "Terminal output 3";
+//        public const string TerminalOutput4 = "Terminal output 4";
+//
+//        public SystemWithConsoleOutput()
+//        {
+//            tasksSource.Detect(Arg.Any<string>()).Returns(As.List<ITask>(new MSBuildTask("fle.sln")));
+//            var tasks = GetExecTasks();
+//            execTaskGenerator.GimeTasks(Arg.Any<ITask>()).Returns(tasks);
+//        }
+//
+//        IList<IExecTask> GetExecTasks()
+//        {
+//            var task1 = Substitute.For<IExecTask>();
+//            task1.Perform(Arg.Any<SourceDrop>()).Returns(new ExecTaskResult(ExecutionStatus.Success, 0));
+//            task1.When(task => task.Perform(Arg.Any<SourceDrop>())).Do(
+//                info =>
+//                    {
+//                        task1.OnTerminalOutputUpdate += Raise.Event<Action<string>>(TerminalOutput1);
+//                        task1.OnTerminalOutputUpdate += Raise.Event<Action<string>>(TerminalOutput2);
+//                    });
+//            var task2 = Substitute.For<IExecTask>();
+//            task2.Perform(Arg.Any<SourceDrop>()).Returns(new ExecTaskResult(ExecutionStatus.Success, 0));
+//            task2.When(task => task.Perform(Arg.Any<SourceDrop>())).Do(
+//                info =>
+//                    {
+//                        task2.OnTerminalOutputUpdate += Raise.Event<Action<string>>(TerminalOutput3);
+//                        task2.OnTerminalOutputUpdate += Raise.Event<Action<string>>(TerminalOutput4);
+//                    });
+//            return As.List(task1, task2);
+//        }
+//    }
 
     [TestFixture]
     public class RealTimeConsoleStreaming : BDD
     {
-        SystemDriver<SystemWithConsoleOutput> system;
+        SystemDriver system;
         RepositoryDriver repo;
 
         protected override void Given()
         {
             repo = RepositoryDriver.GetNewRepository();
-            system = SystemDriver<SystemWithConsoleOutput>.GetCleanSystem();
+            system = SystemDriver.GetCleanSystem(() => new TestSystem(null, url => new GitDriver(url)));
             system.RegisterNewProject(repo.Url);
         }
 

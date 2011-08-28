@@ -5,6 +5,8 @@ using Frog.Support;
 
 namespace Frog.Domain
 {
+    public delegate SourceRepoDriver SourceRepoDriverFactory(string repositoryURL);
+
     public interface SourceRepoDriver
     {
         string GetLatestRevision();

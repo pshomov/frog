@@ -69,7 +69,7 @@ namespace Frog.UI.Web
 
         void WireUpApp()
         {
-            var system = new ProductionSystem(serviceArea);
+            var system = new ProductionSystem(serviceArea, null);
             ServiceLocator.Report = system.report;
             ServiceLocator.Bus = system.Bus;
             ServiceLocator.AllMassages = system.AllMessages;
@@ -117,7 +117,7 @@ namespace Frog.UI.Web
         IBusDebug debug;
         public readonly ConcurrentQueue<Message> AllMessages = new ConcurrentQueue<Message>();
 
-        public ProductionSystem(string serviceArea)
+        public ProductionSystem(string serviceArea, WorkingAreaGoverner governer) : base(governer, url => new GitDriver(url))
         {
             var ser = new JavaScriptSerializer();
             debug = (IBusDebug)TheBus;
@@ -133,11 +133,6 @@ namespace Frog.UI.Web
             return new RabbitMQBus(Environment.GetEnvironmentVariable("RUNZ_RABBITMQ_SERVER") ?? "localhost");
         }
 
-        protected override WorkingAreaGoverner SetupWorkingAreaGovernor()
-        {
-            return null;
-        }
-
         protected override PipelineOfTasks GetPipeline()
         {
             return null;
@@ -147,7 +142,7 @@ namespace Frog.UI.Web
         {
         }
 
-        protected override void SetupAgent()
+        protected override void SetupAgent(SourceRepoDriverFactory sourceRepoDriverFactory)
         {
         }
 

@@ -10,10 +10,12 @@ namespace Frog.Domain.Specs.Agent
         protected IBus Bus;
         protected Domain.Agent Agent;
         protected Worker Worker;
+        protected SourceRepoDriver repo;
 
         protected override void Given()
         {
             Bus = Substitute.For<IBus>();
+            repo = Substitute.For<SourceRepoDriver>();
             Worker = Substitute.For<Worker>(null, null);
             Worker.When(
                 iValve => iValve.CheckForUpdatesAndKickOffPipeline(Arg.Any<SourceRepoDriver>(), Arg.Any<string>())).Do(
@@ -27,7 +29,7 @@ namespace Frog.Domain.Specs.Agent
                                 Raise.Event<Action<int, TaskInfo.TaskStatus>>(0, TaskInfo.TaskStatus.Started);
                             Worker.OnBuildEnded += Raise.Event<Action<BuildTotalEndStatus>>(BuildTotalEndStatus.Success);
                         });
-            Agent = new Domain.Agent(Bus, Worker);
+            Agent = new Domain.Agent(Bus, Worker, url => repo);
             Agent.JoinTheParty();
         }
     }

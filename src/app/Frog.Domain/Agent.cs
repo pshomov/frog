@@ -91,11 +91,13 @@ namespace Frog.Domain
     {
         readonly IBus theBus;
         readonly Worker worker;
+        private readonly SourceRepoDriverFactory repoDriverFactory;
 
-        public Agent(IBus theBus, Worker worker)
+        public Agent(IBus theBus, Worker worker, SourceRepoDriverFactory repoDriverFactory)
         {
             this.theBus = theBus;
             this.worker = worker;
+            this.repoDriverFactory = repoDriverFactory;
         }
 
         public void JoinTheParty()

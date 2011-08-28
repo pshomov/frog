@@ -1,3 +1,4 @@
+using Frog.Domain;
 using Frog.Domain.RepositoryTracker;
 using Frog.Specs.Support;
 using Frog.System.Specs.Underware;
@@ -26,24 +27,24 @@ namespace Frog.System.Specs
         }
     }
 
-    internal class SystemWithAgentWhichDoesNotAnswer : TestSystem
-    {
-        protected override void SetupAgent()
-        {
-            new AgentWhichDoesNotAnswer(TheBus).JoinTheParty();
-        }
-    }
-
+//    internal class SystemWithAgentWhichDoesNotAnswer : TestSystem
+//    {
+//        protected override void SetupAgent()
+//        {
+//            new AgentWhichDoesNotAnswer(TheBus).JoinTheParty();
+//        }
+//    }
+//
     [TestFixture]
     public class CheckkingForUpdatesTwiceInARowWithoutAnyResponseInBetween : BDD
     {
-        SystemDriver<SystemWithAgentWhichDoesNotAnswer> system;
+        SystemDriver system;
         RepositoryDriver repo;
 
         protected override void Given()
         {
             repo = RepositoryDriver.GetNewRepository();
-            system = SystemDriver<SystemWithAgentWhichDoesNotAnswer>.GetCleanSystem();
+            system = SystemDriver.GetCleanSystem(() => new TestSystem(null, url => new GitDriver(url)));
             system.RegisterNewProject(repo.Url);
             system.CheckProjectsForUpdates();
         }
