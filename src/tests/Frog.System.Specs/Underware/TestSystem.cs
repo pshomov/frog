@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using Frog.Domain;
@@ -25,9 +24,7 @@ namespace Frog.System.Specs.Underware
     public class TestSystem : TestSystemBase
     {
         readonly List<Message> messages;
-        string workingAreaPath;
-        public IExecTaskGenerator execTaskGenerator;
-        public TaskSource tasksSource;
+        public TaskSource TasksSource;
 
         public TestSystem(WorkingAreaGoverner governer, SourceRepoDriverFactory sourceRepoDriverFactory, bool runAgent = true) : base(governer, sourceRepoDriverFactory, runAgent)
         {
@@ -35,19 +32,11 @@ namespace Frog.System.Specs.Underware
             SetupAllEventLogging();
         }
 
-//        protected override WorkingAreaGoverner SetupWorkingAreaGovernor()
-//        {
-//            workingAreaPath = Path.Combine(GitTestSupport.GetTempPath(), Path.GetRandomFileName());
-//            Directory.CreateDirectory(workingAreaPath);
-//            return new SubfolderWorkingAreaGoverner(workingAreaPath);
-//        }
-
         protected override PipelineOfTasks GetPipeline()
         {
             {
-                execTaskGenerator = Substitute.For<IExecTaskGenerator>();
-                tasksSource = Substitute.For<TaskSource>();
-                return new PipelineOfTasks(tasksSource,
+                TasksSource = Substitute.For<TaskSource>();
+                return new PipelineOfTasks(TasksSource,
                                            new ExecTaskGenerator(new ExecTaskFactory()));
             }
         }
@@ -66,11 +55,6 @@ namespace Frog.System.Specs.Underware
         public void CleanupTestSystem()
         {
             messages.Clear();
-            if (Directory.Exists(workingAreaPath))
-            {
-                OSHelpers.ClearAttributes(workingAreaPath);
-                Directory.Delete(workingAreaPath, true);
-            }
         }
     }
 

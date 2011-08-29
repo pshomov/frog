@@ -5,7 +5,6 @@ using Frog.Specs.Support;
 using Frog.System.Specs.Underware;
 using NSubstitute;
 using NUnit.Framework;
-using SimpleCQRS;
 using xray;
 
 namespace Frog.System.Specs

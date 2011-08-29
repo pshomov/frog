@@ -1,11 +1,8 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Frog.Domain;
 using Frog.Domain.BuildSystems.FrogSystemTest;
-using Frog.Domain.BuildSystems.Solution;
 using Frog.Domain.CustomTasks;
-using Frog.Domain.ExecTasks;
 using Frog.Domain.UI;
 using Frog.Specs.Support;
 using Frog.Support;
@@ -16,18 +13,10 @@ using xray;
 
 namespace Frog.System.Specs
 {
-    public class SystemWithConsoleOutput
-    {
-        public const string TerminalOutput1 = "Terminal output 1";
-        public const string TerminalOutput2 = "Terminal output 2";
-        public const string TerminalOutput3 = "Terminal output 3";
-        public const string TerminalOutput4 = "Terminal output 4";
-    }
-
     [TestFixture]
     public class RealTimeConsoleStreaming : BDD
     {
-        private const string repoUrl = "http://123";
+        private const string RepoUrl = "http://123";
         private SystemDriver system;
 
         protected override void Given()
@@ -37,16 +26,16 @@ namespace Frog.System.Specs
             var workingAreaGoverner = Substitute.For<WorkingAreaGoverner>();
             workingAreaGoverner.AllocateWorkingArea().Returns("fake location");
             var testSystem = new TestSystem(workingAreaGoverner, url => sourceRepoDriver);
-            testSystem.tasksSource.Detect(Arg.Any<string>()).Returns(
+            testSystem.TasksSource.Detect(Arg.Any<string>()).Returns(
                 As.List(
                     (ITask)
-                    new FakeTaskDescription(SystemWithConsoleOutput.TerminalOutput1,
-                                            SystemWithConsoleOutput.TerminalOutput2),
+                    new FakeTaskDescription(TerminalOutput1,
+                                            TerminalOutput2),
                     (ITask)
-                    new FakeTaskDescription(SystemWithConsoleOutput.TerminalOutput3,
-                                            SystemWithConsoleOutput.TerminalOutput4)));
+                    new FakeTaskDescription(TerminalOutput3,
+                                            TerminalOutput4)));
             system = SystemDriver.GetCleanSystem(() => testSystem);
-            system.RegisterNewProject(repoUrl);
+            system.RegisterNewProject(RepoUrl);
         }
 
         protected override void When()
@@ -62,27 +51,27 @@ namespace Frog.System.Specs
                                          .Has(x => x,
                                               An.Event<TerminalUpdate>(
                                                   ev =>
-                                                  ev.RepoUrl == repoUrl && ev.TaskIndex == 0 &&
+                                                  ev.RepoUrl == RepoUrl && ev.TaskIndex == 0 &&
                                                   ev.ContentSequenceIndex == 0 &&
-                                                  ev.Content.Contains(SystemWithConsoleOutput.TerminalOutput1)))
+                                                  ev.Content.Contains(TerminalOutput1)))
                                          .Has(x => x,
                                               An.Event<TerminalUpdate>(
                                                   ev =>
-                                                  ev.RepoUrl == repoUrl && ev.TaskIndex == 0 &&
+                                                  ev.RepoUrl == RepoUrl && ev.TaskIndex == 0 &&
                                                   ev.ContentSequenceIndex == 1 &&
-                                                  ev.Content.Contains(SystemWithConsoleOutput.TerminalOutput2)))
+                                                  ev.Content.Contains(TerminalOutput2)))
                                          .Has(x => x,
                                               An.Event<TerminalUpdate>(
                                                   ev =>
-                                                  ev.RepoUrl == repoUrl && ev.TaskIndex == 1 &&
+                                                  ev.RepoUrl == RepoUrl && ev.TaskIndex == 1 &&
                                                   ev.ContentSequenceIndex == 0 &&
-                                                  ev.Content.Contains(SystemWithConsoleOutput.TerminalOutput3)))
+                                                  ev.Content.Contains(TerminalOutput3)))
                                          .Has(x => x,
                                               An.Event<TerminalUpdate>(
                                                   ev =>
-                                                  ev.RepoUrl == repoUrl && ev.TaskIndex == 1 &&
+                                                  ev.RepoUrl == RepoUrl && ev.TaskIndex == 1 &&
                                                   ev.ContentSequenceIndex == 1 &&
-                                                  ev.Content.Contains(SystemWithConsoleOutput.TerminalOutput4)))
+                                                  ev.Content.Contains(TerminalOutput4)))
                             ));
         }
 
@@ -94,20 +83,25 @@ namespace Frog.System.Specs
                                          .Has(statuses => statuses,
                                               A.Check<Dictionary<string, BuildStatus>>(
                                                   arg =>
-                                                  arg[repoUrl].Tasks.Count() > 0 &&
-                                                  arg[repoUrl].Tasks[0].GetTerminalOutput().Content.Match(
-                                                      SystemWithConsoleOutput.TerminalOutput1 + ".*\n.*" +
-                                                      SystemWithConsoleOutput.TerminalOutput2)))
+                                                  arg[RepoUrl].Tasks.Count() > 0 &&
+                                                  arg[RepoUrl].Tasks[0].GetTerminalOutput().Content.Match(
+                                                      TerminalOutput1 + ".*\n.*" +
+                                                      TerminalOutput2)))
                             ));
             Assert.True(prober.check(Take.Snapshot(() => system.GetView())
                                          .Has(statuses => statuses,
                                               A.Check<Dictionary<string, BuildStatus>>(
                                                   arg =>
-                                                  arg[repoUrl].Tasks.Count() > 1 &&
-                                                  arg[repoUrl].Tasks[1].GetTerminalOutput().Content.Match(
-                                                      SystemWithConsoleOutput.TerminalOutput3 + ".*\n.*" +
-                                                      SystemWithConsoleOutput.TerminalOutput4))))
+                                                  arg[RepoUrl].Tasks.Count() > 1 &&
+                                                  arg[RepoUrl].Tasks[1].GetTerminalOutput().Content.Match(
+                                                      TerminalOutput3 + ".*\n.*" +
+                                                      TerminalOutput4))))
                 );
         }
+
+        private const string TerminalOutput1 = "Terminal output 1";
+        private const string TerminalOutput2 = "Terminal output 2";
+        private const string TerminalOutput3 = "Terminal output 3";
+        private const string TerminalOutput4 = "Terminal output 4";
     }
 }
