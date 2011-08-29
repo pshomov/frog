@@ -118,14 +118,17 @@ namespace Frog.Domain
                                                          theBus.Publish(new TerminalUpdate(repoUrl: message.RepoUrl,
                                                                                            content: info.Content, taskIndex: info.TaskIndex,
                                                                                            contentSequenceIndex: info.ContentSequenceIndex));
+            Action onCheckForUpdateFailed = () => theBus.Publish(new CheckForUpdateFailed(){repoUrl = message.RepoUrl});
+
             worker.OnUpdateFound += onUpdateFound;
             worker.OnTerminalUpdates += onTerminalUpdates;
             worker.OnBuildStarted += onBuildStarted;
             worker.OnBuildUpdated += onBuildUpdated;
             worker.OnBuildEnded += onBuildEnded;
+            worker.OnCheckForUpdateFailed += onCheckForUpdateFailed;
             try
             {
-                worker.CheckForUpdatesAndKickOffPipeline(new GitDriver(message.RepoUrl), message.Revision);
+                worker.CheckForUpdatesAndKickOffPipeline(repoDriverFactory(message.RepoUrl), message.Revision);
             }
             finally
             {
@@ -134,6 +137,7 @@ namespace Frog.Domain
                 worker.OnBuildUpdated -= onBuildUpdated;
                 worker.OnUpdateFound -= onUpdateFound;
                 worker.OnTerminalUpdates -= onTerminalUpdates;
+                worker.OnCheckForUpdateFailed -= onCheckForUpdateFailed;
             }
         }
     }

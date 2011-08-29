@@ -30,4 +30,16 @@ namespace Frog.Domain.BuildSystems.FrogSystemTest
             this.path = path;
         }
     }
+
+    public class FakeTaskDescription : ITask
+    {
+        public readonly string[] messages;
+
+        public FakeTaskDescription(params string[] messages)
+        {
+            this.messages = messages;
+        }
+
+    }
+
 }

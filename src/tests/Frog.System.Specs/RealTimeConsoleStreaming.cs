@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Frog.Domain;
+using Frog.Domain.BuildSystems.FrogSystemTest;
 using Frog.Domain.BuildSystems.Solution;
 using Frog.Domain.CustomTasks;
 using Frog.Domain.ExecTasks;
@@ -23,53 +24,29 @@ namespace Frog.System.Specs
         public const string TerminalOutput4 = "Terminal output 4";
     }
 
-//    public class SystemWithConsoleOutput : TestSystem
-//    {
-//        public const string TerminalOutput1 = "Terminal output 1";
-//        public const string TerminalOutput2 = "Terminal output 2";
-//        public const string TerminalOutput3 = "Terminal output 3";
-//        public const string TerminalOutput4 = "Terminal output 4";
-//
-//        public SystemWithConsoleOutput()
-//        {
-//            tasksSource.Detect(Arg.Any<string>()).Returns(As.List<ITask>(new MSBuildTask("fle.sln")));
-//            var tasks = GetExecTasks();
-//            execTaskGenerator.GimeTasks(Arg.Any<ITask>()).Returns(tasks);
-//        }
-//
-//        IList<IExecTask> GetExecTasks()
-//        {
-//            var task1 = Substitute.For<IExecTask>();
-//            task1.Perform(Arg.Any<SourceDrop>()).Returns(new ExecTaskResult(ExecutionStatus.Success, 0));
-//            task1.When(task => task.Perform(Arg.Any<SourceDrop>())).Do(
-//                info =>
-//                    {
-//                        task1.OnTerminalOutputUpdate += Raise.Event<Action<string>>(TerminalOutput1);
-//                        task1.OnTerminalOutputUpdate += Raise.Event<Action<string>>(TerminalOutput2);
-//                    });
-//            var task2 = Substitute.For<IExecTask>();
-//            task2.Perform(Arg.Any<SourceDrop>()).Returns(new ExecTaskResult(ExecutionStatus.Success, 0));
-//            task2.When(task => task.Perform(Arg.Any<SourceDrop>())).Do(
-//                info =>
-//                    {
-//                        task2.OnTerminalOutputUpdate += Raise.Event<Action<string>>(TerminalOutput3);
-//                        task2.OnTerminalOutputUpdate += Raise.Event<Action<string>>(TerminalOutput4);
-//                    });
-//            return As.List(task1, task2);
-//        }
-//    }
-
     [TestFixture]
     public class RealTimeConsoleStreaming : BDD
     {
-        SystemDriver system;
-        RepositoryDriver repo;
+        private const string repoUrl = "http://123";
+        private SystemDriver system;
 
         protected override void Given()
         {
-            repo = RepositoryDriver.GetNewRepository();
-            system = SystemDriver.GetCleanSystem(() => new TestSystem(null, url => new GitDriver(url)));
-            system.RegisterNewProject(repo.Url);
+            var sourceRepoDriver = Substitute.For<SourceRepoDriver>();
+            sourceRepoDriver.GetLatestRevision().Returns("12");
+            var workingAreaGoverner = Substitute.For<WorkingAreaGoverner>();
+            workingAreaGoverner.AllocateWorkingArea().Returns("fake location");
+            var testSystem = new TestSystem(workingAreaGoverner, url => sourceRepoDriver);
+            testSystem.tasksSource.Detect(Arg.Any<string>()).Returns(
+                As.List(
+                    (ITask)
+                    new FakeTaskDescription(SystemWithConsoleOutput.TerminalOutput1,
+                                            SystemWithConsoleOutput.TerminalOutput2),
+                    (ITask)
+                    new FakeTaskDescription(SystemWithConsoleOutput.TerminalOutput3,
+                                            SystemWithConsoleOutput.TerminalOutput4)));
+            system = SystemDriver.GetCleanSystem(() => testSystem);
+            system.RegisterNewProject(repoUrl);
         }
 
         protected override void When()
@@ -85,27 +62,27 @@ namespace Frog.System.Specs
                                          .Has(x => x,
                                               An.Event<TerminalUpdate>(
                                                   ev =>
-                                                  ev.RepoUrl == repo.Url && ev.TaskIndex == 0 &&
+                                                  ev.RepoUrl == repoUrl && ev.TaskIndex == 0 &&
                                                   ev.ContentSequenceIndex == 0 &&
-                                                  ev.Content == SystemWithConsoleOutput.TerminalOutput1))
+                                                  ev.Content.Contains(SystemWithConsoleOutput.TerminalOutput1)))
                                          .Has(x => x,
                                               An.Event<TerminalUpdate>(
                                                   ev =>
-                                                  ev.RepoUrl == repo.Url && ev.TaskIndex == 0 &&
+                                                  ev.RepoUrl == repoUrl && ev.TaskIndex == 0 &&
                                                   ev.ContentSequenceIndex == 1 &&
-                                                  ev.Content == SystemWithConsoleOutput.TerminalOutput2))
+                                                  ev.Content.Contains(SystemWithConsoleOutput.TerminalOutput2)))
                                          .Has(x => x,
                                               An.Event<TerminalUpdate>(
                                                   ev =>
-                                                  ev.RepoUrl == repo.Url && ev.TaskIndex == 1 &&
+                                                  ev.RepoUrl == repoUrl && ev.TaskIndex == 1 &&
                                                   ev.ContentSequenceIndex == 0 &&
-                                                  ev.Content == SystemWithConsoleOutput.TerminalOutput3))
+                                                  ev.Content.Contains(SystemWithConsoleOutput.TerminalOutput3)))
                                          .Has(x => x,
                                               An.Event<TerminalUpdate>(
                                                   ev =>
-                                                  ev.RepoUrl == repo.Url && ev.TaskIndex == 1 &&
+                                                  ev.RepoUrl == repoUrl && ev.TaskIndex == 1 &&
                                                   ev.ContentSequenceIndex == 1 &&
-                                                  ev.Content == SystemWithConsoleOutput.TerminalOutput4))
+                                                  ev.Content.Contains(SystemWithConsoleOutput.TerminalOutput4)))
                             ));
         }
 
@@ -117,18 +94,20 @@ namespace Frog.System.Specs
                                          .Has(statuses => statuses,
                                               A.Check<Dictionary<string, BuildStatus>>(
                                                   arg =>
-                                                  arg[repo.Url].Tasks.Count() > 0 &&
-                                                  arg[repo.Url].Tasks[0].GetTerminalOutput().Content ==
-                                                  SystemWithConsoleOutput.TerminalOutput1 +
-                                                  SystemWithConsoleOutput.TerminalOutput2))
+                                                  arg[repoUrl].Tasks.Count() > 0 &&
+                                                  arg[repoUrl].Tasks[0].GetTerminalOutput().Content.Match(
+                                                      SystemWithConsoleOutput.TerminalOutput1 + ".*\n.*" +
+                                                      SystemWithConsoleOutput.TerminalOutput2)))
+                            ));
+            Assert.True(prober.check(Take.Snapshot(() => system.GetView())
                                          .Has(statuses => statuses,
                                               A.Check<Dictionary<string, BuildStatus>>(
                                                   arg =>
-                                                  arg[repo.Url].Tasks.Count() > 1 &&
-                                                  arg[repo.Url].Tasks[1].GetTerminalOutput().Content ==
-                                                  SystemWithConsoleOutput.TerminalOutput3 +
-                                                  SystemWithConsoleOutput.TerminalOutput4)))
-                            );
+                                                  arg[repoUrl].Tasks.Count() > 1 &&
+                                                  arg[repoUrl].Tasks[1].GetTerminalOutput().Content.Match(
+                                                      SystemWithConsoleOutput.TerminalOutput3 + ".*\n.*" +
+                                                      SystemWithConsoleOutput.TerminalOutput4))))
+                );
         }
     }
 }

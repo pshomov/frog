@@ -14,14 +14,14 @@ namespace Frog.Domain
         Agent agent;
         Worker worker;
 
-        protected SystemBase(WorkingAreaGoverner governer, SourceRepoDriverFactory sourceRepoDriverFactory)
+        protected SystemBase(WorkingAreaGoverner governer, SourceRepoDriverFactory sourceRepoDriverFactory, bool runAgent = true)
         {
             TheBus = SetupBus();
 
             areaGoverner = governer;
             SetupWorker(GetPipeline());
             SetupRepositoryTracker();
-            SetupAgent(sourceRepoDriverFactory);
+            if (runAgent) SetupAgent(sourceRepoDriverFactory);
 
             SetupView();
         }

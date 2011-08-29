@@ -55,6 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Agent\AgentChecksForUpdates.cs" />
+    <Compile Include="Agent\AgentFailsRevsionCheck.cs" />
     <Compile Include="Agent\AgentHandlesException.cs" />
     <Compile Include="Agent\AgentHandlesTerminalUpdates.cs" />
     <Compile Include="Agent\AgentSpecsBase.cs" />

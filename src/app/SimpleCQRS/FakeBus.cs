@@ -38,10 +38,6 @@ namespace SimpleCQRS
                 if (handlers.Count != 1) throw new InvalidOperationException("cannot send to more than one handler");
                 handlers[0](command);
             }
-            else
-            {
-                throw new InvalidOperationException("no handler registered");
-            }
         }
 
         public void Publish<T>(T @event) where T : Event

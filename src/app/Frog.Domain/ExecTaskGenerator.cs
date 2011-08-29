@@ -35,11 +35,15 @@ namespace Frog.Domain
                 var nunit = (NUnitTask) task;
                 result.Add(execTaskGenerator.CreateTask("nunit", nunit.Assembly, "unit_test"));
             }
-            if(task.GetType() == typeof(TestTaskDescription))
+            if (task.GetType() == typeof(TestTaskDescription))
             {
                 result.Add(new TestExecTask((task as TestTaskDescription).path));
             }
-            if(task.GetType() == typeof(RakeTask))
+            if (task.GetType() == typeof(FakeTaskDescription))
+            {
+                result.Add(new FakeExecTask((task as FakeTaskDescription).messages));
+            }
+            if (task.GetType() == typeof(RakeTask))
             {
                 result.Add(execTaskGenerator.CreateTask("rvm", "use 1.9.2", "prepare_for_rake"));
                 result.Add(execTaskGenerator.CreateTask("rake", null, "unit_test"));

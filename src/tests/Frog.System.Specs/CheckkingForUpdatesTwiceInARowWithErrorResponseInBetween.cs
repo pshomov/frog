@@ -58,9 +58,9 @@ namespace Frog.System.Specs
             system.CheckProjectsForUpdates();
             prober = new PollingProber(5000, 100);
             Assert.True(prober.check(Take.Snapshot(() => system.GetEventsSnapshot())
-                             .Has(msgs => msgs, An.Event<CheckForUpdateFailed>())
-                             .Has(msgs => msgs, A.Command<CheckForUpdates>())
-                                  ));
+                                         .Has(msgs => msgs, An.Event<CheckForUpdateFailed>())
+                                         .Has(msgs => msgs, A.Command<CheckForUpdates>())
+                            ));
         }
 
         protected override void When()

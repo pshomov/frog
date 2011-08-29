@@ -15,7 +15,7 @@ namespace Frog.System.Specs.Underware
 {
     public abstract class TestSystemBase : SystemBase
     {
-        protected TestSystemBase(WorkingAreaGoverner governer, SourceRepoDriverFactory sourceRepoDriverFactory) : base(governer, sourceRepoDriverFactory)
+        protected TestSystemBase(WorkingAreaGoverner governer, SourceRepoDriverFactory sourceRepoDriverFactory, bool runAgent) : base(governer, sourceRepoDriverFactory, runAgent: runAgent)
         {
         }
 
@@ -26,10 +26,10 @@ namespace Frog.System.Specs.Underware
     {
         readonly List<Message> messages;
         string workingAreaPath;
-        protected IExecTaskGenerator execTaskGenerator;
-        protected TaskSource tasksSource;
+        public IExecTaskGenerator execTaskGenerator;
+        public TaskSource tasksSource;
 
-        public TestSystem(WorkingAreaGoverner governer, SourceRepoDriverFactory sourceRepoDriverFactory) : base(governer, sourceRepoDriverFactory)
+        public TestSystem(WorkingAreaGoverner governer, SourceRepoDriverFactory sourceRepoDriverFactory, bool runAgent = true) : base(governer, sourceRepoDriverFactory, runAgent)
         {
             messages = new List<Message>();
             SetupAllEventLogging();
@@ -48,7 +48,7 @@ namespace Frog.System.Specs.Underware
                 execTaskGenerator = Substitute.For<IExecTaskGenerator>();
                 tasksSource = Substitute.For<TaskSource>();
                 return new PipelineOfTasks(tasksSource,
-                                           execTaskGenerator);
+                                           new ExecTaskGenerator(new ExecTaskFactory()));
             }
         }
 

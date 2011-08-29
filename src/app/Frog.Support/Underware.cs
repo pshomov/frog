@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Frog.Support
 {
@@ -98,6 +99,11 @@ namespace Frog.Support
         public static T LastItem<T>(this T[] ar )
         {
             return ar[ar.Length - 1];
+        }
+
+        public static bool Match(this string str, string pattern)
+        {
+            return Regex.IsMatch(str, pattern);
         }
     }
 }

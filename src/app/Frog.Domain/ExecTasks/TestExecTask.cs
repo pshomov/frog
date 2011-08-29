@@ -5,16 +5,9 @@ using Frog.Support;
 
 namespace Frog.Domain.ExecTasks
 {
-    public class TestExecTask : IExecTask
+    public abstract class TestTaskBase : IExecTask
     {
-        readonly string path;
-
-        public TestExecTask(string path)
-        {
-            this.path = path;
-        }
-
-        public event Action<string> OnTerminalOutputUpdate = s => Console.WriteLine(s);
+        public virtual event Action<string> OnTerminalOutputUpdate;
 
         public string Name
         {
@@ -23,7 +16,7 @@ namespace Frog.Domain.ExecTasks
 
         public ExecTaskResult Perform(SourceDrop sourceDrop)
         {
-            var allLines = File.ReadAllLines(Path.Combine(sourceDrop.SourceDropLocation, path));
+            var allLines = ReadAllLines(sourceDrop);
             foreach (var line in allLines)
             {
                 OnTerminalOutputUpdate("S>" + line + "\r\n");
@@ -36,7 +29,7 @@ namespace Frog.Domain.ExecTasks
                                     {"OK", ExecutionStatus.Success},
                                     {"ERROR", ExecutionStatus.Failure}
                                 };
-                var lastItem = allLines.LastItem().ToUpper();
+                var lastItem = ExtensionMethods.LastItem<string>(allLines).ToUpper();
                 if (lastItem == "EXCEPTION") 
                     throw new Exception("Bad things happened here");
                 if (exits.ContainsKey(lastItem))
@@ -45,6 +38,40 @@ namespace Frog.Domain.ExecTasks
                 }
             }
             return new ExecTaskResult(execStatus, 0);
+        }
+
+        protected abstract string[] ReadAllLines(SourceDrop sourceDrop);
+    }
+
+    public class TestExecTask : TestTaskBase
+    {
+        readonly string path;
+
+        public TestExecTask(string path)
+        {
+            this.path = path;
+        }
+
+        public override event Action<string> OnTerminalOutputUpdate = s => Console.WriteLine(s);
+
+        protected override string[] ReadAllLines(SourceDrop sourceDrop)
+        {
+            return File.ReadAllLines(Path.Combine(sourceDrop.SourceDropLocation, path));
+        }
+    }
+
+    class FakeExecTask : TestTaskBase
+    {
+        private readonly string[] tasks;
+
+        public FakeExecTask(string[] tasks)
+        {
+            this.tasks = tasks;
+        }
+
+        protected override string[] ReadAllLines(SourceDrop sourceDrop)
+        {
+            return tasks;
         }
     }
 }
