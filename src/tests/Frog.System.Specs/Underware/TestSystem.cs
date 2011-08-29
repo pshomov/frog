@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using Frog.Domain;
@@ -12,27 +13,34 @@ using SimpleCQRS;
 
 namespace Frog.System.Specs.Underware
 {
-    public abstract class TestSystemBase : SystemBase
-    {
-        protected TestSystemBase(WorkingAreaGoverner governer, SourceRepoDriverFactory sourceRepoDriverFactory, bool runAgent) : base(governer, sourceRepoDriverFactory, runAgent: runAgent)
-        {
-        }
-
-        public abstract List<Message> GetMessagesSoFar();
-    }
-
-    public class TestSystem : TestSystemBase
+    public class TestSystem
     {
         readonly List<Message> messages;
         public TaskSource TasksSource;
+        protected IBus TheBus;
+        private readonly WorkingAreaGoverner areaGoverner;
+        private Agent agent;
+        private Worker worker;
 
-        public TestSystem(WorkingAreaGoverner governer, SourceRepoDriverFactory sourceRepoDriverFactory, bool runAgent = true) : base(governer, sourceRepoDriverFactory, runAgent)
+        public TestSystem(WorkingAreaGoverner governer, SourceRepoDriverFactory sourceRepoDriverFactory, bool runAgent = true)
         {
+            TheBus = SetupBus();
+
+            areaGoverner = governer;
+            SetupWorker(GetPipeline());
+            SetupRepositoryTracker();
+            if (runAgent) SetupAgent(sourceRepoDriverFactory);
+
+            SetupView();
+
             messages = new List<Message>();
             SetupAllEventLogging();
         }
 
-        protected override PipelineOfTasks GetPipeline()
+        public ConcurrentDictionary<string, BuildStatus> report { get; private set; }
+        public RepositoryTracker repositoryTracker { get; private set; }
+
+        protected  PipelineOfTasks GetPipeline()
         {
             {
                 TasksSource = Substitute.For<TaskSource>();
@@ -47,7 +55,7 @@ namespace Frog.System.Specs.Underware
             busDebug.OnMessage += msg => messages.Add(msg);
         }
 
-        public override List<Message> GetMessagesSoFar()
+        public  List<Message> GetMessagesSoFar()
         {
             return new List<Message>(messages);
         }
@@ -55,6 +63,38 @@ namespace Frog.System.Specs.Underware
         public void CleanupTestSystem()
         {
             messages.Clear();
+        }
+
+        protected virtual IBus SetupBus()
+        {
+            return new FakeBus();
+        }
+
+        protected virtual void SetupWorker(PipelineOfTasks pipeline)
+        {
+            worker = new Worker(pipeline, areaGoverner);
+        }
+
+        protected virtual void SetupAgent(SourceRepoDriverFactory sourceRepoDriverFactory)
+        {
+            agent = new Agent(TheBus, worker, sourceRepoDriverFactory);
+            agent.JoinTheParty();
+        }
+
+        protected virtual void SetupRepositoryTracker()
+        {
+            repositoryTracker = new RepositoryTracker(TheBus, new InMemoryProjectsRepository());
+            repositoryTracker.JoinTheMessageParty();
+        }
+
+        protected void SetupView()
+        {
+            report = new ConcurrentDictionary<string, BuildStatus>();
+            var statusView = new PipelineStatusView(report);
+            TheBus.RegisterHandler<BuildStarted>(statusView.Handle, "UI");
+            TheBus.RegisterHandler<BuildEnded>(statusView.Handle, "UI");
+            TheBus.RegisterHandler<BuildUpdated>(statusView.Handle, "UI");
+            TheBus.RegisterHandler<TerminalUpdate>(statusView.Handle, "UI");
         }
     }
 
@@ -93,14 +133,14 @@ namespace Frog.System.Specs.Underware
 
     public class SystemDriver
     {
-        readonly TestSystemBase theTestSystem;
+        readonly TestSystem theTestSystem;
 
-        SystemDriver(TestSystemBase system)
+        SystemDriver(TestSystem system)
         {
             theTestSystem = system;
         }
 
-        public static SystemDriver GetCleanSystem(Func<TestSystemBase> factory)
+        public static SystemDriver GetCleanSystem(Func<TestSystem> factory)
         {
             return new SystemDriver(factory());
         }

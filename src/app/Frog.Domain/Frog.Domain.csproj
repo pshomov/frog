@@ -60,7 +60,6 @@
     <Compile Include="RepositoryTracker\IProjectsRepository.cs" />
     <Compile Include="RepositoryTracker\InMemoryProjectsRepository.cs" />
     <Compile Include="RepositoryTracker\RepositoryTracker.cs" />
-    <Compile Include="SystemBase.cs" />
     <Compile Include="ExecTasks\TestExecTask.cs" />
     <Compile Include="UI\BuildStatus.cs" />
     <Compile Include="UI\PipelineStatusView.cs" />
