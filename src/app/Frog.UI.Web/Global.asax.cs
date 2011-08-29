@@ -3,9 +3,9 @@ using System.Collections.Concurrent;
 using System.IO;
 using System.Web.Mvc;
 using System.Web.Routing;
-using System.Web.Script.Serialization;
 using Frog.Domain;
 using Frog.Domain.Integration;
+using Frog.Domain.UI;
 using Frog.Support;
 using SimpleCQRS;
 
@@ -14,7 +14,7 @@ namespace Frog.UI.Web
     // Note: For instructions on enabling IIS6 or IIS7 classic mode, 
     // visit http://go.microsoft.com/?LinkId=9394801
 
-    public class MvcApplication : System.Web.HttpApplication
+    public class RunzFrontendApplication : System.Web.HttpApplication
     {
         string mapPath;
         string serviceArea;
@@ -34,7 +34,7 @@ namespace Frog.UI.Web
             AreaRegistration.RegisterAllAreas();
 
             RegisterGlobalFilters(GlobalFilters.Filters);
-            WireUpApp();
+            WireUpUIModelInfrastructure();
 
             WebFrontendSetup frontendSetup = GetWebFrontendSetup();
             frontendSetup.RegisterRoutes(RouteTable.Routes);
@@ -67,13 +67,21 @@ namespace Frog.UI.Web
             }
         }
 
-        void WireUpApp()
+        void WireUpUIModelInfrastructure()
         {
-            var system = new ProductionSystem(serviceArea, null);
-            ServiceLocator.Report = system.report;
-            ServiceLocator.Bus = system.Bus;
-            ServiceLocator.AllMassages = system.AllMessages;
+            var report = new ConcurrentDictionary<string, BuildStatus>();
+            var statusView = new PipelineStatusView(report);
+            var theBus = new RabbitMQBus(Environment.GetEnvironmentVariable("RUNZ_RABBITMQ_SERVER") ?? "localhost");
+            theBus.RegisterHandler<BuildStarted>(statusView.Handle, "UI");
+            theBus.RegisterHandler<BuildEnded>(statusView.Handle, "UI");
+            theBus.RegisterHandler<BuildUpdated>(statusView.Handle, "UI");
+            theBus.RegisterHandler<TerminalUpdate>(statusView.Handle, "UI");
+
+            ServiceLocator.Report = report;
+            ServiceLocator.Bus = theBus;
+            ServiceLocator.AllMassages = new ConcurrentQueue<Message>();
         }
+
     }
     internal class WebFrontendSetup
     {
@@ -111,46 +119,4 @@ namespace Frog.UI.Web
             base.RegisterRoutes(routes);
         }
     }
-
-    public class ProductionSystem : SystemBase
-    {
-        IBusDebug debug;
-        public readonly ConcurrentQueue<Message> AllMessages = new ConcurrentQueue<Message>();
-
-        public ProductionSystem(string serviceArea, WorkingAreaGoverner governer) : base(governer, url => new GitDriver(url))
-        {
-            var ser = new JavaScriptSerializer();
-            debug = (IBusDebug)TheBus;
-            debug.OnMessage += message =>
-            {
-                File.AppendAllText(Path.Combine(serviceArea, "EventLog.json"), ser.Serialize(new { Type = message.GetType().Name, Fields = message }));
-                AllMessages.Enqueue(message);
-            };
-        }
-
-        protected override IBus SetupBus()
-        {
-            return new RabbitMQBus(Environment.GetEnvironmentVariable("RUNZ_RABBITMQ_SERVER") ?? "localhost");
-        }
-
-        protected override PipelineOfTasks GetPipeline()
-        {
-            return null;
-        }
-
-        protected override void SetupWorker(PipelineOfTasks pipeline)
-        {
-        }
-
-        protected override void SetupAgent(SourceRepoDriverFactory sourceRepoDriverFactory)
-        {
-        }
-
-        protected override void SetupRepositoryTracker()
-        {
-        }
-
-        public IBus Bus { get { return TheBus; } }
-    }
-
 }
