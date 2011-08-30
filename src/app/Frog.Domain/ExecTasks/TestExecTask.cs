@@ -7,7 +7,7 @@ namespace Frog.Domain.ExecTasks
 {
     public abstract class TestTaskBase : IExecTask
     {
-        public virtual event Action<string> OnTerminalOutputUpdate;
+        public event Action<string> OnTerminalOutputUpdate = s => {};
 
         public string Name
         {
@@ -51,8 +51,6 @@ namespace Frog.Domain.ExecTasks
         {
             this.path = path;
         }
-
-        public override event Action<string> OnTerminalOutputUpdate = s => Console.WriteLine(s);
 
         protected override string[] ReadAllLines(SourceDrop sourceDrop)
         {
