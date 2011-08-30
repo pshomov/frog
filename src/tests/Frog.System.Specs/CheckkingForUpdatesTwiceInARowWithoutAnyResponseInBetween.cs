@@ -17,10 +17,8 @@ namespace Frog.System.Specs
         protected override void Given()
         {
             var repoUrl = Guid.NewGuid().ToString();
-            var sourceRepoDriver = Substitute.For<SourceRepoDriver>();
-            sourceRepoDriver.GetLatestRevision().Returns("14");
-            var workingAreaGoverner = Substitute.For<WorkingAreaGoverner>();
-            system = SystemDriver.GetCleanSystem(() => new TestSystem(workingAreaGoverner, url => sourceRepoDriver, runAgent: false));
+            system = new SystemDriver(runAgent : false);
+            system.SourceRepoDriver.GetLatestRevision().Returns("14");
             system.RegisterNewProject(repoUrl);
             system.CheckProjectsForUpdates();
             make_sure_one_CHECK_FOR_UPDATE_message_is_sent();

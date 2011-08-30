@@ -88,15 +88,17 @@ namespace Frog.System.Specs.Underware
     public class SystemDriver
     {
         readonly TestSystem theTestSystem;
+        public SourceRepoDriver SourceRepoDriver;
 
-        SystemDriver(TestSystem system)
+        public SystemDriver(TestSystem system)
         {
             theTestSystem = system;
         }
 
-        public static SystemDriver GetCleanSystem(Func<TestSystem> factory)
+        public SystemDriver(bool runAgent = true)
         {
-            return new SystemDriver(factory());
+            SourceRepoDriver = Substitute.For<SourceRepoDriver>();
+            theTestSystem = new TestSystem(Substitute.For<WorkingAreaGoverner>(), url => SourceRepoDriver, runAgent);
         }
 
         public List<Message> GetEventsSnapshot()

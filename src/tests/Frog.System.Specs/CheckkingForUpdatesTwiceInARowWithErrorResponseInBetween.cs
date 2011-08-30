@@ -17,13 +17,11 @@ namespace Frog.System.Specs
 
         protected override void Given()
         {
-            var sourceRepoDriver = Substitute.For<SourceRepoDriver>();
-            sourceRepoDriver.GetLatestRevision().Returns(info =>
-                                                             {
-                                                                 throw new NullReferenceException("fake one");
-                                                             });
-            var workingAreaGoverner = Substitute.For<WorkingAreaGoverner>();
-            system = SystemDriver.GetCleanSystem(() => new TestSystem(workingAreaGoverner, url => sourceRepoDriver));
+            system = new SystemDriver();
+            system.SourceRepoDriver.GetLatestRevision().Returns(info =>
+            {
+                throw new NullReferenceException("fake one");
+            });
             system.RegisterNewProject("http://123");
             system.CheckProjectsForUpdates();
             prober = new PollingProber(5000, 100);

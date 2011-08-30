@@ -34,7 +34,7 @@ namespace Frog.System.Specs
                     (ITask)
                     new FakeTaskDescription(TerminalOutput3,
                                             TerminalOutput4)));
-            system = SystemDriver.GetCleanSystem(() => testSystem);
+            system = new SystemDriver(testSystem);
             system.RegisterNewProject(RepoUrl);
         }
 

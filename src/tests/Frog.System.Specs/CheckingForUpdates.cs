@@ -12,15 +12,11 @@ namespace Frog.System.Specs
     public class CheckingForUpdates : BDD
     {
         SystemDriver system;
-        private SourceRepoDriver sourceRepoDriver;
-        private WorkingAreaGoverner workingAreaGoverner;
 
         protected override void Given()
         {
-            sourceRepoDriver = Substitute.For<SourceRepoDriver>();
-            sourceRepoDriver.GetLatestRevision().Returns("12");
-            workingAreaGoverner = Substitute.For<WorkingAreaGoverner>();
-            system = SystemDriver.GetCleanSystem(() => new TestSystem(workingAreaGoverner, url => sourceRepoDriver));
+            system = new SystemDriver();
+            system.SourceRepoDriver.GetLatestRevision().Returns("12");
             system.RegisterNewProject("http://123");
         }
 
