@@ -12,7 +12,6 @@ namespace Frog.System.Specs
     public class CheckingForUpdates : BDD
     {
         SystemDriver system;
-        RepositoryDriver repo;
         private SourceRepoDriver sourceRepoDriver;
         private WorkingAreaGoverner workingAreaGoverner;
 

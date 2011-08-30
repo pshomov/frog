@@ -69,15 +69,9 @@ namespace Frog.UI.Web
 
         void WireUpUIModelInfrastructure()
         {
-            var report = new ConcurrentDictionary<string, BuildStatus>();
-            var statusView = new PipelineStatusView(report);
             var theBus = new RabbitMQBus(Environment.GetEnvironmentVariable("RUNZ_RABBITMQ_SERVER") ?? "localhost");
-            theBus.RegisterHandler<BuildStarted>(statusView.Handle, "UI");
-            theBus.RegisterHandler<BuildEnded>(statusView.Handle, "UI");
-            theBus.RegisterHandler<BuildUpdated>(statusView.Handle, "UI");
-            theBus.RegisterHandler<TerminalUpdate>(statusView.Handle, "UI");
 
-            ServiceLocator.Report = report;
+            ServiceLocator.Report = Setup.SetupView(theBus);
             ServiceLocator.Bus = theBus;
             ServiceLocator.AllMassages = new ConcurrentQueue<Message>();
         }

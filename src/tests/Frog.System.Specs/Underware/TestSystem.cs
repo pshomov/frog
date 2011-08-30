@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.IO;
 using Frog.Domain;
 using Frog.Domain.RepositoryTracker;
-using Frog.Domain.Specs;
 using Frog.Domain.TaskSources;
 using Frog.Domain.UI;
-using Frog.Support;
 using NSubstitute;
 using SimpleCQRS;
 
@@ -16,31 +13,31 @@ namespace Frog.System.Specs.Underware
     public class TestSystem
     {
         readonly List<Message> messages;
+        readonly IBus theBus;
+        readonly WorkingAreaGoverner areaGoverner;
+        Agent agent;
+        Worker worker;
+
+        public ConcurrentDictionary<string, BuildStatus> report { get; private set; }
         public TaskSource TasksSource;
-        protected IBus TheBus;
-        private readonly WorkingAreaGoverner areaGoverner;
-        private Agent agent;
-        private Worker worker;
+        public RepositoryTracker repositoryTracker { get; private set; }
 
         public TestSystem(WorkingAreaGoverner governer, SourceRepoDriverFactory sourceRepoDriverFactory, bool runAgent = true)
         {
-            TheBus = SetupBus();
+            theBus = SetupBus();
 
             areaGoverner = governer;
             SetupWorker(GetPipeline());
             SetupRepositoryTracker();
             if (runAgent) SetupAgent(sourceRepoDriverFactory);
 
-            SetupView();
+            report = Setup.SetupView(theBus);
 
             messages = new List<Message>();
             SetupAllEventLogging();
         }
 
-        public ConcurrentDictionary<string, BuildStatus> report { get; private set; }
-        public RepositoryTracker repositoryTracker { get; private set; }
-
-        protected  PipelineOfTasks GetPipeline()
+        PipelineOfTasks GetPipeline()
         {
             {
                 TasksSource = Substitute.For<TaskSource>();
@@ -51,11 +48,11 @@ namespace Frog.System.Specs.Underware
 
         void SetupAllEventLogging()
         {
-            var busDebug = (IBusDebug) TheBus;
+            var busDebug = (IBusDebug) theBus;
             busDebug.OnMessage += msg => messages.Add(msg);
         }
 
-        public  List<Message> GetMessagesSoFar()
+        public List<Message> GetMessagesSoFar()
         {
             return new List<Message>(messages);
         }
@@ -65,69 +62,26 @@ namespace Frog.System.Specs.Underware
             messages.Clear();
         }
 
-        protected virtual IBus SetupBus()
+        IBus SetupBus()
         {
             return new FakeBus();
         }
 
-        protected virtual void SetupWorker(PipelineOfTasks pipeline)
+        void SetupWorker(PipelineOfTasks pipeline)
         {
             worker = new Worker(pipeline, areaGoverner);
         }
 
-        protected virtual void SetupAgent(SourceRepoDriverFactory sourceRepoDriverFactory)
+        void SetupAgent(SourceRepoDriverFactory sourceRepoDriverFactory)
         {
-            agent = new Agent(TheBus, worker, sourceRepoDriverFactory);
+            agent = new Agent(theBus, worker, sourceRepoDriverFactory);
             agent.JoinTheParty();
         }
 
-        protected virtual void SetupRepositoryTracker()
+        void SetupRepositoryTracker()
         {
-            repositoryTracker = new RepositoryTracker(TheBus, new InMemoryProjectsRepository());
+            repositoryTracker = new RepositoryTracker(theBus, new InMemoryProjectsRepository());
             repositoryTracker.JoinTheMessageParty();
-        }
-
-        protected void SetupView()
-        {
-            report = new ConcurrentDictionary<string, BuildStatus>();
-            var statusView = new PipelineStatusView(report);
-            TheBus.RegisterHandler<BuildStarted>(statusView.Handle, "UI");
-            TheBus.RegisterHandler<BuildEnded>(statusView.Handle, "UI");
-            TheBus.RegisterHandler<BuildUpdated>(statusView.Handle, "UI");
-            TheBus.RegisterHandler<TerminalUpdate>(statusView.Handle, "UI");
-        }
-    }
-
-    public class RepositoryDriver
-    {
-        readonly string repoPath;
-
-        RepositoryDriver(string repoPath)
-        {
-            this.repoPath = repoPath;
-        }
-
-        public string Url
-        {
-            get { return repoPath; }
-        }
-
-        public static RepositoryDriver GetNewRepository()
-        {
-            return new RepositoryDriver(SetupDummyRepo());
-        }
-
-        static string SetupDummyRepo()
-        {
-            var originalRepo = Path.Combine(GitTestSupport.GetTempPath(), Path.GetRandomFileName());
-            Directory.CreateDirectory(originalRepo);
-            return GitTestSupport.CreateDummyRepo(originalRepo, "test_repo");
-        }
-
-        public void Cleanup()
-        {
-            OSHelpers.ClearAttributes(repoPath);
-            Directory.Delete(repoPath, true);
         }
     }
 
