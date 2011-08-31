@@ -110,13 +110,13 @@ namespace Frog.Domain.ExecTasks
             {
                 if (process.WaitForProcess(periodLengthMs)) return;
                 var currentQuotaCPU = process.TotalProcessorTime;
-                if (HnagingTaskDetector(lastQuotaCPU, currentQuotaCPU)) throw new HangingProcessDetectedException();
+                if (HangingTaskDetector(lastQuotaCPU, currentQuotaCPU)) throw new HangingProcessDetectedException();
                 lastQuotaCPU = currentQuotaCPU;
             }
             throw new TaskQuotaConsumedException();
         }
 
-        private static bool HnagingTaskDetector(TimeSpan lastQuotaCPU, TimeSpan currentQuotaCPU)
+        private static bool HangingTaskDetector(TimeSpan lastQuotaCPU, TimeSpan currentQuotaCPU)
         {
             return currentQuotaCPU == lastQuotaCPU;
         }
