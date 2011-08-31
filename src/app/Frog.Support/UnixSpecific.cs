@@ -41,7 +41,7 @@ namespace Frog.Support
         internal static string ParsePSInfo(List<string> processStrings)
         {
             if (processStrings.Count == 1) return processStrings[0];
-            throw new InvalidOperationException("Process could not be found");
+            throw new InvalidOperationException("Process could not be found. Output from CPU sampler is:"+string.Join(",", processStrings.ToArray()));
         }
     }
 }
