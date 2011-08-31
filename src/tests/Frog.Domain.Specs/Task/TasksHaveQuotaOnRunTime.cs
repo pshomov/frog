@@ -16,7 +16,7 @@ namespace Frog.Domain.Specs.Task
         protected override void Given()
         {
             processWrapper = Substitute.For<IProcessWrapper>();
-            processWrapper.TotalProcessorTime.Returns(TimeSpan.FromMinutes(1.0), TimeSpan.FromMinutes(2.0), TimeSpan.FromMinutes(3.0));
+            processWrapper.ProcessTreeCPUUsageId.Returns("1weqwesafsd", "2fasdfasdf", "asfdasdfasdfasdfqw");
             task = new ExecTask("fle", "flo", "name",
                                 (s, s1, arg3) => processWrapper, periodLengthMs: 1000, quotaNrPeriods: 3);
         }
@@ -32,7 +32,7 @@ namespace Frog.Domain.Specs.Task
             Assert.That(
                 processWrapper.ReceivedCalls().Where(call => call.GetMethodInfo().Name == "WaitForProcess" && call.GetArguments().Count() == 1).Count(),
                 Is.EqualTo(3));
-            processWrapper.Received().Kill();
+            processWrapper.Received().Dispose();
         }
 
         [Test]

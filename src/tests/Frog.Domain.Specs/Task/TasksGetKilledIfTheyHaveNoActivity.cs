@@ -15,7 +15,7 @@ namespace Frog.Domain.Specs.Task
         protected override void Given()
         {
             processWrapper = MockRepository.GenerateMock<IProcessWrapper>();
-            processWrapper.Expect(wrapper => wrapper.TotalProcessorTime).Return(TimeSpan.FromTicks(0));
+            processWrapper.Expect(wrapper => wrapper.ProcessTreeCPUUsageId).Return("");
             task = new ExecTask("fle", "flo", "name",
                                 (s, s1, arg3) => processWrapper, periodLengthMs: 1000, quotaNrPeriods: 10);
         }
@@ -28,7 +28,7 @@ namespace Frog.Domain.Specs.Task
         [Test]
         public void should_kill_task()
         {
-            processWrapper.AssertWasCalled(wrapper => wrapper.Kill());
+            processWrapper.AssertWasCalled(wrapper => wrapper.Dispose());
         }
 
         [Test]

@@ -8,15 +8,13 @@ namespace Frog.Support
 {
     public interface IProcessWrapper
     {
-        TimeSpan TotalProcessorTime { get; }
-        int ExitCode { get; }
+        string ProcessTreeCPUUsageId { get; }
         int Id { get; }
         event Action<string> OnErrorOutput;
         event Action<string> OnStdOutput;
         void Execute();
         bool WaitForProcess(int timeoutMilliseconds);
-        void Kill();
-        void MakeSureTerminalOutputIsFlushed();
+        int Dispose();
     }
 
     public class ProcessWrapper : IProcessWrapper
@@ -49,27 +47,15 @@ namespace Frog.Support
             get { return process.HasExited; }
         }
 
-        #region IProcessWrapper Members
-
         public event Action<string> OnErrorOutput = s => Console.WriteLine(String.Format("E>{0}", s));
         public event Action<string> OnStdOutput = s => Console.WriteLine(String.Format("S>{0}", s));
 
-        public TimeSpan TotalProcessorTime
+        public string ProcessTreeCPUUsageId
         {
             get
             {
-                if (Os.IsUnix)
-                {
-                    return UnixSpecific.UnixTotalProcessorTime(process.Id);
-                }
-                else
-                    return WindowsTotalProcessorTime();
+                return UnixSpecific.UnixTotalProcessorTime(process.Id);
             }
-        }
-
-        public int ExitCode
-        {
-            get { return process.ExitCode; }
         }
 
         public void Execute()
@@ -102,7 +88,7 @@ namespace Frog.Support
             return process.WaitForExit(timeoutMilliseconds);
         }
 
-        public void Kill()
+        public int Dispose()
         {
 			string paramz = Path.Combine(Underware.SupportScriptsLocation,"killtree.py") + " " +process.Id.ToString();
             if (!process.HasExited)
@@ -111,27 +97,18 @@ namespace Frog.Support
                 {
                     killProcess.Start();
                     killProcess.WaitForExit();
+                    killProcess.Close();
                 }
             }
+            process.WaitForExit();
+            var result = process.ExitCode;
+            process.Close();
+            return result;
         }
 
         public int Id
         {
             get { return process.Id; }
-        }
-
-        public void MakeSureTerminalOutputIsFlushed()
-        {
-            WaitForProcess();
-        }
-
-        #endregion
-
-        private TimeSpan WindowsTotalProcessorTime()
-        {
-            Process[] processes = Process.GetProcesses();
-            TimeSpan cputime = GetProcessCpuTime(processes, process);
-            return cputime;
         }
 
         private TimeSpan GetProcessCpuTime(Process[] processes, Process process)

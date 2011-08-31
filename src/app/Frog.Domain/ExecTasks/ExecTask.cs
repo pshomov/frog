@@ -69,28 +69,27 @@ namespace Frog.Domain.ExecTasks
             process.OnStdOutput += s => { if (s != null) OnTerminalOutputUpdate("S>" + s + "\r\n"); };
             OnTerminalOutputUpdate(string.Format("Runz>> Launching {0} with arguments {1} with currentFolder {2}",
                                                  app, arguments, sourceDrop.SourceDropLocation) + "\r\n");
+            var exitCode = -100000;
             try
             {
                 process.Execute();
                 OnTaskStarted(process.Id);
                 ObserveTask();
-                process.MakeSureTerminalOutputIsFlushed();
+                exitCode = process.Dispose();
             }
             catch(HangingProcessDetectedException)
             {
-                process.Kill();
-                process.MakeSureTerminalOutputIsFlushed();
+                var exitcode = process.Dispose();
                 OnTerminalOutputUpdate(string.Format("Runz>> It looks like task is hanging without doing much. Task was killed. Exit code: {0}",
-                                                        process.ExitCode) + "\r\n");
-                return new ExecTaskResult(ExecutionStatus.Failure, process.ExitCode);
+                                                        exitcode) + "\r\n");
+                return new ExecTaskResult(ExecutionStatus.Failure, exitcode);
             }
             catch(TaskQuotaConsumedException)
             {
-                process.Kill();
-                process.MakeSureTerminalOutputIsFlushed();
+                var exitcode = process.Dispose();
                 OnTerminalOutputUpdate(string.Format("Runz>> Task has consumed all its quota. Task was killed. Exit code: {0}",
-                                                     process.ExitCode) + "\r\n");
-                return new ExecTaskResult(ExecutionStatus.Failure, process.ExitCode);
+                                                     exitcode) + "\r\n");
+                return new ExecTaskResult(ExecutionStatus.Failure, exitcode);
             }
             catch (ApplicationNotFoundException e)
             {
@@ -99,24 +98,24 @@ namespace Frog.Domain.ExecTasks
             }
 
             OnTerminalOutputUpdate(string.Format("Runz>> Task has exited with exitcode {0}",
-                                                    process.ExitCode) + "\r\n");
-            return new ExecTaskResult(ExecutionStatus.Success, process.ExitCode);
+                                                    exitCode) + "\r\n");
+            return new ExecTaskResult(ExecutionStatus.Success, exitCode);
         }
 
         private void ObserveTask()
         {
-            var lastQuotaCPU = TimeSpan.FromTicks(0);
+            var lastQuotaCPU = "";
             for (int i = 0; i < quotaNrPeriods; i++)
             {
                 if (process.WaitForProcess(periodLengthMs)) return;
-                var currentQuotaCPU = process.TotalProcessorTime;
+                var currentQuotaCPU = process.ProcessTreeCPUUsageId;
                 if (HangingTaskDetector(lastQuotaCPU, currentQuotaCPU)) throw new HangingProcessDetectedException();
                 lastQuotaCPU = currentQuotaCPU;
             }
             throw new TaskQuotaConsumedException();
         }
 
-        private static bool HangingTaskDetector(TimeSpan lastQuotaCPU, TimeSpan currentQuotaCPU)
+        private static bool HangingTaskDetector(string lastQuotaCPU, string currentQuotaCPU)
         {
             return currentQuotaCPU == lastQuotaCPU;
         }

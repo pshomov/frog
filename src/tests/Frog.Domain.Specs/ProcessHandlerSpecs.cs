@@ -1,14 +1,14 @@
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Text;
 using Frog.Support;
 using NUnit.Framework;
 
 namespace Frog.Domain.Specs
 {
-
     [TestFixture]
-    public class ProcessHandlerIOCaptureSpecs
+    public class ProcessHandlerSpec
     {
 
         [Test]
@@ -20,7 +20,7 @@ namespace Frog.Domain.Specs
 
             pw.Execute();
             pw.WaitForProcess(5000);
-            pw.MakeSureTerminalOutputIsFlushed();
+            pw.Dispose();
 
             Assert.That(std.ToString(), Is.Not.Empty);
         }
@@ -33,6 +33,7 @@ namespace Frog.Domain.Specs
             pw.OnErrorOutput += output => err.Append(output);
             pw.Execute();
             pw.WaitForProcess(5000);
+            pw.Dispose();
             Assert.That(err.ToString(), Is.Not.Empty);
         }
 
@@ -64,45 +65,66 @@ namespace Frog.Domain.Specs
             var pw = new ProcessWrapper("ruby", "-e '100000000.times {|e| e}'");
             pw.Execute();
             pw.WaitForProcess(1);
-            var tpt = pw.TotalProcessorTime;
+            var tpt = pw.ProcessTreeCPUUsageId;
             pw.WaitForProcess(500);
-            var tpt1 = pw.TotalProcessorTime;
-            pw.Kill();
+            var tpt1 = pw.ProcessTreeCPUUsageId;
+            pw.Dispose();
 			
-            Assert.That(tpt, Is.LessThan(tpt1));
+            Assert.That(tpt, Is.Not.EqualTo(tpt1));
         }
+
         [Test]
         public void should_indicate_no_cpu_usage_when_process_does_nothing()
         {
             var pw = new ProcessWrapper("ruby", "-e 'sleep 30'");
             pw.Execute();
             pw.WaitForProcess(100);
-            var tpt = pw.TotalProcessorTime;
+            var tpt = pw.ProcessTreeCPUUsageId;
             pw.WaitForProcess(200);
-            var tpt1 = pw.TotalProcessorTime;
-            pw.Kill();
+            var tpt1 = pw.ProcessTreeCPUUsageId;
+            pw.Dispose();
 			
             Assert.That(tpt, Is.EqualTo(tpt1));
         }
+
         [Test]
-        public void should_make_the_process_invalid_after_killing_it()
+        public void should_make_the_process_nonexistent_after_killing_it()
         {
             var pw = new ProcessWrapper("ruby", @"-e ""system(\""ruby -e 'sleep 300'\"")""");
             pw.Execute();
-            pw.Kill();
-            Assert.That(ProcessHasExited(pw));
+            var processId = pw.Id;
+            pw.Dispose();
+            Assert.That(ProcessHasExited(processId));
         }
 
-        private bool ProcessHasExited(ProcessWrapper processWrapper)
+        [Test]
+        public void should_throw_an_exception_when_trying_to_get_process_snapshot_for_process_that_has_died()
+        {
+            var pw = new ProcessWrapper("ruby", @"-e exit 0");
+            pw.Execute();
+            pw.WaitForProcess(100);
+            try
+            {
+                var tpt = pw.ProcessTreeCPUUsageId;
+                Assert.Fail("the process should have been gone, operation should have failed");
+            }
+            catch(InvalidOperationException)
+            {
+                // that's what we are aiming for ;)
+            }
+            pw.Dispose();
+        }
+
+        private bool ProcessHasExited(int processWrapper)
         {
             try
             {
-                var exitcode = processWrapper.ExitCode;
-                return true;
-            }
-            catch (InvalidOperationException e)
-            {
+                Process.GetProcessById(processWrapper);
                 return false;
+            }
+            catch (ArgumentException e)
+            {
+                return true;
             }
         }
     }
