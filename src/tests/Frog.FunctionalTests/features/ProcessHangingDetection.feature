@@ -5,7 +5,7 @@
 
 Scenario: Long running inactive process gets killed
 	Given I have a project as "p1"
-	And I add a test task "t1" with content "exec ruby.exe -e 'sleep 300'" to project "p1"
+	And I add a test task "t1" with content "exec ruby -e 'sleep 300'" to project "p1"
 	And I have registered project "p1"
 	When I am on the status page for project "p1"
 	Then The terminal output contains text "hang"

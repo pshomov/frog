@@ -75,8 +75,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 7
  testRunner.Given("I have a project as \"p1\"");
 #line 8
- testRunner.And("I add a test task \"t1\" with content \"exec ruby.exe -e \'sleep 300\'\" to project \"p1" +
-                    "\"");
+ testRunner.And("I add a test task \"t1\" with content \"exec ruby -e \'sleep 300\'\" to project \"p1\"");
 #line 9
  testRunner.And("I have registered project \"p1\"");
 #line 10
