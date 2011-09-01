@@ -42,11 +42,6 @@ namespace Frog.Support
             get { return process; }
         }
 
-        public bool HasExited
-        {
-            get { return process.HasExited; }
-        }
-
         public event Action<string> OnErrorOutput = s => Console.WriteLine(String.Format("E>{0}", s));
         public event Action<string> OnStdOutput = s => Console.WriteLine(String.Format("S>{0}", s));
 
@@ -109,45 +104,6 @@ namespace Frog.Support
         public int Id
         {
             get { return process.Id; }
-        }
-
-        private TimeSpan GetProcessCpuTime(Process[] processes, Process process)
-        {
-            TimeSpan cputime = WinProcessProcessorTime(process);
-            cputime += WinChildProcessesProcessorTime(processes, process);
-            return cputime;
-        }
-
-        private TimeSpan WinChildProcessesProcessorTime(Process[] processes, Process process)
-        {
-            return
-                TimeSpan.FromTicks(
-                    processes.Where(p =>
-                                        {
-                                            try
-                                            {
-                                                Process parentProcess = ParentProcessUtilities.GetParentProcess(p.Handle);
-                                                return (parentProcess != null) &&
-                                                       (parentProcess.Handle == process.Handle);
-                                            }
-                                            catch (Win32Exception e)
-                                            {
-                                                if (e.NativeErrorCode == 5) return false;
-                                                throw;
-                                            }
-                                        }).
-                        Sum(childProcess => GetProcessCpuTime(processes, childProcess).Ticks));
-        }
-
-        private TimeSpan WinProcessProcessorTime(Process process)
-        {
-            return process.TotalProcessorTime;
-        }
-
-        private int WaitForProcess()
-        {
-            process.WaitForExit();
-            return process.ExitCode;
         }
     }
 
