@@ -37,12 +37,15 @@ namespace Frog.Domain.ExecTasks
                 allLines.Where(s => s.StartsWith("exec")).ToList().ForEach(s =>
                                                                                {
                                                                                    var parsed = Regex.Match(s, @"^exec (\S+) (.*)$");
+																				   var cmd = Os.IsUnix ? "/bin/bash" : "cmd.exe";
+																				   var args = Os.IsUnix ? "-c \"" : "/c ";
+																					args += parsed.Groups[1].Value + " " + parsed.Groups[2].Value;
+																				   if (Os.IsUnix) args += "\"";
                                                                                    var tasks = execTaskGenerator.GimeTasks(
                                                                                        new AnyTask
                                                                                            {
-                                                                                               cmd = "cmd.exe",
-                                                                                               args = "/c "+parsed.Groups[1].Value + " "+
-                                                                                                   parsed.Groups[2].Value
+                                                                                               cmd = cmd,
+                                                                                               args = args
                                                                                            });
                                                                                    var task = tasks[0];
                                                                                    task.OnTerminalOutputUpdate +=
