@@ -29,7 +29,7 @@ namespace Frog.Domain.ExecTasks
                                     {"OK", ExecutionStatus.Success},
                                     {"ERROR", ExecutionStatus.Failure}
                                 };
-                var lastItem = ExtensionMethods.LastItem<string>(allLines).ToUpper();
+                var lastItem = allLines.LastItem().ToUpper();
                 if (lastItem == "EXCEPTION") 
                     throw new Exception("Bad things happened here");
                 if (exits.ContainsKey(lastItem))

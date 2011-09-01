@@ -52,6 +52,7 @@ namespace Frog.Domain.ExecTasks
         private IProcessWrapper process;
         public event Action<int> OnTaskStarted = pid => {};
         public event Action<string> OnTerminalOutputUpdate = s => {};
+
         public ExecTask(string app, string arguments, string name, Func<string, string, string, IProcessWrapper> processWrapperFactory, int periodLengthMs = 5000, int quotaNrPeriods = 60)
         {
             this.app = app;
