@@ -10,7 +10,7 @@ namespace Frog.Support
     {
         static string GitScriptsLocation(string subfolder)
         {
-            return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, (Os.IsWebApp() ? "bin" + Path.DirectorySeparatorChar : "") + subfolder);
+            return Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, (Os.IsWebApp() ? "bin" : "")),subfolder);
         }
 
         public static string GitProductionScriptsLocation
