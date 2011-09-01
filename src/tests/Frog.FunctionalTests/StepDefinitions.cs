@@ -126,7 +126,7 @@ namespace Frog.FunctionalTests
                                };
             AssertionHelpers.WithRetries(
                 () =>
-                Assert.That(World.browser.FindElement(By.CssSelector("#status")).Text, Is.EqualTo(statuses[status])));
+                Assert.That(World.browser.FindElement(By.CssSelector("#status")).Text, Is.EqualTo(statuses[status])), retries: 300);
         }
 
         [Then(@"The terminal output has text ""(.*)""")]
@@ -140,7 +140,7 @@ namespace Frog.FunctionalTests
         public void ThenTheTerminalOutputContainsTextFromTheBuild(string text)
         {
             AssertionHelpers.WithRetries(
-                () => Assert.That(World.browser.FindElement(By.CssSelector("#terminal")).Text, Is.StringContaining(text.Replace("\\n", Environment.NewLine))));
+                () => Assert.That(World.browser.FindElement(By.CssSelector("#terminal")).Text, Is.StringContaining(text.Replace("\\n", Environment.NewLine))), retries: 300);
         }
 
         Uri U(string relativeUrl)

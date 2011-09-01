@@ -44,6 +44,7 @@
     <Compile Include="Agent.cs" />
     <Compile Include="BuildSystems\FrogSystemTest\TestTaskDetector.cs" />
     <Compile Include="BuildSystems\FrogSystemTest\TestTaskTaskFileFinder.cs" />
+    <Compile Include="BuildSystems\Rake\AnyTask.cs" />
     <Compile Include="BuildSystems\Rake\BundlerFileFinder.cs" />
     <Compile Include="BuildSystems\Rake\RakeTaskDetector.cs" />
     <Compile Include="BuildSystems\Rake\RakeTaskFileFinder.cs" />

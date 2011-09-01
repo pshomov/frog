@@ -37,11 +37,11 @@ namespace Frog.Domain
             }
             if (task.GetType() == typeof(TestTaskDescription))
             {
-                result.Add(new TestExecTask((task as TestTaskDescription).path));
+                result.Add(new TestExecTask((task as TestTaskDescription).path, this));
             }
             if (task.GetType() == typeof(FakeTaskDescription))
             {
-                result.Add(new FakeExecTask((task as FakeTaskDescription).messages));
+                result.Add(new FakeExecTask((task as FakeTaskDescription).messages, this));
             }
             if (task.GetType() == typeof(RakeTask))
             {
@@ -51,6 +51,11 @@ namespace Frog.Domain
             if(task.GetType() == typeof(BundlerTask))
             {
                 result.Add(execTaskGenerator.CreateTask("bundle", null, "Bundler"));
+            }
+            if(task.GetType() == typeof(AnyTask))
+            {
+                var anyTask = task as AnyTask;
+                result.Add(execTaskGenerator.CreateTask(anyTask.cmd, anyTask.args, "System Task"));
             }
             return result;
         }

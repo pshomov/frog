@@ -1,13 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
+using Frog.Domain.BuildSystems.Rake;
+using Frog.Domain.CustomTasks;
 using Frog.Support;
 
 namespace Frog.Domain.ExecTasks
 {
     public abstract class TestTaskBase : IExecTask
     {
+        private readonly IExecTaskGenerator execTaskGenerator;
         public event Action<string> OnTerminalOutputUpdate = s => {};
+
+        protected TestTaskBase(IExecTaskGenerator execTaskGenerator)
+        {
+            this.execTaskGenerator = execTaskGenerator;
+        }
 
         public string Name
         {
@@ -24,6 +34,23 @@ namespace Frog.Domain.ExecTasks
             var execStatus = ExecutionStatus.Success;
             if (allLines.Length > 0)
             {
+                allLines.Where(s => s.StartsWith("exec")).ToList().ForEach(s =>
+                                                                               {
+                                                                                   var parsed = Regex.Match(s, @"^exec (\S+) (.*)$");
+                                                                                   var tasks = execTaskGenerator.GimeTasks(
+                                                                                       new AnyTask
+                                                                                           {
+                                                                                               cmd = "cmd.exe",
+                                                                                               args = "/c "+parsed.Groups[1].Value + " "+
+                                                                                                   parsed.Groups[2].Value
+                                                                                           });
+                                                                                   var task = tasks[0];
+                                                                                   task.OnTerminalOutputUpdate +=
+                                                                                       OnTaskOnOnTerminalOutputUpdate;
+                                                                                   task.Perform(sourceDrop);
+                                                                                   task.OnTerminalOutputUpdate -=
+                                                                                       OnTaskOnOnTerminalOutputUpdate;
+                                                                               });
                 var exits = new Dictionary<string, ExecutionStatus>
                                 {
                                     {"OK", ExecutionStatus.Success},
@@ -40,6 +67,11 @@ namespace Frog.Domain.ExecTasks
             return new ExecTaskResult(execStatus, 0);
         }
 
+        private void OnTaskOnOnTerminalOutputUpdate(string s1)
+        {
+            OnTerminalOutputUpdate(s1);
+        }
+
         protected abstract string[] ReadAllLines(SourceDrop sourceDrop);
     }
 
@@ -47,7 +79,7 @@ namespace Frog.Domain.ExecTasks
     {
         readonly string path;
 
-        public TestExecTask(string path)
+        public TestExecTask(string path, IExecTaskGenerator execTaskGenerator) : base(execTaskGenerator)
         {
             this.path = path;
         }
@@ -62,7 +94,7 @@ namespace Frog.Domain.ExecTasks
     {
         private readonly string[] tasks;
 
-        public FakeExecTask(string[] tasks)
+        public FakeExecTask(string[] tasks, IExecTaskGenerator execTaskGenerator): base(execTaskGenerator)
         {
             this.tasks = tasks;
         }
