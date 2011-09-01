@@ -14,11 +14,13 @@ namespace Frog.Support
         {
             var p = new ProcessWrapper("python",string.Format("{0} {1}", Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "support_scripts"), "cpu_times.py"), processId));
             var processStrings = new List<String>();
+            var errorStrings = new List<String>();
             p.OnStdOutput += s => { if (!s.IsNullOrEmpty()) processStrings.Add(s); };
+            p.OnErrorOutput += s => { if (!s.IsNullOrEmpty()) errorStrings.Add(s); };
             p.Execute();
             p.WaitForProcess(10000);
             p.Dispose();
-            return ParsePSInfo(processStrings);
+            return ParsePSInfo(processStrings, errorStrings);
         }
 
         private static TimeSpan GetTotalCpuTime(List<long[]> processes, int pid)
@@ -38,10 +40,12 @@ namespace Frog.Support
             return TimeSpan.FromTicks(processes.Single(ints => ints[0] == pid)[2]);
         }
 
-        internal static string ParsePSInfo(List<string> processStrings)
+        internal static string ParsePSInfo(List<string> processStrings, List<string> errorStrings)
         {
             if (processStrings.Count == 1) return processStrings[0];
-            throw new InvalidOperationException("Process could not be found. Output from CPU sampler is:"+string.Join(",", processStrings.ToArray()));
+            if (errorStrings.Count > 0 && errorStrings.Exists(s => s.Contains("NoSuchProcess"))) throw new InvalidOperationException("Process could not be found. Output from CPU sampler is:"+string.Join(",", processStrings.ToArray()));
+            throw new ApplicationException(
+                string.Format("Could not process cpu snapshot output. StdOutput: {0}, ErrOutput: {1}", string.Join(",", processStrings.ToArray()), string.Join(",", errorStrings.ToArray())));
         }
     }
 }

@@ -108,7 +108,15 @@ namespace Frog.Domain.ExecTasks
             for (int i = 0; i < quotaNrPeriods; i++)
             {
                 if (process.WaitForProcess(periodLengthMs)) return;
-                var currentQuotaCPU = process.ProcessTreeCPUUsageId;
+                string currentQuotaCPU;
+                try
+                {
+                    currentQuotaCPU = process.ProcessTreeCPUUsageId;
+                }
+                catch (InvalidOperationException)
+                {
+                    return;
+                }
                 if (HangingTaskDetector(lastQuotaCPU, currentQuotaCPU)) throw new HangingProcessDetectedException();
                 lastQuotaCPU = currentQuotaCPU;
             }
