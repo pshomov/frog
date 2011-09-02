@@ -5,6 +5,7 @@ using Frog.Domain.BuildSystems.Solution;
 using Frog.Domain.CustomTasks;
 using Frog.Domain.ExecTasks;
 using Frog.Domain.TaskSources;
+using Frog.Support;
 
 namespace Frog.Domain
 {
@@ -52,10 +53,15 @@ namespace Frog.Domain
             {
                 result.Add(execTaskGenerator.CreateTask("bundle", null, "Bundler"));
             }
-            if(task.GetType() == typeof(AnyTask))
+            if(task.GetType() == typeof(ShellTask))
             {
-                var anyTask = task as AnyTask;
-                result.Add(execTaskGenerator.CreateTask(anyTask.cmd, anyTask.args, "System Task"));
+                var anyTask = (ShellTask)task;
+                var cmd = Os.IsUnix ? "/bin/bash" : "cmd.exe";
+                var args = Os.IsUnix ? "-c \"" : "/c ";
+                args += anyTask.cmd + " " + anyTask.args;
+                if (Os.IsUnix) args += "\"";
+
+                result.Add(execTaskGenerator.CreateTask(cmd, args, "Shell Task"));
             }
             return result;
         }

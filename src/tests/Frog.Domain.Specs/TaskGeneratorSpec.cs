@@ -103,4 +103,28 @@ namespace Frog.Domain.Specs
             execTaskFactory.Received().CreateTask("bundle", Arg.Any<string>(), "Bundler");
         }
     }
+
+    [TestFixture]
+    public class TaskGeneratorShellTasksSpec : BDD
+    {
+        ExecTaskGenerator execTaskGenerator;
+        ExecTaskFactory execTaskFactory;
+
+        protected override void Given()
+        {
+            execTaskFactory = Substitute.For<ExecTaskFactory>();
+            execTaskGenerator = new ExecTaskGenerator(execTaskFactory);
+        }
+
+        protected override void When()
+        {
+            execTaskGenerator.GimeTasks(new ShellTask(){cmd = "ccc", args = "/a /b"});
+        }
+
+        [Test]
+        public void should_have_bundle_task()
+        {
+            execTaskFactory.Received().CreateTask(Arg.Is<string>(s => s == "cmd.exe" || s == "/bin/bash"), Arg.Is<string>(s => s == "-c \"ccc /a /b\"" || s == "/c ccc /a /b"), "Shell Task");
+        }
+    }
 }

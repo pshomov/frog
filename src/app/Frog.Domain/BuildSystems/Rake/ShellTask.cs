@@ -2,7 +2,7 @@ using Frog.Domain.CustomTasks;
 
 namespace Frog.Domain.BuildSystems.Rake
 {
-    class AnyTask : ITask
+    public class ShellTask : ITask
     {
         public string cmd;
         public string args;
