@@ -1,3 +1,4 @@
+using System.IO;
 using Frog.Domain.BuildSystems.Rake;
 using Frog.Domain.BuildSystems.Solution;
 using Frog.Specs.Support;
@@ -75,8 +76,7 @@ namespace Frog.Domain.Specs
         [Test]
         public void should_have_rake_task()
         {
-            execTaskFactory.Received().CreateTask("rake", Arg.Any<string>(), "unit_test");
-            execTaskFactory.Received().CreateTask("rvm", Arg.Is<string>(s => !s.IsNullOrEmpty() && s.StartsWith("use")), "prepare_for_rake");
+            execTaskFactory.Received().CreateTask(Arg.Any<string>(), Arg.Is<string>(s => s.Contains(Path.Combine(Underware.GitProductionScriptsLocation, "ruby_tasks.rb"))), Arg.Any<string>());
         }
     }
 

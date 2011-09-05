@@ -81,6 +81,9 @@
     <Compile Include="WorkingAreaGoverner.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="git_scripts\ruby_tasks.rb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="git_scripts\git_fetch.rb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

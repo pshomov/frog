@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using Frog.Domain.BuildSystems.FrogSystemTest;
 using Frog.Domain.BuildSystems.Rake;
 using Frog.Domain.BuildSystems.Solution;
@@ -46,8 +47,7 @@ namespace Frog.Domain
             }
             if (task.GetType() == typeof(RakeTask))
             {
-                result.Add(execTaskGenerator.CreateTask("rvm", "use 1.9.2", "prepare_for_rake"));
-                result.Add(execTaskGenerator.CreateTask("rake", null, "unit_test"));
+                result.Add(CreateShellTask(new ShellTask {cmd = Path.Combine(Underware.GitProductionScriptsLocation,"ruby_tasks.rb"), args = "rake"}));
             }
             if(task.GetType() == typeof(BundlerTask))
             {
