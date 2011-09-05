@@ -55,15 +55,20 @@ namespace Frog.Domain
             }
             if(task.GetType() == typeof(ShellTask))
             {
-                var anyTask = (ShellTask)task;
-                var cmd = Os.IsUnix ? "/bin/bash" : "cmd.exe";
-                var args = Os.IsUnix ? "-c \"" : "/c ";
-                args += anyTask.cmd + " " + anyTask.args;
-                if (Os.IsUnix) args += "\"";
-
-                result.Add(execTaskGenerator.CreateTask(cmd, args, "Shell Task"));
+                result.Add(CreateShellTask((ShellTask)task));
             }
             return result;
+        }
+
+        private IExecTask CreateShellTask(ShellTask anyTask)
+        {
+            var cmd = Os.IsUnix ? "/bin/bash" : "cmd.exe";
+            var args = Os.IsUnix ? "-c \"" : "/c ";
+            args += anyTask.cmd + " " + anyTask.args;
+            if (Os.IsUnix) args += "\"";
+
+            var execTask = execTaskGenerator.CreateTask(cmd, args, "Shell Task");
+            return execTask;
         }
     }
 }
