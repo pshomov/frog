@@ -100,7 +100,7 @@ namespace Frog.Domain.Specs
         [Test]
         public void should_have_bundle_task()
         {
-            execTaskFactory.Received().CreateTask("bundle", Arg.Any<string>(), "Bundler");
+            execTaskFactory.Received().CreateTask(Arg.Any<string>(), Arg.Is<string>(s => s.Contains("bundler")), Arg.Any<string>());
         }
     }
 

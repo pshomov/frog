@@ -51,7 +51,7 @@ namespace Frog.Domain
             }
             if(task.GetType() == typeof(BundlerTask))
             {
-                result.Add(execTaskGenerator.CreateTask("bundle", null, "Bundler"));
+                result.Add(CreateShellTask(new ShellTask { cmd = Path.Combine(Underware.GitProductionScriptsLocation, "ruby_tasks.rb"), args = "bundler" }));
             }
             if(task.GetType() == typeof(ShellTask))
             {
