@@ -47,7 +47,7 @@ namespace Frog.Domain
             }
             if (task.GetType() == typeof(RakeTask))
             {
-                result.Add(CreateShellTask(new ShellTask {cmd = "rake", args = ""}));
+                result.Add(CreateShellTask(new ShellTask {cmd = "bundle", args = "exec rake"}));
             }
             if(task.GetType() == typeof(BundlerTask))
             {

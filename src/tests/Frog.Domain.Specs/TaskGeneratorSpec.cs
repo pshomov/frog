@@ -76,7 +76,7 @@ namespace Frog.Domain.Specs
         [Test]
         public void should_have_rake_task()
         {
-            execTaskFactory.Received().CreateTask(Arg.Any<string>(), Arg.Is<string>(s => s.Contains("rake")), Arg.Any<string>());
+            execTaskFactory.Received().CreateTask(Arg.Any<string>(), Arg.Is<string>(s => s.Contains("bundle exec rake")), Arg.Any<string>());
         }
     }
 
