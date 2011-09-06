@@ -47,11 +47,11 @@ namespace Frog.Domain
             }
             if (task.GetType() == typeof(RakeTask))
             {
-                result.Add(CreateShellTask(new ShellTask {cmd = Path.Combine(Underware.GitProductionScriptsLocation,"ruby_tasks.rb"), args = "rake"}));
+                result.Add(CreateShellTask(new ShellTask {cmd = "rake", args = ""}));
             }
             if(task.GetType() == typeof(BundlerTask))
             {
-                result.Add(CreateShellTask(new ShellTask { cmd = Path.Combine(Underware.GitProductionScriptsLocation, "ruby_tasks.rb"), args = "bundler" }));
+                result.Add(CreateShellTask(new ShellTask { cmd = "bundle", args = "install --path runz-built-deps" }));
             }
             if(task.GetType() == typeof(ShellTask))
             {
