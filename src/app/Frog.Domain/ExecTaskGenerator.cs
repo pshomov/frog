@@ -47,11 +47,11 @@ namespace Frog.Domain
             }
             if (task.GetType() == typeof(RakeTask))
             {
-                result.Add(CreateShellTask(new ShellTask {cmd = "bundle", args = "exec rake"}));
+                result.Add(CreateShellTask(new ShellTask {cmd = "rake", args = ""}));
             }
             if(task.GetType() == typeof(BundlerTask))
             {
-                result.Add(CreateShellTask(new ShellTask { cmd = "bundle", args = "install --path runz-built-deps" }));
+                result.Add(CreateShellTask(new ShellTask { cmd = "bundle", args = "install --path ~/.gem" }));
             }
             if(task.GetType() == typeof(ShellTask))
             {
@@ -65,6 +65,7 @@ namespace Frog.Domain
             var cmd = Os.IsUnix ? "/bin/bash" : "cmd.exe";
             var args = Os.IsUnix ? "-c \"" : "/c ";
             args += anyTask.cmd + " " + anyTask.args;
+            args = args.Trim();
             if (Os.IsUnix) args += "\"";
 
             var execTask = execTaskGenerator.CreateTask(cmd, args, "Shell Task");

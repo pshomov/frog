@@ -76,7 +76,7 @@ namespace Frog.Domain.Specs
         [Test]
         public void should_have_rake_task()
         {
-            execTaskFactory.Received().CreateTask(Arg.Any<string>(), Arg.Is<string>(s => s.Contains("bundle exec rake")), Arg.Any<string>());
+            execTaskFactory.Received().CreateTask(Arg.Any<string>(), Arg.Is<string>(s => s.EndsWith("rake")), Arg.Any<string>());
         }
     }
 
@@ -100,7 +100,7 @@ namespace Frog.Domain.Specs
         [Test]
         public void should_have_bundle_task()
         {
-            execTaskFactory.Received().CreateTask(Arg.Any<string>(), Arg.Is<string>(s => s.Contains("bundle install --path runz-built-deps")), Arg.Any<string>());
+            execTaskFactory.Received().CreateTask(Arg.Any<string>(), Arg.Is<string>(s => s.Contains("bundle install --path ~/.gem")), Arg.Any<string>());
         }
     }
 
