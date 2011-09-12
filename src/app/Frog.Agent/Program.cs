@@ -28,7 +28,7 @@ namespace Frog.Agent
             var pathFinder = new PathFinder();
             return new PipelineOfTasks(new CompoundTaskSource(
                                            new TestTaskDetector(new TestTaskTaskFileFinder(pathFinder)),
-                                           new RakeTaskDetector(new RakeTaskFileFinder(pathFinder), new BundlerFileFinder(pathFinder)),
+                                           new RubyTaskDetector(new RakeTaskFileFinder(pathFinder), new BundlerFileFinder(pathFinder)),
                                            new MSBuildDetector(new SolutionTaskFileFinder(pathFinder)),
                                            new NUnitTaskDetector(new NUnitTaskFileFinder(pathFinder))
                                            ),
