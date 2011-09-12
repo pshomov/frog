@@ -83,7 +83,7 @@
     <Compile Include="PathGoble\GobleTests.cs" />
     <Compile Include="Pipeline\PipelineProcessSuccessfulBuild.cs" />
     <Compile Include="ProcessHandlerSpecs.cs" />
-    <Compile Include="TaskDetection\AloneRakeTaskDetection.cs" />
+    <Compile Include="TaskDetection\RubyTasksDetection.cs" />
     <Compile Include="TaskGeneratorSpec.cs">
       <SubType>Code</SubType>
     </Compile>
