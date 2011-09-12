@@ -45,6 +45,7 @@
     <Compile Include="BuildSystems\FrogSystemTest\TestTaskDetector.cs" />
     <Compile Include="BuildSystems\FrogSystemTest\TestTaskTaskFileFinder.cs" />
     <Compile Include="BuildSystems\Make\MakeFileFinder.cs" />
+    <Compile Include="BuildSystems\Make\MakeTaskDetector.cs" />
     <Compile Include="BuildSystems\Rake\ShellTask.cs" />
     <Compile Include="BuildSystems\Rake\BundlerFileFinder.cs" />
     <Compile Include="BuildSystems\Rake\RubyTaskDetector.cs" />
