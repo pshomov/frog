@@ -44,9 +44,11 @@
     <Compile Include="Agent.cs" />
     <Compile Include="BuildSystems\FrogSystemTest\TestTaskDetector.cs" />
     <Compile Include="BuildSystems\FrogSystemTest\TestTaskTaskFileFinder.cs" />
+    <Compile Include="BuildSystems\Make\MakeFileFinder.cs" />
+    <Compile Include="BuildSystems\Make\MakeTaskDetector.cs" />
     <Compile Include="BuildSystems\Rake\ShellTask.cs" />
     <Compile Include="BuildSystems\Rake\BundlerFileFinder.cs" />
-    <Compile Include="BuildSystems\Rake\RakeTaskDetector.cs" />
+    <Compile Include="BuildSystems\Rake\RubyTaskDetector.cs" />
     <Compile Include="BuildSystems\Rake\RakeTaskFileFinder.cs" />
     <Compile Include="BuildSystems\Rake\RubyTasks.cs" />
     <Compile Include="BuildSystems\Solution\MSBuildDetector.cs" />
@@ -58,6 +60,7 @@
     <Compile Include="CheckForUpdateFailed.cs" />
     <Compile Include="IExecTask.cs" />
     <Compile Include="BuildSystems\Maven\TaskSource\MavenTaskDetector.cs" />
+    <Compile Include="BuildSystems\Make\MakeTask.cs" />
     <Compile Include="RepositoryTracker\IProjectsRepository.cs" />
     <Compile Include="RepositoryTracker\InMemoryProjectsRepository.cs" />
     <Compile Include="RepositoryTracker\RepositoryTracker.cs" />

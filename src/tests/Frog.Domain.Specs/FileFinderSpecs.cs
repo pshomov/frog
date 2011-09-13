@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using Frog.Domain.BuildSystems.Make;
 using Frog.Domain.BuildSystems.Rake;
 using Frog.Domain.BuildSystems.Solution;
 using Frog.Specs.Support;
@@ -141,6 +142,64 @@ namespace Frog.Domain.Specs
                                                      Arg.Is<string>(
                                                          s =>
                                                          s.Equals("RAKEFILE.RB",
+                                                                  StringComparison.InvariantCultureIgnoreCase)),
+                                                     "basefolder");
+        }
+    }
+
+    [TestFixture]
+    public class BundlerFileFindSpec : BDD
+    {
+        private TaskFileFinder _taskFileFinder;
+        private PathFinder pathFinder;
+
+        protected override void Given()
+        {
+            pathFinder = Substitute.For<PathFinder>();
+            _taskFileFinder = new BundlerFileFinder(pathFinder);
+        }
+
+        protected override void When()
+        {
+            _taskFileFinder.FindFiles("basefolder");
+        }
+
+        [Test]
+        public void should_search_for_file_RAKEFILE_at_the_root_of_the_tree()
+        {
+            pathFinder.Received().FindFilesAtTheBase(Arg.Any<Action<string>>(),
+                                                     Arg.Is<string>(
+                                                         s =>
+                                                         s.Equals("GEMFILE",
+                                                                  StringComparison.InvariantCultureIgnoreCase)),
+                                                     "basefolder");
+        }
+    }
+
+    [TestFixture]
+    public class MakefileFileFinderSpec : BDD
+    {
+        private TaskFileFinder _taskFileFinder;
+        private PathFinder pathFinder;
+
+        protected override void Given()
+        {
+            pathFinder = Substitute.For<PathFinder>();
+            _taskFileFinder = new MakeFileFinder(pathFinder);
+        }
+
+        protected override void When()
+        {
+            _taskFileFinder.FindFiles("basefolder");
+        }
+
+        [Test]
+        public void should_search_for_file_MAKEFILE_at_the_root_of_the_tree()
+        {
+            pathFinder.Received().FindFilesAtTheBase(Arg.Any<Action<string>>(),
+                                                     Arg.Is<string>(
+                                                         s =>
+                                                         s.Equals("MAKEFILE",
                                                                   StringComparison.InvariantCultureIgnoreCase)),
                                                      "basefolder");
         }

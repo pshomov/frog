@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using Frog.Domain;
 using Frog.Domain.BuildSystems.FrogSystemTest;
+using Frog.Domain.BuildSystems.Make;
 using Frog.Domain.BuildSystems.Rake;
 using Frog.Domain.BuildSystems.Solution;
 using Frog.Domain.Integration;
@@ -28,7 +29,8 @@ namespace Frog.Agent
             var pathFinder = new PathFinder();
             return new PipelineOfTasks(new CompoundTaskSource(
                                            new TestTaskDetector(new TestTaskTaskFileFinder(pathFinder)),
-                                           new RakeTaskDetector(new RakeTaskFileFinder(pathFinder), new BundlerFileFinder(pathFinder)),
+                                           new MakeTaskDetector(new MakeFileFinder(pathFinder)),
+                                           new RubyTaskDetector(new RakeTaskFileFinder(pathFinder), new BundlerFileFinder(pathFinder)),
                                            new MSBuildDetector(new SolutionTaskFileFinder(pathFinder)),
                                            new NUnitTaskDetector(new NUnitTaskFileFinder(pathFinder))
                                            ),

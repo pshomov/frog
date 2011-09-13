@@ -78,12 +78,13 @@
     <Compile Include="Pipeline\PipelineProcessSpecBase.cs" />
     <Compile Include="Pipeline\PipelinePropagateTerminalUpdateEvents.cs" />
     <Compile Include="RegisterRepositoryChecksItForUpdates.cs" />
+    <Compile Include="TaskDetection\MakeTaskDetectorSpecs.cs" />
     <Compile Include="TaskDetection\TaskDetectorSpecs.cs" />
     <Compile Include="TaskDetection\TaskDetectorSpecsBase.cs" />
     <Compile Include="PathGoble\GobleTests.cs" />
     <Compile Include="Pipeline\PipelineProcessSuccessfulBuild.cs" />
     <Compile Include="ProcessHandlerSpecs.cs" />
-    <Compile Include="TaskDetection\AloneRakeTaskDetection.cs" />
+    <Compile Include="TaskDetection\RubyTasksDetection.cs" />
     <Compile Include="TaskGeneratorSpec.cs">
       <SubType>Code</SubType>
     </Compile>

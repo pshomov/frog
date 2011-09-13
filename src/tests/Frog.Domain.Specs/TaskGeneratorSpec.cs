@@ -1,4 +1,5 @@
 using System.IO;
+using Frog.Domain.BuildSystems.Make;
 using Frog.Domain.BuildSystems.Rake;
 using Frog.Domain.BuildSystems.Solution;
 using Frog.Specs.Support;
@@ -125,6 +126,30 @@ namespace Frog.Domain.Specs
         public void should_have_bundle_task()
         {
             execTaskFactory.Received().CreateTask(Arg.Is<string>(s => s == "cmd.exe" || s == "/bin/bash"), Arg.Is<string>(s => s == "-c \"ccc /a /b\"" || s == "/c ccc /a /b"), "Shell Task");
+        }
+    }
+
+    [TestFixture]
+    public class TaskGeneratorMakeTaskSpec : BDD
+    {
+        ExecTaskGenerator execTaskGenerator;
+        ExecTaskFactory execTaskFactory;
+
+        protected override void Given()
+        {
+            execTaskFactory = Substitute.For<ExecTaskFactory>();
+            execTaskGenerator = new ExecTaskGenerator(execTaskFactory);
+        }
+
+        protected override void When()
+        {
+            execTaskGenerator.GimeTasks(new MakeTask());
+        }
+
+        [Test]
+        public void should_have_make_task()
+        {
+            execTaskFactory.Received().CreateTask(Arg.Is<string>(s => s == "make"), Arg.Is((string)null), "Make task");
         }
     }
 }

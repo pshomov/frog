@@ -11,7 +11,7 @@ namespace Frog.Domain.Specs.TaskDetection
     public class RakeTaskDetectorAlternativeFilenameSpecs : TaskDetectorSpecsBase
     {
         protected TaskFileFinder bundlerFileFinder;
-        protected RakeTaskDetector taskDetector;
+        protected RubyTaskDetector taskDetector;
         protected IList<ITask> tasks;
 
         protected override void Given()
@@ -19,7 +19,7 @@ namespace Frog.Domain.Specs.TaskDetection
             taskFileFinder.FindFiles("base").Returns(As.List("Rakefile.rb"));
             bundlerFileFinder = Substitute.For<TaskFileFinder>();
             bundlerFileFinder.FindFiles("base").Returns(Empty.ListOf("String"));
-            taskDetector = new RakeTaskDetector(taskFileFinder, bundlerFileFinder);
+            taskDetector = new RubyTaskDetector(taskFileFinder, bundlerFileFinder);
         }
 
         protected override void When()
@@ -37,7 +37,7 @@ namespace Frog.Domain.Specs.TaskDetection
     public class RakeTaskDetectorSpecsBase : TaskDetectorSpecsBase
     {
         protected TaskFileFinder bundlerFileFinder;
-        protected RakeTaskDetector taskDetector;
+        protected RubyTaskDetector taskDetector;
         protected IList<ITask> tasks;
 
         protected override void Given()
@@ -45,7 +45,7 @@ namespace Frog.Domain.Specs.TaskDetection
             taskFileFinder.FindFiles("base").Returns(As.List("Rakefile"));
             bundlerFileFinder = Substitute.For<TaskFileFinder>();
             bundlerFileFinder.FindFiles("base").Returns(Empty.ListOf("String"));
-            taskDetector = new RakeTaskDetector(taskFileFinder, bundlerFileFinder);
+            taskDetector = new RubyTaskDetector(taskFileFinder, bundlerFileFinder);
         }
 
         protected override void When()
@@ -76,7 +76,7 @@ namespace Frog.Domain.Specs.TaskDetection
             taskFileFinder.FindFiles("base").Returns(As.List("Rakefile"));
             bundlerFileFinder = Substitute.For<TaskFileFinder>();
             bundlerFileFinder.FindFiles("base").Returns(As.List("Gemfile"));
-            taskDetector = new RakeTaskDetector(taskFileFinder, bundlerFileFinder);
+            taskDetector = new RubyTaskDetector(taskFileFinder, bundlerFileFinder);
         }
 
         protected override void When()
@@ -109,7 +109,7 @@ namespace Frog.Domain.Specs.TaskDetection
         protected override void Given()
         {
             taskFileFinder.FindFiles("base").Returns(new List<string>());
-            taskDetector = new RakeTaskDetector(taskFileFinder, taskFileFinder);
+            taskDetector = new RubyTaskDetector(taskFileFinder, taskFileFinder);
         }
 
         protected override void When()

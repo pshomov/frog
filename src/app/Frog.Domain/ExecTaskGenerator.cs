@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using Frog.Domain.BuildSystems.FrogSystemTest;
+using Frog.Domain.BuildSystems.Make;
 using Frog.Domain.BuildSystems.Rake;
 using Frog.Domain.BuildSystems.Solution;
 using Frog.Domain.CustomTasks;
@@ -56,6 +57,10 @@ namespace Frog.Domain
             if(task.GetType() == typeof(ShellTask))
             {
                 result.Add(CreateShellTask((ShellTask)task));
+            }
+            if(task.GetType() == typeof(MakeTask))
+            {
+                result.Add(execTaskGenerator.CreateTask("make", null, "Make task"));
             }
             return result;
         }

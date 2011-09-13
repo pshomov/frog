@@ -5,21 +5,21 @@ using Frog.Domain.TaskSources;
 
 namespace Frog.Domain.BuildSystems.Rake
 {
-    public class RakeTaskDetector : TaskSource
+    public class RubyTaskDetector : TaskSource
     {
-        readonly TaskFileFinder _rakeTaskFileFinder;
-        private readonly TaskFileFinder _bundlerFileFinder;
+        readonly TaskFileFinder rakeTaskFileFinder;
+        private readonly TaskFileFinder bundlerFileFinder;
 
-        public RakeTaskDetector(TaskFileFinder _rakeTaskFileFinder, TaskFileFinder bundlerFileFinder)
+        public RubyTaskDetector(TaskFileFinder rakeTaskFileFinder, TaskFileFinder bundlerFileFinder)
         {
-            this._rakeTaskFileFinder = _rakeTaskFileFinder;
-            _bundlerFileFinder = bundlerFileFinder;
+            this.rakeTaskFileFinder = rakeTaskFileFinder;
+            this.bundlerFileFinder = bundlerFileFinder;
         }
 
         public IList<ITask> Detect(string projectFolder)
         {
-            var rakeFile = _rakeTaskFileFinder.FindFiles(projectFolder);
-            var bundlerFile = _bundlerFileFinder.FindFiles(projectFolder);
+            var rakeFile = rakeTaskFileFinder.FindFiles(projectFolder);
+            var bundlerFile = bundlerFileFinder.FindFiles(projectFolder);
             var tasks = new List<ITask>();
             if (rakeFile.Exists(s => s.Equals("Rakefile",StringComparison.InvariantCultureIgnoreCase) || s.Equals("Rakefile.rb", StringComparison.InvariantCultureIgnoreCase)))
             {
