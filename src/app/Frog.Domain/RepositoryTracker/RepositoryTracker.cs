@@ -24,6 +24,12 @@ namespace Frog.Domain.RepositoryTracker
         }
     }
 
+    public class BuildProject : Command
+    {
+        public string RepoUrl;
+        public string Revision;
+    }
+
     public class RepositoryTracker : Handles<UpdateFound>, Handles<RegisterRepository>, Handles<CheckForUpdateFailed>
     {
         private const string RepositoryTrackerQueueId = "Repository_tracker";
@@ -65,7 +71,10 @@ namespace Frog.Domain.RepositoryTracker
 
         public void Handle(UpdateFound message)
         {
+            var currentRev =
+                projectsRepository.AllProjects.First(document => document.projecturl == message.RepoUrl).revision;
             projectsRepository.UpdateLastKnownRevision(message.RepoUrl, message.Revision);
+            if (currentRev != message.Revision) bus.Send(new BuildProject {RepoUrl = message.RepoUrl, Revision = message.Revision});
         }
 
         public void Handle(CheckForUpdateFailed message)

@@ -33,7 +33,7 @@ namespace Frog.Domain.Specs
         {
             repositoryTracker.CheckForUpdates();
             bus.Received().Send(Arg.Is<CheckForUpdates>(updates => 
-                updates.RepoUrl == "http://fle" && updates.Revision == ""));
+                updates.RepoUrl == "http://fle"));
         }
 
     }
@@ -71,11 +71,11 @@ namespace Frog.Domain.Specs
         {
             repositoryTracker.CheckForUpdates();
             bus.Received().Send(Arg.Is<CheckForUpdates>(updates =>
-                updates.RepoUrl == "http://fle1" && updates.Revision == ""));
+                updates.RepoUrl == "http://fle1"));
             bus.Received().Send(Arg.Is<CheckForUpdates>(updates =>
-                updates.RepoUrl == "http://fle2" && updates.Revision == ""));
+                updates.RepoUrl == "http://fle2"));
             bus.Received().Send(Arg.Is<CheckForUpdates>(updates =>
-                updates.RepoUrl == "http://fle3" && updates.Revision == ""));
+                updates.RepoUrl == "http://fle3"));
         }
 
     }
@@ -95,28 +95,6 @@ namespace Frog.Domain.Specs
             bus.Received().RegisterHandler(Arg.Any<Action<RegisterRepository>>(), Arg.Any<string>());
         }
 
-    }
-
-    [TestFixture]
-    public class RepositoryUpdateLastRevisionNumber : RepositoryTrackerSpecsBase
-    {
-        protected override void Given()
-        {
-            base.Given();
-            repositoryTracker.Handle(new RegisterRepository { Repo = "http://fle" });
-        }
-
-        protected override void When()
-        {
-            repositoryTracker.Handle(new UpdateFound{RepoUrl = "http://fle", Revision = "12"});
-        }
-
-        [Test]
-        public void should_send_new_revision_as_latest_known_revision_number_on_subsecuen_checks_for_updates()
-        {
-            repositoryTracker.CheckForUpdates();
-            bus.Received().Send(Arg.Is<CheckForUpdates>(updates => updates.RepoUrl == "http://fle" && updates.Revision == "12"));
-        }
     }
 
     [TestFixture]
@@ -187,6 +165,52 @@ namespace Frog.Domain.Specs
         public void should_send_a_new_command_to_check_for_updates()
         {
             bus.Received().Send(Arg.Any<CheckForUpdates>());
+        }
+    }
+
+    [TestFixture]
+    public class RepositoryChecksForUpdateAndFindsNewRevision : RepositoryTrackerSpecsBase
+    {
+        protected override void Given()
+        {
+            base.Given();
+            repositoryTracker.Handle(new RegisterRepository { Repo = "http://fle" });
+            repositoryTracker.CheckForUpdates();
+        }
+
+        protected override void When()
+        {
+            repositoryTracker.Handle(new UpdateFound { RepoUrl = "http://fle", Revision = "789" });
+        }
+
+        [Test]
+        public void should_send_a_command_to_build_the_project()
+        {
+            bus.Received().Send(Arg.Is<BuildProject>(project => project.RepoUrl == "http://fle" && project.Revision == "789"));
+        }
+    }
+    [TestFixture]
+    public class RepositoryChecksForUpdateButNoNewRevision : RepositoryTrackerSpecsBase
+    {
+        protected override void Given()
+        {
+            base.Given();
+            repositoryTracker.Handle(new RegisterRepository { Repo = "http://fle" });
+            repositoryTracker.CheckForUpdates();
+            repositoryTracker.Handle(new UpdateFound { RepoUrl = "http://fle", Revision = "789" });
+            repositoryTracker.CheckForUpdates();
+            bus.ClearReceivedCalls();
+        }
+
+        protected override void When()
+        {
+            repositoryTracker.Handle(new UpdateFound { RepoUrl = "http://fle", Revision = "789" });
+        }
+
+        [Test]
+        public void should_send_a_command_to_build_the_project()
+        {
+            bus.DidNotReceive().Send(Arg.Any<BuildProject>());
         }
     }
 }
