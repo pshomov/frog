@@ -8,16 +8,16 @@ namespace Frog.Domain.RepositoryTracker
         public string Repo;
     }
 
-    public class CheckForUpdates : Command
+    public class Build : Command
     {
         public string RepoUrl { get; set; }
         public string Revision { get; set; }
 
-        public CheckForUpdates()
+        public Build()
         {
         }
 
-        public CheckForUpdates(string repoUrl, string revision)
+        public Build(string repoUrl, string revision)
         {
             RepoUrl = repoUrl;
             Revision = revision;
@@ -53,7 +53,7 @@ namespace Frog.Domain.RepositoryTracker
                  document =>
                      {
                          projectsRepository.ProjectCheckInProgress(document.projecturl);
-                         bus.Send(new CheckForUpdates(repoUrl: document.projecturl, revision: document.revision));
+                         bus.Send(new Build(repoUrl: document.projecturl, revision: document.revision));
                      });
         }
 

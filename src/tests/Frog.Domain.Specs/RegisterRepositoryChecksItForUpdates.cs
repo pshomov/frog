@@ -32,7 +32,7 @@ namespace Frog.Domain.Specs
         public void should_register_repository()
         {
             repositoryTracker.CheckForUpdates();
-            bus.Received().Send(Arg.Is<CheckForUpdates>(updates => 
+            bus.Received().Send(Arg.Is<Build>(updates => 
                 updates.RepoUrl == "http://fle"));
         }
 
@@ -70,11 +70,11 @@ namespace Frog.Domain.Specs
         public void should_send_only_one_check_for_updates_command()
         {
             repositoryTracker.CheckForUpdates();
-            bus.Received().Send(Arg.Is<CheckForUpdates>(updates =>
+            bus.Received().Send(Arg.Is<Build>(updates =>
                 updates.RepoUrl == "http://fle1"));
-            bus.Received().Send(Arg.Is<CheckForUpdates>(updates =>
+            bus.Received().Send(Arg.Is<Build>(updates =>
                 updates.RepoUrl == "http://fle2"));
-            bus.Received().Send(Arg.Is<CheckForUpdates>(updates =>
+            bus.Received().Send(Arg.Is<Build>(updates =>
                 updates.RepoUrl == "http://fle3"));
         }
 
@@ -116,7 +116,7 @@ namespace Frog.Domain.Specs
         [Test]
         public void should_not_send_a_new_command_to_check_for_updates_since_it_already_has_asked_before()
         {
-            bus.DidNotReceive().Send(Arg.Any<CheckForUpdates>());
+            bus.DidNotReceive().Send(Arg.Any<Build>());
         }
     }
 
@@ -140,7 +140,7 @@ namespace Frog.Domain.Specs
         [Test]
         public void should_send_a_new_command_to_check_for_updates()
         {
-            bus.Received().Send(Arg.Any<CheckForUpdates>());
+            bus.Received().Send(Arg.Any<Build>());
         }
     }
 
@@ -164,7 +164,7 @@ namespace Frog.Domain.Specs
         [Test]
         public void should_send_a_new_command_to_check_for_updates()
         {
-            bus.Received().Send(Arg.Any<CheckForUpdates>());
+            bus.Received().Send(Arg.Any<Build>());
         }
     }
 

@@ -87,7 +87,7 @@ namespace Frog.Domain
     }
 
 
-    public class Agent : Handles<CheckForUpdates>
+    public class Agent : Handles<Build>
     {
         readonly IBus theBus;
         readonly Worker worker;
@@ -102,10 +102,10 @@ namespace Frog.Domain
 
         public void JoinTheParty()
         {
-            theBus.RegisterHandler<CheckForUpdates>(Handle, "Agent");
+            theBus.RegisterHandler<Build>(Handle, "Agent");
         }
 
-        public void Handle(CheckForUpdates message)
+        public void Handle(Build message)
         {
             Action<string> onUpdateFound =
                 s => theBus.Publish(new UpdateFound {RepoUrl = message.RepoUrl, Revision = s});

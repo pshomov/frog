@@ -35,11 +35,11 @@ namespace Frog.System.Specs
             var prober = new PollingProber(1000, 100);
             Assert.True(prober.check(Take.Snapshot(() => system.GetEventsSnapshot())
                                          .Has(x => x,
-                                              A.Command<CheckForUpdates>())
+                                              A.Command<Build>())
                             ));
             Assert.False(prober.check(Take.Snapshot(() => system.GetEventsSnapshot())
                                          .Has(x => x,
-                                              Two.Commands<CheckForUpdates>())
+                                              Two.Commands<Build>())
                             ));
         }
 
@@ -47,7 +47,7 @@ namespace Frog.System.Specs
         {
             var prober = new PollingProber(5000, 100);
             Assert.True(prober.check(Take.Snapshot(() => system.GetEventsSnapshot())
-                                         .Has(msgs => msgs, A.Command<CheckForUpdates>())
+                                         .Has(msgs => msgs, A.Command<Build>())
                             ));
         }
     }

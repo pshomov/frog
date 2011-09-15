@@ -27,7 +27,7 @@ namespace Frog.System.Specs
             prober = new PollingProber(5000, 100);
             Assert.True(prober.check(Take.Snapshot(() => system.GetEventsSnapshot())
                                          .Has(msgs => msgs, An.Event<CheckForUpdateFailed>())
-                                         .Has(msgs => msgs, A.Command<CheckForUpdates>())
+                                         .Has(msgs => msgs, A.Command<Build>())
                             ));
         }
 
@@ -41,7 +41,7 @@ namespace Frog.System.Specs
         {
             Assert.True(prober.check(Take.Snapshot(() => system.GetEventsSnapshot())
                                          .Has(x => x,
-                                              Two.Commands<CheckForUpdates>())
+                                              Two.Commands<Build>())
                             ));
         }
     }
