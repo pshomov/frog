@@ -78,6 +78,8 @@
     <Compile Include="Pipeline\PipelineProcessSpecBase.cs" />
     <Compile Include="Pipeline\PipelinePropagateTerminalUpdateEvents.cs" />
     <Compile Include="RegisterRepositoryChecksItForUpdates.cs" />
+    <Compile Include="RevisionChecker\FailsToRetrieveRevision.cs" />
+    <Compile Include="RevisionChecker\RetrievesRevisionSuccessfully.cs" />
     <Compile Include="TaskDetection\MakeTaskDetectorSpecs.cs" />
     <Compile Include="TaskDetection\TaskDetectorSpecs.cs" />
     <Compile Include="TaskDetection\TaskDetectorSpecsBase.cs" />
