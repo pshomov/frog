@@ -9,6 +9,7 @@ using Frog.Domain.BuildSystems.Make;
 using Frog.Domain.BuildSystems.Rake;
 using Frog.Domain.BuildSystems.Solution;
 using Frog.Domain.Integration;
+using Frog.Domain.RevisionChecker;
 using Frog.Domain.TaskSources;
 using SimpleCQRS;
 
@@ -19,8 +20,12 @@ namespace Frog.Agent
         static void Main(string[] args)
         {
             var worker = new Worker(GetPipeline(), SetupWorkingAreaGovernor());
-            var agent = new Domain.Agent(SetupBus(), worker, url => new GitDriver(url));
+            var bus = SetupBus();
+            SourceRepoDriverFactory sourceRepoDriverFactory = url => new GitDriver(url);
+            var agent = new Domain.Agent(bus, worker, sourceRepoDriverFactory);
+            var revisionChecker = new RevisionChecker(bus, sourceRepoDriverFactory);
             agent.JoinTheParty();
+            revisionChecker.JoinTheParty();
             Console.ReadLine();
         }
 
