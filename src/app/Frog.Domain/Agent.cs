@@ -107,8 +107,6 @@ namespace Frog.Domain
 
         public void Handle(Build message)
         {
-            Action<string> onUpdateFound =
-                s => theBus.Publish(new UpdateFound {RepoUrl = message.RepoUrl, Revision = s});
             Action<BuildTotalEndStatus> onBuildEnded = started => theBus.Publish(new BuildEnded(message.RepoUrl, started));
             BuildStartedDelegate onBuildStarted =
                 started => theBus.Publish(new BuildStarted(status: started, repoUrl: message.RepoUrl));
@@ -118,14 +116,11 @@ namespace Frog.Domain
                                                          theBus.Publish(new TerminalUpdate(repoUrl: message.RepoUrl,
                                                                                            content: info.Content, taskIndex: info.TaskIndex,
                                                                                            contentSequenceIndex: info.ContentSequenceIndex));
-            Action onCheckForUpdateFailed = () => theBus.Publish(new CheckForUpdateFailed(){repoUrl = message.RepoUrl});
 
-            worker.OnUpdateFound += onUpdateFound;
             worker.OnTerminalUpdates += onTerminalUpdates;
             worker.OnBuildStarted += onBuildStarted;
             worker.OnBuildUpdated += onBuildUpdated;
             worker.OnBuildEnded += onBuildEnded;
-            worker.OnCheckForUpdateFailed += onCheckForUpdateFailed;
             try
             {
                 worker.CheckForUpdatesAndKickOffPipeline(repoDriverFactory(message.RepoUrl), message.Revision);
@@ -135,9 +130,7 @@ namespace Frog.Domain
                 worker.OnBuildEnded -= onBuildEnded;
                 worker.OnBuildStarted -= onBuildStarted;
                 worker.OnBuildUpdated -= onBuildUpdated;
-                worker.OnUpdateFound -= onUpdateFound;
                 worker.OnTerminalUpdates -= onTerminalUpdates;
-                worker.OnCheckForUpdateFailed -= onCheckForUpdateFailed;
             }
         }
     }

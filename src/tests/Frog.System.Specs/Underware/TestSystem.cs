@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using Frog.Domain;
 using Frog.Domain.RepositoryTracker;
+using Frog.Domain.RevisionChecker;
 using Frog.Domain.TaskSources;
 using Frog.Domain.UI;
 using NSubstitute;
@@ -22,14 +23,15 @@ namespace Frog.System.Specs.Underware
         public TaskSource TasksSource;
         public RepositoryTracker repositoryTracker { get; private set; }
 
-        public TestSystem(WorkingAreaGoverner governer, SourceRepoDriverFactory sourceRepoDriverFactory, bool runAgent = true)
+        public TestSystem(WorkingAreaGoverner governer, SourceRepoDriverFactory sourceRepoDriverFactory, bool runRevisionChecker = true)
         {
             theBus = SetupBus();
 
             areaGoverner = governer;
             SetupWorker(GetPipeline());
             SetupRepositoryTracker();
-            if (runAgent) SetupAgent(sourceRepoDriverFactory);
+            if (runRevisionChecker) new RevisionChecker(theBus, sourceRepoDriverFactory).JoinTheParty();
+            SetupAgent(sourceRepoDriverFactory);
 
             report = Setup.SetupView(theBus);
 
@@ -95,10 +97,10 @@ namespace Frog.System.Specs.Underware
             theTestSystem = system;
         }
 
-        public SystemDriver(bool runAgent = true)
+        public SystemDriver(bool runRevisionChecker = true)
         {
             SourceRepoDriver = Substitute.For<SourceRepoDriver>();
-            theTestSystem = new TestSystem(Substitute.For<WorkingAreaGoverner>(), url => SourceRepoDriver, runAgent);
+            theTestSystem = new TestSystem(Substitute.For<WorkingAreaGoverner>(), url => SourceRepoDriver, runRevisionChecker);
         }
 
         public List<Message> GetEventsSnapshot()

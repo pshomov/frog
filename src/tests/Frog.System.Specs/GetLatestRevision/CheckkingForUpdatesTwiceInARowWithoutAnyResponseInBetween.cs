@@ -1,6 +1,7 @@
 using System;
 using Frog.Domain;
 using Frog.Domain.RepositoryTracker;
+using Frog.Domain.RevisionChecker;
 using Frog.Specs.Support;
 using Frog.System.Specs.Underware;
 using NSubstitute;
@@ -17,7 +18,7 @@ namespace Frog.System.Specs
         protected override void Given()
         {
             var repoUrl = Guid.NewGuid().ToString();
-            system = new SystemDriver(runAgent : false);
+            system = new SystemDriver(runRevisionChecker : false);
             system.SourceRepoDriver.GetLatestRevision().Returns("14");
             system.RegisterNewProject(repoUrl);
             system.CheckProjectsForUpdates();
@@ -35,11 +36,11 @@ namespace Frog.System.Specs
             var prober = new PollingProber(1000, 100);
             Assert.True(prober.check(Take.Snapshot(() => system.GetEventsSnapshot())
                                          .Has(x => x,
-                                              A.Command<Build>())
+                                              A.Command<CheckRevision>())
                             ));
             Assert.False(prober.check(Take.Snapshot(() => system.GetEventsSnapshot())
                                          .Has(x => x,
-                                              Two.Commands<Build>())
+                                              Two.Commands<CheckRevision>())
                             ));
         }
 
@@ -47,7 +48,7 @@ namespace Frog.System.Specs
         {
             var prober = new PollingProber(5000, 100);
             Assert.True(prober.check(Take.Snapshot(() => system.GetEventsSnapshot())
-                                         .Has(msgs => msgs, A.Command<Build>())
+                                         .Has(msgs => msgs, A.Command<CheckRevision>())
                             ));
         }
     }

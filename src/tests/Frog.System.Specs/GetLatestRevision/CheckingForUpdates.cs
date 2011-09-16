@@ -1,6 +1,7 @@
 using System.Linq;
 using Frog.Domain;
 using Frog.Domain.RepositoryTracker;
+using Frog.Domain.RevisionChecker;
 using Frog.Specs.Support;
 using Frog.System.Specs.Underware;
 using NSubstitute;
@@ -28,19 +29,19 @@ namespace Frog.System.Specs
         }
 
         [Test]
-        public void should_send_CHECK_FOR_UPDATES_and_receive_event_UPDATE_FOUND_and_send_BUILDPROJECT()
+        public void should_check_for_new_revision_and_request_a_build_of_it()
         {
             var prober = new PollingProber(3000, 100);
             Assert.True(prober.check(Take.Snapshot(() => system.GetEventsSnapshot())
                                          .Has(x => x,
-                                              A.Command<Build>(
+                                              A.Command<CheckRevision>(
                                                   ev =>
                                                   ev.RepoUrl == "http://123"))
                                          .Has(x => x,
                                               An.Event<UpdateFound>(
                                                   found => found.RepoUrl == "http://123" && found.Revision == "12"))
                                          .Has(x => x,
-                                              A.Command<BuildProject>(
+                                              A.Command<Build>(
                                                   found => found.RepoUrl == "http://123" && found.Revision == "12"))
                             ));
         }
@@ -53,13 +54,13 @@ namespace Frog.System.Specs
             system.CheckProjectsForUpdates();
             Assert.True(prober.check(Take.Snapshot(() => system.GetEventsSnapshot())
                                          .Has(x => x.Skip(messageCheckpoint).ToList(),
-                                              A.Command<Build>(
+                                              A.Command<CheckRevision>(
                                                   ev =>
                                                   ev.RepoUrl == "http://123"))
                             ));
             Assert.False(prober.check(Take.Snapshot(() => system.GetEventsSnapshot())
                                           .Has(x => x.Skip(messageCheckpoint).ToList(),
-                                               A.Command<BuildProject>(
+                                               A.Command<Build>(
                                                    ev =>
                                                    ev.RepoUrl == "http://123"))
                              ));

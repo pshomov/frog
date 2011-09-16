@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Frog.Domain.RevisionChecker;
 using SimpleCQRS;
 
 namespace Frog.Domain.RepositoryTracker
@@ -24,12 +25,6 @@ namespace Frog.Domain.RepositoryTracker
         }
     }
 
-    public class BuildProject : Command
-    {
-        public string RepoUrl;
-        public string Revision;
-    }
-
     public class RepositoryTracker : Handles<UpdateFound>, Handles<RegisterRepository>, Handles<CheckForUpdateFailed>
     {
         private const string RepositoryTrackerQueueId = "Repository_tracker";
@@ -53,7 +48,7 @@ namespace Frog.Domain.RepositoryTracker
                  document =>
                      {
                          projectsRepository.ProjectCheckInProgress(document.projecturl);
-                         bus.Send(new Build(repoUrl: document.projecturl, revision: document.revision));
+                         bus.Send(new CheckRevision{RepoUrl = document.projecturl});
                      });
         }
 
@@ -74,7 +69,7 @@ namespace Frog.Domain.RepositoryTracker
             var currentRev =
                 projectsRepository.AllProjects.First(document => document.projecturl == message.RepoUrl).revision;
             projectsRepository.UpdateLastKnownRevision(message.RepoUrl, message.Revision);
-            if (currentRev != message.Revision) bus.Send(new BuildProject {RepoUrl = message.RepoUrl, Revision = message.Revision});
+            if (currentRev != message.Revision) bus.Send(new Build {RepoUrl = message.RepoUrl, Revision = message.Revision});
         }
 
         public void Handle(CheckForUpdateFailed message)

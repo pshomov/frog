@@ -22,26 +22,26 @@ namespace Frog.Domain
 
         public virtual void CheckForUpdatesAndKickOffPipeline(SourceRepoDriver repositoryDriver, string revision)
         {
-            string latestRevision;
-            try
-            {
-                latestRevision = repositoryDriver.GetLatestRevision();
-            }
-            catch (Exception e)
-            {
-                OnCheckForUpdateFailed();
-                return;
-            }
-
-            OnUpdateFound(latestRevision);
-            
-            if (latestRevision != revision)
-            {
+//            string latestRevision;
+//            try
+//            {
+//                latestRevision = repositoryDriver.GetLatestRevision();
+//            }
+//            catch (Exception e)
+//            {
+//                OnCheckForUpdateFailed();
+//                return;
+//            }
+//
+//            OnUpdateFound(latestRevision);
+//            
+//            if (latestRevision != revision)
+//            {
                 var allocatedWorkingArea = workingAreaGoverner.AllocateWorkingArea();
-                repositoryDriver.GetSourceRevision(latestRevision, allocatedWorkingArea);
+                repositoryDriver.GetSourceRevision(revision, allocatedWorkingArea);
                 ProcessPipeline(allocatedWorkingArea);
                 workingAreaGoverner.DeallocateWorkingArea(allocatedWorkingArea);
-            }
+//            }
         }
 
         void ProcessPipeline(string allocatedWorkingArea)
@@ -63,8 +63,6 @@ namespace Frog.Domain
             }
         }
 
-        public virtual event Action<string> OnUpdateFound = s => {};
-        public virtual event Action OnCheckForUpdateFailed = () => {};
         public virtual event Action<TerminalUpdateInfo> OnTerminalUpdates = info => {};
         public virtual event BuildStartedDelegate OnBuildStarted = status => {};
         public virtual event Action<int, TaskInfo.TaskStatus> OnBuildUpdated =  (i,status) => {};

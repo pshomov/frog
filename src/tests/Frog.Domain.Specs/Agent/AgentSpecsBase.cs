@@ -21,8 +21,6 @@ namespace Frog.Domain.Specs.Agent
                 iValve => iValve.CheckForUpdatesAndKickOffPipeline(Arg.Any<SourceRepoDriver>(), Arg.Any<string>())).Do(
                     info =>
                         {
-                            Worker.OnCheckForUpdateFailed += Raise.Event<Action>();
-                            Worker.OnUpdateFound += Raise.Event<Action<string>>("new_rev");
                             Worker.OnBuildStarted +=
                                 Raise.Event<BuildStartedDelegate>(new PipelineStatus(Guid.NewGuid()));
                             Worker.OnTerminalUpdates += Raise.Event<Action<TerminalUpdateInfo>>(new TerminalUpdateInfo(content: "content", taskIndex: 1, contentSequenceIndex: 1));

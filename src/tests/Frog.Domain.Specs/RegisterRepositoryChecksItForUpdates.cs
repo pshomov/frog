@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Frog.Domain.RepositoryTracker;
+using Frog.Domain.RevisionChecker;
 using Frog.Specs.Support;
 using NSubstitute;
 using NUnit.Framework;
@@ -32,7 +33,7 @@ namespace Frog.Domain.Specs
         public void should_register_repository()
         {
             repositoryTracker.CheckForUpdates();
-            bus.Received().Send(Arg.Is<Build>(updates => 
+            bus.Received().Send(Arg.Is<CheckRevision>(updates => 
                 updates.RepoUrl == "http://fle"));
         }
 
@@ -70,11 +71,11 @@ namespace Frog.Domain.Specs
         public void should_send_only_one_check_for_updates_command()
         {
             repositoryTracker.CheckForUpdates();
-            bus.Received().Send(Arg.Is<Build>(updates =>
+            bus.Received().Send(Arg.Is<CheckRevision>(updates =>
                 updates.RepoUrl == "http://fle1"));
-            bus.Received().Send(Arg.Is<Build>(updates =>
+            bus.Received().Send(Arg.Is<CheckRevision>(updates =>
                 updates.RepoUrl == "http://fle2"));
-            bus.Received().Send(Arg.Is<Build>(updates =>
+            bus.Received().Send(Arg.Is<CheckRevision>(updates =>
                 updates.RepoUrl == "http://fle3"));
         }
 
@@ -140,7 +141,7 @@ namespace Frog.Domain.Specs
         [Test]
         public void should_send_a_new_command_to_check_for_updates()
         {
-            bus.Received().Send(Arg.Any<Build>());
+            bus.Received().Send(Arg.Any<CheckRevision>());
         }
     }
 
@@ -164,7 +165,7 @@ namespace Frog.Domain.Specs
         [Test]
         public void should_send_a_new_command_to_check_for_updates()
         {
-            bus.Received().Send(Arg.Any<Build>());
+            bus.Received().Send(Arg.Any<CheckRevision>());
         }
     }
 
@@ -186,7 +187,7 @@ namespace Frog.Domain.Specs
         [Test]
         public void should_send_a_command_to_build_the_project()
         {
-            bus.Received().Send(Arg.Is<BuildProject>(project => project.RepoUrl == "http://fle" && project.Revision == "789"));
+            bus.Received().Send(Arg.Is<Build>(project => project.RepoUrl == "http://fle" && project.Revision == "789"));
         }
     }
     [TestFixture]
@@ -210,7 +211,7 @@ namespace Frog.Domain.Specs
         [Test]
         public void should_send_a_command_to_build_the_project()
         {
-            bus.DidNotReceive().Send(Arg.Any<BuildProject>());
+            bus.DidNotReceive().Send(Arg.Any<Build>());
         }
     }
 }

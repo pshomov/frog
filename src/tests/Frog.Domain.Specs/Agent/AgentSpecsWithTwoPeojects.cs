@@ -21,15 +21,6 @@ namespace Frog.Domain.Specs.Agent
         }
 
         [Test]
-        public void should_publish_UPDATE_FOUND_event_when_there_is_a_new_revision()
-        {
-            Bus.Received().Publish(
-                Arg.Is<UpdateFound>(found => found.Revision == "new_rev" && found.RepoUrl == "http://fle"));
-            Bus.Received().Publish(
-                Arg.Is<UpdateFound>(found => found.Revision == "new_rev" && found.RepoUrl == "http://flo"));
-        }
-
-        [Test]
         public void should_publish_BuildStarted_event()
         {
             Bus.Received().Publish(

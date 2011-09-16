@@ -1,6 +1,7 @@
 using System;
 using Frog.Domain;
 using Frog.Domain.RepositoryTracker;
+using Frog.Domain.RevisionChecker;
 using Frog.Specs.Support;
 using Frog.System.Specs.Underware;
 using NSubstitute;
@@ -27,7 +28,7 @@ namespace Frog.System.Specs
             prober = new PollingProber(5000, 100);
             Assert.True(prober.check(Take.Snapshot(() => system.GetEventsSnapshot())
                                          .Has(msgs => msgs, An.Event<CheckForUpdateFailed>())
-                                         .Has(msgs => msgs, A.Command<Build>())
+                                         .Has(msgs => msgs, A.Command<CheckRevision>())
                             ));
         }
 
@@ -41,7 +42,7 @@ namespace Frog.System.Specs
         {
             Assert.True(prober.check(Take.Snapshot(() => system.GetEventsSnapshot())
                                          .Has(x => x,
-                                              Two.Commands<Build>())
+                                              Two.Commands<CheckRevision>())
                             ));
         }
     }

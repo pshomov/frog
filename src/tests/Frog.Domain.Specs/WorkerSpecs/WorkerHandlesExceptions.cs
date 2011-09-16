@@ -60,32 +60,4 @@ namespace Frog.Domain.Specs.WorkerSpecs
             Assert.That(eventCount, Is.EqualTo(4));
         }
     }
-
-    [TestFixture]
-    public class WorkerHandlesExceptionsDuringVersionCheck : WorkerSpecsBase
-    {
-        int eventCount;
-
-        protected override void Given()
-        {
-            base.Given();
-            eventCount = 0;
-
-            SourceRepoDriver.GetLatestRevision().Returns(info => {throw new NullReferenceException();});
-
-            Worker = new Worker(Pipeline, WorkingAreaGovernor);
-            Worker.OnCheckForUpdateFailed  += delegate { eventCount++; };
-        }
-
-        protected override void When()
-        {
-            Worker.CheckForUpdatesAndKickOffPipeline(SourceRepoDriver, "");
-        }
-
-        [Test]
-        public void should_have_reised_the_event_subscribers_ony_for_the_current_check()
-        {
-            Assert.That(eventCount, Is.EqualTo(1));
-        }
-    }
 }

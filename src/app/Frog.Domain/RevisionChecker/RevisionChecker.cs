@@ -3,7 +3,7 @@ using SimpleCQRS;
 
 namespace Frog.Domain.RevisionChecker
 {
-    public class RevisionChecker
+    public class RevisionChecker : Handles<CheckRevision>
     {
         private readonly IBus bus;
         private readonly SourceRepoDriverFactory sourceRepoDriver;
@@ -26,6 +26,11 @@ namespace Frog.Domain.RevisionChecker
             {
                 bus.Publish(new CheckForUpdateFailed {repoUrl = checkRevision.RepoUrl});
             }
+        }
+
+        public void JoinTheParty()
+        {
+            bus.RegisterHandler<CheckRevision>(Handle, "checksForUpdates");
         }
     }
 }
