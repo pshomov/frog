@@ -17,10 +17,10 @@ namespace Frog.Domain
             if (privateRepo.IsMatch(repoUrl))
             {
                 var b = privateRepo.Match(repoUrl).Groups;
-                RepoUrl = b[1].Value + b[4].Value;
+                BuildId = b[1].Value + b[4].Value;
             }
             else
-                RepoUrl = repoUrl;
+                BuildId = repoUrl;
         }
     }
 
