@@ -1,8 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Frog.Domain;
 using Frog.Domain.BuildSystems.FrogSystemTest;
 using Frog.Domain.CustomTasks;
+using Frog.Domain.RepositoryTracker;
 using Frog.Domain.UI;
 using Frog.Specs.Support;
 using Frog.Support;
@@ -47,29 +49,33 @@ namespace Frog.System.Specs
         public void should_send_TERMINAL_UPDATE_messages()
         {
             var prober = new PollingProber(5000, 100);
+            Guid buildId = Guid.Empty;
             Assert.True(prober.check(Take.Snapshot(() => system.GetEventsSnapshot())
+                                         .Has(x => x, A.Command<Build>(ev =>
+                                                                           {
+                                                                               buildId = ev.Id; return true; }))
                                          .Has(x => x,
                                               An.Event<TerminalUpdate>(
                                                   ev =>
-                                                  ev.BuildId == RepoUrl && ev.TaskIndex == 0 &&
+                                                  ev.BuildId == buildId && ev.TaskIndex == 0 &&
                                                   ev.ContentSequenceIndex == 0 &&
                                                   ev.Content.Contains(TerminalOutput1)))
                                          .Has(x => x,
                                               An.Event<TerminalUpdate>(
                                                   ev =>
-                                                  ev.BuildId == RepoUrl && ev.TaskIndex == 0 &&
+                                                  ev.BuildId == buildId && ev.TaskIndex == 0 &&
                                                   ev.ContentSequenceIndex == 1 &&
                                                   ev.Content.Contains(TerminalOutput2)))
                                          .Has(x => x,
                                               An.Event<TerminalUpdate>(
                                                   ev =>
-                                                  ev.BuildId == RepoUrl && ev.TaskIndex == 1 &&
+                                                  ev.BuildId == buildId && ev.TaskIndex == 1 &&
                                                   ev.ContentSequenceIndex == 0 &&
                                                   ev.Content.Contains(TerminalOutput3)))
                                          .Has(x => x,
                                               An.Event<TerminalUpdate>(
                                                   ev =>
-                                                  ev.BuildId == RepoUrl && ev.TaskIndex == 1 &&
+                                                  ev.BuildId == buildId && ev.TaskIndex == 1 &&
                                                   ev.ContentSequenceIndex == 1 &&
                                                   ev.Content.Contains(TerminalOutput4)))
                             ));
@@ -79,21 +85,29 @@ namespace Frog.System.Specs
         public void should_update_view_with_terminal_updates()
         {
             var prober = new PollingProber(5000, 100);
+            Guid buildId = Guid.Empty;
+            prober.check(Take.Snapshot(() => system.GetEventsSnapshot())
+                             .Has(x => x, A.Command<Build>(ev =>
+                                                               {
+                                                                   buildId = ev.Id;
+                                                                   return true;
+                                                               })));
+                        
             Assert.True(prober.check(Take.Snapshot(() => system.GetView())
                                          .Has(statuses => statuses,
-                                              A.Check<Dictionary<string, BuildStatus>>(
+                                              A.Check<Dictionary<Guid, BuildStatus>>(
                                                   arg =>
-                                                  arg[RepoUrl].Tasks.Count() > 0 &&
-                                                  arg[RepoUrl].Tasks[0].GetTerminalOutput().Content.Match(
+                                                  arg[buildId].Tasks.Count() > 0 &&
+                                                  arg[buildId].Tasks[0].GetTerminalOutput().Content.Match(
                                                       TerminalOutput1 + ".*\n.*" +
                                                       TerminalOutput2)))
                             ));
             Assert.True(prober.check(Take.Snapshot(() => system.GetView())
                                          .Has(statuses => statuses,
-                                              A.Check<Dictionary<string, BuildStatus>>(
+                                              A.Check<Dictionary<Guid, BuildStatus>>(
                                                   arg =>
-                                                  arg[RepoUrl].Tasks.Count() > 1 &&
-                                                  arg[RepoUrl].Tasks[1].GetTerminalOutput().Content.Match(
+                                                  arg[buildId].Tasks.Count() > 1 &&
+                                                  arg[buildId].Tasks[1].GetTerminalOutput().Content.Match(
                                                       TerminalOutput3 + ".*\n.*" +
                                                       TerminalOutput4))))
                 );

@@ -8,13 +8,13 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
     {
         protected override void When()
         {
-            View.Handle(new BuildEnded("http://flo", BuildTotalEndStatus.Success));
+            View.Handle(new BuildEnded(BuildMessage.Id, BuildTotalEndStatus.Success));
         }
 
         [Test]
         public void should_set_status_to_BUILD_COMPLETED()
         {
-            Assert.That(BuildStatuses["http://flo"].Overall,
+            Assert.That(BuildStatuses[BuildMessage.Id].Overall,
                         Is.EqualTo(BuildTotalStatus.BuildEndedSuccess));
         }
     }

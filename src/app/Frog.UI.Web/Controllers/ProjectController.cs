@@ -30,9 +30,9 @@ namespace Frog.UI.Web.Controllers
 
         internal static ActionResult GetAllTaskTerminalOutput(string projectUrl, int lastChunkIndex, int taskIndex)
         {
-            if (ServiceLocator.Report.ContainsKey(projectUrl))
+            if (ServiceLocator.CurrentReport.ContainsKey(projectUrl))
             {
-                var tasks = ServiceLocator.Report[projectUrl].Tasks;
+                var tasks = ServiceLocator.Report[ServiceLocator.CurrentReport[projectUrl]].Tasks;
                 var activeTask = taskIndex;
                 var content = new StringBuilder();
                 for (var i = taskIndex; i < tasks.Count; i++)
@@ -66,8 +66,8 @@ namespace Frog.UI.Web.Controllers
 
         protected internal ActionResult GetProjectStatus(string projectUrl)
         {
-            if (ServiceLocator.Report.ContainsKey(projectUrl))
-                return MonoBugs.Json(new {status = ServiceLocator.Report[projectUrl]});
+            if (ServiceLocator.CurrentReport.ContainsKey(projectUrl))
+                return MonoBugs.Json(new {status = ServiceLocator.Report[ServiceLocator.CurrentReport[projectUrl]]});
             else
             {
                 return new HttpNotFoundResult("Project does not Runz ;(");
@@ -76,13 +76,13 @@ namespace Frog.UI.Web.Controllers
 
         protected internal ActionResult GetTaskTerminalOutput(string projectUrl, int taskIndex)
         {
-            if (ServiceLocator.Report.ContainsKey(projectUrl))
+            if (ServiceLocator.CurrentReport.ContainsKey(projectUrl))
                 return
                     MonoBugs.Json(
                         new
                             {
                                 terminalOutput =
-                            ServiceLocator.Report[projectUrl].Tasks[taskIndex].GetTerminalOutput()
+                            ServiceLocator.Report[ServiceLocator.CurrentReport[projectUrl]].Tasks[taskIndex].GetTerminalOutput()
                             });
             else
             {

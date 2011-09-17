@@ -3,15 +3,16 @@ using System.Collections.Concurrent;
 using System.Linq;
 using System.Threading;
 using System.Web.Script.Serialization;
+using Frog.Domain.RepositoryTracker;
 using SimpleCQRS;
 
 namespace Frog.Domain.UI
 {
     public class PipelineStatusView : Handles<BuildStarted>, Handles<BuildEnded>, Handles<BuildUpdated>
     {
-        readonly ConcurrentDictionary<string, BuildStatus> report;
+        readonly ConcurrentDictionary<Guid, BuildStatus> report;
 
-        public PipelineStatusView(ConcurrentDictionary<string, BuildStatus> report)
+        public PipelineStatusView(ConcurrentDictionary<Guid, BuildStatus> report)
         {
             this.report = report;
         }
@@ -42,9 +43,14 @@ namespace Frog.Domain.UI
                                                                                          message.Content);
         }
 
-        void EnsureReportExistsForRepo(string repoUrl)
+        void EnsureReportExistsForRepo(Guid repoUrl)
         {
             report.TryAdd(repoUrl, new BuildStatus());
+        }
+
+        public void Handle(Build message)
+        {
+            throw new NotImplementedException();
         }
     }
 }

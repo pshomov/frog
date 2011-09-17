@@ -7,9 +7,12 @@ namespace Frog.Domain.Specs.Agent
     [TestFixture]
     public class AgentChecksForUpdates : AgentSpecsBase
     {
+        private Build buildMessage;
+
         protected override void When()
         {
-            Agent.Handle(new Build{RepoUrl = "http://fle", Revision = "2"});
+            buildMessage = new Build{RepoUrl = "http://fle", Revision = "2"};
+            Agent.Handle(buildMessage);
         }
 
         [Test]
@@ -22,14 +25,14 @@ namespace Frog.Domain.Specs.Agent
         public void should_publish_BuildStarted_event()
         {
             Bus.Received().Publish(
-                Arg.Is<BuildStarted>(found => found.Status != null && found.BuildId == "http://fle"));
+                Arg.Is<BuildStarted>(found => found.Status != null && found.BuildId == buildMessage.Id));
         }
 
         [Test]
         public void should_publish_BuildUpdated_event()
         {
             Bus.Received().Publish(
-                Arg.Is<BuildUpdated>(found => found.TaskStatus == TaskInfo.TaskStatus.Started && found.TaskIndex  == 0 && found.BuildId == "http://fle"));
+                Arg.Is<BuildUpdated>(found => found.TaskStatus == TaskInfo.TaskStatus.Started && found.TaskIndex == 0 && found.BuildId == buildMessage.Id));
         }
 
         [Test]
@@ -37,7 +40,7 @@ namespace Frog.Domain.Specs.Agent
         {
             Bus.Received().Publish(
                 Arg.Is<BuildEnded>(
-                    found => found.TotalStatus == BuildTotalEndStatus.Success && found.BuildId == "http://fle"));
+                    found => found.TotalStatus == BuildTotalEndStatus.Success && found.BuildId == buildMessage.Id));
         }
     }
 }

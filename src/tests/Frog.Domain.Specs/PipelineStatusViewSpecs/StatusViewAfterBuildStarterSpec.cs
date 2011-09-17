@@ -20,13 +20,13 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
                                                  {Name = "task1", Status = TaskInfo.TaskStatus.NotStarted}
                                          }
                                  };
-            View.Handle(new BuildStarted("http://repo", new PipelineStatus(PipelineStatus)));
+            View.Handle(new BuildStarted(BuildMessage.Id, new PipelineStatus(PipelineStatus)));
         }
 
         [Test]
         public void should_set_status_to_BUILD_STARTED()
         {
-            Assert.That(BuildStatuses["http://repo"].Overall,
+            Assert.That(BuildStatuses[BuildMessage.Id].Overall,
                         Is.EqualTo(BuildTotalStatus.BuildStarted));
         }
     }

@@ -19,8 +19,9 @@ namespace Frog.System.Specs.Underware
         Agent agent;
         Worker worker;
 
-        public ConcurrentDictionary<string, BuildStatus> report { get; private set; }
+        public ConcurrentDictionary<Guid, BuildStatus> report { get; private set; }
         public TaskSource TasksSource;
+        public ConcurrentDictionary<string, Guid> currentBuild;
         public RepositoryTracker repositoryTracker { get; private set; }
 
         public TestSystem(WorkingAreaGoverner governer, SourceRepoDriverFactory sourceRepoDriverFactory, bool runRevisionChecker = true)
@@ -33,7 +34,9 @@ namespace Frog.System.Specs.Underware
             if (runRevisionChecker) new RevisionChecker(TheBus, sourceRepoDriverFactory).JoinTheParty();
             SetupAgent(sourceRepoDriverFactory);
 
-            report = Setup.SetupView(TheBus);
+            var views = Setup.SetupView(TheBus);
+            report = views.Item1;
+            currentBuild = views.Item2;
 
             messages = new List<Message>();
             SetupAllEventLogging();
@@ -118,9 +121,9 @@ namespace Frog.System.Specs.Underware
             theTestSystem.repositoryTracker.CheckForUpdates();
         }
 
-        public Dictionary<string, BuildStatus> GetView()
+        public Dictionary<Guid, BuildStatus> GetView()
         {
-            return new Dictionary<string, BuildStatus>(theTestSystem.report);
+            return new Dictionary<Guid, BuildStatus>(theTestSystem.report);
         }
 
         public void Build(string repoUrl, string revision, Guid buildId)

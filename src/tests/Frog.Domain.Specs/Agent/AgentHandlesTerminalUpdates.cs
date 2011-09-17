@@ -7,9 +7,12 @@ namespace Frog.Domain.Specs.Agent
     [TestFixture]
     public class AgentHandlesTerminalUpdates : AgentSpecsBase
     {
+        private Build buildMessage;
+
         protected override void When()
         {
-            Agent.Handle(new Build{RepoUrl = "http://fle", Revision = "2"});
+            buildMessage = new Build{RepoUrl = "http://fle", Revision = "2"};
+            Agent.Handle(buildMessage);
         }
 
         [Test]
@@ -18,7 +21,7 @@ namespace Frog.Domain.Specs.Agent
             Bus.Received().Publish(
                 Arg.Is<TerminalUpdate>(
                     update =>
-                    update.BuildId == "http://fle" && update.Content == "content" && update.TaskIndex == 1 &&
+                    update.BuildId == buildMessage.Id && update.Content == "content" && update.TaskIndex == 1 &&
                     update.ContentSequenceIndex == 1));
         }
     }

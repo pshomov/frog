@@ -8,10 +8,15 @@ namespace Frog.Domain.Specs.Agent
     [TestFixture]
     public class AgentSpecsWithTwoPeojects : AgentSpecsBase
     {
+        private Build buildMessage1;
+        private Build buildMessage2;
+
         protected override void When()
         {
-            Agent.Handle(new Build{RepoUrl = "http://fle", Revision = "2"});
-            Agent.Handle(new Build{RepoUrl = "http://flo", Revision = "2"});
+            buildMessage1 = new Build{RepoUrl = "http://fle", Revision = "2"};
+            Agent.Handle(buildMessage1);
+            buildMessage2 = new Build{RepoUrl = "http://flo", Revision = "2"};
+            Agent.Handle(buildMessage2);
         }
 
         [Test]
@@ -24,18 +29,18 @@ namespace Frog.Domain.Specs.Agent
         public void should_publish_BuildStarted_event()
         {
             Bus.Received().Publish(
-                Arg.Is<BuildStarted>(found => found.Status != null && found.BuildId == "http://fle"));
+                Arg.Is<BuildStarted>(found => found.Status != null && found.BuildId == buildMessage1.Id));
             Bus.Received().Publish(
-                Arg.Is<BuildStarted>(found => found.Status != null && found.BuildId == "http://flo"));
+                Arg.Is<BuildStarted>(found => found.Status != null && found.BuildId == buildMessage2.Id));
         }
 
         [Test]
         public void should_publish_BuildUpdated_event()
         {
             Bus.Received().Publish(
-                Arg.Is<BuildUpdated>(found => found.TaskIndex == 0 && found.TaskStatus == TaskInfo.TaskStatus.Started && found.BuildId == "http://fle"));
+                Arg.Is<BuildUpdated>(found => found.TaskIndex == 0 && found.TaskStatus == TaskInfo.TaskStatus.Started && found.BuildId == buildMessage1.Id));
             Bus.Received().Publish(
-                Arg.Is<BuildUpdated>(found => found.TaskIndex == 0 && found.TaskStatus == TaskInfo.TaskStatus.Started && found.BuildId == "http://flo"));
+                Arg.Is<BuildUpdated>(found => found.TaskIndex == 0 && found.TaskStatus == TaskInfo.TaskStatus.Started && found.BuildId == buildMessage2.Id));
         }
 
         [Test]
@@ -43,10 +48,10 @@ namespace Frog.Domain.Specs.Agent
         {
             Bus.Received().Publish(
                 Arg.Is<BuildEnded>(
-                    found => found.TotalStatus == BuildTotalEndStatus.Success && found.BuildId == "http://fle"));
+                    found => found.TotalStatus == BuildTotalEndStatus.Success && found.BuildId == buildMessage1.Id));
             Bus.Received().Publish(
                 Arg.Is<BuildEnded>(
-                    found => found.TotalStatus == BuildTotalEndStatus.Success && found.BuildId == "http://flo"));
+                    found => found.TotalStatus == BuildTotalEndStatus.Success && found.BuildId == buildMessage2.Id));
         }
     }
 }
