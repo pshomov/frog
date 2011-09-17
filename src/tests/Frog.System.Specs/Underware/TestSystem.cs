@@ -14,7 +14,7 @@ namespace Frog.System.Specs.Underware
     public class TestSystem
     {
         readonly List<Message> messages;
-        readonly IBus theBus;
+        public readonly IBus TheBus;
         readonly WorkingAreaGoverner areaGoverner;
         Agent agent;
         Worker worker;
@@ -25,15 +25,15 @@ namespace Frog.System.Specs.Underware
 
         public TestSystem(WorkingAreaGoverner governer, SourceRepoDriverFactory sourceRepoDriverFactory, bool runRevisionChecker = true)
         {
-            theBus = SetupBus();
+            TheBus = SetupBus();
 
             areaGoverner = governer;
             SetupWorker(GetPipeline());
             SetupRepositoryTracker();
-            if (runRevisionChecker) new RevisionChecker(theBus, sourceRepoDriverFactory).JoinTheParty();
+            if (runRevisionChecker) new RevisionChecker(TheBus, sourceRepoDriverFactory).JoinTheParty();
             SetupAgent(sourceRepoDriverFactory);
 
-            report = Setup.SetupView(theBus);
+            report = Setup.SetupView(TheBus);
 
             messages = new List<Message>();
             SetupAllEventLogging();
@@ -50,7 +50,7 @@ namespace Frog.System.Specs.Underware
 
         void SetupAllEventLogging()
         {
-            var busDebug = (IBusDebug) theBus;
+            var busDebug = (IBusDebug) TheBus;
             busDebug.OnMessage += msg => messages.Add(msg);
         }
 
@@ -76,13 +76,13 @@ namespace Frog.System.Specs.Underware
 
         void SetupAgent(SourceRepoDriverFactory sourceRepoDriverFactory)
         {
-            agent = new Agent(theBus, worker, sourceRepoDriverFactory);
+            agent = new Agent(TheBus, worker, sourceRepoDriverFactory);
             agent.JoinTheParty();
         }
 
         void SetupRepositoryTracker()
         {
-            repositoryTracker = new RepositoryTracker(theBus, new InMemoryProjectsRepository());
+            repositoryTracker = new RepositoryTracker(TheBus, new InMemoryProjectsRepository());
             repositoryTracker.JoinTheMessageParty();
         }
     }
@@ -121,6 +121,11 @@ namespace Frog.System.Specs.Underware
         public Dictionary<string, BuildStatus> GetView()
         {
             return new Dictionary<string, BuildStatus>(theTestSystem.report);
+        }
+
+        public void Build(string repoUrl, string revision, Guid buildId)
+        {
+            theTestSystem.TheBus.Send(new Domain.RepositoryTracker.Build {RepoUrl = repoUrl, Revision = revision});
         }
     }
 }

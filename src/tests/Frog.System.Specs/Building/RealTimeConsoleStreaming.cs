@@ -51,25 +51,25 @@ namespace Frog.System.Specs
                                          .Has(x => x,
                                               An.Event<TerminalUpdate>(
                                                   ev =>
-                                                  ev.RepoUrl == RepoUrl && ev.TaskIndex == 0 &&
+                                                  ev.BuildId == RepoUrl && ev.TaskIndex == 0 &&
                                                   ev.ContentSequenceIndex == 0 &&
                                                   ev.Content.Contains(TerminalOutput1)))
                                          .Has(x => x,
                                               An.Event<TerminalUpdate>(
                                                   ev =>
-                                                  ev.RepoUrl == RepoUrl && ev.TaskIndex == 0 &&
+                                                  ev.BuildId == RepoUrl && ev.TaskIndex == 0 &&
                                                   ev.ContentSequenceIndex == 1 &&
                                                   ev.Content.Contains(TerminalOutput2)))
                                          .Has(x => x,
                                               An.Event<TerminalUpdate>(
                                                   ev =>
-                                                  ev.RepoUrl == RepoUrl && ev.TaskIndex == 1 &&
+                                                  ev.BuildId == RepoUrl && ev.TaskIndex == 1 &&
                                                   ev.ContentSequenceIndex == 0 &&
                                                   ev.Content.Contains(TerminalOutput3)))
                                          .Has(x => x,
                                               An.Event<TerminalUpdate>(
                                                   ev =>
-                                                  ev.RepoUrl == RepoUrl && ev.TaskIndex == 1 &&
+                                                  ev.BuildId == RepoUrl && ev.TaskIndex == 1 &&
                                                   ev.ContentSequenceIndex == 1 &&
                                                   ev.Content.Contains(TerminalOutput4)))
                             ));
