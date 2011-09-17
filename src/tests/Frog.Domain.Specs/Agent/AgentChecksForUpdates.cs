@@ -9,7 +9,7 @@ namespace Frog.Domain.Specs.Agent
     {
         protected override void When()
         {
-            Agent.Handle(new Build(repoUrl : "http://fle", revision : "2"));
+            Agent.Handle(new Build{RepoUrl = "http://fle", Revision = "2"});
         }
 
         [Test]
@@ -22,14 +22,14 @@ namespace Frog.Domain.Specs.Agent
         public void should_publish_BuildStarted_event()
         {
             Bus.Received().Publish(
-                Arg.Is<BuildStarted>(found => found.Status != null && found.RepoUrl == "http://fle"));
+                Arg.Is<BuildStarted>(found => found.Status != null && found.BuildId == "http://fle"));
         }
 
         [Test]
         public void should_publish_BuildUpdated_event()
         {
             Bus.Received().Publish(
-                Arg.Is<BuildUpdated>(found => found.TaskStatus == TaskInfo.TaskStatus.Started && found.TaskIndex  == 0 && found.RepoUrl == "http://fle"));
+                Arg.Is<BuildUpdated>(found => found.TaskStatus == TaskInfo.TaskStatus.Started && found.TaskIndex  == 0 && found.BuildId == "http://fle"));
         }
 
         [Test]
@@ -37,7 +37,7 @@ namespace Frog.Domain.Specs.Agent
         {
             Bus.Received().Publish(
                 Arg.Is<BuildEnded>(
-                    found => found.TotalStatus == BuildTotalEndStatus.Success && found.RepoUrl == "http://fle"));
+                    found => found.TotalStatus == BuildTotalEndStatus.Success && found.BuildId == "http://fle"));
         }
     }
 }

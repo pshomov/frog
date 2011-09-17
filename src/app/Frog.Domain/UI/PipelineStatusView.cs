@@ -18,27 +18,27 @@ namespace Frog.Domain.UI
 
         public void Handle(BuildStarted message)
         {
-            EnsureReportExistsForRepo(message.RepoUrl);
-            var buildStatus = report[message.RepoUrl];
+            EnsureReportExistsForRepo(message.BuildId);
+            var buildStatus = report[message.BuildId];
             buildStatus.BuildStarted(message.Status.Tasks);
         }
 
         public void Handle(BuildUpdated message)
         {
-            EnsureReportExistsForRepo(message.RepoUrl);
-            report[message.RepoUrl].BuildUpdated(message.TaskIndex, message.TaskStatus);
+            EnsureReportExistsForRepo(message.BuildId);
+            report[message.BuildId].BuildUpdated(message.TaskIndex, message.TaskStatus);
         }
 
         public void Handle(BuildEnded message)
         {
-            EnsureReportExistsForRepo(message.RepoUrl);
-            report[message.RepoUrl].BuildEnded(message.TotalStatus);
+            EnsureReportExistsForRepo(message.BuildId);
+            report[message.BuildId].BuildEnded(message.TotalStatus);
         }
 
         public void Handle(TerminalUpdate message)
         {
-            EnsureReportExistsForRepo(message.RepoUrl);
-            report[message.RepoUrl].Tasks[message.TaskIndex].AddTerminalOutput(message.ContentSequenceIndex,
+            EnsureReportExistsForRepo(message.BuildId);
+            report[message.BuildId].Tasks[message.TaskIndex].AddTerminalOutput(message.ContentSequenceIndex,
                                                                                          message.Content);
         }
 

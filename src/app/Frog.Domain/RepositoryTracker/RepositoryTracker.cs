@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Frog.Domain.RevisionChecker;
 using SimpleCQRS;
 
@@ -13,15 +14,11 @@ namespace Frog.Domain.RepositoryTracker
     {
         public string RepoUrl { get; set; }
         public string Revision { get; set; }
+        public Guid Id { get;  set; }
 
         public Build()
         {
-        }
-
-        public Build(string repoUrl, string revision)
-        {
-            RepoUrl = repoUrl;
-            Revision = revision;
+            Id = Guid.NewGuid();
         }
     }
 

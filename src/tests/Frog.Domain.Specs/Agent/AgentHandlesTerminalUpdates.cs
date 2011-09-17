@@ -9,7 +9,7 @@ namespace Frog.Domain.Specs.Agent
     {
         protected override void When()
         {
-            Agent.Handle(new Build(repoUrl: "http://fle", revision: "2"));
+            Agent.Handle(new Build{RepoUrl = "http://fle", Revision = "2"});
         }
 
         [Test]
@@ -18,7 +18,7 @@ namespace Frog.Domain.Specs.Agent
             Bus.Received().Publish(
                 Arg.Is<TerminalUpdate>(
                     update =>
-                    update.RepoUrl == "http://fle" && update.Content == "content" && update.TaskIndex == 1 &&
+                    update.BuildId == "http://fle" && update.Content == "content" && update.TaskIndex == 1 &&
                     update.ContentSequenceIndex == 1));
         }
     }
