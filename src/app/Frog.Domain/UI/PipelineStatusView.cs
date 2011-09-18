@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Web.Script.Serialization;
 using Frog.Domain.RepositoryTracker;
@@ -52,7 +53,14 @@ namespace Frog.Domain.UI
 
         public void Handle(Build message)
         {
-            currentBuilds[message.RepoUrl] = message.Id;
+            string repoUrl = message.RepoUrl;
+            var privateRepo = new Regex(@"^(http://)(\w+):(\w+)@(github.com.*)$");
+            if (privateRepo.IsMatch(repoUrl))
+            {
+                var b = privateRepo.Match(repoUrl).Groups;
+                repoUrl = b[1].Value + b[4].Value;
+            }
+            currentBuilds[repoUrl] = message.Id;
         }
     }
 }

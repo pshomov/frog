@@ -60,7 +60,6 @@
     <Compile Include="Agent\AgentSpecsBase.cs" />
     <Compile Include="Agent\AgentSpecsWithTwoPeojects.cs" />
     <Compile Include="Agent\AgentJoinsThePartySpec.cs" />
-    <Compile Include="BuildEventRepoFilteringSpecs.cs" />
     <Compile Include="FileFinderSpecs.cs" />
     <Compile Include="Git\GitRepositoryGetRevisionSpecs.cs" />
     <Compile Include="Git\GitRepositoryCheckForLatestRev.cs" />
