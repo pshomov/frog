@@ -11,10 +11,12 @@ namespace Frog.Domain.UI
     public class PipelineStatusView : Handles<BuildStarted>, Handles<BuildEnded>, Handles<BuildUpdated>
     {
         readonly ConcurrentDictionary<Guid, BuildStatus> report;
+        private readonly ConcurrentDictionary<string, Guid> currentBuilds;
 
-        public PipelineStatusView(ConcurrentDictionary<Guid, BuildStatus> report)
+        public PipelineStatusView(ConcurrentDictionary<Guid, BuildStatus> report, ConcurrentDictionary<string, Guid> currentBuilds)
         {
             this.report = report;
+            this.currentBuilds = currentBuilds;
         }
 
         public void Handle(BuildStarted message)
@@ -50,7 +52,7 @@ namespace Frog.Domain.UI
 
         public void Handle(Build message)
         {
-            throw new NotImplementedException();
+            currentBuilds[message.RepoUrl] = message.Id;
         }
     }
 }

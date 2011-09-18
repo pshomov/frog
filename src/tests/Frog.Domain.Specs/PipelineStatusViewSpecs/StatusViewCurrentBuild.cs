@@ -1,13 +1,18 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using Frog.Domain.RepositoryTracker;
 using Frog.Domain.UI;
 using Frog.Specs.Support;
+using NUnit.Framework;
 
 namespace Frog.Domain.Specs.PipelineStatusViewSpecs
 {
-    public abstract class StatusViewAfterBuildStarterSpecBase : BDD
+    class StatusViewCurrentBuild : BDD
     {
+        private const string RepoUrl = "http://lilalo";
         protected PipelineStatusView View;
         protected PipelineStatus PipelineStatus;
         protected ConcurrentDictionary<Guid, BuildStatus> BuildStatuses;
@@ -20,8 +25,19 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
             currentBuilds = new ConcurrentDictionary<string, Guid>();
             View = new PipelineStatusView(BuildStatuses, currentBuilds);
 
-            BuildMessage = new Build{RepoUrl = "http://somecoolproject"};
+        }
+
+        protected override void When()
+        {
+            BuildMessage = new Build{RepoUrl = RepoUrl, Revision = "23"};
             View.Handle(BuildMessage);
         }
+
+        [Test]
+        public void should_have_the_new_buildId_as_the_current_build()
+        {
+            Assert.That(currentBuilds[RepoUrl], Is.EqualTo(BuildMessage.Id));
+        }
+
     }
 }

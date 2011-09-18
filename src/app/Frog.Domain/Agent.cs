@@ -21,6 +21,7 @@ namespace Frog.Domain
 //            }
 //            else
 //                BuildId = repoUrl;
+            BuildId = repoUrl;
         }
     }
 
