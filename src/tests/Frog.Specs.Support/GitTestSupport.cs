@@ -1,10 +1,9 @@
-using System;
 using System.IO;
-using System.Linq;
+using Frog.Domain;
 using Frog.Domain.ExecTasks;
 using Frog.Support;
 
-namespace Frog.Domain.Specs
+namespace Frog.Specs.Support
 {
     public class GitTestSupport
     {

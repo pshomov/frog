@@ -1,8 +1,8 @@
-using System;
 using System.Web.Script.Serialization;
 using System.Web.Mvc;
 using System.Text;
-namespace Frog.UI.Web
+
+namespace Frog.UI.Web.HttpHelpers
 {
 	public class MonoBugs
 	{

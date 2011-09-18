@@ -4,6 +4,7 @@ using System.Web;
 using Frog.Domain;
 using Frog.Domain.RepositoryTracker;
 using Frog.Support;
+using Frog.UI.Web.HttpHelpers;
 
 namespace Frog.UI.Web.Controllers.TestSupport
 {

@@ -1,6 +1,7 @@
 ﻿using System.Web;
 using System.Web.Mvc;
 using Frog.Support;
+using Frog.UI.Web.HttpHelpers;
 
 namespace Frog.UI.Web.Controllers.TestSupport
 {

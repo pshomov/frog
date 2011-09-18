@@ -1,6 +1,4 @@
-using System;
-
-namespace Frog.UI.Web
+namespace Frog.UI.Web.HttpHelpers
 {
 	public static class PathUrlConversion
 	{

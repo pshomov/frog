@@ -1,15 +1,12 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Threading;
 using Frog.Specs.Support;
 using NUnit.Framework;
 using Frog.Domain.Integration;
 using SimpleCQRS;
 
-namespace Frog.Domain.IntegrationTests
+namespace Frog.Domain.IntegrationTests.RabbitMQ
 {
 	class MyEvent : Event{
 		public string Data;

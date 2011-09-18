@@ -1,14 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
 using Frog.Domain.Integration;
-using Frog.Specs.Support;
 using NUnit.Framework;
-using SimpleCQRS;
 
-namespace Frog.Domain.IntegrationTests
+namespace Frog.Domain.IntegrationTests.RabbitMQ
 {
     [TestFixture]
     class MessageBusChecksIfShouldContinue

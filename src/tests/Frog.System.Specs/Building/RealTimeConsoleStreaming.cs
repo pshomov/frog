@@ -13,7 +13,7 @@ using NSubstitute;
 using NUnit.Framework;
 using xray;
 
-namespace Frog.System.Specs
+namespace Frog.System.Specs.Building
 {
     [TestFixture]
     public class RealTimeConsoleStreaming : BDD

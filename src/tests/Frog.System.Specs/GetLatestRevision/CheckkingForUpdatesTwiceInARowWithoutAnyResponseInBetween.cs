@@ -1,6 +1,4 @@
 using System;
-using Frog.Domain;
-using Frog.Domain.RepositoryTracker;
 using Frog.Domain.RevisionChecker;
 using Frog.Specs.Support;
 using Frog.System.Specs.Underware;
@@ -8,7 +6,7 @@ using NSubstitute;
 using NUnit.Framework;
 using xray;
 
-namespace Frog.System.Specs
+namespace Frog.System.Specs.GetLatestRevision
 {
     [TestFixture]
     public class CheckkingForUpdatesTwiceInARowWhileAgentIsNotRunning : BDD
