@@ -28,6 +28,8 @@ namespace Frog.Domain
     public class BuildStarted : BuildEvent
     {
         public PipelineStatus Status { get; set; }
+		
+		public BuildStarted(){}
 
         public BuildStarted(Guid repoUrl, PipelineStatus status) : base(repoUrl)
         {
@@ -40,7 +42,9 @@ namespace Frog.Domain
         public int TaskIndex { get;  set; }
 
         public TaskInfo.TaskStatus TaskStatus { get; set; }
-
+		
+		public BuildUpdated(){}
+		
         public BuildUpdated(Guid repoUrl, int taskIndex, TaskInfo.TaskStatus newStatus) : base(repoUrl)
         {
             TaskIndex = taskIndex;
@@ -51,7 +55,9 @@ namespace Frog.Domain
     public class BuildEnded : BuildEvent
     {
         public BuildTotalEndStatus TotalStatus { get; set; }
-
+		
+		public BuildEnded(){}
+		
         public BuildEnded(Guid repoUrl, BuildTotalEndStatus totalStatus) : base(repoUrl)
         {
             TotalStatus = totalStatus;
@@ -65,6 +71,8 @@ namespace Frog.Domain
         public int TaskIndex { get;  set; }
 
         public int ContentSequenceIndex { get;  set; }
+		
+		public TerminalUpdate(){}
 
         public TerminalUpdate(string content, int taskIndex, int contentSequenceIndex, Guid repoUrl)
             : base(repoUrl)
