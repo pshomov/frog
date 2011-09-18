@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Frog.Domain;
 using Frog.Domain.BuildSystems.FrogSystemTest;
 using Frog.Domain.CustomTasks;
@@ -15,7 +12,7 @@ using xray;
 namespace Frog.System.Specs.Building
 {
     [TestFixture]
-    class BuildingProject : BDD
+    public class BuildingProject : BDD
     {
         private const string RepoUrl = "http://123";
         private SystemDriver system;
@@ -43,20 +40,56 @@ namespace Frog.System.Specs.Building
         }
 
         [Test]
-        public void should_have_aggregate_id_in_all_messages_related_to_the_build()
+        public void should_announce_the_build_has_started()
         {
-//            var prober = new PollingProber(5000, 100);
-//            Assert.True(prober.check(Take.Snapshot(() => system.GetEventsSnapshot())
-//                                         .Has(x => x,
-//                                              An.Event<TerminalUpdate>(
-//                                                  ev =>
-//                                                  ev.BuildId && ev.TaskIndex == 0 &&
-//                                                  ev.ContentSequenceIndex == 0 &&
-//                                                  ev.Content.Contains(TerminalOutput3)))
+            var prober = new PollingProber(5000, 100);
+            Assert.True(prober.check(Take.Snapshot(() => system.GetEventsSnapshot())
+                                         .Has(x => x,
+                                              An.Event<BuildStarted>(
+                                                  ev =>
+                                                  ev.BuildId == newGuid && ev.RepoUrl == RepoUrl &&
+                                                  ev.Status.Tasks.Count == 1
+                                                  ))));
+        }
+
+        [Test]
+        public void should_update_build_status()
+        {
+            var prober = new PollingProber(5000, 100);
+            Assert.True(prober.check(Take.Snapshot(() => system.GetEventsSnapshot())
+                                         .Has(x => x,
+                                              An.Event<BuildUpdated>(
+                                                  ev =>
+                                                  ev.BuildId == newGuid && ev.TaskIndex == 0 &&
+                                                  ev.TaskStatus == TaskInfo.TaskStatus.Started
+                                                  ))));
+        }
+
+        [Test]
+        public void should_update_the_terminal_outout_for_the_task()
+        {
+            var prober = new PollingProber(5000, 100);
+            Assert.True(prober.check(Take.Snapshot(() => system.GetEventsSnapshot())
+                                         .Has(x => x,
+                                              An.Event<TerminalUpdate>(
+                                                  ev =>
+                                                  ev.BuildId == newGuid && ev.TaskIndex == 0 &&
+                                                  ev.ContentSequenceIndex == 0 &&
+                                                  ev.Content.Contains(TerminalOutput3)))));
+        }
+
+        [Test]
+        public void should_mark_the_build_as_finished_and_successful()
+        {
+            var prober = new PollingProber(5000, 100);
+            Assert.True(prober.check(Take.Snapshot(() => system.GetEventsSnapshot())
+                                         .Has(x => x,
+                                              An.Event<BuildEnded>(
+                                                  ev =>
+                                                  ev.BuildId == newGuid && ev.TotalStatus == BuildTotalEndStatus.Success))));
         }
 
         private const string TerminalOutput3 = "Terminal output 3";
         private const string TerminalOutput4 = "Terminal output 4";
-
     }
 }

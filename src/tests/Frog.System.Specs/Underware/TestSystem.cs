@@ -133,7 +133,7 @@ namespace Frog.System.Specs.Underware
 
         public void Build(string repoUrl, string revision, Guid buildId)
         {
-            theTestSystem.TheBus.Send(new Domain.RepositoryTracker.Build {RepoUrl = repoUrl, Revision = revision});
+            theTestSystem.TheBus.Send(new Build {RepoUrl = repoUrl, Revision = revision, Id = buildId});
         }
     }
 }
