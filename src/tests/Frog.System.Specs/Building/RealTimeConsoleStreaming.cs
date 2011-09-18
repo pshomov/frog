@@ -112,6 +112,26 @@ namespace Frog.System.Specs
                                                       TerminalOutput4))))
                 );
         }
+        [Test]
+        public void should_make_the_current_build_the_active_one()
+        {
+            var prober = new PollingProber(5000, 100);
+            Guid buildId = Guid.Empty;
+            string repo = "";
+            prober.check(Take.Snapshot(() => system.GetEventsSnapshot())
+                             .Has(x => x, A.Command<Build>(ev =>
+                                                               {
+                                                                   buildId = ev.Id;
+                                                                   repo = ev.RepoUrl;
+                                                                   return true;
+                                                               })));
+                        
+            Assert.True(prober.check(Take.Snapshot(() => system.GetCurrentBuilds())
+                                         .Has(statuses => statuses,
+                                              A.Check<Dictionary<string, Guid>>(
+                                                  arg => arg[repo] == buildId))
+                            ));
+        }
 
         private const string TerminalOutput1 = "Terminal output 1";
         private const string TerminalOutput2 = "Terminal output 2";

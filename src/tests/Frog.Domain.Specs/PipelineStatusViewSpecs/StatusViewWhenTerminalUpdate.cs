@@ -11,26 +11,26 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
         protected override void Given()
         {
             base.Given();
-            View.Handle(new BuildStarted(BuildMessage.Id,
+            View.Handle(new BuildStarted(BuildMessage.BuildId,
                                          new PipelineStatus(Guid.NewGuid())
-                                             {Tasks = As.List(new TaskInfo(), new TaskInfo())}));
+                                             {Tasks = As.List(new TaskInfo(), new TaskInfo())}, "http://somerepo"));
         }
 
         protected override void When()
         {
-            View.Handle(new TerminalUpdate("content1", 0, 0, BuildMessage.Id));
+            View.Handle(new TerminalUpdate("content1", 0, 0, BuildMessage.BuildId));
         }
 
         [Test]
         public void should_update_terminal_output_for_task_0()
         {
-            Assert.That(BuildStatuses[BuildMessage.Id].Tasks[0].GetTerminalOutput().Content, Is.EqualTo("content1"));
+            Assert.That(BuildStatuses[BuildMessage.BuildId].Tasks[0].GetTerminalOutput().Content, Is.EqualTo("content1"));
         }
 
         [Test]
         public void should_return_empty_output_for_task_1()
         {
-            Assert.That(BuildStatuses[BuildMessage.Id].Tasks[1].GetTerminalOutput().Content, Is.EqualTo(""));
+            Assert.That(BuildStatuses[BuildMessage.BuildId].Tasks[1].GetTerminalOutput().Content, Is.EqualTo(""));
         }
     }
 
@@ -40,24 +40,24 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
         protected override void Given()
         {
             base.Given();
-            View.Handle(new BuildStarted(BuildMessage.Id,
+            View.Handle(new BuildStarted(BuildMessage.BuildId,
                                          new PipelineStatus(Guid.NewGuid())
-                                             {Tasks = As.List(new TaskInfo(), new TaskInfo())}));
-            View.Handle(new TerminalUpdate("content1", 0, 0, BuildMessage.Id));
-            View.Handle(new BuildEnded(BuildMessage.Id, BuildTotalEndStatus.Success));
+                                             {Tasks = As.List(new TaskInfo(), new TaskInfo())}, "http://fle"));
+            View.Handle(new TerminalUpdate("content1", 0, 0, BuildMessage.BuildId));
+            View.Handle(new BuildEnded(BuildMessage.BuildId, BuildTotalEndStatus.Success));
         }
 
         protected override void When()
         {
-            View.Handle(new BuildStarted(BuildMessage.Id,
+            View.Handle(new BuildStarted(BuildMessage.BuildId,
                                          new PipelineStatus(Guid.NewGuid())
-                                             {Tasks = As.List(new TaskInfo(), new TaskInfo(), new TaskInfo())}));
+                                             {Tasks = As.List(new TaskInfo(), new TaskInfo(), new TaskInfo())}, "http://fle"));
         }
 
         [Test]
         public void should_update_terminal_output_for_task_0()
         {
-            Assert.That(BuildStatuses[BuildMessage.Id].Tasks.Count(), Is.EqualTo(3));
+            Assert.That(BuildStatuses[BuildMessage.BuildId].Tasks.Count(), Is.EqualTo(3));
         }
     }
 }

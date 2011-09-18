@@ -22,6 +22,15 @@ namespace Frog.Domain.UI
 
         public void Handle(BuildStarted message)
         {
+            string repoUrl = message.RepoUrl;
+            var privateRepo = new Regex(@"^(http://)(\w+):(\w+)@(github.com.*)$");
+            if (privateRepo.IsMatch(repoUrl))
+            {
+                var b = privateRepo.Match(repoUrl).Groups;
+                repoUrl = b[1].Value + b[4].Value;
+            }
+            currentBuilds[repoUrl] = message.BuildId;
+
             EnsureReportExistsForRepo(message.BuildId);
             var buildStatus = report[message.BuildId];
             buildStatus.BuildStarted(message.Status.Tasks);
@@ -49,18 +58,6 @@ namespace Frog.Domain.UI
         void EnsureReportExistsForRepo(Guid repoUrl)
         {
             report.TryAdd(repoUrl, new BuildStatus());
-        }
-
-        public void Handle(Build message)
-        {
-            string repoUrl = message.RepoUrl;
-            var privateRepo = new Regex(@"^(http://)(\w+):(\w+)@(github.com.*)$");
-            if (privateRepo.IsMatch(repoUrl))
-            {
-                var b = privateRepo.Match(repoUrl).Groups;
-                repoUrl = b[1].Value + b[4].Value;
-            }
-            currentBuilds[repoUrl] = message.Id;
         }
     }
 }

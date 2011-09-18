@@ -20,7 +20,7 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
                                              }
                                      };
 
-            View.Handle(new BuildStarted(BuildMessage.Id, pipelineStatus));
+            View.Handle(new BuildStarted(BuildMessage.BuildId, pipelineStatus, "http://"));
         }
 
         protected override void When()
@@ -33,20 +33,20 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
                                                  {Name = "task1", Status = TaskInfo.TaskStatus.Started}
                                          }
                                  };
-            View.Handle(new BuildUpdated(BuildMessage.Id, 0, TaskInfo.TaskStatus.FinishedError));
+            View.Handle(new BuildUpdated(BuildMessage.BuildId, 0, TaskInfo.TaskStatus.FinishedError));
         }
 
         [Test]
         public void should_not_modify_build_status()
         {
-            Assert.That(BuildStatuses[BuildMessage.Id].Overall,
+            Assert.That(BuildStatuses[BuildMessage.BuildId].Overall,
                         Is.EqualTo(BuildTotalStatus.BuildStarted));
         }
 
         [Test]
         public void should_set_task_status_as_as_in_message()
         {
-            Assert.That(BuildStatuses[BuildMessage.Id].Tasks[0].Status,
+            Assert.That(BuildStatuses[BuildMessage.BuildId].Tasks[0].Status,
                         Is.EqualTo(TaskInfo.TaskStatus.FinishedError));
         }
     }

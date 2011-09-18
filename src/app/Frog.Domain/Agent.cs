@@ -11,7 +11,7 @@ namespace Frog.Domain
 
         public BuildEvent(){}
 
-        public BuildEvent(Guid repoUrl)
+        public BuildEvent(Guid buildId)
         {
 //            var privateRepo = new Regex(@"^(http://)(\w+):(\w+)@(github.com.*)$");
 //            if (privateRepo.IsMatch(repoUrl))
@@ -21,19 +21,21 @@ namespace Frog.Domain
 //            }
 //            else
 //                BuildId = repoUrl;
-            BuildId = repoUrl;
+            BuildId = buildId;
         }
     }
 
     public class BuildStarted : BuildEvent
     {
         public PipelineStatus Status { get; set; }
-		
-		public BuildStarted(){}
+        public string RepoUrl { get; set; }
 
-        public BuildStarted(Guid repoUrl, PipelineStatus status) : base(repoUrl)
+        public BuildStarted(){}
+
+        public BuildStarted(Guid buildId, PipelineStatus status, string repoUrl) : base(buildId)
         {
             Status = status;
+            RepoUrl = repoUrl;
         }
     }
 
@@ -45,7 +47,7 @@ namespace Frog.Domain
 		
 		public BuildUpdated(){}
 		
-        public BuildUpdated(Guid repoUrl, int taskIndex, TaskInfo.TaskStatus newStatus) : base(repoUrl)
+        public BuildUpdated(Guid buildId, int taskIndex, TaskInfo.TaskStatus newStatus) : base(buildId)
         {
             TaskIndex = taskIndex;
             TaskStatus = newStatus;
@@ -58,7 +60,7 @@ namespace Frog.Domain
 		
 		public BuildEnded(){}
 		
-        public BuildEnded(Guid repoUrl, BuildTotalEndStatus totalStatus) : base(repoUrl)
+        public BuildEnded(Guid buildId, BuildTotalEndStatus totalStatus) : base(buildId)
         {
             TotalStatus = totalStatus;
         }
@@ -74,8 +76,8 @@ namespace Frog.Domain
 		
 		public TerminalUpdate(){}
 
-        public TerminalUpdate(string content, int taskIndex, int contentSequenceIndex, Guid repoUrl)
-            : base(repoUrl)
+        public TerminalUpdate(string content, int taskIndex, int contentSequenceIndex, Guid buildId)
+            : base(buildId)
         {
             Content = content;
             TaskIndex = taskIndex;
@@ -106,11 +108,11 @@ namespace Frog.Domain
         {
             Action<BuildTotalEndStatus> onBuildEnded = started => theBus.Publish(new BuildEnded(message.Id, started));
             BuildStartedDelegate onBuildStarted =
-                started => theBus.Publish(new BuildStarted(status: started, repoUrl: message.Id));
+                started => theBus.Publish(new BuildStarted(buildId: message.Id, status: started, repoUrl: message.RepoUrl));
             Action<int, TaskInfo.TaskStatus> onBuildUpdated =
-                (i, status) => theBus.Publish(new BuildUpdated(repoUrl: message.Id, taskIndex: i, newStatus: status));
+                (i, status) => theBus.Publish(new BuildUpdated(buildId: message.Id, taskIndex: i, newStatus: status));
             Action<TerminalUpdateInfo> onTerminalUpdates = info => 
-                                                         theBus.Publish(new TerminalUpdate(repoUrl: message.Id,
+                                                         theBus.Publish(new TerminalUpdate(buildId: message.Id,
                                                                                            content: info.Content, taskIndex: info.TaskIndex,
                                                                                            contentSequenceIndex: info.ContentSequenceIndex));
 

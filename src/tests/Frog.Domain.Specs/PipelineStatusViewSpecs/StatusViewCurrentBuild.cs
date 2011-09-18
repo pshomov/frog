@@ -16,7 +16,7 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
         protected PipelineStatusView View;
         protected PipelineStatus PipelineStatus;
         protected ConcurrentDictionary<Guid, BuildStatus> BuildStatuses;
-        protected Build BuildMessage;
+        protected BuildStarted BuildMessage;
         private ConcurrentDictionary<string, Guid> currentBuilds;
 
         protected override void Given()
@@ -29,14 +29,26 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
 
         protected override void When()
         {
-            BuildMessage = new Build{RepoUrl = RepoUrl, Revision = "23"};
+            BuildMessage = new BuildStarted
+            {
+                RepoUrl = RepoUrl,
+                BuildId = Guid.NewGuid(),
+                Status = new PipelineStatus(Guid.NewGuid())
+                {
+                    Tasks =
+                                         {
+                                             new TaskInfo
+                                                 {Name = "task1", Status = TaskInfo.TaskStatus.NotStarted}
+                                         }
+                }
+            };
             View.Handle(BuildMessage);
         }
 
         [Test]
         public void should_have_the_new_buildId_as_the_current_build()
         {
-            Assert.That(currentBuilds[RepoUrl], Is.EqualTo(BuildMessage.Id));
+            Assert.That(currentBuilds[RepoUrl], Is.EqualTo(BuildMessage.BuildId));
         }
 
     }
@@ -46,7 +58,7 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
         protected PipelineStatusView View;
         protected PipelineStatus PipelineStatus;
         protected ConcurrentDictionary<Guid, BuildStatus> BuildStatuses;
-        protected Build BuildMessage;
+        protected BuildStarted BuildMessage;
         private ConcurrentDictionary<string, Guid> currentBuilds;
 
         protected override void Given()
@@ -59,14 +71,26 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
 
         protected override void When()
         {
-            BuildMessage = new Build{RepoUrl = PrivateRepoUrl, Revision = "23"};
+            BuildMessage = new BuildStarted
+            {
+                RepoUrl = PrivateRepoUrl,
+                BuildId = Guid.NewGuid(),
+                Status = new PipelineStatus(Guid.NewGuid())
+                {
+                    Tasks =
+                                         {
+                                             new TaskInfo
+                                                 {Name = "task1", Status = TaskInfo.TaskStatus.NotStarted}
+                                         }
+                }
+            };
             View.Handle(BuildMessage);
         }
 
         [Test]
         public void should_have_the_new_buildId_as_the_current_build()
         {
-            Assert.That(currentBuilds["http://github.com/p1/p2"], Is.EqualTo(BuildMessage.Id));
+            Assert.That(currentBuilds["http://github.com/p1/p2"], Is.EqualTo(BuildMessage.BuildId));
         }
 
     }

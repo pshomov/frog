@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using Frog.Domain.RepositoryTracker;
 using Frog.Domain.UI;
 using Frog.Specs.Support;
+using Frog.Support;
 
 namespace Frog.Domain.Specs.PipelineStatusViewSpecs
 {
@@ -11,7 +12,7 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
         protected PipelineStatusView View;
         protected PipelineStatus PipelineStatus;
         protected ConcurrentDictionary<Guid, BuildStatus> BuildStatuses;
-        protected Build BuildMessage;
+        protected BuildStarted BuildMessage;
         private ConcurrentDictionary<string, Guid> currentBuilds;
 
         protected override void Given()
@@ -20,7 +21,15 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
             currentBuilds = new ConcurrentDictionary<string, Guid>();
             View = new PipelineStatusView(BuildStatuses, currentBuilds);
 
-            BuildMessage = new Build{RepoUrl = "http://somecoolproject"};
+            BuildMessage = new BuildStarted{RepoUrl = "http://somecoolproject", BuildId = Guid.NewGuid(), Status = new PipelineStatus(Guid.NewGuid())
+                                 {
+                                     Tasks =
+                                         {
+                                             new TaskInfo
+                                                 {Name = "task1", Status = TaskInfo.TaskStatus.NotStarted}
+                                         }
+                                 }};
+
             View.Handle(BuildMessage);
         }
     }

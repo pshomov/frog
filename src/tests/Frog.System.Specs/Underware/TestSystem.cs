@@ -21,7 +21,7 @@ namespace Frog.System.Specs.Underware
 
         public ConcurrentDictionary<Guid, BuildStatus> report { get; private set; }
         public TaskSource TasksSource;
-        public ConcurrentDictionary<string, Guid> currentBuild;
+        public ConcurrentDictionary<string, Guid> CurrentBuild;
         public RepositoryTracker repositoryTracker { get; private set; }
 
         public TestSystem(WorkingAreaGoverner governer, SourceRepoDriverFactory sourceRepoDriverFactory, bool runRevisionChecker = true)
@@ -36,7 +36,7 @@ namespace Frog.System.Specs.Underware
 
             var views = Setup.SetupView(TheBus);
             report = views.Item1;
-            currentBuild = views.Item2;
+            CurrentBuild = views.Item2;
 
             messages = new List<Message>();
             SetupAllEventLogging();
@@ -124,6 +124,11 @@ namespace Frog.System.Specs.Underware
         public Dictionary<Guid, BuildStatus> GetView()
         {
             return new Dictionary<Guid, BuildStatus>(theTestSystem.report);
+        }
+
+        public Dictionary<string,Guid> GetCurrentBuilds()
+        {
+            return new Dictionary<string, Guid>(theTestSystem.CurrentBuild);
         }
 
         public void Build(string repoUrl, string revision, Guid buildId)
