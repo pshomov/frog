@@ -97,8 +97,8 @@ namespace Frog.System.Specs.Building
                                          .Has(statuses => statuses,
                                               A.Check<ProjectView>(
                                                   arg =>
-                                                  arg[buildId].Tasks.Count() > 0 &&
-                                                  arg[buildId].Tasks[0].GetTerminalOutput().Content.Match(
+                                                  arg.GetBuildStatus(buildId).Tasks.Count() > 0 &&
+                                                  arg.GetBuildStatus(buildId).Tasks[0].GetTerminalOutput().Content.Match(
                                                       TerminalOutput1 + ".*\n.*" +
                                                       TerminalOutput2)))
                             ));
@@ -106,8 +106,8 @@ namespace Frog.System.Specs.Building
                                          .Has(statuses => statuses,
                                               A.Check<ProjectView>(
                                                   arg =>
-                                                  arg[buildId].Tasks.Count() > 1 &&
-                                                  arg[buildId].Tasks[1].GetTerminalOutput().Content.Match(
+                                                  arg.GetBuildStatus(buildId).Tasks.Count() > 1 &&
+                                                  arg.GetBuildStatus(buildId).Tasks[1].GetTerminalOutput().Content.Match(
                                                       TerminalOutput3 + ".*\n.*" +
                                                       TerminalOutput4))))
                 );

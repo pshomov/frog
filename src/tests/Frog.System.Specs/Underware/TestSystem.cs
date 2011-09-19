@@ -123,12 +123,7 @@ namespace Frog.System.Specs.Underware
 
         public ProjectView GetView()
         {
-            return new ProjectView(theTestSystem.report);
-        }
-
-        public Dictionary<string,Guid> GetCurrentBuilds()
-        {
-            return new Dictionary<string, Guid>(theTestSystem.CurrentBuild);
+            return new ProjectView(theTestSystem.report, theTestSystem.CurrentBuild);
         }
 
         public void Build(string repoUrl, string revision, Guid buildId)

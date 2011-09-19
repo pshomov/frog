@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Frog.Domain;
 using Frog.Domain.BuildSystems.FrogSystemTest;
 using Frog.Domain.CustomTasks;
+using Frog.Domain.UI;
 using Frog.Specs.Support;
 using Frog.Support;
 using Frog.System.Specs.Underware;
@@ -94,8 +95,8 @@ namespace Frog.System.Specs.Building
         public void should_have_the_build_as_the_current_one_in_the_ui()
         {
             var prober = new PollingProber(5000, 100);
-            Assert.True(prober.check(Take.Snapshot(() => system.GetCurrentBuilds())
-                                         .Has(x => x, A.Check<Dictionary<string, Guid>>(guids => guids[RepoUrl] == newGuid))));
+            Assert.True(prober.check(Take.Snapshot(() => system.GetView())
+                                         .Has(x => x, A.Check<ProjectView>(view => view.GetCurrentBuild(RepoUrl) == newGuid))));
         }
 
         private const string TerminalOutput3 = "Terminal output 3";
