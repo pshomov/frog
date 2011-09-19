@@ -95,7 +95,7 @@ namespace Frog.System.Specs.Building
                         
             Assert.True(prober.check(Take.Snapshot(() => system.GetView())
                                          .Has(statuses => statuses,
-                                              A.Check<Dictionary<Guid, BuildStatus>>(
+                                              A.Check<ProjectView>(
                                                   arg =>
                                                   arg[buildId].Tasks.Count() > 0 &&
                                                   arg[buildId].Tasks[0].GetTerminalOutput().Content.Match(
@@ -104,7 +104,7 @@ namespace Frog.System.Specs.Building
                             ));
             Assert.True(prober.check(Take.Snapshot(() => system.GetView())
                                          .Has(statuses => statuses,
-                                              A.Check<Dictionary<Guid, BuildStatus>>(
+                                              A.Check<ProjectView>(
                                                   arg =>
                                                   arg[buildId].Tasks.Count() > 1 &&
                                                   arg[buildId].Tasks[1].GetTerminalOutput().Content.Match(
