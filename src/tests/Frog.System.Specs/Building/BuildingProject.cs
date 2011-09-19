@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Frog.Domain;
 using Frog.Domain.BuildSystems.FrogSystemTest;
 using Frog.Domain.CustomTasks;
@@ -87,6 +88,14 @@ namespace Frog.System.Specs.Building
                                               An.Event<BuildEnded>(
                                                   ev =>
                                                   ev.BuildId == newGuid && ev.TotalStatus == BuildTotalEndStatus.Success))));
+        }
+
+        [Test]
+        public void should_have_the_build_as_the_current_one_in_the_ui()
+        {
+            var prober = new PollingProber(5000, 100);
+            Assert.True(prober.check(Take.Snapshot(() => system.GetCurrentBuilds())
+                                         .Has(x => x, A.Check<Dictionary<string, Guid>>(guids => guids[RepoUrl] == newGuid))));
         }
 
         private const string TerminalOutput3 = "Terminal output 3";
