@@ -34,5 +34,10 @@ namespace Frog.Domain.UI
         {
             currentBuild[repoUrl] = buildId;
         }
+
+        public bool ProjectRegistered(string projectUrl)
+        {
+            return currentBuild.ContainsKey(projectUrl);
+        }
     }
 }

@@ -31,7 +31,7 @@ namespace Frog.UI.Web.Controllers
 
         internal static ActionResult GetAllTaskTerminalOutput(string projectUrl, int lastChunkIndex, int taskIndex)
         {
-            if (ServiceLocator.CurrentReport.ContainsKey(projectUrl))
+            if (ServiceLocator.Report.ProjectRegistered(projectUrl))
             {
                 var tasks = ServiceLocator.Report.GetBuildStatus(ServiceLocator.Report.GetCurrentBuild(projectUrl)).Tasks;
                 var activeTask = taskIndex;
@@ -67,7 +67,7 @@ namespace Frog.UI.Web.Controllers
 
         protected internal ActionResult GetProjectStatus(string projectUrl)
         {
-            if (ServiceLocator.CurrentReport.ContainsKey(projectUrl))
+            if (ServiceLocator.Report.ProjectRegistered(projectUrl))
                 return MonoBugs.Json(new { status = ServiceLocator.Report.GetBuildStatus(ServiceLocator.Report.GetCurrentBuild(projectUrl)) });
             else
             {
@@ -77,7 +77,7 @@ namespace Frog.UI.Web.Controllers
 
         protected internal ActionResult GetTaskTerminalOutput(string projectUrl, int taskIndex)
         {
-            if (ServiceLocator.CurrentReport.ContainsKey(projectUrl))
+            if (ServiceLocator.Report.ProjectRegistered(projectUrl))
                 return
                     MonoBugs.Json(
                         new
