@@ -15,16 +15,13 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
         private const string RepoUrl = "http://lilalo";
         protected PipelineStatusView View;
         protected PipelineStatus PipelineStatus;
-        protected ConcurrentDictionary<Guid, BuildStatus> BuildStatuses;
         protected BuildStarted BuildMessage;
-        private ConcurrentDictionary<string, Guid> currentBuilds;
+        private ProjectView projectView;
 
         protected override void Given()
         {
-            BuildStatuses = new ConcurrentDictionary<Guid, BuildStatus>();
-            currentBuilds = new ConcurrentDictionary<string, Guid>();
-            View = new PipelineStatusView(BuildStatuses, currentBuilds);
-
+            projectView = new ProjectView();
+            View = new PipelineStatusView(projectView);
         }
 
         protected override void When()
@@ -48,7 +45,7 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
         [Test]
         public void should_have_the_new_buildId_as_the_current_build()
         {
-            Assert.That(currentBuilds[RepoUrl], Is.EqualTo(BuildMessage.BuildId));
+            Assert.That(projectView.GetCurrentBuild(RepoUrl), Is.EqualTo(BuildMessage.BuildId));
         }
 
     }
@@ -57,16 +54,13 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
         private const string PrivateRepoUrl = "http://psh:pass@github.com/p1/p2";
         protected PipelineStatusView View;
         protected PipelineStatus PipelineStatus;
-        protected ConcurrentDictionary<Guid, BuildStatus> BuildStatuses;
         protected BuildStarted BuildMessage;
-        private ConcurrentDictionary<string, Guid> currentBuilds;
+        private ProjectView projectView;
 
         protected override void Given()
         {
-            BuildStatuses = new ConcurrentDictionary<Guid, BuildStatus>();
-            currentBuilds = new ConcurrentDictionary<string, Guid>();
-            View = new PipelineStatusView(BuildStatuses, currentBuilds);
-
+            projectView = new ProjectView();
+            View = new PipelineStatusView(projectView);
         }
 
         protected override void When()
@@ -90,7 +84,7 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
         [Test]
         public void should_have_the_new_buildId_as_the_current_build()
         {
-            Assert.That(currentBuilds["http://github.com/p1/p2"], Is.EqualTo(BuildMessage.BuildId));
+            Assert.That(projectView.GetCurrentBuild("http://github.com/p1/p2"), Is.EqualTo(BuildMessage.BuildId));
         }
 
     }

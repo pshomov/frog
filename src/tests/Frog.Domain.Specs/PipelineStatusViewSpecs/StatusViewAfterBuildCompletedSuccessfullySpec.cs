@@ -14,7 +14,7 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
         [Test]
         public void should_set_status_to_BUILD_COMPLETED()
         {
-            Assert.That(BuildStatuses[BuildMessage.BuildId].Overall,
+            Assert.That(ProjectView.GetBuildStatus(BuildMessage.BuildId).Overall,
                         Is.EqualTo(BuildTotalStatus.BuildEndedSuccess));
         }
     }

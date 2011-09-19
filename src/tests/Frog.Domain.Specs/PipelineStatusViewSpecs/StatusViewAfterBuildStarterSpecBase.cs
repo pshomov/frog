@@ -11,15 +11,13 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
     {
         protected PipelineStatusView View;
         protected PipelineStatus PipelineStatus;
-        protected ConcurrentDictionary<Guid, BuildStatus> BuildStatuses;
         protected BuildStarted BuildMessage;
-        private ConcurrentDictionary<string, Guid> currentBuilds;
+        protected ProjectView ProjectView;
 
         protected override void Given()
         {
-            BuildStatuses = new ConcurrentDictionary<Guid, BuildStatus>();
-            currentBuilds = new ConcurrentDictionary<string, Guid>();
-            View = new PipelineStatusView(BuildStatuses, currentBuilds);
+            ProjectView = new ProjectView();
+            View = new PipelineStatusView(ProjectView);
 
             BuildMessage = new BuildStarted{RepoUrl = "http://somecoolproject", BuildId = Guid.NewGuid(), Status = new PipelineStatus(Guid.NewGuid())
                                  {

@@ -33,7 +33,7 @@ namespace Frog.UI.Web.Controllers
         {
             if (ServiceLocator.CurrentReport.ContainsKey(projectUrl))
             {
-                var tasks = ServiceLocator.Report[ServiceLocator.CurrentReport[projectUrl]].Tasks;
+                var tasks = ServiceLocator.Report.GetBuildStatus(ServiceLocator.Report.GetCurrentBuild(projectUrl)).Tasks;
                 var activeTask = taskIndex;
                 var content = new StringBuilder();
                 for (var i = taskIndex; i < tasks.Count; i++)
@@ -68,7 +68,7 @@ namespace Frog.UI.Web.Controllers
         protected internal ActionResult GetProjectStatus(string projectUrl)
         {
             if (ServiceLocator.CurrentReport.ContainsKey(projectUrl))
-                return MonoBugs.Json(new {status = ServiceLocator.Report[ServiceLocator.CurrentReport[projectUrl]]});
+                return MonoBugs.Json(new { status = ServiceLocator.Report.GetBuildStatus(ServiceLocator.Report.GetCurrentBuild(projectUrl)) });
             else
             {
                 return new HttpNotFoundResult("Project does not Runz ;(");
@@ -83,7 +83,7 @@ namespace Frog.UI.Web.Controllers
                         new
                             {
                                 terminalOutput =
-                            ServiceLocator.Report[ServiceLocator.CurrentReport[projectUrl]].Tasks[taskIndex].GetTerminalOutput()
+                            ServiceLocator.Report.GetBuildStatus(ServiceLocator.Report.GetCurrentBuild(projectUrl)).Tasks[taskIndex].GetTerminalOutput()
                             });
             else
             {

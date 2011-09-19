@@ -39,14 +39,14 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
         [Test]
         public void should_not_modify_build_status()
         {
-            Assert.That(BuildStatuses[BuildMessage.BuildId].Overall,
+            Assert.That(ProjectView.GetBuildStatus(BuildMessage.BuildId).Overall,
                         Is.EqualTo(BuildTotalStatus.BuildStarted));
         }
 
         [Test]
         public void should_set_task_status_as_as_in_message()
         {
-            Assert.That(BuildStatuses[BuildMessage.BuildId].Tasks[0].Status,
+            Assert.That(ProjectView.GetBuildStatus(BuildMessage.BuildId).Tasks[0].Status,
                         Is.EqualTo(TaskInfo.TaskStatus.FinishedError));
         }
     }

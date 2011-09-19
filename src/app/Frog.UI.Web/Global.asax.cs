@@ -72,8 +72,7 @@ namespace Frog.UI.Web
             var theBus = new RabbitMQBus(Environment.GetEnvironmentVariable("RUNZ_RABBITMQ_SERVER") ?? "localhost");
 
             var views = Setup.SetupView(theBus);
-            ServiceLocator.Report = views.Item1;
-            ServiceLocator.CurrentReport = views.Item2;
+            ServiceLocator.Report = views;
             ServiceLocator.Bus = theBus;
             ServiceLocator.AllMassages = new ConcurrentQueue<Message>();
         }

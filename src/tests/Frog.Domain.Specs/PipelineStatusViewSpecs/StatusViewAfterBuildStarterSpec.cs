@@ -26,7 +26,7 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
         [Test]
         public void should_set_status_to_BUILD_STARTED()
         {
-            Assert.That(BuildStatuses[BuildMessage.BuildId].Overall,
+            Assert.That(ProjectView.GetBuildStatus(BuildMessage.BuildId).Overall,
                         Is.EqualTo(BuildTotalStatus.BuildStarted));
         }
     }
