@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Frog.Domain;
 using Frog.Domain.BuildSystems.FrogSystemTest;
 using Frog.Domain.CustomTasks;
@@ -13,11 +14,12 @@ using xray;
 namespace Frog.System.Specs.Building
 {
     [TestFixture]
-    public class LastBuildIsTheActiveOne : BDD
+    public class MultipleBuildsOfTheSameProject : BDD
     {
         private const string RepoUrl = "http://123";
         private SystemDriver system;
         private Guid newGuid;
+        private Guid oldGuid;
 
         protected override void Given()
         {
@@ -37,6 +39,7 @@ namespace Frog.System.Specs.Building
         {
             newGuid = Guid.NewGuid();
             system.Build(RepoUrl, "123", newGuid);
+            oldGuid = newGuid;
             newGuid = Guid.NewGuid();
             system.Build(RepoUrl, "123", newGuid);
         }
@@ -50,5 +53,16 @@ namespace Frog.System.Specs.Building
                                               A.Check<ProjectView>(view => view.GetCurrentBuild(RepoUrl) == newGuid))));
         }
 
+        [Test]
+        public void should_have_the_list_of_builds()
+        {
+            var prober = new PollingProber(5000, 100);
+            Assert.True(prober.check(Take.Snapshot(() => system.GetView().GetListOfBuilds(RepoUrl))
+                                         .Has(x => x,
+                                              A.Check<List<Guid>>(
+                                                  listOfBuilds =>
+                                                  listOfBuilds.Count == 2 && listOfBuilds[0] == oldGuid &&
+                                                  listOfBuilds[1] == newGuid))));
+        }
     }
 }

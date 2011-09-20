@@ -57,7 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Building\BuildingProject.cs" />
-    <Compile Include="Building\LastBuildIsTheActiveOne.cs" />
+    <Compile Include="Building\MultipleBuildsOfTheSameProject.cs" />
     <Compile Include="GetLatestRevision\CheckingForUpdates.cs" />
     <Compile Include="GetLatestRevision\CheckkingForUpdatesTwiceInARowWithoutAnyResponseInBetween.cs" />
     <Compile Include="GetLatestRevision\CheckkingForUpdatesTwiceInARowWithErrorResponseInBetween.cs" />
