@@ -1,38 +1,21 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Frog.Domain.UI;
 using NUnit.Framework;
 
 namespace Frog.Domain.Specs.PipelineStatusViewSpecs
 {
     [TestFixture]
-    public class StatusViewAfterBuildUpdateSpec : StatusViewAfterBuildStarterSpecBase
+    public class StatusViewAfterBuildUpdateSpec : StatusViewCurrentBuildPublicRepoBase
     {
         protected override void Given()
         {
             base.Given();
-            var pipelineStatus = new PipelineStatus()
-                                     {
-                                         Tasks =
-                                             {
-                                                 new TaskInfo
-                                                     {Name = "task1", Status = TaskInfo.TaskStatus.NotStarted}
-                                             }
-                                     };
-
-            View.Handle(new BuildStarted(BuildMessage.BuildId, pipelineStatus, "http://"));
+            RepoUrl = "http://";
+            HandleBuildStarted(DefaultTask);
         }
 
         protected override void When()
         {
-            PipelineStatus = new PipelineStatus(Guid.NewGuid())
-                                 {
-                                     Tasks =
-                                         {
-                                             new TaskInfo
-                                                 {Name = "task1", Status = TaskInfo.TaskStatus.Started}
-                                         }
-                                 };
             View.Handle(new BuildUpdated(BuildMessage.BuildId, 0, TaskInfo.TaskStatus.FinishedError));
         }
 

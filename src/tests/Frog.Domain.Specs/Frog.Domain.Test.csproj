@@ -68,7 +68,6 @@
     <Compile Include="PipelineStatusViewSpecs\StatusViewAfterBuildCompletedSuccessfullySpec.cs" />
     <Compile Include="PipelineStatusViewSpecs\StatusViewAfterBuildCompletedWithErrorSpec.cs" />
     <Compile Include="PipelineStatusViewSpecs\StatusViewAfterBuildStarterSpec.cs" />
-    <Compile Include="PipelineStatusViewSpecs\StatusViewAfterBuildStarterSpecBase.cs" />
     <Compile Include="PipelineStatusViewSpecs\StatusViewAfterBuildUpdateSpec.cs" />
     <Compile Include="PipelineStatusViewSpecs\StatusViewCurrentBuild.cs" />
     <Compile Include="PipelineStatusViewSpecs\StatusViewWhenTerminalUpdate.cs" />

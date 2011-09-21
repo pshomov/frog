@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using Frog.Support;
 using NUnit.Framework;
@@ -6,14 +5,13 @@ using NUnit.Framework;
 namespace Frog.Domain.Specs.PipelineStatusViewSpecs
 {
     [TestFixture]
-    public class StatusViewWhenTerminalUpdate : StatusViewAfterBuildStarterSpecBase
+    public class StatusViewWhenTerminalUpdate : StatusViewCurrentBuildPublicRepoBase
     {
         protected override void Given()
         {
             base.Given();
-            View.Handle(new BuildStarted(BuildMessage.BuildId,
-                                         new PipelineStatus()
-                                             {Tasks = As.List(new TaskInfo(), new TaskInfo())}, "http://somerepo"));
+            RepoUrl = "http://";
+            HandleBuildStarted(new TaskInfo(), new TaskInfo());
         }
 
         protected override void When()
@@ -35,23 +33,19 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
     }
 
     [TestFixture]
-    public class StatusViewAfterTheFirstBuildIsCompleteAndNewOneStarts : StatusViewAfterBuildStarterSpecBase
+    public class StatusViewAfterTheFirstBuildIsCompleteAndNewOneStarts : StatusViewCurrentBuildPublicRepoBase
     {
         protected override void Given()
         {
             base.Given();
-            View.Handle(new BuildStarted(BuildMessage.BuildId,
-                                         new PipelineStatus()
-                                             {Tasks = As.List(new TaskInfo(), new TaskInfo())}, "http://fle"));
-            View.Handle(new TerminalUpdate("content1", 0, 0, BuildMessage.BuildId));
-            View.Handle(new BuildEnded(BuildMessage.BuildId, BuildTotalEndStatus.Success));
+            RepoUrl = "http://asdasda";
+            HandleBuildStarted(DefaultTask);
+            HandleBuildEnded(BuildTotalEndStatus.Success);
         }
 
         protected override void When()
         {
-            View.Handle(new BuildStarted(BuildMessage.BuildId,
-                                         new PipelineStatus()
-                                             {Tasks = As.List(new TaskInfo(), new TaskInfo(), new TaskInfo())}, "http://fle"));
+            HandleBuildStarted(new TaskInfo(), new TaskInfo(), new TaskInfo());
         }
 
         [Test]

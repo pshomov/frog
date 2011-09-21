@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Frog.Domain.UI;
 using Frog.Specs.Support;
 using NUnit.Framework;
@@ -12,6 +13,12 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
         protected ProjectView ProjectView;
         protected BuildStarted BuildMessage;
         protected Guid NewGuid;
+        public TaskInfo DefaultTask;
+
+        public StatusViewCurrentBuildPublicRepoBase()
+        {
+            DefaultTask = new TaskInfo { Name = "task1", Status = TaskInfo.TaskStatus.NotStarted };
+        }
 
         protected override void Given()
         {
@@ -21,7 +28,7 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
 
         protected void HandleABuild(BuildTotalEndStatus buildTotalEndStatus)
         {
-            HandleBuildStarted();
+            HandleBuildStarted(DefaultTask);
             HandleBuildEnded(buildTotalEndStatus);
         }
 
@@ -30,14 +37,14 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
             View.Handle(new BuildEnded(NewGuid, buildTotalEndStatus));
         }
 
-        protected void HandleBuildStarted()
+        protected void HandleBuildStarted(params TaskInfo[] tasks)
         {
             NewGuid = Guid.NewGuid();
-            BuildMessage = CreateBuildMessage(NewGuid, RepoUrl);
+            BuildMessage = CreateBuildMessage(NewGuid, RepoUrl, tasks);
             View.Handle(BuildMessage);
         }
 
-        protected BuildStarted CreateBuildMessage(Guid buildId, string repoUrl)
+        protected BuildStarted CreateBuildMessage(Guid buildId, string repoUrl, params TaskInfo[] tasks)
         {
             return new BuildStarted
                        {
@@ -45,11 +52,7 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
                            BuildId = buildId,
                            Status = new PipelineStatus()
                                         {
-                                            Tasks =
-                                                {
-                                                    new TaskInfo
-                                                        {Name = "task1", Status = TaskInfo.TaskStatus.NotStarted}
-                                                }
+                                            Tasks = new List<TaskInfo>(tasks)
                                         }
                        };
         }

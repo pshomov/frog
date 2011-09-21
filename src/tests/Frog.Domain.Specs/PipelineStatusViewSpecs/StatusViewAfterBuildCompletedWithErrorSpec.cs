@@ -5,11 +5,12 @@ using NUnit.Framework;
 namespace Frog.Domain.Specs.PipelineStatusViewSpecs
 {
     [TestFixture]
-    public class StatusViewAfterBuildCompletedWithErrorSpec : StatusViewAfterBuildStarterSpecBase
+    public class StatusViewAfterBuildCompletedWithErrorSpec : StatusViewCurrentBuildPublicRepoBase
     {
         protected override void When()
         {
-            View.Handle(new BuildEnded(BuildMessage.BuildId, BuildTotalEndStatus.Error));
+            RepoUrl = "http://";
+            HandleABuild(BuildTotalEndStatus.Error);
         }
 
         [Test]
