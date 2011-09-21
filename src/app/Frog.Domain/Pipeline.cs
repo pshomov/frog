@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Frog.Domain.ExecTasks;
 using Frog.Domain.TaskSources;
 
@@ -48,26 +47,7 @@ namespace Frog.Domain
 
     public class PipelineStatus
     {
-        public PipelineStatus()
-        {
-        }
-
-        public PipelineStatus(Guid id)
-        {
-            Tasks = new List<TaskInfo>();
-            PipelineId = id;
-        }
-
-        public PipelineStatus(PipelineStatus pipelineStatus)
-        {
-            PipelineId = pipelineStatus.PipelineId;
-            Tasks = new List<TaskInfo>();
-
-            pipelineStatus.Tasks.ToList().ForEach(info => Tasks.Add(new TaskInfo(info)));
-        }
-
-        public Guid PipelineId;
-        public List<TaskInfo> Tasks;
+        public List<TaskInfo> Tasks = new List<TaskInfo>();
     }
 
     public class TaskInfo
@@ -175,7 +155,7 @@ namespace Frog.Domain
 
         PipelineStatus GeneratePipelineStatus(List<IExecTask> execTasks)
         {
-            var pipelineStatus = new PipelineStatus(Guid.NewGuid());
+            var pipelineStatus = new PipelineStatus();
             foreach (var execTask in execTasks)
             {
                 pipelineStatus.Tasks.Add(new TaskInfo

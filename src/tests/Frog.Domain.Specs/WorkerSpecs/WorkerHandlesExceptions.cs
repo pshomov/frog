@@ -25,7 +25,7 @@ namespace Frog.Domain.Specs.WorkerSpecs
                     callInfo =>
                         {
                             Pipeline.OnBuildStarted +=
-                                Raise.Event<BuildStartedDelegate>(new PipelineStatus(Guid.NewGuid()));
+                                Raise.Event<BuildStartedDelegate>(new PipelineStatus());
                             Pipeline.OnBuildUpdated +=
                                 Raise.Event<Action<int, TaskInfo.TaskStatus>>(0, TaskInfo.TaskStatus.Started);
                             Pipeline.OnBuildEnded +=

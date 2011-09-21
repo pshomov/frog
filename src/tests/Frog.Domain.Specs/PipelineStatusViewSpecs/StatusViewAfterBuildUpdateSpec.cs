@@ -11,7 +11,7 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
         protected override void Given()
         {
             base.Given();
-            var pipelineStatus = new PipelineStatus(Guid.NewGuid())
+            var pipelineStatus = new PipelineStatus()
                                      {
                                          Tasks =
                                              {

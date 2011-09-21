@@ -22,7 +22,7 @@ namespace Frog.Domain.Specs.Agent
                     info =>
                         {
                             Worker.OnBuildStarted +=
-                                Raise.Event<BuildStartedDelegate>(new PipelineStatus(Guid.NewGuid()));
+                                Raise.Event<BuildStartedDelegate>(new PipelineStatus());
                             Worker.OnTerminalUpdates += Raise.Event<Action<TerminalUpdateInfo>>(new TerminalUpdateInfo(content: "content", taskIndex: 1, contentSequenceIndex: 1));
                             Worker.OnBuildUpdated +=
                                 Raise.Event<Action<int, TaskInfo.TaskStatus>>(0, TaskInfo.TaskStatus.Started);

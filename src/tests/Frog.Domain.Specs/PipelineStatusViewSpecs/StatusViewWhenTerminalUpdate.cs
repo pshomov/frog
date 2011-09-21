@@ -12,7 +12,7 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
         {
             base.Given();
             View.Handle(new BuildStarted(BuildMessage.BuildId,
-                                         new PipelineStatus(Guid.NewGuid())
+                                         new PipelineStatus()
                                              {Tasks = As.List(new TaskInfo(), new TaskInfo())}, "http://somerepo"));
         }
 
@@ -41,7 +41,7 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
         {
             base.Given();
             View.Handle(new BuildStarted(BuildMessage.BuildId,
-                                         new PipelineStatus(Guid.NewGuid())
+                                         new PipelineStatus()
                                              {Tasks = As.List(new TaskInfo(), new TaskInfo())}, "http://fle"));
             View.Handle(new TerminalUpdate("content1", 0, 0, BuildMessage.BuildId));
             View.Handle(new BuildEnded(BuildMessage.BuildId, BuildTotalEndStatus.Success));
@@ -50,7 +50,7 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
         protected override void When()
         {
             View.Handle(new BuildStarted(BuildMessage.BuildId,
-                                         new PipelineStatus(Guid.NewGuid())
+                                         new PipelineStatus()
                                              {Tasks = As.List(new TaskInfo(), new TaskInfo(), new TaskInfo())}, "http://fle"));
         }
 
