@@ -72,7 +72,8 @@ namespace Frog.FunctionalTests.Features
 #line 7
  testRunner.Given("I have a project as \"p1\"");
 #line 8
- testRunner.And("I add a test task \"t1\" with content \"testoutput\" to project \"p1\"");
+ testRunner.And("I add a test task \"t1\" with comment \"commit 1\" and content \"testoutput\" to projec" +
+                    "t \"p1\"");
 #line hidden
         }
         
@@ -92,7 +93,8 @@ this.ScenarioSetup(scenarioInfo);
 #line 14
  testRunner.And("I see the build is completed with status SUCCESS");
 #line 15
- testRunner.And("I add a test task \"t2\" with content \"testoutput\" to project \"p1\"");
+ testRunner.And("I add a test task \"t2\" with comment \"commit 2\" and content \"testoutput\" to projec" +
+                    "t \"p1\"");
 #line 16
  testRunner.And("I check for updates");
 #line 17
@@ -101,6 +103,10 @@ this.ScenarioSetup(scenarioInfo);
  testRunner.Then("I see the build is completed with status SUCCESS");
 #line 19
  testRunner.And("I see build history contains 2 items");
+#line 20
+ testRunner.And("I see build history item 1 contains \"commit 2\"");
+#line 21
+ testRunner.And("I see build history item 2 contains \"commit 1\"");
 #line hidden
             this.ScenarioCleanup();
         }

@@ -80,7 +80,16 @@ namespace Frog.FunctionalTests
             var gen = new FileGenesis();
             gen.File(string.Format("{0}.testtask", taskName), content.Replace("\\n", Environment.NewLine));
             GitTestSupport.CommitChangeFiles(repo, gen.Root, string.Format("commit on project {0} for adding task {1}", project, taskName));
+        }
 
+        [Given(@"I add a test task ""(.*)"" with comment ""(.*)"" and content ""(.*)"" to project ""(.*)""")]
+        [When(@"I add a test task ""(.*)"" with comment ""(.*)"" and content ""(.*)"" to project ""(.*)""")]
+        public void AddTaskWithComment(string taskName, string content, string comment, string project)
+        {
+            var repo = (string) ScenarioContext.Current[project];
+            var gen = new FileGenesis();
+            gen.File(string.Format("{0}.testtask", taskName), content.Replace("\\n", Environment.NewLine));
+            GitTestSupport.CommitChangeFiles(repo, gen.Root, comment);
         }
 
         [Given(@"I type in the url input the ""(.*)"" repository URL and press the 'Register' button")]
@@ -144,11 +153,17 @@ namespace Frog.FunctionalTests
                 () => Assert.That(World.browser.FindElement(By.CssSelector("#terminal")).Text, Is.StringContaining(text.Replace("\\n", Environment.NewLine))), retries: 300);
         }
 
-        [Then("I see build history contains (.*) items")]
+        [Then(@"I see build history contains (.*) items")]
         public void BuildHistoryContains(int itemCount)
         {
             AssertionHelpers.WithRetries(
                 () => Assert.That(World.browser.FindElements(By.CssSelector("#history li")).Count, Is.EqualTo(itemCount)), retries: 300);
+        }
+        [Then(@"I see build history item (.*) contains ""(.*)""")]
+        public void BuildHistoryItemContains(int itemIndex, string contains)
+        {
+            AssertionHelpers.WithRetries(
+                () => Assert.That(World.browser.FindElements(By.CssSelector("#history li"))[itemIndex], Is.StringContaining(contains)), retries: 300);
         }
 
         Uri U(string relativeUrl)
