@@ -73,6 +73,7 @@ namespace Frog.FunctionalTests
         }
 
         [Given(@"I add a test task ""(.*)"" with content ""(.*)"" to project ""(.*)""")]
+        [When(@"I add a test task ""(.*)"" with content ""(.*)"" to project ""(.*)""")]
         public void Give_I_add_a_task(string taskName, string content, string project)
         {
             var repo = (string) ScenarioContext.Current[project];
@@ -116,6 +117,7 @@ namespace Frog.FunctionalTests
         }
 
         [Then(@"I see the build is completed with status (.*)$")]
+        [When(@"I see the build is completed with status (.*)$")]
         public void ThenISeeTheBuildIsCompletedWithStatus(string status)
         {
             var statuses = new Dictionary<string, string>
@@ -140,6 +142,13 @@ namespace Frog.FunctionalTests
         {
             AssertionHelpers.WithRetries(
                 () => Assert.That(World.browser.FindElement(By.CssSelector("#terminal")).Text, Is.StringContaining(text.Replace("\\n", Environment.NewLine))), retries: 300);
+        }
+
+        [Then("I see build history contains (.*) items")]
+        public void BuildHistoryContains(int itemCount)
+        {
+            AssertionHelpers.WithRetries(
+                () => Assert.That(World.browser.FindElements(By.CssSelector("#history li")).Count, Is.EqualTo(itemCount)), retries: 300);
         }
 
         Uri U(string relativeUrl)

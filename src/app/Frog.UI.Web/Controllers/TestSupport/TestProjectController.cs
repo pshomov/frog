@@ -20,6 +20,13 @@ namespace Frog.UI.Web.Controllers.TestSupport
             return new ProjectController().GetProjectStatus(PathUrlConversion.Url2Path(projectUrl));
         }
 
+        public ActionResult History(string projectUrl)
+        {
+            if (Os.IsWindows)
+                projectUrl = HttpUtility.UrlDecode(projectUrl);
+            return new ProjectController().GetProjectHistory(PathUrlConversion.Url2Path(projectUrl));
+        }
+
         public ActionResult TerminalOutput(string projectUrl, int taskIndex)
         {
             if (Os.IsWindows)

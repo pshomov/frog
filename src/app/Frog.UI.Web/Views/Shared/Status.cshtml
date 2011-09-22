@@ -44,6 +44,18 @@
                     $("#status").text("Nothing to see here, moving along");
                 }
             });
+            $.ajax({
+                url: "history",
+                success: function data(msg) {
+                    $('#history_items').empty();
+                    for (var i = 0; i < msg.items.length; i++) {
+                        $('#history_items').append("<li>item 1</li>");
+                    }
+                },
+                error: function () {
+                    $("#status").text("Nothing to see here, moving along");
+                }
+            });
         };
         function set_status(msg, color) {
             $("#status").text(msg);
@@ -63,7 +75,6 @@
         };
 
         function update_terminal_output() {
-        	console.log("requesting terminal output");
             $.ajax({
                 url: "task",
                 data: { lastOutputChunkIndex: lastOutputChunkIndex, taskIndex: taskIndex },
@@ -98,6 +109,10 @@
     </head>
     <body>
         <div id="status"></div>
+        <div id="history">
+        Latest builds
+        <ul id="history_items"></ul>
+        </div>
         <div id="tasks"></div>
         <div id="terminal" style="width:100%;height:30%;margin-bottom:0;"></div>
     </body>

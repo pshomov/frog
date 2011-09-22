@@ -14,6 +14,11 @@ namespace Frog.UI.Web.Controllers
             return View();
         }
 
+        public ActionResult History(string user, string project)
+        {
+            return GetProjectHistory(GetGithubProjectUrl(user, project));
+        }
+
         public ActionResult Data(string user, string project)
         {
             return GetProjectStatus(GetGithubProjectUrl(user, project));
@@ -69,6 +74,22 @@ namespace Frog.UI.Web.Controllers
         {
             if (ServiceLocator.Report.ProjectRegistered(projectUrl))
                 return MonoBugs.Json(new { status = ServiceLocator.Report.GetBuildStatus(ServiceLocator.Report.GetCurrentBuild(projectUrl)) });
+            else
+            {
+                return new HttpNotFoundResult("Project does not Runz ;(");
+            }
+        }
+
+        public ActionResult GetProjectHistory(string projectUrl)
+        {
+            if (ServiceLocator.Report.ProjectRegistered(projectUrl))
+                return
+                    MonoBugs.Json(
+                        new
+                        {
+                            items =
+                        ServiceLocator.Report.GetListOfBuilds(projectUrl)
+                        });
             else
             {
                 return new HttpNotFoundResult("Project does not Runz ;(");

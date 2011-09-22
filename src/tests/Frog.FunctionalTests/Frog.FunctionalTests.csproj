@@ -68,6 +68,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="features\BuildHistory.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BuildHistory.feature</DependentUpon>
+    </Compile>
     <Compile Include="features\HandlingMultipleProjects.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -112,6 +117,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="features\BuildHistory.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>BuildHistory.feature.cs</LastGenOutput>
+    </None>
     <None Include="features\HandlingMultipleProjects.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>HandlingMultipleProjects.feature.cs</LastGenOutput>
