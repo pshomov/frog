@@ -9,8 +9,8 @@ namespace Frog.Domain.Specs.Git
     [TestFixture]
     public class GitRepositoryGetLatestRev : GitRepositoryDriverCheckBase
     {
-        string revision1;
-        string revision2;
+        RevisionInfo revision1;
+        RevisionInfo revision2;
         string workingArea;
 
         protected override void Given()
@@ -43,7 +43,7 @@ namespace Frog.Domain.Specs.Git
         {
             workingArea = Path.Combine(GitTestSupport.GetTempPath(), Path.GetRandomFileName());
             Directory.CreateDirectory(workingArea);
-            _driver.GetSourceRevision(revision1, workingArea );
+            _driver.GetSourceRevision(revision1.Revision, workingArea );
         }
 
         [Test]

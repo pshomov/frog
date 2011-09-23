@@ -13,7 +13,7 @@ namespace Frog.Domain.RepositoryTracker
     public class Build : Command
     {
         public string RepoUrl { get; set; }
-        public string Revision { get; set; }
+        public RevisionInfo Revision { get; set; }
         public Guid Id { get;  set; }
 
         public Build()
@@ -65,8 +65,8 @@ namespace Frog.Domain.RepositoryTracker
         {
             var currentRev =
                 projectsRepository.AllProjects.First(document => document.projecturl == message.RepoUrl).revision;
-            projectsRepository.UpdateLastKnownRevision(message.RepoUrl, message.Revision);
-            if (currentRev != message.Revision) bus.Send(new Build {RepoUrl = message.RepoUrl, Revision = message.Revision});
+            projectsRepository.UpdateLastKnownRevision(message.RepoUrl, message.Revision.Revision);
+            if (currentRev != message.Revision.Revision) bus.Send(new Build {RepoUrl = message.RepoUrl, Revision = message.Revision});
         }
 
         public void Handle(CheckForUpdateFailed message)

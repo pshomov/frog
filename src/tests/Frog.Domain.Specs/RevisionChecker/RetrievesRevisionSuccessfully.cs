@@ -19,7 +19,7 @@ namespace Frog.Domain.Specs.RevisionChecker
         protected override void Given()
         {
             sr = Substitute.For<SourceRepoDriver>();
-            sr.GetLatestRevision().Returns("456");
+            sr.GetLatestRevision().Returns(new RevisionInfo { Revision = "456" });
             bus = NSubstitute.Substitute.For<IBus>();
             rc = new Frog.Domain.RevisionChecker.RevisionChecker(bus, url => sr);
         }
@@ -38,7 +38,7 @@ namespace Frog.Domain.Specs.RevisionChecker
         [Test]
         public void should_send_event_with_revision_found()
         {
-            bus.Received().Publish(Arg.Is<UpdateFound>(found => found.RepoUrl == "http://fle" && found.Revision == "456"));
+            bus.Received().Publish(Arg.Is<UpdateFound>(found => found.RepoUrl == "http://fle" && found.Revision.Revision == "456"));
         }
     }
 }

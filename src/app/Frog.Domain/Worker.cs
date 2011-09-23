@@ -5,7 +5,7 @@ namespace Frog.Domain
 {
     public class UpdateFound : Event
     {
-        public string Revision;
+        public RevisionInfo Revision;
         public string RepoUrl;
     }
 

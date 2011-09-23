@@ -129,7 +129,7 @@ namespace Frog.Domain.Specs
             base.Given();
             repositoryTracker.Handle(new RegisterRepository { Repo = "http://fle" });
             repositoryTracker.CheckForUpdates();
-            repositoryTracker.Handle(new UpdateFound {RepoUrl = "http://fle", Revision = "123"});
+            repositoryTracker.Handle(new UpdateFound { RepoUrl = "http://fle", Revision = new RevisionInfo { Revision = "123" } });
             bus.ClearReceivedCalls();
         }
 
@@ -181,13 +181,13 @@ namespace Frog.Domain.Specs
 
         protected override void When()
         {
-            repositoryTracker.Handle(new UpdateFound { RepoUrl = "http://fle", Revision = "789" });
+            repositoryTracker.Handle(new UpdateFound { RepoUrl = "http://fle", Revision = new RevisionInfo { Revision = "789" } });
         }
 
         [Test]
         public void should_send_a_command_to_build_the_project()
         {
-            bus.Received().Send(Arg.Is<Build>(project => project.RepoUrl == "http://fle" && project.Revision == "789"));
+            bus.Received().Send(Arg.Is<Build>(project => project.RepoUrl == "http://fle" && project.Revision.Revision == "789"));
         }
     }
     [TestFixture]
@@ -198,14 +198,14 @@ namespace Frog.Domain.Specs
             base.Given();
             repositoryTracker.Handle(new RegisterRepository { Repo = "http://fle" });
             repositoryTracker.CheckForUpdates();
-            repositoryTracker.Handle(new UpdateFound { RepoUrl = "http://fle", Revision = "789" });
+            repositoryTracker.Handle(new UpdateFound { RepoUrl = "http://fle", Revision = new RevisionInfo { Revision = "789" } });
             repositoryTracker.CheckForUpdates();
             bus.ClearReceivedCalls();
         }
 
         protected override void When()
         {
-            repositoryTracker.Handle(new UpdateFound { RepoUrl = "http://fle", Revision = "789" });
+            repositoryTracker.Handle(new UpdateFound { RepoUrl = "http://fle", Revision = new RevisionInfo{Revision = "789"}});
         }
 
         [Test]

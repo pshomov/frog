@@ -18,7 +18,7 @@ namespace Frog.System.Specs.GetLatestRevision
         protected override void Given()
         {
             system = new SystemDriver();
-            system.SourceRepoDriver.GetLatestRevision().Returns("12");
+            system.SourceRepoDriver.GetLatestRevision().Returns(new RevisionInfo { Revision = "12" });
             system.RegisterNewProject("http://123");
         }
 
@@ -38,10 +38,10 @@ namespace Frog.System.Specs.GetLatestRevision
                                                   ev.RepoUrl == "http://123"))
                                          .Has(x => x,
                                               An.Event<UpdateFound>(
-                                                  found => found.RepoUrl == "http://123" && found.Revision == "12"))
+                                                  found => found.RepoUrl == "http://123" && found.Revision.Revision == "12"))
                                          .Has(x => x,
                                               A.Command<Build>(
-                                                  found => found.RepoUrl == "http://123" && found.Revision == "12"))
+                                                  found => found.RepoUrl == "http://123" && found.Revision.Revision == "12"))
                             ));
         }
 

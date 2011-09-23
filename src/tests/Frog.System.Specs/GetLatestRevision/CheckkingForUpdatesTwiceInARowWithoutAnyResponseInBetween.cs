@@ -1,4 +1,5 @@
 using System;
+using Frog.Domain;
 using Frog.Domain.RevisionChecker;
 using Frog.Specs.Support;
 using Frog.System.Specs.Underware;
@@ -17,7 +18,7 @@ namespace Frog.System.Specs.GetLatestRevision
         {
             var repoUrl = Guid.NewGuid().ToString();
             system = new SystemDriver(runRevisionChecker : false);
-            system.SourceRepoDriver.GetLatestRevision().Returns("14");
+            system.SourceRepoDriver.GetLatestRevision().Returns(new RevisionInfo{Revision = "14"});
             system.RegisterNewProject(repoUrl);
             system.CheckProjectsForUpdates();
             make_sure_one_CHECK_FOR_UPDATE_message_is_sent();

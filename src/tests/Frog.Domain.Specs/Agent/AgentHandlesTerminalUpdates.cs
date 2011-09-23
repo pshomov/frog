@@ -11,7 +11,7 @@ namespace Frog.Domain.Specs.Agent
 
         protected override void When()
         {
-            buildMessage = new Build{RepoUrl = "http://fle", Revision = "2"};
+            buildMessage = new Build { RepoUrl = "http://fle", Revision = new RevisionInfo { Revision = "2" } };
             Agent.Handle(buildMessage);
         }
 

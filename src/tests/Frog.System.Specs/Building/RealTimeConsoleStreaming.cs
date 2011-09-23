@@ -24,7 +24,7 @@ namespace Frog.System.Specs.Building
         protected override void Given()
         {
             var sourceRepoDriver = Substitute.For<SourceRepoDriver>();
-            sourceRepoDriver.GetLatestRevision().Returns("12");
+            sourceRepoDriver.GetLatestRevision().Returns(new RevisionInfo { Revision = "12" });
             var workingAreaGoverner = Substitute.For<WorkingAreaGoverner>();
             workingAreaGoverner.AllocateWorkingArea().Returns("fake location");
             var testSystem = new TestSystem(workingAreaGoverner, url => sourceRepoDriver);

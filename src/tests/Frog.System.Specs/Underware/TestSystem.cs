@@ -123,7 +123,7 @@ namespace Frog.System.Specs.Underware
             return theTestSystem.Views;
         }
 
-        public void Build(string repoUrl, string revision, Guid buildId)
+        public void Build(string repoUrl, RevisionInfo revision, Guid buildId)
         {
             theTestSystem.TheBus.Send(new Build {RepoUrl = repoUrl, Revision = revision, Id = buildId});
         }

@@ -122,7 +122,7 @@ namespace Frog.Domain
             worker.OnBuildEnded += onBuildEnded;
             try
             {
-                worker.CheckForUpdatesAndKickOffPipeline(repoDriverFactory(message.RepoUrl), message.Revision);
+                worker.CheckForUpdatesAndKickOffPipeline(repoDriverFactory(message.RepoUrl), message.Revision.Revision);
             }
             finally
             {

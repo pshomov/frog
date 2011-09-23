@@ -9,7 +9,7 @@ namespace Frog.Domain.Specs.WorkerSpecs
         protected override void Given()
         {
             base.Given();
-            SourceRepoDriver.GetLatestRevision().Returns("2344");
+            SourceRepoDriver.GetLatestRevision().Returns(new RevisionInfo { Revision = "2344" });
             WorkingAreaGovernor.AllocateWorkingArea().Returns("dugh");
             Worker = new Worker(Pipeline, WorkingAreaGovernor);
         }

@@ -14,7 +14,7 @@ namespace Frog.Domain.Specs.WorkerSpecs
             base.Given();
             eventCount = 0;
 
-            SourceRepoDriver.GetLatestRevision().Returns("qwe");
+            SourceRepoDriver.GetLatestRevision().Returns(new RevisionInfo { Revision = "qwe" });
             WorkingAreaGovernor.AllocateWorkingArea().Returns("1", "2");
 
             Pipeline.When(

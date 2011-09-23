@@ -7,7 +7,7 @@ namespace Frog.Domain.Specs.Git
     [TestFixture]
     public class GitRepositoryCheckForLatestRev : GitRepositoryDriverCheckBase
     {
-        string revision;
+        RevisionInfo revision;
 
         protected override void Given()
         {
@@ -32,7 +32,7 @@ namespace Frog.Domain.Specs.Git
         [Test]
         public void should_return_revision_number()
         {
-            Assert.That(revision.Length == 40, Is.True);
+            Assert.That(revision.Revision.Length == 40, Is.True);
         }
 
         string GetChangesetArea()

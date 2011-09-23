@@ -19,7 +19,7 @@ namespace Frog.Domain.RevisionChecker
             var driver = sourceRepoDriver(checkRevision.RepoUrl);
             try
             {
-                string latestRevision = driver.GetLatestRevision();
+                var latestRevision = driver.GetLatestRevision();
                 bus.Publish(new UpdateFound { RepoUrl = checkRevision.RepoUrl, Revision = latestRevision });
             }
             catch (Exception e)

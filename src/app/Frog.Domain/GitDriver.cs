@@ -7,9 +7,15 @@ namespace Frog.Domain
 {
     public delegate SourceRepoDriver SourceRepoDriverFactory(string repositoryURL);
 
+    public struct RevisionInfo
+    {
+        public string Revision;
+        public string Comment;
+    }
+
     public interface SourceRepoDriver
     {
-        string GetLatestRevision();
+        RevisionInfo GetLatestRevision();
         void GetSourceRevision(string revision, string checkoutPath);
     }
 
@@ -24,7 +30,7 @@ namespace Frog.Domain
             repoUrl = repo;
         }
 
-        public string GetLatestRevision()
+        public RevisionInfo GetLatestRevision()
         {
             string scriptPath = Path.Combine(Underware.GitProductionScriptsLocation, "git_remote_latest_rev.rb");
             Console.WriteLine("Repo url is: "+repoUrl);
@@ -45,7 +51,7 @@ namespace Frog.Domain
             var exitcode = process.Dispose();
             if (exitcode != 0)
                 throw new InvalidProgramException("script failed, see log for details");
-            return result;
+            return new RevisionInfo(){Revision = result};
         }
 
         public void GetSourceRevision(string revision, string workingArea)

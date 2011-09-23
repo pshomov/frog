@@ -38,10 +38,10 @@ namespace Frog.System.Specs.Building
         protected override void When()
         {
             newGuid = Guid.NewGuid();
-            system.Build(RepoUrl, "123", newGuid);
+            system.Build(RepoUrl, new RevisionInfo { Revision = "123" }, newGuid);
             oldGuid = newGuid;
             newGuid = Guid.NewGuid();
-            system.Build(RepoUrl, "123", newGuid);
+            system.Build(RepoUrl, new RevisionInfo { Revision = "123" }, newGuid);
         }
 
         [Test]

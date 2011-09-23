@@ -25,7 +25,7 @@ namespace Frog.Domain.Specs.Agent
             Agent = new Domain.Agent(Bus, Worker, url => null);
             try
             {
-                Agent.Handle(new Build{RepoUrl = "asda", Revision = "2"});
+                Agent.Handle(new Build { RepoUrl = "asda", Revision = new RevisionInfo { Revision = "2" } });
             } catch(ApplicationException)
             {
             }
@@ -33,7 +33,7 @@ namespace Frog.Domain.Specs.Agent
 
         protected override void When()
         {
-            Agent.Handle(new Build { RepoUrl = "asda", Revision = "3" });
+            Agent.Handle(new Build { RepoUrl = "asda", Revision = new RevisionInfo { Revision = "3" } });
         }
 
         [Test]
