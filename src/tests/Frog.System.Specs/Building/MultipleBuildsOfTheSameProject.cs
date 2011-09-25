@@ -59,10 +59,22 @@ namespace Frog.System.Specs.Building
             var prober = new PollingProber(5000, 100);
             Assert.True(prober.check(Take.Snapshot(() => system.GetView().GetListOfBuilds(RepoUrl))
                                          .Has(x => x,
-                                              A.Check<List<Guid>>(
+                                              A.Check<List<BuildHistoryItem>>(
                                                   listOfBuilds =>
-                                                  listOfBuilds.Count == 2 && listOfBuilds[0] == oldGuid &&
-                                                  listOfBuilds[1] == newGuid))));
+                                                  listOfBuilds.Count == 2 && listOfBuilds[0].BuildId == oldGuid &&
+                                                  listOfBuilds[1].BuildId == newGuid))));
+        }
+
+        [Test]
+        public void should_have_the_commit_messages_associated_with_the_build_history_items()
+        {
+            var prober = new PollingProber(5000, 100);
+            Assert.True(prober.check(Take.Snapshot(() => system.GetView().GetListOfBuilds(RepoUrl))
+                                         .Has(x => x,
+                                              A.Check<List<BuildHistoryItem>>(
+                                                  listOfBuilds =>
+                                                  listOfBuilds.Count == 2 && listOfBuilds[0].BuildId == oldGuid &&
+                                                  listOfBuilds[1].BuildId == newGuid))));
         }
     }
 }

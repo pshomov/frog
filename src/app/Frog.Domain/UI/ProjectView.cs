@@ -4,17 +4,23 @@ using System.Collections.Generic;
 
 namespace Frog.Domain.UI
 {
+    public struct BuildHistoryItem
+    {
+        public Guid BuildId;
+        public string Comment;
+        public string Revision;
+    }
     public class ProjectView
     {
         private readonly ConcurrentDictionary<Guid, BuildStatus> report;
         private readonly ConcurrentDictionary<string, Guid> currentBuild;
-        private readonly ConcurrentDictionary<string, List<Guid>> buildHistory;
+        private readonly ConcurrentDictionary<string, List<BuildHistoryItem>> buildHistory;
 
         public ProjectView()
         {
             report = new ConcurrentDictionary<Guid, BuildStatus>();
             currentBuild = new ConcurrentDictionary<string, Guid>();
-            buildHistory = new ConcurrentDictionary<string, List<Guid>>();
+            buildHistory = new ConcurrentDictionary<string, List<BuildHistoryItem>>();
         }
 
         public void SetBuildStatus(Guid id, BuildStatus value)
@@ -36,8 +42,8 @@ namespace Frog.Domain.UI
         public void SetCurrentBuild(string repoUrl, Guid buildId)
         {
             currentBuild[repoUrl] = buildId;
-            buildHistory.TryAdd(repoUrl, new List<Guid>());
-            buildHistory[repoUrl].Add(buildId);
+            buildHistory.TryAdd(repoUrl, new List<BuildHistoryItem>());
+            buildHistory[repoUrl].Add(new BuildHistoryItem(){BuildId = buildId});
         }
 
         public bool ProjectRegistered(string projectUrl)
@@ -45,7 +51,7 @@ namespace Frog.Domain.UI
             return currentBuild.ContainsKey(projectUrl);
         }
 
-        public List<Guid> GetListOfBuilds(string repoUrl)
+        public List<BuildHistoryItem> GetListOfBuilds(string repoUrl)
         {
             return buildHistory[repoUrl];
         }

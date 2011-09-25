@@ -115,8 +115,8 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
         [Test]
         public void should_have_builds_in_the_order_as_they_got_executed()
         {
-            Assert.That(ProjectView.GetListOfBuilds("http://github.com/p1/p2")[0], Is.EqualTo(oldGuid));
-            Assert.That(ProjectView.GetListOfBuilds("http://github.com/p1/p2")[1], Is.EqualTo(NewGuid));
+            Assert.That(ProjectView.GetListOfBuilds("http://github.com/p1/p2")[0].BuildId, Is.EqualTo(oldGuid));
+            Assert.That(ProjectView.GetListOfBuilds("http://github.com/p1/p2")[1].BuildId, Is.EqualTo(NewGuid));
         }
     }
 }

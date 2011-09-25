@@ -10,7 +10,6 @@ namespace Frog.Domain
     public struct RevisionInfo
     {
         public string Revision;
-        public string Comment;
     }
 
     public interface SourceRepoDriver
