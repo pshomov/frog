@@ -12,10 +12,15 @@ namespace Frog.Domain
         public string Revision;
     }
 
+    public class CheckoutInfo
+    {
+        public string Comment;
+    }
+
     public interface SourceRepoDriver
     {
         RevisionInfo GetLatestRevision();
-        void GetSourceRevision(string revision, string checkoutPath);
+        CheckoutInfo GetSourceRevision(string revision, string checkoutPath);
     }
 
     public class GitDriver : SourceRepoDriver
@@ -50,10 +55,10 @@ namespace Frog.Domain
             var exitcode = process.Dispose();
             if (exitcode != 0)
                 throw new InvalidProgramException("script failed, see log for details");
-            return new RevisionInfo(){Revision = result};
+            return new RevisionInfo {Revision = result};
         }
 
-        public void GetSourceRevision(string revision, string workingArea)
+        public CheckoutInfo GetSourceRevision(string revision, string workingArea)
         {
             var scriptPath = Path.Combine(Underware.GitProductionScriptsLocation, "git_fetch.rb");
             var process = new ProcessWrapper("ruby",
@@ -63,6 +68,7 @@ namespace Frog.Domain
             var exitcode = process.Dispose();
             if (exitcode != 0)
                 throw new InvalidProgramException("script failed, see log for details");
+            return new CheckoutInfo {Comment = "needs comment"};
         }
     }
 }
