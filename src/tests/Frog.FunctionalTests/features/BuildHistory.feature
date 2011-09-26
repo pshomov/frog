@@ -7,7 +7,7 @@ Background:
 	Given I have a project as "p1"
 	And I add a test task "t1" with comment "commit 1" and content "testoutput" to project "p1"
 
-Scenario: See the last 3 builds at a glance
+Scenario: See the last 2 builds at a glance with the latest one on top
 	Given I have registered project "p1"
 	When I check for updates
 	And I am on the status page for project "p1"

@@ -78,10 +78,10 @@ namespace Frog.FunctionalTests.Features
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("See the last 3 builds at a glance")]
-        public virtual void SeeTheLast3BuildsAtAGlance()
+        [NUnit.Framework.DescriptionAttribute("See the last 2 builds at a glance with the latest one on top")]
+        public virtual void SeeTheLast2BuildsAtAGlanceWithTheLatestOneOnTop()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("See the last 3 builds at a glance", ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("See the last 2 builds at a glance with the latest one on top", ((string[])(null)));
 #line 10
 this.ScenarioSetup(scenarioInfo);
 #line 11

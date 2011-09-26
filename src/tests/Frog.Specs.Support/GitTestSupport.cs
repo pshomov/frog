@@ -23,7 +23,7 @@ namespace Frog.Specs.Support
         public static void CommitChangeFiles(string repo, string fileset, string commitMessage = "wind of change")
         {
             var scriptPath = Path.Combine(Underware.GitSupportScriptsLocation, "git_commit_files.rb");
-            var process = new ExecTask("ruby", scriptPath + " \"" + repo + "\" \"" + fileset + "/.\" " + commitMessage, "Commit all changes to git", (s, s1, arg3) => new ProcessWrapper(s, s1, arg3));
+            var process = new ExecTask("ruby", scriptPath + " \"" + repo + "\" \"" + fileset + "/.\" \"" + commitMessage+"\"", "Commit all changes to git", (s, s1, arg3) => new ProcessWrapper(s, s1, arg3));
             process.Perform(new SourceDrop(Directory.GetCurrentDirectory()));
         }
     }

@@ -10,4 +10,6 @@ exit $? if $? != 0
 system 'git checkout -b master --track origin/master'
 exit $? if $? != 0
 system "git checkout #{ARGV[1]}"
+exit $? if $? != 0
+system "git  log -1 --format=%s  #{ARGV[1]}"
 exit $?

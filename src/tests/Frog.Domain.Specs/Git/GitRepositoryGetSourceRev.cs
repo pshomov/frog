@@ -28,7 +28,7 @@ namespace Frog.Domain.Specs.Git
                     .Up()
                 .File("SampleProject.sln", "");
 
-            GitTestSupport.CommitChangeFiles(repoUrl, changeset);
+            GitTestSupport.CommitChangeFiles(repoUrl, changeset, commitMessage: "commenting");
             revision1 = _driver.GetLatestRevision();
         }
 
@@ -43,6 +43,12 @@ namespace Frog.Domain.Specs.Git
         public void should_have_the_revision_number_in_the_checkout_info()
         {
             Assert.That(sourceRevision.Revision, Is.EqualTo(revision1.Revision));
+        }
+
+        [Test]
+        public void should_have_the_commit_comment_in_the_checkout_info()
+        {
+            Assert.That(sourceRevision.Comment, Is.EqualTo("commenting"));
         }
 
         string GetChangesetArea()

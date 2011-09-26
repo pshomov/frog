@@ -64,12 +64,14 @@ namespace Frog.Domain
             var scriptPath = Path.Combine(Underware.GitProductionScriptsLocation, "git_fetch.rb");
             var process = new ProcessWrapper("ruby",
                                              scriptPath + " \"" + repoUrl + "\" " + revision + " " + " \"" + workingArea+"\"");
+            var log = "";
+            process.OnStdOutput += s => { if (!s.IsNullOrEmpty()) log = s; };
             process.Execute();
             process.WaitForProcess(GitTimeoutInMs);
             var exitcode = process.Dispose();
             if (exitcode != 0)
                 throw new InvalidProgramException("script failed, see log for details");
-            return new CheckoutInfo {Comment = "needs comment", Revision = revision};
+            return new CheckoutInfo {Comment = log, Revision = revision};
         }
     }
 }

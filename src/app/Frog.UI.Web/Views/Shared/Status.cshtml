@@ -49,7 +49,7 @@
                 success: function data(msg) {
                     $('#history_items').empty();
                     for (var i = 0; i < msg.items.length; i++) {
-                        $('#history_items').append("<li>item 1</li>");
+                        $('#history_items').prepend("<li>"+msg.items[i].Comment+"</li");
                     }
                 },
                 error: function () {

@@ -84,7 +84,7 @@ namespace Frog.FunctionalTests
 
         [Given(@"I add a test task ""(.*)"" with comment ""(.*)"" and content ""(.*)"" to project ""(.*)""")]
         [When(@"I add a test task ""(.*)"" with comment ""(.*)"" and content ""(.*)"" to project ""(.*)""")]
-        public void AddTaskWithComment(string taskName, string content, string comment, string project)
+        public void AddTaskWithComment(string taskName, string comment, string content, string project)
         {
             var repo = (string) ScenarioContext.Current[project];
             var gen = new FileGenesis();
@@ -163,7 +163,7 @@ namespace Frog.FunctionalTests
         public void BuildHistoryItemContains(int itemIndex, string contains)
         {
             AssertionHelpers.WithRetries(
-                () => Assert.That(World.browser.FindElements(By.CssSelector("#history li"))[itemIndex], Is.StringContaining(contains)), retries: 300);
+                () => Assert.That(World.browser.FindElements(By.CssSelector("#history li"))[itemIndex-1].Text, Is.StringContaining(contains)), retries: 300);
         }
 
         Uri U(string relativeUrl)
