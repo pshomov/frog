@@ -25,6 +25,13 @@ namespace Frog.Domain
         }
     }
 
+    public class ProjectCheckedOut : BuildEvent
+    {
+        public string RepoUrl;
+        public CheckoutInfo CheckoutInfo;
+    }
+
+
     public class BuildStarted : BuildEvent
     {
         public PipelineStatus Status { get; set; }
@@ -115,11 +122,14 @@ namespace Frog.Domain
                                                          theBus.Publish(new TerminalUpdate(buildId: message.Id,
                                                                                            content: info.Content, taskIndex: info.TaskIndex,
                                                                                            contentSequenceIndex: info.ContentSequenceIndex));
+            ProjectCheckedOutDelegate onProjectCheckedOut =
+                info => theBus.Publish(new ProjectCheckedOut{BuildId = message.Id, CheckoutInfo = info, RepoUrl = message.RepoUrl});
 
             worker.OnTerminalUpdates += onTerminalUpdates;
             worker.OnBuildStarted += onBuildStarted;
             worker.OnBuildUpdated += onBuildUpdated;
             worker.OnBuildEnded += onBuildEnded;
+            worker.OnProjectCheckedOut += onProjectCheckedOut;
             try
             {
                 worker.CheckForUpdatesAndKickOffPipeline(repoDriverFactory(message.RepoUrl), message.Revision.Revision);
@@ -130,6 +140,7 @@ namespace Frog.Domain
                 worker.OnBuildStarted -= onBuildStarted;
                 worker.OnBuildUpdated -= onBuildUpdated;
                 worker.OnTerminalUpdates -= onTerminalUpdates;
+                worker.OnProjectCheckedOut -= onProjectCheckedOut;
             }
         }
     }

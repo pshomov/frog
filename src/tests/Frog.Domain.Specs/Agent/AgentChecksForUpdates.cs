@@ -22,6 +22,14 @@ namespace Frog.Domain.Specs.Agent
         }
 
         [Test]
+        public void should_publish_project_checkedout()
+        {
+            Bus.Received().Publish(
+                Arg.Is<ProjectCheckedOut>(
+                    found => found.BuildId == buildMessage.Id && found.CheckoutInfo.Comment == "committed"));
+        }
+
+        [Test]
         public void should_publish_BuildStarted_event()
         {
             Bus.Received().Publish(

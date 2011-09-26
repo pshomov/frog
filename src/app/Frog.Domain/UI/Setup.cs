@@ -12,6 +12,7 @@ namespace Frog.Domain.UI
             theBus.RegisterHandler<BuildEnded>(statusView.Handle, "UI");
             theBus.RegisterHandler<BuildUpdated>(statusView.Handle, "UI");
             theBus.RegisterHandler<TerminalUpdate>(statusView.Handle, "UI");
+            theBus.RegisterHandler<ProjectCheckedOut>(statusView.Handle, "UI");
             return projectView;
         }
     }

@@ -9,7 +9,7 @@ namespace Frog.Domain.Specs.Agent
     [TestFixture]
     public class AgentHandlesException : AgentSpecsBase
     {
-        private const int NumberOfExpectedEvents = 4;
+        private const int NumberOfExpectedEvents = 5;
 
         protected override void Given()
         {

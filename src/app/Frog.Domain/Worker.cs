@@ -38,8 +38,9 @@ namespace Frog.Domain
 //            if (latestRevision != revision)
 //            {
                 var allocatedWorkingArea = workingAreaGoverner.AllocateWorkingArea();
-                repositoryDriver.GetSourceRevision(revision, allocatedWorkingArea);
-                ProcessPipeline(allocatedWorkingArea);
+            var checkoutInfo = repositoryDriver.GetSourceRevision(revision, allocatedWorkingArea);
+            OnProjectCheckedOut(checkoutInfo);
+            ProcessPipeline(allocatedWorkingArea);
                 workingAreaGoverner.DeallocateWorkingArea(allocatedWorkingArea);
 //            }
         }
@@ -67,5 +68,6 @@ namespace Frog.Domain
         public virtual event BuildStartedDelegate OnBuildStarted = status => {};
         public virtual event Action<int, TaskInfo.TaskStatus> OnBuildUpdated =  (i,status) => {};
         public virtual event Action<BuildTotalEndStatus> OnBuildEnded = status => {};
+        public virtual event ProjectCheckedOutDelegate OnProjectCheckedOut = info => {};
     }
 }

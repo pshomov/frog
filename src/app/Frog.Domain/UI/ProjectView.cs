@@ -39,11 +39,11 @@ namespace Frog.Domain.UI
             return currentBuild[repoUrl];
         }
 
-        public void SetCurrentBuild(string repoUrl, Guid buildId)
+        public void SetCurrentBuild(string repoUrl, Guid buildId, string comment, string revision)
         {
             currentBuild[repoUrl] = buildId;
             buildHistory.TryAdd(repoUrl, new List<BuildHistoryItem>());
-            buildHistory[repoUrl].Add(new BuildHistoryItem(){BuildId = buildId});
+            buildHistory[repoUrl].Add(new BuildHistoryItem(){BuildId = buildId, Comment = comment, Revision = revision});
         }
 
         public bool ProjectRegistered(string projectUrl)

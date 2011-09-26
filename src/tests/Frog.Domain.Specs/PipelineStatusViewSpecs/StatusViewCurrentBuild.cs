@@ -28,6 +28,7 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
 
         protected void HandleABuild(BuildTotalEndStatus buildTotalEndStatus)
         {
+            HandleProjectCheckedOut("no comment");
             HandleBuildStarted(DefaultTask);
             HandleBuildEnded(buildTotalEndStatus);
         }
@@ -39,7 +40,6 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
 
         protected void HandleBuildStarted(params TaskInfo[] tasks)
         {
-            NewGuid = Guid.NewGuid();
             BuildMessage = CreateBuildMessage(NewGuid, RepoUrl, tasks);
             View.Handle(BuildMessage);
         }
@@ -50,11 +50,19 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
                        {
                            RepoUrl = repoUrl,
                            BuildId = buildId,
-                           Status = new PipelineStatus()
+                           Status = new PipelineStatus
                                         {
                                             Tasks = new List<TaskInfo>(tasks)
                                         }
                        };
+        }
+
+        protected void HandleProjectCheckedOut(string comment)
+        {
+            NewGuid = Guid.NewGuid();
+            var checkedOut = new ProjectCheckedOut
+                                 {BuildId = NewGuid, CheckoutInfo = new CheckoutInfo {Comment = comment}, RepoUrl = RepoUrl};
+            View.Handle(checkedOut);
         }
     }
 
@@ -64,14 +72,14 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
 
         protected override void When()
         {
-            RepoUrl = "http://lilalo"; 
-            HandleABuild(BuildTotalEndStatus.Success);
+            RepoUrl = "http://lilalo";
+            HandleProjectCheckedOut("");
         }
 
         [Test]
         public void should_have_the_new_buildId_as_the_current_build()
         {
-            Assert.That(ProjectView.GetCurrentBuild(RepoUrl), Is.EqualTo(BuildMessage.BuildId));
+            Assert.That(ProjectView.GetCurrentBuild(RepoUrl), Is.EqualTo(NewGuid));
         }
 
     }
@@ -83,13 +91,13 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
         protected override void When()
         {
             RepoUrl = "http://psh:pass@github.com/p1/p2";
-            HandleABuild(BuildTotalEndStatus.Success);
+            HandleProjectCheckedOut("");
         }
 
         [Test]
         public void should_have_the_new_buildId_as_the_current_build()
         {
-            Assert.That(ProjectView.GetCurrentBuild("http://github.com/p1/p2"), Is.EqualTo(BuildMessage.BuildId));
+            Assert.That(ProjectView.GetCurrentBuild("http://github.com/p1/p2"), Is.EqualTo(NewGuid));
         }
     }
 
@@ -117,6 +125,23 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
         {
             Assert.That(ProjectView.GetListOfBuilds("http://github.com/p1/p2")[0].BuildId, Is.EqualTo(oldGuid));
             Assert.That(ProjectView.GetListOfBuilds("http://github.com/p1/p2")[1].BuildId, Is.EqualTo(NewGuid));
+        }
+    }
+
+    class StatusViewProjectCheckedOut : StatusViewCurrentBuildPublicRepoBase
+    {
+        protected PipelineStatus PipelineStatus;
+
+        protected override void When()
+        {
+            RepoUrl = "http://github.com/p1/p2";
+            HandleProjectCheckedOut("come comment");
+        }
+
+        [Test]
+        public void should_have_as_many_builds_in_the_list_as_they_were()
+        {
+            Assert.That(ProjectView.GetListOfBuilds(RepoUrl)[0].Comment, Is.EqualTo("come comment"));
         }
     }
 }

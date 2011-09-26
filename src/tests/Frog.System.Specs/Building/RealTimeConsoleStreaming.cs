@@ -25,6 +25,7 @@ namespace Frog.System.Specs.Building
         {
             var sourceRepoDriver = Substitute.For<SourceRepoDriver>();
             sourceRepoDriver.GetLatestRevision().Returns(new RevisionInfo { Revision = "12" });
+            sourceRepoDriver.GetSourceRevision("12", Arg.Any<string>()).Returns(new CheckoutInfo(){Comment = "comment", Revision = "12"});
             var workingAreaGoverner = Substitute.For<WorkingAreaGoverner>();
             workingAreaGoverner.AllocateWorkingArea().Returns("fake location");
             var testSystem = new TestSystem(workingAreaGoverner, url => sourceRepoDriver);

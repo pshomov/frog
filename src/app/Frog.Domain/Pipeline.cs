@@ -20,6 +20,7 @@ namespace Frog.Domain
         }
     }
 
+    public delegate void ProjectCheckedOutDelegate(CheckoutInfo info);
     public delegate void BuildStartedDelegate(PipelineStatus status);
 
     public interface Pipeline

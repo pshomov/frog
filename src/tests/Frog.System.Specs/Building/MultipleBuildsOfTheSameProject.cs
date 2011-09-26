@@ -24,7 +24,7 @@ namespace Frog.System.Specs.Building
         protected override void Given()
         {
             var sourceRepoDriver = Substitute.For<SourceRepoDriver>();
-            sourceRepoDriver.GetSourceRevision(Arg.Any<string>(), Arg.Any<string>()).Returns(new CheckoutInfo{Comment = "comment 1"});
+            sourceRepoDriver.GetSourceRevision(Arg.Any<string>(), Arg.Any<string>()).Returns(new CheckoutInfo{Comment = "comment 1"}, new CheckoutInfo {Comment = "comment 2"});
             var workingAreaGoverner = Substitute.For<WorkingAreaGoverner>();
             workingAreaGoverner.AllocateWorkingArea().Returns("fake location");
             var testSystem = new TestSystem(workingAreaGoverner, url => sourceRepoDriver);
@@ -74,8 +74,8 @@ namespace Frog.System.Specs.Building
                                          .Has(x => x,
                                               A.Check<List<BuildHistoryItem>>(
                                                   listOfBuilds =>
-                                                  listOfBuilds.Count == 2 && listOfBuilds[0].BuildId == oldGuid &&
-                                                  listOfBuilds[1].BuildId == newGuid))));
+                                                  listOfBuilds.Count == 2 && listOfBuilds[0].Comment == "comment 1" &&
+                                                  listOfBuilds[1].Comment == "comment 2"))));
         }
     }
 

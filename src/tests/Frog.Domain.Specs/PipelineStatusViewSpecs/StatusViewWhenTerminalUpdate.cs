@@ -1,5 +1,4 @@
 using System.Linq;
-using Frog.Support;
 using NUnit.Framework;
 
 namespace Frog.Domain.Specs.PipelineStatusViewSpecs

@@ -15,6 +15,7 @@ namespace Frog.Domain
     public class CheckoutInfo
     {
         public string Comment;
+        public string Revision;
     }
 
     public interface SourceRepoDriver
@@ -68,7 +69,7 @@ namespace Frog.Domain
             var exitcode = process.Dispose();
             if (exitcode != 0)
                 throw new InvalidProgramException("script failed, see log for details");
-            return new CheckoutInfo {Comment = "needs comment"};
+            return new CheckoutInfo {Comment = "needs comment", Revision = revision};
         }
     }
 }

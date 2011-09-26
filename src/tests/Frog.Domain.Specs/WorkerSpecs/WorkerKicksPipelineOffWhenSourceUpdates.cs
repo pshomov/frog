@@ -6,17 +6,27 @@ namespace Frog.Domain.Specs.WorkerSpecs
     [TestFixture]
     public class WorkerKicksPipelineOffWhenSourceUpdates : WorkerSpecsBase
     {
+        private CheckoutInfo checkoutInfo;
+
         protected override void Given()
         {
             base.Given();
             SourceRepoDriver.GetLatestRevision().Returns(new RevisionInfo { Revision = "2344" });
+            SourceRepoDriver.GetSourceRevision(Arg.Any<string>(), Arg.Any<string>()).Returns(new CheckoutInfo(){Comment = "comment"});
             WorkingAreaGovernor.AllocateWorkingArea().Returns("dugh");
             Worker = new Worker(Pipeline, WorkingAreaGovernor);
+            Worker.OnProjectCheckedOut += info => checkoutInfo = info;
         }
 
         protected override void When()
         {
             Worker.CheckForUpdatesAndKickOffPipeline(repositoryDriver: SourceRepoDriver, revision: "123");
+        }
+
+        [Test]
+        public void should_provide_source_checkout_info()
+        {
+            Assert.That(checkoutInfo.Comment, Is.EqualTo("comment"));
         }
 
         [Test]

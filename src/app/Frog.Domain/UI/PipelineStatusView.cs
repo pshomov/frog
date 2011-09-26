@@ -3,7 +3,7 @@ using SimpleCQRS;
 
 namespace Frog.Domain.UI
 {
-    public class PipelineStatusView : Handles<BuildStarted>, Handles<BuildEnded>, Handles<BuildUpdated>
+    public class PipelineStatusView : Handles<BuildStarted>, Handles<BuildEnded>, Handles<BuildUpdated>, Handles<ProjectCheckedOut>
     {
         private readonly ProjectView projectView;
 
@@ -14,15 +14,6 @@ namespace Frog.Domain.UI
 
         public void Handle(BuildStarted message)
         {
-            string repoUrl = message.RepoUrl;
-            var privateRepo = new Regex(@"^(http://)(\w+):(\w+)@(github.com.*)$");
-            if (privateRepo.IsMatch(repoUrl))
-            {
-                var b = privateRepo.Match(repoUrl).Groups;
-                repoUrl = b[1].Value + b[4].Value;
-            }
-            projectView.SetCurrentBuild(repoUrl, message.BuildId);
-
             var buildStatus = projectView.GetBuildStatus(message.BuildId);
             buildStatus.BuildStarted(message.Status.Tasks);
         }
@@ -41,6 +32,18 @@ namespace Frog.Domain.UI
         {
             projectView.GetBuildStatus(message.BuildId).Tasks[message.TaskIndex].AddTerminalOutput(message.ContentSequenceIndex,
                                                                                          message.Content);
+        }
+
+        public void Handle(ProjectCheckedOut message)
+        {
+            string repoUrl = message.RepoUrl;
+            var privateRepo = new Regex(@"^(http://)(\w+):(\w+)@(github.com.*)$");
+            if (privateRepo.IsMatch(repoUrl))
+            {
+                var b = privateRepo.Match(repoUrl).Groups;
+                repoUrl = b[1].Value + b[4].Value;
+            }
+            projectView.SetCurrentBuild(repoUrl, message.BuildId, message.CheckoutInfo.Comment, message.CheckoutInfo.Revision);
         }
     }
 }
