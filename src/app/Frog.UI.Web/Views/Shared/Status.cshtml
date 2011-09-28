@@ -20,8 +20,49 @@
                 update_status();
             }
         );
+            function esc(str) {
+                return str.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+            }    
+            function colorize(line) {
+                var nothing = undefined;
+                var translate = {
+                    1: nothing,
+                    2: nothing,
+                    4: nothing,
+                    5: nothing,
+                    7: nothing,
+                    30: "black",
+                    31: "red",
+                    32: "green",
+                    33: "yellow",
+                    34: "blue",
+                    35: "magenta",
+                    36: "cyan",
+                    37: "white",
+                    40: "nothing",
+                    41: "nothing",
+                    43: "nothing",
+                    44: "nothing",
+                    45: "nothing",
+                    46: "nothing",
+                    47: "nothing"
+                };
+                for (var prop in translate) {
+                    if (translate.hasOwnProperty(prop)) {
+                        if (translate[prop] === nothing) {
+                            var regex = new RegExp(esc("[" + prop + "m"), "gi");
+                            line = line.replace(regex, "<span>");
+                        } else {
+                            var regex = new RegExp(esc('[' + prop + 'm'), 'gi');
+                            line = line.replace(regex, "<span style=\"color:" + translate[prop] + "\">");
+                        }
+                    }
+                }
+                line = line.replace(/\[0m/, '<\span>');
+                return line;
+            }
 
-        function update_status() {
+            function update_status() {
             $.ajax({
                 url: "data",
                 success: function data(msg) {
@@ -79,7 +120,9 @@
                 url: "task",
                 data: { lastOutputChunkIndex: lastOutputChunkIndex, taskIndex: taskIndex },
                 success: function (msg) {
-                    $("#terminal").append("<p>"+msg.terminalOutput.replace(/\r\n/g,'</p><p>')+"</p>");
+                    var to = "<p>" + msg.terminalOutput.replace(/\r\n/g, '</p><p>') + "</p>";
+                    to = colorize(to);
+                    $("#terminal").append(to);
                     lastOutputChunkIndex = msg.lastChunkIndex;
                     taskIndex = msg.activeTask;
                 },
