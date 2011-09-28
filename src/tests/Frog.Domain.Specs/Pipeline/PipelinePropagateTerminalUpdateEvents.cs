@@ -1,6 +1,5 @@
 using System;
 using Frog.Domain.BuildSystems.Solution;
-using Frog.Domain.CustomTasks;
 using Frog.Domain.ExecTasks;
 using Frog.Support;
 using NSubstitute;
@@ -15,7 +14,7 @@ namespace Frog.Domain.Specs.Pipeline
         {
             base.Given();
             SrcTask1 = new MSBuildTask("");
-            TaskSource.Detect(Arg.Any<string>()).Returns(As.List<ITask>(SrcTask1));
+            TaskSource.Detect(Arg.Any<string>()).Returns(As.List<Domain.Task>(SrcTask1));
             Task1 = Substitute.For<IExecTask>();
             Task1.Perform(Arg.Any<SourceDrop>()).Returns(new ExecTaskResult(ExecutionStatus.Success, 4));
             Task1.When(task => task.Perform(Arg.Any<SourceDrop>())).Do(info =>
@@ -28,7 +27,7 @@ namespace Frog.Domain.Specs.Pipeline
                                                                                Task1.OnTerminalOutputUpdate +=
                                                                                    Raise.Event<Action<string>>("content2");
                                                                            });
-            ExecTaskGenerator.GimeTasks(Arg.Any<ITask>()).Returns(As.List(Task1));
+            ExecTaskGenerator.GimeTasks(Arg.Any<Domain.Task>()).Returns(As.List(Task1));
         }
 
         protected override void When()

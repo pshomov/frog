@@ -1,12 +1,10 @@
-﻿using Frog.Domain.CustomTasks;
-
-namespace Frog.Domain.BuildSystems.Rake
+﻿namespace Frog.Domain.BuildSystems.Rake
 {
-    public class RakeTask : ITask
+    public class RakeTask : Task
     {
     }
 
-    public class BundlerTask : ITask
+    public class BundlerTask : Task
     {
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Frog.Domain.CustomTasks;
 using Frog.Domain.TaskSources;
 
 namespace Frog.Domain.BuildSystems.FrogSystemTest
@@ -14,14 +13,14 @@ namespace Frog.Domain.BuildSystems.FrogSystemTest
             this.taskFileFinder = taskFileFinder;
         }
 
-        public IList<ITask> Detect(string projectFolder)
+        public IList<Task> Detect(string projectFolder)
         {
             var testTaskFiles = taskFileFinder.FindFiles(projectFolder);
-            return testTaskFiles.Select(s => (ITask) new TestTaskDescription(s)).ToList();
+            return testTaskFiles.Select(s => (Task) new TestTaskDescription(s)).ToList();
         }
     }
 
-    public class TestTaskDescription : ITask
+    public class TestTaskDescription : Task
     {
         public readonly string path;
 
@@ -31,7 +30,7 @@ namespace Frog.Domain.BuildSystems.FrogSystemTest
         }
     }
 
-    public class FakeTaskDescription : ITask
+    public class FakeTaskDescription : Task
     {
         public readonly string[] messages;
 

@@ -1,9 +1,7 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using Frog.Domain;
 using Frog.Domain.BuildSystems.FrogSystemTest;
-using Frog.Domain.CustomTasks;
 using Frog.Domain.RepositoryTracker;
 using Frog.Domain.UI;
 using Frog.Specs.Support;
@@ -13,10 +11,10 @@ using NSubstitute;
 using NUnit.Framework;
 using xray;
 
-namespace Frog.System.Specs.Building
+namespace Frog.System.Specs.ProjectBuilding
 {
     [TestFixture]
-    public class RealTimeConsoleStreaming : BDD
+    public class RealTime_Console_Streaming : BDD
     {
         private const string RepoUrl = "http://123";
         private SystemDriver system;
@@ -31,10 +29,10 @@ namespace Frog.System.Specs.Building
             var testSystem = new TestSystem(workingAreaGoverner, url => sourceRepoDriver);
             testSystem.TasksSource.Detect(Arg.Any<string>()).Returns(
                 As.List(
-                    (ITask)
+                    (Task)
                     new FakeTaskDescription(TerminalOutput1,
                                             TerminalOutput2),
-                    (ITask)
+                    (Task)
                     new FakeTaskDescription(TerminalOutput3,
                                             TerminalOutput4)));
             system = new SystemDriver(testSystem);

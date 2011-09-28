@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Frog.Domain.CustomTasks;
 using Frog.Domain.TaskSources;
 
 namespace Frog.Domain.BuildSystems.Make
@@ -13,9 +12,9 @@ namespace Frog.Domain.BuildSystems.Make
             this.taskFileFinder = taskFileFinder;
         }
 
-        public IList<ITask> Detect(string projectFolder)
+        public IList<Task> Detect(string projectFolder)
         {
-            var result = new List<ITask>();
+            var result = new List<Task>();
             List<string> foundFiles = taskFileFinder.FindFiles(projectFolder);
             if (foundFiles.Count == 1) result.Add(new MakeTask());
             return result;

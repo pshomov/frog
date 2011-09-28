@@ -1,8 +1,6 @@
-using Frog.Domain.CustomTasks;
-
 namespace Frog.Domain.BuildSystems.Make
 {
-    public class MakeTask : ITask
+    public class MakeTask : Task
     {
     }
 }

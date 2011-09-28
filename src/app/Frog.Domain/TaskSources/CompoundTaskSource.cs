@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Frog.Domain.CustomTasks;
 
 namespace Frog.Domain.TaskSources
 {
@@ -12,9 +11,9 @@ namespace Frog.Domain.TaskSources
             this.srcs = srcs;
         }
 
-        public IList<ITask> Detect(string projectFolder)
+        public IList<Task> Detect(string projectFolder)
         {
-            var result = new List<ITask>();
+            var result = new List<Task>();
             foreach (var taskSource in srcs)
             {
                 result.AddRange(taskSource.Detect(projectFolder));

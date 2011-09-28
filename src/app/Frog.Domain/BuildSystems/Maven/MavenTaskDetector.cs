@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
-using Frog.Domain.BuildSystems.Rake;
-using Frog.Domain.CustomTasks;
+using System.Collections.Generic;
 
-namespace Frog.Domain.BuildSystems.Maven.TaskSource
+namespace Frog.Domain.BuildSystems.Maven
 {
     public class MavenTaskDetector : TaskSources.TaskSource
     {
@@ -13,9 +11,9 @@ namespace Frog.Domain.BuildSystems.Maven.TaskSource
             this._taskFileFinder = _taskFileFinder;
         }
 
-        public IList<ITask> Detect(string projectFolder)
+        public IList<Task> Detect(string projectFolder)
         {
-            var tasks = new List<ITask>();
+            var tasks = new List<Task>();
             return tasks;
         }
     }

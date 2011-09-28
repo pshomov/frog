@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Frog.Domain.CustomTasks;
 using Frog.Domain.TaskSources;
 using Frog.Support;
 
@@ -16,10 +15,10 @@ namespace Frog.Domain.BuildSystems.Solution
             this._projectTaskFileRepo = _projectTaskFileRepo;
         }
 
-        public IList<ITask> Detect(string projectFolder)
+        public IList<Task> Detect(string projectFolder)
         {
             var items = _projectTaskFileRepo.FindFiles(projectFolder);
-            return items.Select(s => (ITask) new NUnitTask(ProjectPathToAssemblyPath(s))).ToList();
+            return items.Select(s => (Task) new NUnitTask(ProjectPathToAssemblyPath(s))).ToList();
         }
 
         string ProjectPathToAssemblyPath(string projectPath)

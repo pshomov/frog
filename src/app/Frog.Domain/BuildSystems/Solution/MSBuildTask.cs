@@ -1,8 +1,6 @@
-﻿using Frog.Domain.CustomTasks;
-
-namespace Frog.Domain.BuildSystems.Solution
+﻿namespace Frog.Domain.BuildSystems.Solution
 {
-    public class MSBuildTask : ITask
+    public class MSBuildTask : Task
     {
         public readonly string SolutionFile;
 

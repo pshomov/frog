@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Frog.Domain.BuildSystems.Rake;
-using Frog.Domain.CustomTasks;
 using Frog.Domain.TaskSources;
 using Frog.Support;
 using NSubstitute;
@@ -12,7 +11,7 @@ namespace Frog.Domain.Specs.TaskDetection
     {
         protected TaskFileFinder bundlerFileFinder;
         protected RubyTaskDetector taskDetector;
-        protected IList<ITask> tasks;
+        protected IList<Domain.Task> tasks;
 
         protected override void Given()
         {
@@ -38,7 +37,7 @@ namespace Frog.Domain.Specs.TaskDetection
     {
         protected TaskFileFinder bundlerFileFinder;
         protected RubyTaskDetector taskDetector;
-        protected IList<ITask> tasks;
+        protected IList<Domain.Task> tasks;
 
         protected override void Given()
         {

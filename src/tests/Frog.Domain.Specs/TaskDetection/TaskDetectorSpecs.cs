@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Frog.Domain.BuildSystems.Solution;
-using Frog.Domain.CustomTasks;
 using Frog.Domain.TaskSources;
 using Frog.Support;
 using NSubstitute;
@@ -12,7 +11,7 @@ namespace Frog.Domain.Specs.TaskDetection
     public class TaskDetectorSpecs : TaskDetectorSpecsBase
     {
         MSBuildDetector msbuildTaskDetecttor;
-        IList<ITask> items;
+        IList<Domain.Task> items;
 
         protected override void Given()
         {
@@ -39,7 +38,7 @@ namespace Frog.Domain.Specs.TaskDetection
     public class TaskDetectorMultipleSolutionsAtTheRootSpecs : TaskDetectorSpecsBase
     {
         MSBuildDetector msbuildTaskDetecttor;
-        IList<ITask> items;
+        IList<Domain.Task> items;
 
         protected override void Given()
         {
@@ -66,7 +65,7 @@ namespace Frog.Domain.Specs.TaskDetection
     public class TaskDetectorMultipleSolutionsAtTheRootWithBuildOneSpecs : TaskDetectorSpecsBase
     {
         MSBuildDetector msbuildTaskDetecttor;
-        IList<ITask> items;
+        IList<Domain.Task> items;
 
         protected override void Given()
         {
@@ -95,7 +94,7 @@ namespace Frog.Domain.Specs.TaskDetection
     public class NoSolutionsAtAllSpecs : TaskDetectorSpecsBase
     {
         MSBuildDetector msbuildTaskDetecttor;
-        IList<ITask> items;
+        IList<Domain.Task> items;
 
         protected override void Given()
         {
@@ -119,7 +118,7 @@ namespace Frog.Domain.Specs.TaskDetection
     public class OneSolutionAnywhereGetsSelectedForBuildSpecs : TaskDetectorSpecsBase
     {
         MSBuildDetector msbuildTaskDetector;
-        IList<ITask> items;
+        IList<Domain.Task> items;
 
         protected override void Given()
         {
@@ -144,7 +143,7 @@ namespace Frog.Domain.Specs.TaskDetection
     public class MultipleSplutionsButNoneAtTheRootSpecs : TaskDetectorSpecsBase
     {
         MSBuildDetector msbuildTaskDetecttor;
-        IList<ITask> items;
+        IList<Domain.Task> items;
 
         protected override void Given()
         {

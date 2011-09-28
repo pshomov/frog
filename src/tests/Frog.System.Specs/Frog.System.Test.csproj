@@ -56,12 +56,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Building\BuildingProject.cs" />
-    <Compile Include="Building\MultipleBuildsOfTheSameProject.cs" />
+    <Compile Include="ProjectBuilding\Building_A_Project.cs" />
+    <Compile Include="ProjectBuilding\Multiple_Builds_Of_The_Same_Project.cs" />
     <Compile Include="GetLatestRevision\CheckingForUpdates.cs" />
     <Compile Include="GetLatestRevision\CheckkingForUpdatesTwiceInARowWithoutAnyResponseInBetween.cs" />
     <Compile Include="GetLatestRevision\CheckkingForUpdatesTwiceInARowWithErrorResponseInBetween.cs" />
-    <Compile Include="Building\RealTimeConsoleStreaming.cs" />
+    <Compile Include="ProjectBuilding\RealTime_Console_Streaming.cs" />
     <Compile Include="Underware\An.cs" />
     <Compile Include="Underware\EventedProber.cs" />
     <Compile Include="Underware\TestSystem.cs" />

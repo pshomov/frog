@@ -4,7 +4,6 @@ using Frog.Domain.BuildSystems.FrogSystemTest;
 using Frog.Domain.BuildSystems.Make;
 using Frog.Domain.BuildSystems.Rake;
 using Frog.Domain.BuildSystems.Solution;
-using Frog.Domain.CustomTasks;
 using Frog.Domain.ExecTasks;
 using Frog.Domain.TaskSources;
 using Frog.Support;
@@ -13,7 +12,7 @@ namespace Frog.Domain
 {
     public interface IExecTaskGenerator
     {
-        List<IExecTask> GimeTasks(ITask task);
+        List<IExecTask> GimeTasks(Task task);
     }
 
     public class ExecTaskGenerator : IExecTaskGenerator
@@ -25,7 +24,7 @@ namespace Frog.Domain
             this.execTaskGenerator = execTaskGenerator;
         }
 
-        public List<IExecTask> GimeTasks(ITask task)
+        public List<IExecTask> GimeTasks(Task task)
         {
             var result = new List<IExecTask>();
             if (task.GetType() == typeof (MSBuildTask))

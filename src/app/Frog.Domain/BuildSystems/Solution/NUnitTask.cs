@@ -1,8 +1,6 @@
-﻿using Frog.Domain.CustomTasks;
-
-namespace Frog.Domain.BuildSystems.Solution
+﻿namespace Frog.Domain.BuildSystems.Solution
 {
-    public class NUnitTask : ITask
+    public class NUnitTask : Task
     {
         readonly string assembly;
 

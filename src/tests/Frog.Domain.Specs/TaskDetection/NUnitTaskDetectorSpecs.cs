@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Frog.Domain.BuildSystems.Solution;
-using Frog.Domain.CustomTasks;
 using Frog.Domain.TaskSources;
 using Frog.Specs.Support;
 using Frog.Support;
@@ -14,7 +13,7 @@ namespace Frog.Domain.Specs.TaskDetection
     {
         TaskFileFinder _projectTaskFileRepo;
         NUnitTaskDetector nunitTaskDetecttor;
-        IList<ITask> items;
+        IList<Domain.Task> items;
 
         protected override void Given()
         {
