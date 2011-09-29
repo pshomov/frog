@@ -6,25 +6,22 @@ using NUnit.Framework;
 
 namespace Frog.Domain.Specs.PipelineStatusViewSpecs
 {
-    public abstract class StatusViewCurrentBuildPublicRepoBase : BDD
+    public abstract class StatusViewContractBase : BDD
     {
         protected string RepoUrl;
         protected PipelineStatusView View;
-        protected ProjectView ProjectView;
         protected BuildStarted BuildMessage;
         protected Guid NewGuid;
-        public TaskInfo DefaultTask;
-
-        public StatusViewCurrentBuildPublicRepoBase()
-        {
-            DefaultTask = new TaskInfo { Name = "task1", Status = TaskInfo.TaskStatus.NotStarted };
-        }
+        protected TaskInfo DefaultTask;
+        protected ProjectView ProjectView;
 
         protected override void Given()
         {
-            ProjectView = new InMemProjectView();
+            SetupProjectView();
             View = new PipelineStatusView(ProjectView);
         }
+
+        protected abstract void SetupProjectView();
 
         protected void HandleABuild(BuildTotalEndStatus buildTotalEndStatus)
         {
@@ -66,6 +63,20 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
         }
     }
 
+    public abstract class StatusViewCurrentBuildPublicRepoBase : StatusViewContractBase
+    {
+
+        protected StatusViewCurrentBuildPublicRepoBase()
+        {
+            DefaultTask = new TaskInfo { Name = "task1", Status = TaskInfo.TaskStatus.NotStarted };
+        }
+
+        protected override void SetupProjectView()
+        {
+            ProjectView = new InMemProjectView();
+        }
+    }
+
     class StatusViewCurrentBuildPublicRepo : StatusViewCurrentBuildPublicRepoBase
     {
         protected PipelineStatus PipelineStatus;
@@ -86,8 +97,6 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
 
     class StatusViewCurrentBuildPrivateRepo : StatusViewCurrentBuildPublicRepoBase
     {
-        protected PipelineStatus PipelineStatus;
-
         protected override void When()
         {
             RepoUrl = "http://psh:pass@github.com/p1/p2";
@@ -103,7 +112,6 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
 
     class StatusViewListOfBuilds : StatusViewCurrentBuildPublicRepoBase
     {
-        protected PipelineStatus PipelineStatus;
         private Guid oldGuid;
 
         protected override void When()
@@ -130,8 +138,6 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
 
     class StatusViewProjectCheckedOut : StatusViewCurrentBuildPublicRepoBase
     {
-        protected PipelineStatus PipelineStatus;
-
         protected override void When()
         {
             RepoUrl = "http://github.com/p1/p2";
