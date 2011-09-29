@@ -10,22 +10,27 @@ namespace Frog.Domain.UI
         public string Comment;
         public string Revision;
     }
-    public class ProjectView
+
+    public interface ProjectView
+    {
+        BuildStatus GetBuildStatus(Guid id);
+        Guid GetCurrentBuild(string repoUrl);
+        void SetCurrentBuild(string repoUrl, Guid buildId, string comment, string revision);
+        bool ProjectRegistered(string projectUrl);
+        List<BuildHistoryItem> GetListOfBuilds(string repoUrl);
+    }
+
+    public class InMemProjectView : ProjectView
     {
         private readonly ConcurrentDictionary<Guid, BuildStatus> report;
         private readonly ConcurrentDictionary<string, Guid> currentBuild;
         private readonly ConcurrentDictionary<string, List<BuildHistoryItem>> buildHistory;
 
-        public ProjectView()
+        public InMemProjectView()
         {
             report = new ConcurrentDictionary<Guid, BuildStatus>();
             currentBuild = new ConcurrentDictionary<string, Guid>();
             buildHistory = new ConcurrentDictionary<string, List<BuildHistoryItem>>();
-        }
-
-        public void SetBuildStatus(Guid id, BuildStatus value)
-        {
-            report[id] = value;
         }
 
         public BuildStatus GetBuildStatus(Guid id)

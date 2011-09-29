@@ -4,9 +4,9 @@ namespace Frog.Domain.UI
 {
     public class Setup
     {
-        public static ProjectView SetupView(IBus theBus)
+        public static InMemProjectView SetupView(IBus theBus)
         {
-            var projectView = new ProjectView();
+            var projectView = new InMemProjectView();
             var statusView = new PipelineStatusView(projectView);
             theBus.RegisterHandler<BuildStarted>(statusView.Handle, "UI");
             theBus.RegisterHandler<BuildEnded>(statusView.Handle, "UI");

@@ -22,7 +22,7 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
 
         protected override void Given()
         {
-            ProjectView = new ProjectView();
+            ProjectView = new InMemProjectView();
             View = new PipelineStatusView(ProjectView);
         }
 

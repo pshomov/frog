@@ -82,7 +82,7 @@
     <Compile Include="ExecTaskFactory.cs" />
     <Compile Include="SubfolderWorkingArea.cs" />
     <Compile Include="TaskSources\TaskSource.cs" />
-    <Compile Include="UI\ProjectView.cs" />
+    <Compile Include="UI\InMemProjectView.cs" />
     <Compile Include="UI\Setup.cs" />
     <Compile Include="Worker.cs" />
     <Compile Include="WorkingAreaGoverner.cs" />
