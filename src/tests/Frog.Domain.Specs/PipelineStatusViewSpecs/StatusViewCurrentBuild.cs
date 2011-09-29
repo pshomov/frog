@@ -41,7 +41,7 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
             View.Handle(BuildMessage);
         }
 
-        protected BuildStarted CreateBuildMessage(Guid buildId, string repoUrl, params TaskInfo[] tasks)
+        private BuildStarted CreateBuildMessage(Guid buildId, string repoUrl, params TaskInfo[] tasks)
         {
             return new BuildStarted
                        {
