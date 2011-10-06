@@ -18,6 +18,11 @@ namespace Frog.Domain.UI
         void SetCurrentBuild(string repoUrl, Guid buildId, string comment, string revision);
         bool ProjectRegistered(string projectUrl);
         List<BuildHistoryItem> GetListOfBuilds(string repoUrl);
+        void SetBuildStarted(Guid id, IEnumerable<TaskInfo> taskInfos);
+        void WipeBucket();
+        void BuildUpdated(Guid id, int taskIndex, TaskInfo.TaskStatus taskStatus);
+        void BuildEnded(Guid id, BuildTotalEndStatus totalStatus);
+        void AppendTerminalOutput(Guid buildId, int taskIndex, int contentSequenceIndex, string content);
     }
 
     public class InMemProjectView : ProjectView
@@ -41,7 +46,14 @@ namespace Frog.Domain.UI
 
         public Guid GetCurrentBuild(string repoUrl)
         {
-            return currentBuild[repoUrl];
+            try
+            {
+                return currentBuild[repoUrl];
+            }
+            catch (KeyNotFoundException e)
+            {
+                throw new RepositoryNotRegisteredException();
+            }
         }
 
         public void SetCurrentBuild(string repoUrl, Guid buildId, string comment, string revision)
@@ -58,7 +70,43 @@ namespace Frog.Domain.UI
 
         public List<BuildHistoryItem> GetListOfBuilds(string repoUrl)
         {
+            if (!buildHistory.ContainsKey(repoUrl)) return new List<BuildHistoryItem>();
             return buildHistory[repoUrl];
         }
+
+        public void SetBuildStarted(Guid id, IEnumerable<TaskInfo> taskInfos)
+        {
+            GetBuildStatus(id).BuildStarted(taskInfos);
+        }
+
+        public void WipeBucket()
+        {
+            
+        }
+
+        public void BuildUpdated(Guid id, int taskIndex, TaskInfo.TaskStatus taskStatus)
+        {
+            GetBuildStatus(id).BuildUpdated(taskIndex, taskStatus);
+        }
+
+        public void BuildEnded(Guid id, BuildTotalEndStatus totalStatus)
+        {
+            GetBuildStatus(id).BuildEnded(totalStatus);
+        }
+
+        public void AppendTerminalOutput(Guid buildId, int taskIndex, int contentSequenceIndex, string content)
+        {
+            GetBuildStatus(buildId).Tasks[taskIndex].AddTerminalOutput(contentSequenceIndex,
+                                                                                         content);
+        }
     }
+
+    public class RepositoryNotRegisteredException : Exception
+    {
+    }
+
+    public class BuildNotFoundException : Exception
+    {
+    }
+
 }

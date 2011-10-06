@@ -61,12 +61,6 @@ namespace Frog.Domain
             Status = TaskStatus.NotStarted;
         }
 
-        public TaskInfo(TaskInfo taskInfo)
-        {
-            Name = taskInfo.Name;
-            Status = taskInfo.Status;
-        }
-
         public enum TaskStatus
         {
             NotStarted,

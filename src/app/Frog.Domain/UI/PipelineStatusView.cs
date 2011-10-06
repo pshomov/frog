@@ -16,22 +16,22 @@ namespace Frog.Domain.UI
         {
             var buildStatus = projectView.GetBuildStatus(message.BuildId);
             buildStatus.BuildStarted(message.Status.Tasks);
+            projectView.SetBuildStarted(message.BuildId, message.Status.Tasks);
         }
 
         public void Handle(BuildUpdated message)
         {
-            projectView.GetBuildStatus(message.BuildId).BuildUpdated(message.TaskIndex, message.TaskStatus);
+            projectView.BuildUpdated(message.BuildId,message.TaskIndex, message.TaskStatus);
         }
 
         public void Handle(BuildEnded message)
         {
-            projectView.GetBuildStatus(message.BuildId).BuildEnded(message.TotalStatus);
+            projectView.BuildEnded(message.BuildId, message.TotalStatus);
         }
 
         public void Handle(TerminalUpdate message)
         {
-            projectView.GetBuildStatus(message.BuildId).Tasks[message.TaskIndex].AddTerminalOutput(message.ContentSequenceIndex,
-                                                                                         message.Content);
+            projectView.AppendTerminalOutput(message.BuildId, message.TaskIndex, message.ContentSequenceIndex, message.Content);
         }
 
         public void Handle(ProjectCheckedOut message)

@@ -11,8 +11,8 @@ namespace Frog.Domain.UI
             tasks = new List<TaskState>(from taskInfo in taskInfos select new TaskState(taskInfo.Name));
         }
 
-        List<TaskState> tasks;
-        public BuildTotalStatus Overall { get; private set; }
+        public List<TaskState> tasks = new List<TaskState>();
+        public BuildTotalStatus Overall { get; set; }
 
         public IList<TaskState> Tasks
         {
@@ -39,9 +39,9 @@ namespace Frog.Domain.UI
 
     public class TaskState
     {
-        public string Name { get; private set; }
-        readonly TerminalOutput terminalOutput;
-        TaskInfo.TaskStatus status;
+        public string Name { get; set; }
+        public TerminalOutput terminalOutput;
+        public TaskInfo.TaskStatus status;
 
         public TerminalOutput.Info GetTerminalOutput(int sinceIndex = 0)
         {
@@ -63,6 +63,10 @@ namespace Frog.Domain.UI
             this.status = status;
         }
 
+        public TaskState() : this("Unnamed, should not see this")
+        {
+        }
+
         public TaskState(string name)
         {
             Name = name;
@@ -77,7 +81,7 @@ namespace Frog.Domain.UI
             public string Content;
             public int LastChunkIndex;
         }
-        readonly List<string> contentPieces = new List<string>();
+        public List<string> contentPieces = new List<string>();
         public void Add(int sequnceIndex, string content)
         {
             lock (contentPieces)

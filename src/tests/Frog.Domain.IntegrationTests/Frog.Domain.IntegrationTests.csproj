@@ -30,6 +30,13 @@
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\..\packages\Newtonsoft.Json.4.0.3\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="protobuf-net, Version=1.0.0.280, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\protobuf-net.1.0.0.280\lib\protobuf-net.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="nunit.framework, Version=2.5.6.10205, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77">
       <SpecificVersion>False</SpecificVersion>
@@ -43,6 +50,7 @@
     <Compile Include="ProjectRepository\InMemoryProjectRepository.cs" />
     <Compile Include="ProjectRepository\ProjectRepository.cs" />
     <Compile Include="ProjectRepository\RiakProjectRepository.cs" />
+    <Compile Include="RiakProjectView.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -54,6 +62,10 @@
       <Project>{8A446F8C-6B38-4153-A996-CC162DACF795}</Project>
       <Name>Frog.Domain</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\app\Frog.Support\Frog.Support.csproj">
+      <Project>{893935D3-935A-418F-A656-5D6A203D87ED}</Project>
+      <Name>Frog.Support</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\app\SimpleCQRS\SimpleCQRS.csproj">
       <Project>{9FAA6168-F131-420F-81C1-2228FD151BC7}</Project>
       <Name>SimpleCQRS</Name>
@@ -62,5 +74,12 @@
       <Project>{B4CE2703-09EF-4BF5-B933-EF8BB4E68389}</Project>
       <Name>Frog.Specs.Support</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="Riak.config">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>
