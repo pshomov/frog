@@ -23,7 +23,7 @@ namespace Frog.Domain.IntegrationTests
         }
 
 
-        private ProjectView GetProjectView()
+        protected virtual ProjectView GetProjectView()
         {
 
             return new PersistentProjectView(RiakServer, RiakPort, Bucket, "projectbuilds_test");
@@ -143,6 +143,15 @@ namespace Frog.Domain.IntegrationTests
             Assert.That(buildHistoryItems[0].BuildId, Is.EqualTo(id1));
             Assert.That(buildHistoryItems[1].BuildId, Is.EqualTo(id2));
             Assert.That(buildHistoryItems[2].BuildId, Is.EqualTo(id3));
+        }
+    }
+
+    [TestFixture]
+    public class InMemProjectView : RiakProjectView
+    {
+        protected override ProjectView GetProjectView()
+        {
+            return new UI.InMemProjectView();
         }
     }
 }

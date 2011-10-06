@@ -134,8 +134,7 @@ namespace Frog.Domain.Integration
             a.BuildStarted(taskInfos);
             var connectionManager = GetConnectionManager();
             var riakConnection = new RiakContentRepository(connectionManager);
-            var serialize = jsonBridge.Serialize(a);
-            riakConnection.Persist(new RiakPersistRequest { Bucket = idsBucket, Key = id.ToString(), Content = new RiakContent { Value = serialize.GetBytes() } });
+            riakConnection.Persist(new RiakPersistRequest { Bucket = idsBucket, Key = id.ToString(), Content = new RiakContent { Value = jsonBridge.Serialize(a).GetBytes() } });
         }
 
         public void WipeBucket()
@@ -151,8 +150,7 @@ namespace Frog.Domain.Integration
             a.BuildUpdated(taskIndex, taskStatus);
             var connectionManager = GetConnectionManager();
             var riakConnection = new RiakContentRepository(connectionManager);
-            var serialize = jsonBridge.Serialize(a);
-            riakConnection.Persist(new RiakPersistRequest { Bucket = idsBucket, Key = id.ToString(), Content = new RiakContent { Value = serialize.GetBytes() } });
+            riakConnection.Persist(new RiakPersistRequest { Bucket = idsBucket, Key = id.ToString(), Content = new RiakContent { Value = jsonBridge.Serialize(a).GetBytes() } });
         }
 
         public void BuildEnded(Guid id, BuildTotalEndStatus totalStatus)
@@ -161,8 +159,7 @@ namespace Frog.Domain.Integration
             a.BuildEnded(totalStatus);
             var connectionManager = GetConnectionManager();
             var riakConnection = new RiakContentRepository(connectionManager);
-            var serialize = jsonBridge.Serialize(a);
-            riakConnection.Persist(new RiakPersistRequest { Bucket = idsBucket, Key = id.ToString(), Content = new RiakContent { Value = serialize.GetBytes() } });
+            riakConnection.Persist(new RiakPersistRequest { Bucket = idsBucket, Key = id.ToString(), Content = new RiakContent { Value = jsonBridge.Serialize(a).GetBytes() } });
         }
 
         public void AppendTerminalOutput(Guid buildId, int taskIndex, int contentSequenceIndex, string content)
