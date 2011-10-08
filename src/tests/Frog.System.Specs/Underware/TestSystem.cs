@@ -33,7 +33,8 @@ namespace Frog.System.Specs.Underware
             if (runRevisionChecker) new RevisionChecker(TheBus, sourceRepoDriverFactory).JoinTheParty();
             SetupAgent(sourceRepoDriverFactory);
 
-            Views = Setup.SetupView(TheBus);
+            Views = new InMemProjectView();
+            Setup.SetupView(TheBus, Views);
 
             messages = new List<Message>();
             SetupAllEventLogging();

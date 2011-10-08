@@ -78,7 +78,7 @@ namespace Frog.Domain.Integration
             {
                 
             }
-            repoInfo.BuildHistory.Add(buildId);
+            repoInfo.BuildHistory.Add(new BuildHistoryItem(){BuildId = buildId, Comment = comment, Revision = revision});
             repoInfo.CurrentBuild = buildId;
             riakConnection.Persist(new RiakPersistRequest { Bucket = repoBucket, Key = repoUrl, Content = new RiakContent { Value = jsonBridge.Serialize(repoInfo).GetBytes() } });
             riakConnection.Persist(new RiakPersistRequest { Bucket = idsBucket, Key = buildId.ToString(), Content = new RiakContent { Value = jsonBridge.Serialize(new BuildStatus()).GetBytes()}});
@@ -125,7 +125,7 @@ namespace Frog.Domain.Integration
             {
                 return new List<BuildHistoryItem>();
             }
-            return repoInfo.BuildHistory.Select(guid => new BuildHistoryItem() {BuildId = guid}).ToList();
+            return repoInfo.BuildHistory.Select(guid => guid).ToList();
         }
 
         public void SetBuildStarted(Guid id, IEnumerable<TaskInfo> taskInfos)
@@ -188,9 +188,16 @@ namespace Frog.Domain.Integration
         }
     }
 
+    public class BuildInfo
+    {
+        public Guid id;
+        public string comment;
+    }
+
     public class RepoInfo
     {
         public Guid CurrentBuild;
-        public List<Guid> BuildHistory = new List<Guid>();
+        public List<BuildHistoryItem> BuildHistory = new List<BuildHistoryItem>();
+
     }
 }
