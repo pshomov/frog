@@ -4,6 +4,7 @@ using System.Data.RiakClient;
 using System.Data.RiakClient.Models;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Web.Script.Serialization;
 using CorrugatedIron;
 using CorrugatedIron.Comms;
@@ -54,7 +55,7 @@ namespace Frog.Domain.Integration
             try
             {
                 var riakResponse =
-                    riakContentRepository.Find(new RiakFindRequest { Bucket = repoBucket, Keys = new[] {repoUrl}, ReadValue = 1 });
+                    riakContentRepository.Find(new RiakFindRequest { Bucket = repoBucket, Keys = new[] {KeyGenerator(repoUrl)}, ReadValue = 1 });
                 return riakResponse.Result.Select(document => jsonBridge.Deserialize<RepoInfo>(document.Value)).Single().CurrentBuild;
             }
             catch (InvalidOperationException e)
@@ -71,7 +72,7 @@ namespace Frog.Domain.Integration
             try
             {
                 var riakResponse =
-                    riakConnection.Find(new RiakFindRequest { Bucket = repoBucket, Keys = new[] { repoUrl }, ReadValue = 1 });
+                    riakConnection.Find(new RiakFindRequest { Bucket = repoBucket, Keys = new[] { KeyGenerator(repoUrl) }, ReadValue = 1 });
                 if (riakResponse.Result.Count() == 1) repoInfo = riakResponse.Result.Select(document => jsonBridge.Deserialize<RepoInfo>(document.Value)).Single();
             }
             catch (InvalidOperationException e)
@@ -91,7 +92,7 @@ namespace Frog.Domain.Integration
             try
             {
                 var riakResponse =
-                    riakContentRepository.Find(new RiakFindRequest { Bucket = repoBucket, Keys = new[] { projectUrl }, ReadValue = 1 });
+                    riakContentRepository.Find(new RiakFindRequest { Bucket = repoBucket, Keys = new[] { KeyGenerator(projectUrl) }, ReadValue = 1 });
                 return riakResponse.Result.Count() == 1;
             }
             catch (InvalidOperationException e)
@@ -118,7 +119,7 @@ namespace Frog.Domain.Integration
             try
             {
                 var riakResponse =
-                    riakConnection.Find(new RiakFindRequest { Bucket = repoBucket, Keys = new[] { repoUrl }, ReadValue = 1 });
+                    riakConnection.Find(new RiakFindRequest { Bucket = repoBucket, Keys = new[] { KeyGenerator(repoUrl) }, ReadValue = 1 });
                 if (riakResponse.Result.Count() == 1) repoInfo = riakResponse.Result.Select(document => jsonBridge.Deserialize<RepoInfo>(document.Value)).Single();
             }
             catch (InvalidOperationException e)
@@ -174,7 +175,7 @@ namespace Frog.Domain.Integration
         private void WipeBuckett(RiakConnectionManager connectionManager, string bucket)
         {
             var riakConnection1 = new RiakBucketRepository(connectionManager);
-            var keysFor = riakConnection1.ListKeysFor(new ListKeysRequest {Bucket = bucket.GetBytes()});
+            var keysFor = riakConnection1.ListKeysFor(new ListKeysRequest {Bucket = KeyGenerator(bucket).GetBytes()});
             var riakConnection = new RiakContentRepository(connectionManager);
             keysFor.Result.ToList().ForEach(
                 key => riakConnection.Detach(new RiakDetachRequest() {Bucket = bucket, Key = key}));
@@ -185,6 +186,12 @@ namespace Frog.Domain.Integration
             var connectionManager = RiakConnectionManager.FromConfiguration;
             connectionManager.AddConnection(host, port);
             return connectionManager;
+        }
+        private static string KeyGenerator(string repoUrl)
+        {
+            return string.Concat(
+                new MD5CryptoServiceProvider().ComputeHash(
+                    repoUrl.GetBytes()).Select(b => b.ToString("x2")));
         }
     }
 
