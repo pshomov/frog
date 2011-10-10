@@ -14,8 +14,6 @@ namespace Frog.Domain.UI
 
         public void Handle(BuildStarted message)
         {
-            var buildStatus = projectView.GetBuildStatus(message.BuildId);
-            buildStatus.BuildStarted(message.Status.Tasks);
             projectView.SetBuildStarted(message.BuildId, message.Status.Tasks);
         }
 

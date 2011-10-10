@@ -139,6 +139,8 @@ namespace Frog.Domain.Integration
             {
 				channel.TxSelect();
                 channel.ExchangeDeclare(topicName, ExchangeType.Fanout, true);
+                channel.QueueDeclare("all_messages", false, false, false, null);
+                channel.QueueBind("all_messages", topicName, "", null);
                 channel.TxCommit();
             }
             using (IModel channel = connection.CreateModel())
