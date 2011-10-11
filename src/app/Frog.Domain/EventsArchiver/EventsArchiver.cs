@@ -1,28 +1,26 @@
 ﻿using System;
 using System.IO;
-using System.Web.Script.Serialization;
 using SimpleCQRS;
 
 namespace Frog.Domain.EventsArchiver
 {
-    public class EventsArchiver : Handles<Message>
+    public class EventsArchiver
     {
         private readonly IBus bus;
-        readonly JavaScriptSerializer jsonBridge = new JavaScriptSerializer();
 
         public EventsArchiver(IBus bus)
         {
             this.bus = bus;
         }
 
-        public void Handle(Message message)
+        private void Handle(string message, string exchange)
         {
-            File.AppendAllText(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "runz_events.log"), jsonBridge.Serialize(message));
+            File.AppendAllText(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "runz_events.log"), string.Format("{1} - {0}\n", message, exchange));
         }
 
         public void JoinTheParty()
         {
-            bus.RegisterHandler<Message>(this.Handle, "all_messages");
+            bus.RegisterHandler(this.Handle, "all_messages");
         }
     }
 }
