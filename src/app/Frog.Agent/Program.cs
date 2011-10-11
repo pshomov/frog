@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using Frog.Domain;
 using Frog.Domain.BuildSystems.FrogSystemTest;
 using Frog.Domain.BuildSystems.Make;
 using Frog.Domain.BuildSystems.Rake;
 using Frog.Domain.BuildSystems.Solution;
+using Frog.Domain.EventsArchiver;
 using Frog.Domain.Integration;
 using Frog.Domain.RevisionChecker;
 using Frog.Domain.TaskSources;
@@ -15,7 +13,7 @@ using SimpleCQRS;
 
 namespace Frog.Agent
 {
-    class Program
+    static class Program
     {
         static void Main(string[] args)
         {
@@ -24,6 +22,8 @@ namespace Frog.Agent
             SourceRepoDriverFactory sourceRepoDriverFactory = url => new GitDriver(url);
             var agent = new Domain.Agent(bus, worker, sourceRepoDriverFactory);
             var revisionChecker = new RevisionChecker(bus, sourceRepoDriverFactory);
+
+            new EventsArchiver(bus).JoinTheParty();
             agent.JoinTheParty();
             revisionChecker.JoinTheParty();
             Console.ReadLine();

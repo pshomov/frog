@@ -59,6 +59,7 @@
     <Compile Include="BuildSystems\Solution\NUnitTaskFileFinder.cs" />
     <Compile Include="BuildSystems\Solution\SolutionTaskFileFinder.cs" />
     <Compile Include="CheckForUpdateFailed.cs" />
+    <Compile Include="EventsArchiver\EventsArchiver.cs" />
     <Compile Include="IExecTask.cs" />
     <Compile Include="BuildSystems\Make\MakeTask.cs" />
     <Compile Include="PipelineOfTasks.cs" />
