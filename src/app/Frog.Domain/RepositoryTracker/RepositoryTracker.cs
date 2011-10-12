@@ -63,8 +63,15 @@ namespace Frog.Domain.RepositoryTracker
 
         public void Handle(UpdateFound message)
         {
-            var currentRev =
-                projectsRepository.AllProjects.First(document => document.projecturl == message.RepoUrl).revision;
+            string currentRev;
+            try
+            {
+                currentRev = projectsRepository.AllProjects.First(document => document.projecturl == message.RepoUrl).revision;
+            }
+            catch (InvalidOperationException)
+            {
+                return;
+            }
             projectsRepository.UpdateLastKnownRevision(message.RepoUrl, message.Revision.Revision);
             if (currentRev != message.Revision.Revision) bus.Send(new Build {RepoUrl = message.RepoUrl, Revision = message.Revision});
         }
