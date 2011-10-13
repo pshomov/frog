@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using Frog.Domain.Integration;
 using Frog.Domain.UI;
 using Frog.Support;
@@ -10,8 +12,6 @@ namespace Frog.Domain.IntegrationTests
     [TestFixture]
     public class RiakProjectView
     {
-        private const string Bucket = "projectview_test1";
-        private const string RiakServer = "127.0.0.1";
         private const int RiakPort = 8087;
         private ProjectView view;
 
@@ -25,8 +25,7 @@ namespace Frog.Domain.IntegrationTests
 
         protected virtual ProjectView GetProjectView()
         {
-
-            return new PersistentProjectView(RiakServer, RiakPort, Bucket, "projectbuilds_test");
+            return new PersistentProjectView(Environment.GetEnvironmentVariable("RUNZ_RIAK_HOST") ?? "localhost", RiakPort, "buildIds_test1", "repoIds_test");
         }
 
         [Test]
@@ -35,6 +34,7 @@ namespace Frog.Domain.IntegrationTests
             try
             {
                 var buildStatus = view.GetBuildStatus(Guid.NewGuid());
+                Assert.Fail("should come here for builds that do not exist");
             }
             catch (BuildNotFoundException)
             {
@@ -144,6 +144,7 @@ namespace Frog.Domain.IntegrationTests
             Assert.That(buildHistoryItems[1].BuildId, Is.EqualTo(id2));
             Assert.That(buildHistoryItems[2].BuildId, Is.EqualTo(id3));
         }
+
     }
 
     [TestFixture]

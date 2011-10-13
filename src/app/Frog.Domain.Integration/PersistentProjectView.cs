@@ -9,6 +9,7 @@ using System.Web.Script.Serialization;
 using CorrugatedIron;
 using CorrugatedIron.Comms;
 using CorrugatedIron.Config;
+using CorrugatedIron.Models;
 using CorrugatedIron.Models.MapReduce;
 using Frog.Domain.UI;
 using riak.net.Models;
@@ -135,9 +136,14 @@ namespace Frog.Domain.Integration
 			Console.WriteLine("before:"+jsonBridge.Serialize(a));
             a.BuildStarted(taskInfos);
 			Console.WriteLine("after:"+jsonBridge.Serialize(a));
-            var connectionManager = GetConnectionManager();
-            var riakConnection = new RiakContentRepository(connectionManager);
-            riakConnection.Persist(new RiakPersistRequest { Bucket = idsBucket, Key = id.ToString(), Content = new RiakContent { Value = jsonBridge.Serialize(a).GetBytes() }, Write = 1 });
+
+            var cl = RiakCluster.FromConfig("riakConfig", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "riak.config"));
+            var client = cl.CreateClient();
+            client.Put(new RiakObject(idsBucket, id.ToString(), jsonBridge.Serialize(a)));
+
+//            var connectionManager = GetConnectionManager();
+//            var riakConnection = new RiakContentRepository(connectionManager);
+//            riakConnection.Persist(new RiakPersistRequest { Bucket = idsBucket, Key = id.ToString(), Content = new RiakContent { Value = jsonBridge.Serialize(a).GetBytes() }, Write = 1 });
         }
 
         public void WipeBucket()
@@ -177,11 +183,15 @@ namespace Frog.Domain.Integration
 
         private void WipeBuckett(RiakConnectionManager connectionManager, string bucket)
         {
-            var riakConnection1 = new RiakBucketRepository(connectionManager);
-            var keysFor = riakConnection1.ListKeysFor(new ListKeysRequest {Bucket = bucket.GetBytes()});
-            var riakConnection = new RiakContentRepository(connectionManager);
-            keysFor.Result.ToList().ForEach(
-                key => riakConnection.Detach(new RiakDetachRequest() {Bucket = bucket, Key = key}));
+            var cl = RiakCluster.FromConfig("riakConfig", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "riak.config"));
+            var client = cl.CreateClient();
+            client.DeleteBucket(bucket);
+
+//            var riakConnection1 = new RiakBucketRepository(connectionManager);
+//            var keysFor = riakConnection1.ListKeysFor(new ListKeysRequest {Bucket = bucket.GetBytes()});
+//            var riakConnection = new RiakContentRepository(connectionManager);
+//            keysFor.Result.ToList().ForEach(
+//                key => riakConnection.Detach(new RiakDetachRequest() {Bucket = bucket, Key = key}));
         }
 
         private RiakConnectionManager GetConnectionManager()

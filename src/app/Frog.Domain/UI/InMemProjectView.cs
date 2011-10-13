@@ -40,8 +40,14 @@ namespace Frog.Domain.UI
 
         public BuildStatus GetBuildStatus(Guid id)
         {
-            report.TryAdd(id, new BuildStatus());
-            return report[id];
+            try
+            {
+                return report[id];
+            }
+            catch (KeyNotFoundException)
+            {
+                throw new BuildNotFoundException();
+            }
         }
 
         public Guid GetCurrentBuild(string repoUrl)
@@ -61,6 +67,7 @@ namespace Frog.Domain.UI
             currentBuild[repoUrl] = buildId;
             buildHistory.TryAdd(repoUrl, new List<BuildHistoryItem>());
             buildHistory[repoUrl].Add(new BuildHistoryItem(){BuildId = buildId, Comment = comment, Revision = revision});
+            report[buildId] = new BuildStatus();
         }
 
         public bool ProjectRegistered(string projectUrl)
