@@ -11,7 +11,7 @@ namespace Frog.Domain.IntegrationTests
     public class RiakProjectView
     {
         private const string Bucket = "projectview_test1";
-        private const string RiakServer = "10.0.2.2";
+        private const string RiakServer = "127.0.0.1";
         private const int RiakPort = 8087;
         private ProjectView view;
 

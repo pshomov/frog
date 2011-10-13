@@ -81,7 +81,7 @@ namespace Frog.Domain.Integration
             }
             repoInfo.BuildHistory.Add(new BuildHistoryItem(){BuildId = buildId, Comment = comment, Revision = revision});
             repoInfo.CurrentBuild = buildId;
-            riakConnection.Persist(new RiakPersistRequest { Bucket = repoBucket, Key = repoUrl, Content = new RiakContent { Value = jsonBridge.Serialize(repoInfo).GetBytes() } });
+            riakConnection.Persist(new RiakPersistRequest { Bucket = repoBucket, Key = KeyGenerator(repoUrl), Content = new RiakContent { Value = jsonBridge.Serialize(repoInfo).GetBytes() } });
             riakConnection.Persist(new RiakPersistRequest { Bucket = idsBucket, Key = buildId.ToString(), Content = new RiakContent { Value = jsonBridge.Serialize(new BuildStatus()).GetBytes()}});
         }
 
@@ -132,10 +132,12 @@ namespace Frog.Domain.Integration
         public void SetBuildStarted(Guid id, IEnumerable<TaskInfo> taskInfos)
         {
             var a = GetBuildStatus(id);
+			Console.WriteLine("before:"+jsonBridge.Serialize(a));
             a.BuildStarted(taskInfos);
+			Console.WriteLine("after:"+jsonBridge.Serialize(a));
             var connectionManager = GetConnectionManager();
             var riakConnection = new RiakContentRepository(connectionManager);
-            riakConnection.Persist(new RiakPersistRequest { Bucket = idsBucket, Key = id.ToString(), Content = new RiakContent { Value = jsonBridge.Serialize(a).GetBytes() } });
+            riakConnection.Persist(new RiakPersistRequest { Bucket = idsBucket, Key = id.ToString(), Content = new RiakContent { Value = jsonBridge.Serialize(a).GetBytes() }, Write = 1 });
         }
 
         public void WipeBucket()
@@ -148,6 +150,7 @@ namespace Frog.Domain.Integration
         public void BuildUpdated(Guid id, int taskIndex, TaskInfo.TaskStatus taskStatus)
         {
             var a = GetBuildStatus(id);
+			Console.WriteLine("got build "+id.ToString()+": "+jsonBridge.Serialize(a));			
             a.BuildUpdated(taskIndex, taskStatus);
             var connectionManager = GetConnectionManager();
             var riakConnection = new RiakContentRepository(connectionManager);
@@ -175,7 +178,7 @@ namespace Frog.Domain.Integration
         private void WipeBuckett(RiakConnectionManager connectionManager, string bucket)
         {
             var riakConnection1 = new RiakBucketRepository(connectionManager);
-            var keysFor = riakConnection1.ListKeysFor(new ListKeysRequest {Bucket = KeyGenerator(bucket).GetBytes()});
+            var keysFor = riakConnection1.ListKeysFor(new ListKeysRequest {Bucket = bucket.GetBytes()});
             var riakConnection = new RiakContentRepository(connectionManager);
             keysFor.Result.ToList().ForEach(
                 key => riakConnection.Detach(new RiakDetachRequest() {Bucket = bucket, Key = key}));
