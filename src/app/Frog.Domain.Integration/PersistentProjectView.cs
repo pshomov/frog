@@ -14,6 +14,7 @@ using CorrugatedIron.Models.MapReduce;
 using Frog.Domain.UI;
 using riak.net.Models;
 using riak.net.ProtoModels;
+using Newtonsoft.Json;
 
 namespace Frog.Domain.Integration
 {
@@ -41,7 +42,7 @@ namespace Frog.Domain.Integration
             {
                 var riakResponse =
                     riakContentRepository.Find(new RiakFindRequest { Bucket = idsBucket, Keys =  new []{id.ToString()}, ReadValue = 1 });
-                return riakResponse.Result.Select(document => jsonBridge.Deserialize<BuildStatus>(document.Value)).Single();
+                return riakResponse.Result.Select(document => JsonConvert.DeserializeObject<BuildStatus>(document.Value)).Single();
             }
             catch (InvalidOperationException e)
             {
