@@ -105,7 +105,7 @@ namespace Frog.Domain.Integration
 
         public List<BuildHistoryItem> GetListOfBuilds(string repoUrl)
         {
-//            var cl = RiakCluster.FromConfig("riakConfig", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "riak.config"));
+//            var cl = RiakCluster.FromConfig("riakConfig", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Riak.config"));
 //            var client = cl.CreateClient();
 //            var result = client.Ping();
 //            if (!result.IsSuccess) throw new ApplicationException("can't connect to database");
@@ -138,9 +138,11 @@ namespace Frog.Domain.Integration
             a.BuildStarted(taskInfos);
 			Console.WriteLine("after:"+jsonBridge.Serialize(a));
 
-            var cl = RiakCluster.FromConfig("riakConfig", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "riak.config"));
+            var cl = RiakCluster.FromConfig("riakConfig", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Riak.config"));
             var client = cl.CreateClient();
             client.Put(new RiakObject(idsBucket, id.ToString(), jsonBridge.Serialize(a)));
+            var b = GetBuildStatus(id);
+			return;
 
 //            var connectionManager = GetConnectionManager();
 //            var riakConnection = new RiakContentRepository(connectionManager);
@@ -184,7 +186,7 @@ namespace Frog.Domain.Integration
 
         private void WipeBuckett(RiakConnectionManager connectionManager, string bucket)
         {
-            var cl = RiakCluster.FromConfig("riakConfig", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "riak.config"));
+            var cl = RiakCluster.FromConfig("riakConfig", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Riak.config"));
             var client = cl.CreateClient();
             client.DeleteBucket(bucket);
 
