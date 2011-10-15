@@ -1,0 +1,367 @@
+Repo url is: /var/folders/t2/f752cs7n5nn74vyb8q8sl5880000gn/T/z0nmf5vf.3gb/testrepo
+E>remote_latest repo url is /var/folders/t2/f752cs7n5nn74vyb8q8sl5880000gn/T/z0nmf5vf.3gb/testrepo
+E>/Users/petar/src/personal/frog/output/agent/git_scripts/git_remote_latest_rev.rb:3: warning: Insecure world writable dir /usr/local/bin in PATH, mode 040777
+S>0eaf08bb71db716165e2e306e072538d8d852baf	refs/heads/master
+E>
+S>
+Repo url is: /var/folders/t2/f752cs7n5nn74vyb8q8sl5880000gn/T/t60wo1p8.rxa/testrepo
+E>remote_latest repo url is /var/folders/t2/f752cs7n5nn74vyb8q8sl5880000gn/T/t60wo1p8.rxa/testrepo
+E>/Users/petar/src/personal/frog/output/agent/git_scripts/git_remote_latest_rev.rb:3: warning: Insecure world writable dir /usr/local/bin in PATH, mode 040777
+S>c0a8ef6db260c5c50b4c36fee16d75e586ddd54b	refs/heads/master
+E>
+S>
+Repo url is: /var/folders/t2/f752cs7n5nn74vyb8q8sl5880000gn/T/fv9bmgpc.ltp/testrepo
+E>remote_latest repo url is /var/folders/t2/f752cs7n5nn74vyb8q8sl5880000gn/T/fv9bmgpc.ltp/testrepo
+E>/Users/petar/src/personal/frog/output/agent/git_scripts/git_remote_latest_rev.rb:3: warning: Insecure world writable dir /usr/local/bin in PATH, mode 040777
+S>86eb7177a6cc626d00d187a3f007d8118c4454b8	refs/heads/master
+E>
+S>
+xsp4
+Listening on address: 0.0.0.0
+Root directory: /Users/petar/src/personal/frog/helper_scripts
+Listening on port: 6502 (non-secure)
+Hit Return to stop the server.
+Repo url is: /var/folders/t2/f752cs7n5nn74vyb8q8sl5880000gn/T/jki62tkw.q27/testrepo
+E>remote_latest repo url is /var/folders/t2/f752cs7n5nn74vyb8q8sl5880000gn/T/jki62tkw.q27/testrepo
+E>/Users/petar/src/personal/frog/output/agent/git_scripts/git_remote_latest_rev.rb:3: warning: Insecure world writable dir /usr/local/bin in PATH, mode 040777
+S>f41ddf4af5000e11a91926b22dfe26e2dd81b02d	refs/heads/master
+E>
+S>
+E>/Users/petar/src/personal/frog/output/agent/git_scripts/git_fetch.rb:4: warning: Insecure world writable dir /usr/local/bin in PATH, mode 040777
+S>Initialized empty Git repository in /private/tmp/ibzbvqhh.39h/lkoau8b0.46m/.git/
+S>Fetching origin
+E>From /var/folders/t2/f752cs7n5nn74vyb8q8sl5880000gn/T/jki62tkw.q27/testrepo
+E> * [new branch]      master     -> origin/master
+E>Already on 'master'
+S>Branch master set up to track remote branch master from origin.
+E>Note: checking out 'f41ddf4af5000e11a91926b22dfe26e2dd81b02d'.
+E>
+E>You are in 'detached HEAD' state. You can look around, make experimental
+E>changes and commit them, and you can discard any commits you make in this
+E>state without impacting any branches by performing another checkout.
+E>
+E>If you want to create a new branch to retain commits you create, you may
+E>do so (now or later) by using -b with the checkout command again. Example:
+E>
+E>  git checkout -b new_branch_name
+E>
+E>HEAD is now at f41ddf4... commit 1
+S>commit 1
+E>
+S>
+Repo url is: /var/folders/t2/f752cs7n5nn74vyb8q8sl5880000gn/T/jki62tkw.q27/testrepo
+E>remote_latest repo url is /var/folders/t2/f752cs7n5nn74vyb8q8sl5880000gn/T/jki62tkw.q27/testrepo
+E>/Users/petar/src/personal/frog/output/agent/git_scripts/git_remote_latest_rev.rb:3: warning: Insecure world writable dir /usr/local/bin in PATH, mode 040777
+S>ee02e2fa76aa1960ebc5957ad1087647dfe0fe3a	refs/heads/master
+E>
+S>
+E>/Users/petar/src/personal/frog/output/agent/git_scripts/git_fetch.rb:4: warning: Insecure world writable dir /usr/local/bin in PATH, mode 040777
+S>Initialized empty Git repository in /private/tmp/ibzbvqhh.39h/4yb1v7wz.fsb/.git/
+S>Fetching origin
+E>From /var/folders/t2/f752cs7n5nn74vyb8q8sl5880000gn/T/jki62tkw.q27/testrepo
+E> * [new branch]      master     -> origin/master
+E>Already on 'master'
+S>Branch master set up to track remote branch master from origin.
+E>Note: checking out 'ee02e2fa76aa1960ebc5957ad1087647dfe0fe3a'.
+E>
+E>You are in 'detached HEAD' state. You can look around, make experimental
+E>changes and commit them, and you can discard any commits you make in this
+E>state without impacting any branches by performing another checkout.
+E>
+E>If you want to create a new branch to retain commits you create, you may
+E>do so (now or later) by using -b with the checkout command again. Example:
+E>
+E>  git checkout -b new_branch_name
+E>
+E>HEAD is now at ee02e2f... commit 2
+S>commit 2
+E>
+S>
+Repo url is: /var/folders/t2/f752cs7n5nn74vyb8q8sl5880000gn/T/jil8wzgk.5p3/testrepo
+E>remote_latest repo url is /var/folders/t2/f752cs7n5nn74vyb8q8sl5880000gn/T/jil8wzgk.5p3/testrepo
+E>/Users/petar/src/personal/frog/output/agent/git_scripts/git_remote_latest_rev.rb:3: warning: Insecure world writable dir /usr/local/bin in PATH, mode 040777
+S>3eb9d57229eb691de37a90c6e41cfe5a6ba3c378	refs/heads/master
+E>
+S>
+E>/Users/petar/src/personal/frog/output/agent/git_scripts/git_fetch.rb:4: warning: Insecure world writable dir /usr/local/bin in PATH, mode 040777
+S>Initialized empty Git repository in /private/tmp/ibzbvqhh.39h/g9gb8r53.441/.git/
+S>Fetching origin
+E>From /var/folders/t2/f752cs7n5nn74vyb8q8sl5880000gn/T/jil8wzgk.5p3/testrepo
+E> * [new branch]      master     -> origin/master
+E>Already on 'master'
+S>Branch master set up to track remote branch master from origin.
+E>Note: checking out '3eb9d57229eb691de37a90c6e41cfe5a6ba3c378'.
+E>
+E>You are in 'detached HEAD' state. You can look around, make experimental
+E>changes and commit them, and you can discard any commits you make in this
+E>state without impacting any branches by performing another checkout.
+E>
+E>If you want to create a new branch to retain commits you create, you may
+E>do so (now or later) by using -b with the checkout command again. Example:
+E>
+E>  git checkout -b new_branch_name
+E>
+E>HEAD is now at 3eb9d57... commit on project p1 for adding task t1
+S>commit on project p1 for adding task t1
+E>
+S>
+Repo url is: /var/folders/t2/f752cs7n5nn74vyb8q8sl5880000gn/T/jil8wzgk.5p3/testrepo
+E>remote_latest repo url is /var/folders/t2/f752cs7n5nn74vyb8q8sl5880000gn/T/jil8wzgk.5p3/testrepo
+E>/Users/petar/src/personal/frog/output/agent/git_scripts/git_remote_latest_rev.rb:3: warning: Insecure world writable dir /usr/local/bin in PATH, mode 040777
+S>3eb9d57229eb691de37a90c6e41cfe5a6ba3c378	refs/heads/master
+E>
+S>
+S>4e4c4d563fa79d9a008be459fe0ffe3d   0.00623599998653
+E>
+S>
+Repo url is: /var/folders/t2/f752cs7n5nn74vyb8q8sl5880000gn/T/jil8wzgk.5p3/testrepo
+E>remote_latest repo url is /var/folders/t2/f752cs7n5nn74vyb8q8sl5880000gn/T/jil8wzgk.5p3/testrepo
+E>/Users/petar/src/personal/frog/output/agent/git_scripts/git_remote_latest_rev.rb:3: warning: Insecure world writable dir /usr/local/bin in PATH, mode 040777
+S>3eb9d57229eb691de37a90c6e41cfe5a6ba3c378	refs/heads/master
+E>
+S>
+S>4e4c4d563fa79d9a008be459fe0ffe3d   0.00623599998653
+E>
+S>
+E>
+S>
+About to take down process 38083
+About to take down process 38083
+Repo url is: /var/folders/t2/f752cs7n5nn74vyb8q8sl5880000gn/T/jil8wzgk.5p3/testrepo
+E>remote_latest repo url is /var/folders/t2/f752cs7n5nn74vyb8q8sl5880000gn/T/jil8wzgk.5p3/testrepo
+E>/Users/petar/src/personal/frog/output/agent/git_scripts/git_remote_latest_rev.rb:3: warning: Insecure world writable dir /usr/local/bin in PATH, mode 040777
+S>3eb9d57229eb691de37a90c6e41cfe5a6ba3c378	refs/heads/master
+E>
+S>
+Repo url is: /var/folders/t2/f752cs7n5nn74vyb8q8sl5880000gn/T/m9jrd90a.2wf/testrepo
+E>remote_latest repo url is /var/folders/t2/f752cs7n5nn74vyb8q8sl5880000gn/T/m9jrd90a.2wf/testrepo
+E>/Users/petar/src/personal/frog/output/agent/git_scripts/git_remote_latest_rev.rb:3: warning: Insecure world writable dir /usr/local/bin in PATH, mode 040777
+S>6cfbd71d8a82ed82a0c94c70229dd14aee824ee2	refs/heads/master
+E>
+S>
+Repo url is: /var/folders/t2/f752cs7n5nn74vyb8q8sl5880000gn/T/rjccqve0.1a9/testrepo
+E>remote_latest repo url is /var/folders/t2/f752cs7n5nn74vyb8q8sl5880000gn/T/rjccqve0.1a9/testrepo
+E>/Users/petar/src/personal/frog/output/agent/git_scripts/git_remote_latest_rev.rb:3: warning: Insecure world writable dir /usr/local/bin in PATH, mode 040777
+S>832b2fac5837a27d8401f5a45d2a74419cb5d968	refs/heads/master
+E>
+S>
+Repo url is: /var/folders/t2/f752cs7n5nn74vyb8q8sl5880000gn/T/w2v3v925.d7e/testrepo
+E>remote_latest repo url is /var/folders/t2/f752cs7n5nn74vyb8q8sl5880000gn/T/w2v3v925.d7e/testrepo
+E>/Users/petar/src/personal/frog/output/agent/git_scripts/git_remote_latest_rev.rb:3: warning: Insecure world writable dir /usr/local/bin in PATH, mode 040777
+S>5e89d67466961e2abb4fc3171bffc4d381934975	refs/heads/master
+E>
+S>
+E>/Users/petar/src/personal/frog/output/agent/git_scripts/git_fetch.rb:4: warning: Insecure world writable dir /usr/local/bin in PATH, mode 040777
+S>Initialized empty Git repository in /private/tmp/ibzbvqhh.39h/1pr5mxc5.3d1/.git/
+S>Fetching origin
+E>From /var/folders/t2/f752cs7n5nn74vyb8q8sl5880000gn/T/m9jrd90a.2wf/testrepo
+E> * [new branch]      master     -> origin/master
+E>Already on 'master'
+S>Branch master set up to track remote branch master from origin.
+E>Note: checking out '6cfbd71d8a82ed82a0c94c70229dd14aee824ee2'.
+E>
+E>You are in 'detached HEAD' state. You can look around, make experimental
+E>changes and commit them, and you can discard any commits you make in this
+E>state without impacting any branches by performing another checkout.
+E>
+E>If you want to create a new branch to retain commits you create, you may
+E>do so (now or later) by using -b with the checkout command again. Example:
+E>
+E>  git checkout -b new_branch_name
+E>
+E>HEAD is now at 6cfbd71... commit on project p2 for adding task t2
+S>commit on project p2 for adding task t2
+E>
+S>
+E>/Users/petar/src/personal/frog/output/agent/git_scripts/git_fetch.rb:4: warning: Insecure world writable dir /usr/local/bin in PATH, mode 040777
+S>Initialized empty Git repository in /private/tmp/ibzbvqhh.39h/1h6p7gwa.k2z/.git/
+S>Fetching origin
+E>From /var/folders/t2/f752cs7n5nn74vyb8q8sl5880000gn/T/rjccqve0.1a9/testrepo
+E> * [new branch]      master     -> origin/master
+E>Already on 'master'
+S>Branch master set up to track remote branch master from origin.
+E>Note: checking out '832b2fac5837a27d8401f5a45d2a74419cb5d968'.
+E>
+E>You are in 'detached HEAD' state. You can look around, make experimental
+E>changes and commit them, and you can discard any commits you make in this
+E>state without impacting any branches by performing another checkout.
+E>
+E>If you want to create a new branch to retain commits you create, you may
+E>do so (now or later) by using -b with the checkout command again. Example:
+E>
+E>  git checkout -b new_branch_name
+E>
+E>HEAD is now at 832b2fa... commit on project p3 for adding task t3
+S>commit on project p3 for adding task t3
+E>
+S>
+E>/Users/petar/src/personal/frog/output/agent/git_scripts/git_fetch.rb:4: warning: Insecure world writable dir /usr/local/bin in PATH, mode 040777
+S>Initialized empty Git repository in /private/tmp/ibzbvqhh.39h/5u62ee9v.kao/.git/
+S>Fetching origin
+E>From /var/folders/t2/f752cs7n5nn74vyb8q8sl5880000gn/T/w2v3v925.d7e/testrepo
+E> * [new branch]      master     -> origin/master
+E>Already on 'master'
+S>Branch master set up to track remote branch master from origin.
+E>Note: checking out '5e89d67466961e2abb4fc3171bffc4d381934975'.
+E>
+E>You are in 'detached HEAD' state. You can look around, make experimental
+E>changes and commit them, and you can discard any commits you make in this
+E>state without impacting any branches by performing another checkout.
+E>
+E>If you want to create a new branch to retain commits you create, you may
+E>do so (now or later) by using -b with the checkout command again. Example:
+E>
+E>  git checkout -b new_branch_name
+E>
+E>HEAD is now at 5e89d67... commit on project p1 for adding task t1
+S>commit on project p1 for adding task t1
+E>
+S>
+Repo url is: /var/folders/t2/f752cs7n5nn74vyb8q8sl5880000gn/T/m9jrd90a.2wf/testrepo
+E>remote_latest repo url is /var/folders/t2/f752cs7n5nn74vyb8q8sl5880000gn/T/m9jrd90a.2wf/testrepo
+E>/Users/petar/src/personal/frog/output/agent/git_scripts/git_remote_latest_rev.rb:3: warning: Insecure world writable dir /usr/local/bin in PATH, mode 040777
+S>6cfbd71d8a82ed82a0c94c70229dd14aee824ee2	refs/heads/master
+E>
+S>
+Repo url is: /var/folders/t2/f752cs7n5nn74vyb8q8sl5880000gn/T/rjccqve0.1a9/testrepo
+E>remote_latest repo url is /var/folders/t2/f752cs7n5nn74vyb8q8sl5880000gn/T/rjccqve0.1a9/testrepo
+E>/Users/petar/src/personal/frog/output/agent/git_scripts/git_remote_latest_rev.rb:3: warning: Insecure world writable dir /usr/local/bin in PATH, mode 040777
+S>832b2fac5837a27d8401f5a45d2a74419cb5d968	refs/heads/master
+E>
+S>
+Repo url is: /var/folders/t2/f752cs7n5nn74vyb8q8sl5880000gn/T/w2v3v925.d7e/testrepo
+E>remote_latest repo url is /var/folders/t2/f752cs7n5nn74vyb8q8sl5880000gn/T/w2v3v925.d7e/testrepo
+E>/Users/petar/src/personal/frog/output/agent/git_scripts/git_remote_latest_rev.rb:3: warning: Insecure world writable dir /usr/local/bin in PATH, mode 040777
+S>5e89d67466961e2abb4fc3171bffc4d381934975	refs/heads/master
+E>
+S>
+Repo url is: /var/folders/t2/f752cs7n5nn74vyb8q8sl5880000gn/T/y4xrixkx.qou/testrepo
+E>remote_latest repo url is /var/folders/t2/f752cs7n5nn74vyb8q8sl5880000gn/T/y4xrixkx.qou/testrepo
+E>/Users/petar/src/personal/frog/output/agent/git_scripts/git_remote_latest_rev.rb:3: warning: Insecure world writable dir /usr/local/bin in PATH, mode 040777
+S>e0a4bb143966db46b82038d10f3bdbf66ab92d65	refs/heads/master
+E>
+S>
+Repo url is: /var/folders/t2/f752cs7n5nn74vyb8q8sl5880000gn/T/5x3e81h8.yiw/testrepo
+E>remote_latest repo url is /var/folders/t2/f752cs7n5nn74vyb8q8sl5880000gn/T/5x3e81h8.yiw/testrepo
+E>/Users/petar/src/personal/frog/output/agent/git_scripts/git_remote_latest_rev.rb:3: warning: Insecure world writable dir /usr/local/bin in PATH, mode 040777
+S>3dfa909899105be3cfea8812367be9b69bc53925	refs/heads/master
+E>
+S>
+Repo url is: /var/folders/t2/f752cs7n5nn74vyb8q8sl5880000gn/T/las3gv5z.efs/testrepo
+E>remote_latest repo url is /var/folders/t2/f752cs7n5nn74vyb8q8sl5880000gn/T/las3gv5z.efs/testrepo
+E>/Users/petar/src/personal/frog/output/agent/git_scripts/git_remote_latest_rev.rb:3: warning: Insecure world writable dir /usr/local/bin in PATH, mode 040777
+S>22222f8b7fc097a2f87db82afeee4252e053f292	refs/heads/master
+E>
+S>
+E>/Users/petar/src/personal/frog/output/agent/git_scripts/git_fetch.rb:4: warning: Insecure world writable dir /usr/local/bin in PATH, mode 040777
+S>Initialized empty Git repository in /private/tmp/ibzbvqhh.39h/we24ebwi.eqi/.git/
+S>Fetching origin
+E>From /var/folders/t2/f752cs7n5nn74vyb8q8sl5880000gn/T/y4xrixkx.qou/testrepo
+E> * [new branch]      master     -> origin/master
+E>Already on 'master'
+S>Branch master set up to track remote branch master from origin.
+E>Note: checking out 'e0a4bb143966db46b82038d10f3bdbf66ab92d65'.
+E>
+E>You are in 'detached HEAD' state. You can look around, make experimental
+E>changes and commit them, and you can discard any commits you make in this
+E>state without impacting any branches by performing another checkout.
+E>
+E>If you want to create a new branch to retain commits you create, you may
+E>do so (now or later) by using -b with the checkout command again. Example:
+E>
+E>  git checkout -b new_branch_name
+E>
+E>HEAD is now at e0a4bb1... commit on project p3 for adding task t3
+S>commit on project p3 for adding task t3
+E>
+S>
+E>/Users/petar/src/personal/frog/output/agent/git_scripts/git_fetch.rb:4: warning: Insecure world writable dir /usr/local/bin in PATH, mode 040777
+S>Initialized empty Git repository in /private/tmp/ibzbvqhh.39h/ssysc61j.no6/.git/
+S>Fetching origin
+E>From /var/folders/t2/f752cs7n5nn74vyb8q8sl5880000gn/T/5x3e81h8.yiw/testrepo
+E> * [new branch]      master     -> origin/master
+E>Already on 'master'
+S>Branch master set up to track remote branch master from origin.
+E>Note: checking out '3dfa909899105be3cfea8812367be9b69bc53925'.
+E>
+E>You are in 'detached HEAD' state. You can look around, make experimental
+E>changes and commit them, and you can discard any commits you make in this
+E>state without impacting any branches by performing another checkout.
+E>
+E>If you want to create a new branch to retain commits you create, you may
+E>do so (now or later) by using -b with the checkout command again. Example:
+E>
+E>  git checkout -b new_branch_name
+E>
+E>HEAD is now at 3dfa909... commit on project p1 for adding task t1
+S>commit on project p1 for adding task t1
+E>
+S>
+E>/Users/petar/src/personal/frog/output/agent/git_scripts/git_fetch.rb:4: warning: Insecure world writable dir /usr/local/bin in PATH, mode 040777
+S>Initialized empty Git repository in /private/tmp/ibzbvqhh.39h/ftrrzi0o.g2g/.git/
+S>Fetching origin
+E>From /var/folders/t2/f752cs7n5nn74vyb8q8sl5880000gn/T/las3gv5z.efs/testrepo
+E> * [new branch]      master     -> origin/master
+E>Already on 'master'
+S>Branch master set up to track remote branch master from origin.
+E>Note: checking out '22222f8b7fc097a2f87db82afeee4252e053f292'.
+E>
+E>You are in 'detached HEAD' state. You can look around, make experimental
+E>changes and commit them, and you can discard any commits you make in this
+E>state without impacting any branches by performing another checkout.
+E>
+E>If you want to create a new branch to retain commits you create, you may
+E>do so (now or later) by using -b with the checkout command again. Example:
+E>
+E>  git checkout -b new_branch_name
+E>
+E>HEAD is now at 22222f8... commit on project p2 for adding task t2
+S>commit on project p2 for adding task t2
+E>
+S>
+Repo url is: /var/folders/t2/f752cs7n5nn74vyb8q8sl5880000gn/T/y4xrixkx.qou/testrepo
+E>remote_latest repo url is /var/folders/t2/f752cs7n5nn74vyb8q8sl5880000gn/T/y4xrixkx.qou/testrepo
+E>/Users/petar/src/personal/frog/output/agent/git_scripts/git_remote_latest_rev.rb:3: warning: Insecure world writable dir /usr/local/bin in PATH, mode 040777
+S>e0a4bb143966db46b82038d10f3bdbf66ab92d65	refs/heads/master
+E>
+S>
+Repo url is: /var/folders/t2/f752cs7n5nn74vyb8q8sl5880000gn/T/5x3e81h8.yiw/testrepo
+E>remote_latest repo url is /var/folders/t2/f752cs7n5nn74vyb8q8sl5880000gn/T/5x3e81h8.yiw/testrepo
+E>/Users/petar/src/personal/frog/output/agent/git_scripts/git_remote_latest_rev.rb:3: warning: Insecure world writable dir /usr/local/bin in PATH, mode 040777
+S>3dfa909899105be3cfea8812367be9b69bc53925	refs/heads/master
+E>
+S>
+Repo url is: /var/folders/t2/f752cs7n5nn74vyb8q8sl5880000gn/T/las3gv5z.efs/testrepo
+E>remote_latest repo url is /var/folders/t2/f752cs7n5nn74vyb8q8sl5880000gn/T/las3gv5z.efs/testrepo
+E>/Users/petar/src/personal/frog/output/agent/git_scripts/git_remote_latest_rev.rb:3: warning: Insecure world writable dir /usr/local/bin in PATH, mode 040777
+S>22222f8b7fc097a2f87db82afeee4252e053f292	refs/heads/master
+E>
+S>
+Repo url is: /var/folders/t2/f752cs7n5nn74vyb8q8sl5880000gn/T/yziq4ueh.r45/testrepo
+E>remote_latest repo url is /var/folders/t2/f752cs7n5nn74vyb8q8sl5880000gn/T/yziq4ueh.r45/testrepo
+E>/Users/petar/src/personal/frog/output/agent/git_scripts/git_remote_latest_rev.rb:3: warning: Insecure world writable dir /usr/local/bin in PATH, mode 040777
+S>64efc190ef3333427136824f71b0396936a0d06d	refs/heads/master
+E>
+S>
+E>/Users/petar/src/personal/frog/output/agent/git_scripts/git_fetch.rb:4: warning: Insecure world writable dir /usr/local/bin in PATH, mode 040777
+S>Initialized empty Git repository in /private/tmp/ibzbvqhh.39h/x0xbds43.vg1/.git/
+S>Fetching origin
+E>From /var/folders/t2/f752cs7n5nn74vyb8q8sl5880000gn/T/yziq4ueh.r45/testrepo
+E> * [new branch]      master     -> origin/master
+E>Already on 'master'
+S>Branch master set up to track remote branch master from origin.
+E>Note: checking out '64efc190ef3333427136824f71b0396936a0d06d'.
+E>
+E>You are in 'detached HEAD' state. You can look around, make experimental
+E>changes and commit them, and you can discard any commits you make in this
+E>state without impacting any branches by performing another checkout.
+E>
+E>If you want to create a new branch to retain commits you create, you may
+E>do so (now or later) by using -b with the checkout command again. Example:
+E>
+E>  git checkout -b new_branch_name
+E>
+E>HEAD is now at 64efc19... commit on project p1 for adding task t1
+S>commit on project p1 for adding task t1
+E>
+S>
