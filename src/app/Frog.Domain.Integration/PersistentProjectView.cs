@@ -129,8 +129,14 @@ namespace Frog.Domain.Integration
 
         private IRiakCluster GetConnectionManager()
         {
-            return RiakCluster.FromConfig("riakConfig", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Riak.config"));
-        }
+			if (cluster == null){
+            	cluster = RiakCluster.FromConfig("riakConfig", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Riak.config"));
+			}
+            return cluster;
+		}
+		
+		IRiakCluster cluster;
+		
         private static string KeyGenerator(string repoUrl)
         {
             return string.Concat(
