@@ -79,9 +79,5 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Riak.config">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 </Project>

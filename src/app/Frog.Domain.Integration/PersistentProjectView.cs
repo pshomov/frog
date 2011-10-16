@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using CorrugatedIron;
+using CorrugatedIron.Exceptions;
 using CorrugatedIron.Models;
 using Frog.Domain.UI;
 
@@ -12,11 +13,15 @@ namespace Frog.Domain.Integration
 {
     public class PersistentProjectView : ProjectView
     {
+        private readonly string host;
+        private readonly int port;
         private readonly string idsBucket;
         private readonly string repoBucket;
 
         public PersistentProjectView(string host, int port, string IdsBucket, string repoBucket)
         {
+            this.host = host;
+            this.port = port;
             this.idsBucket = IdsBucket;
             this.repoBucket = repoBucket;
         }
@@ -28,8 +33,9 @@ namespace Frog.Domain.Integration
                 connectionManager.Get(idsBucket, id.ToString());
             if (riakResponse.IsSuccess && riakResponse.ResultCode == ResultCode.Success)
                 return riakResponse.Value.GetObject<BuildStatus>();
-            if (riakResponse.IsSuccess && riakResponse.ResultCode == ResultCode.NotFound)
+            if (!riakResponse.IsSuccess && riakResponse.ResultCode == ResultCode.NotFound)
             	throw new BuildNotFoundException();
+            throw new RiakException(riakResponse.ErrorMessage);
         }
 
         public Guid GetCurrentBuild(string repoUrl)
@@ -80,8 +86,7 @@ namespace Frog.Domain.Integration
             var a = GetBuildStatus(id);
             a.BuildStarted(taskInfos);
 
-            var cl = RiakCluster.FromConfig("riakConfig", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Riak.config"));
-            var client = cl.CreateClient();
+            var client = GetConnectionManager().CreateClient();
             client.Put(new RiakObject(idsBucket, id.ToString(), a));
             var b = GetBuildStatus(id);
 			return;
@@ -130,8 +135,22 @@ namespace Frog.Domain.Integration
 
         private IRiakCluster GetConnectionManager()
         {
-			if (cluster == null){
-            	cluster = RiakCluster.FromConfig("riakConfig", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Riak.config"));
+			if (cluster == null)
+			{
+			    var tempFileName = Path.GetTempFileName();
+                File.AppendAllText(tempFileName, string.Format(@"<?xml version=""1.0"" encoding=""utf-8"" ?>
+<configuration>
+  <configSections>
+    <section name=""riakConfig"" type=""CorrugatedIron.Config.RiakClusterConfiguration, CorrugatedIron""/>
+  </configSections>
+  <riakConfig nodePollTime=""5000"" defaultRetryWaitTime=""200"" defaultRetryCount=""3"">
+    <nodes>
+      <node name=""dev1"" hostAddress=""{0}"" pbcPort=""{1}"" restScheme=""http"" restPort=""8098"" poolSize=""20"" />
+    </nodes>
+  </riakConfig>
+</configuration>
+", host, port));
+			    cluster = RiakCluster.FromConfig("riakConfig", tempFileName);
 			}
             return cluster;
 		}
