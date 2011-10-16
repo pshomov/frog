@@ -28,7 +28,8 @@ namespace Frog.Domain.Integration
                 connectionManager.Get(idsBucket, id.ToString());
             if (riakResponse.IsSuccess && riakResponse.ResultCode == ResultCode.Success)
                 return riakResponse.Value.GetObject<BuildStatus>();
-            throw new BuildNotFoundException();
+            if (riakResponse.IsSuccess && riakResponse.ResultCode == ResultCode.NotFound)
+            	throw new BuildNotFoundException();
         }
 
         public Guid GetCurrentBuild(string repoUrl)
