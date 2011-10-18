@@ -11,6 +11,7 @@ using Frog.Domain.UI;
 
 namespace Frog.Domain.Integration
 {
+
     public class PersistentProjectView : ProjectView
     {
         private readonly string host;
@@ -29,13 +30,14 @@ namespace Frog.Domain.Integration
         public BuildStatus GetBuildStatus(Guid id)
         {
             var connectionManager = GetConnectionManager().CreateClient();
-            var riakResponse =
-                connectionManager.Get(idsBucket, id.ToString());
-            if (riakResponse.IsSuccess && riakResponse.ResultCode == ResultCode.Success)
-                return riakResponse.Value.GetObject<BuildStatus>();
-            if (!riakResponse.IsSuccess && riakResponse.ResultCode == ResultCode.NotFound)
-            	throw new BuildNotFoundException();
-            throw new RiakException(riakResponse.ErrorMessage);
+            try
+            {
+                return connectionManager.Get<BuildStatus>(idsBucket, id.ToString());
+            }
+            catch (KeyNotFoundException)
+            {
+                throw new BuildNotFoundException();
+            }
         }
 
         public Guid GetCurrentBuild(string repoUrl)

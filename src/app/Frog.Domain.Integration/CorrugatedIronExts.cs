@@ -1,0 +1,34 @@
+using CorrugatedIron;
+using CorrugatedIron.Exceptions;
+
+namespace Frog.Domain.Integration
+{
+    public static class CorrugatedIronExts
+    {
+        public static T Get<T>(this IRiakClient client, string bucket, string key)
+        {
+            var result = client.Get(bucket, key);
+            if (result.IsSuccess && result.ResultCode == ResultCode.Success)
+            {
+                return result.Value.GetObject<T>();
+            }
+            if (!result.IsSuccess && result.ResultCode == ResultCode.NotFound)
+            {
+                throw new KeyNotFoundException(result.ErrorMessage);
+            }
+            throw new RiakException(result.ErrorMessage);
+        }
+    }
+    public class KeyNotFoundException : RiakException
+    {
+        public KeyNotFoundException(uint errorCode, string errorMessage)
+            : base(errorCode, errorMessage)
+        {
+        }
+
+        public KeyNotFoundException(string errorMessage)
+            : base(errorMessage)
+        {
+        }
+    }
+}
