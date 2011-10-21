@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.RiakClient;
-using System.Data.RiakClient.Models;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Web.Script.Serialization;
 using Frog.Domain.RepositoryTracker;
-using riak.net.Models;
-using riak.net.ProtoModels;
 
 namespace Frog.Domain.Integration
 {
@@ -16,7 +9,6 @@ namespace Frog.Domain.Integration
         private readonly string host;
         private readonly int port;
         private readonly string bucket;
-        readonly JavaScriptSerializer jsonBridge = new JavaScriptSerializer();
 
         public RiakProjectRepository(string host, int port, string bucket)
         {
@@ -27,87 +19,50 @@ namespace Frog.Domain.Integration
 
         public void TrackRepository(string repoUrl)
         {
-            var connectionManager = GetConnectionManager();
-            var riakConnection = new RiakContentRepository(connectionManager);
-            var response = riakConnection.Persist(new RiakPersistRequest
-                                                      {
-                                                          Bucket = bucket,
-                                                          Key = KeyGenerator(repoUrl),
-                                                          Content = new RiakContent
-                                                                        {
-                                                                            Value = jsonBridge.Serialize(new RepositoryDocument{revision = "" , projecturl = repoUrl}).GetBytes()
-                                                                        }
-                                                      }
-                );
-            if (response.ResponseCode != RiakResponseCode.Successful) throw new Exception("ouch, where is my data?");
+            var client = Riak.GetConnectionManager(host, port).CreateClient();
+            client.Put(bucket, Riak.KeyGenerator(repoUrl),
+                       new RepositoryDocument {revision = "", projecturl = repoUrl});
         }
 
         public IEnumerable<RepositoryDocument> AllProjects
         {
             get
             {
-                var connectionManager = GetConnectionManager();
-                var riakConnection = new RiakBucketRepository(connectionManager);
-                var keysFor = riakConnection.ListKeysFor(new ListKeysRequest {Bucket = bucket.GetBytes()});
-                if (keysFor.ResponseCode != RiakResponseCode.Successful)
-                    throw new Exception("ouch, where is my data?");
-                var riakContentRepository = new RiakContentRepository(connectionManager);
-                var riakResponse =
-                    riakContentRepository.Find(new RiakFindRequest {Bucket = bucket, Keys = keysFor.Result, ReadValue = 1});
-                return riakResponse.Result.Select(document => jsonBridge.Deserialize<RepositoryDocument>(document.Value));
+                var client = Riak.GetConnectionManager(host, port).CreateClient();
+                var keys = client.ListKeyz(bucket);
+                return keys.Select(s => client.Get<RepositoryDocument>(bucket, s));
             }
         }
 
         public void UpdateLastKnownRevision(string repoUrl, string revision)
         {
-            RiakConnectionManager connectionManager = GetConnectionManager();
-            var riakConnection = new RiakContentRepository(connectionManager);
-            var riakResponse = riakConnection.Find(new RiakFindRequest { Bucket = bucket, Keys = new []{KeyGenerator(repoUrl)}, ReadValue = 1 });
-            var doc = jsonBridge.Deserialize<RepositoryDocument>(riakResponse.Result[0].Value);
+            var connectionManager = Riak.GetConnectionManager(host, port).CreateClient();
+            var doc = connectionManager.Get<RepositoryDocument>(bucket, Riak.KeyGenerator(repoUrl));
             doc.revision = revision;
             doc.CheckForUpdateRequested = false;
-            riakConnection.Persist(new RiakPersistRequest {Bucket = bucket, Key = KeyGenerator(repoUrl), Content = new RiakContent {Value = jsonBridge.Serialize(doc).GetBytes()}});
+            connectionManager.Put(bucket, Riak.KeyGenerator(repoUrl), doc);
         }
 
         public void RemoveProject(string repoUrl)
         {
-            RiakConnectionManager connectionManager = GetConnectionManager();
-            var riakConnection = new RiakContentRepository(connectionManager);
-            riakConnection.Detach(new RiakDetachRequest() { Bucket = bucket, Key = KeyGenerator(repoUrl) });
+            var connectionManager = Riak.GetConnectionManager(host, port).CreateClient();
+            connectionManager.Delete(bucket, Riak.KeyGenerator(repoUrl));
         }
 
         public void ProjectCheckInProgress(string repoUrl)
         {
-            RiakConnectionManager connectionManager = GetConnectionManager();
-            var riakConnection = new RiakContentRepository(connectionManager);
-            var riakResponse = riakConnection.Find(new RiakFindRequest { Bucket = bucket, Keys = new[] { KeyGenerator(repoUrl) }, ReadValue = 1 });
-            var doc = jsonBridge.Deserialize<RepositoryDocument>(riakResponse.Result[0].Value);
+            var client = Riak.GetConnectionManager(host, port).CreateClient();
+            var doc = client.Get<RepositoryDocument>(bucket, Riak.KeyGenerator(repoUrl));
             doc.CheckForUpdateRequested = true;
-            riakConnection.Persist(new RiakPersistRequest { Bucket = bucket, Key = KeyGenerator(repoUrl), Content = new RiakContent { Value = jsonBridge.Serialize(doc).GetBytes() } });
+            client.Put(bucket, Riak.KeyGenerator(repoUrl), doc);
         }
 
         public void ProjectCheckComplete(string repoUrl)
         {
-            RiakConnectionManager connectionManager = GetConnectionManager();
-            var riakConnection = new RiakContentRepository(connectionManager);
-            var riakResponse = riakConnection.Find(new RiakFindRequest { Bucket = bucket, Keys = new[] { KeyGenerator(repoUrl) }, ReadValue = 1 });
-            var doc = jsonBridge.Deserialize<RepositoryDocument>(riakResponse.Result[0].Value);
+            var client = Riak.GetConnectionManager(host, port).CreateClient();
+            var doc = client.Get<RepositoryDocument>(bucket, Riak.KeyGenerator(repoUrl));
             doc.CheckForUpdateRequested = false;
-            riakConnection.Persist(new RiakPersistRequest { Bucket = bucket, Key = KeyGenerator(repoUrl), Content = new RiakContent { Value = jsonBridge.Serialize(doc).GetBytes() } });
-        }
-
-        private RiakConnectionManager GetConnectionManager()
-        {
-            var connectionManager = RiakConnectionManager.FromConfiguration;
-            connectionManager.AddConnection(host, port);
-            return connectionManager;
-        }
-
-        private static string KeyGenerator(string repoUrl)
-        {
-            return string.Concat(
-                new MD5CryptoServiceProvider().ComputeHash(
-                    repoUrl.GetBytes()).Select(b => b.ToString("x2")));
+            client.Put(bucket, Riak.KeyGenerator(repoUrl), doc);
         }
     }
 }

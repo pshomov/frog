@@ -55,6 +55,7 @@
     <Compile Include="CorrugatedIronExts.cs" />
     <Compile Include="PersistentProjectView.cs" />
     <Compile Include="RabbitMQBus.cs" />
+    <Compile Include="Riak.cs" />
     <Compile Include="RiakProjectRepository.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
