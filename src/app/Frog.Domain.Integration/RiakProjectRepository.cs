@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Frog.Domain.RepositoryTracker;
 
@@ -63,6 +64,12 @@ namespace Frog.Domain.Integration
             var doc = client.Get<RepositoryDocument>(bucket, Riak.KeyGenerator(repoUrl));
             doc.CheckForUpdateRequested = false;
             client.Put(bucket, Riak.KeyGenerator(repoUrl), doc);
+        }
+
+        public void WipeBucket()
+        {
+            var client = Riak.GetConnectionManager(host, port).CreateClient();
+            client.DeleteBucket(bucket);
         }
     }
 }

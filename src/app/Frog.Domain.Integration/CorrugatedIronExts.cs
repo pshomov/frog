@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using CorrugatedIron;
 using CorrugatedIron.Exceptions;
@@ -10,8 +11,9 @@ namespace Frog.Domain.Integration
         public static T Get<T>(this IRiakClient client, string bucket, string key)
         {
             var result = client.Get(bucket, key);
-            if (result.IsSuccess && result.ResultCode == ResultCode.Success)
+            if (result.IsSuccess)
             {
+                Console.WriteLine("({0})",result.Value.ContentType);
                 return result.Value.GetObject<T>();
             }
             if (!result.IsSuccess && result.ResultCode == ResultCode.NotFound)

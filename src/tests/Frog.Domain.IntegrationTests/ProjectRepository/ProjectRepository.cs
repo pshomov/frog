@@ -16,6 +16,7 @@ namespace Frog.Domain.IntegrationTests.ProjectRepository
         {
             riakProject = GetProjectRepository();
             projectId = Guid.NewGuid().ToString();
+            riakProject.WipeBucket();
         }
 
         protected abstract IProjectsRepository GetProjectRepository();

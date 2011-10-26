@@ -40,5 +40,10 @@ namespace Frog.Domain.RepositoryTracker
         {
             trackedRepos[repoUrl].CheckForUpdateRequested = false;
         }
+
+        public void WipeBucket()
+        {
+            trackedRepos.Clear();
+        }
     }
 }
