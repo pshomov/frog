@@ -13,7 +13,6 @@ namespace Frog.Domain.Integration
             var result = client.Get(bucket, key);
             if (result.IsSuccess)
             {
-                Console.WriteLine("({0})",result.Value.ContentType);
                 return result.Value.GetObject<T>();
             }
             if (!result.IsSuccess && result.ResultCode == ResultCode.NotFound)
