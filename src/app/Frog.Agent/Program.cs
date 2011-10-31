@@ -9,6 +9,7 @@ using Frog.Domain.EventsArchiver;
 using Frog.Domain.Integration;
 using Frog.Domain.RevisionChecker;
 using Frog.Domain.TaskSources;
+using Frog.Support;
 using SimpleCQRS;
 
 namespace Frog.Agent
@@ -43,7 +44,7 @@ namespace Frog.Agent
         }
         static IBus SetupBus()
         {
-            return new RabbitMQBus(Environment.GetEnvironmentVariable("RUNZ_RABBITMQ_SERVER") ?? "localhost");
+            return new RabbitMQBus(OSHelpers.RabbitHost());
         }
 
         static WorkingAreaGoverner SetupWorkingAreaGovernor()

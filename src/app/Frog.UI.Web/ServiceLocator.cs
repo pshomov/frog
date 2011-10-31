@@ -8,6 +8,6 @@ namespace Frog.UI.Web
     {
         public static ProjectView Report { get; set; }
         public static IBus Bus { get; set; }
-        public static ConcurrentQueue<Message> AllMassages { get; set; }
+        public static ConcurrentQueue<Message> AllMessages { get; set; }
     }
 }

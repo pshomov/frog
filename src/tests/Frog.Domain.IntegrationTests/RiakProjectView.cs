@@ -12,7 +12,6 @@ namespace Frog.Domain.IntegrationTests
     [TestFixture]
     public class RiakProjectView
     {
-        private const int RiakPort = 8087;
         private ProjectView view;
 
         [SetUp]
@@ -25,7 +24,7 @@ namespace Frog.Domain.IntegrationTests
 
         protected virtual ProjectView GetProjectView()
         {
-            return new PersistentProjectView(Environment.GetEnvironmentVariable("RUNZ_RIAK_HOST") ?? "localhost", RiakPort, "buildIds_test1", "repoIds_test");
+            return new PersistentProjectView(OSHelpers.RiakHost(), OSHelpers.RiakPort(), "buildIds_test1", "repoIds_test");
         }
 
         [Test]

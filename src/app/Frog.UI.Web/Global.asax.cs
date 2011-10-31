@@ -69,13 +69,13 @@ namespace Frog.UI.Web
 
         void WireUpUIModelInfrastructure()
         {
-            var theBus = new RabbitMQBus(Environment.GetEnvironmentVariable("RUNZ_RABBITMQ_SERVER") ?? "localhost");
+            var theBus = new RabbitMQBus(OSHelpers.RabbitHost());
 
             var views = new PersistentProjectView(OSHelpers.RiakHost(), OSHelpers.RiakPort(), "buildsIds", "reposBucket");
             Setup.SetupView(theBus, views);
             ServiceLocator.Report = views;
             ServiceLocator.Bus = theBus;
-            ServiceLocator.AllMassages = new ConcurrentQueue<Message>();
+            ServiceLocator.AllMessages = new ConcurrentQueue<Message>();
         }
 
     }

@@ -36,7 +36,7 @@ namespace Frog.Support
             Directory.CreateDirectory(changeset);
             return changeset;
         }
-
+    
         public static int RiakPort()
         {
             return Int32.Parse(
@@ -48,6 +48,11 @@ namespace Frog.Support
         {
             return Environment.GetEnvironmentVariable(
                 "RUNZ_RIAK_HOST") ?? "localhost";
+        }
+
+        public static string RabbitHost()
+        {
+            return Environment.GetEnvironmentVariable("RUNZ_RABBITMQ_SERVER") ?? "localhost";
         }
     }
 }

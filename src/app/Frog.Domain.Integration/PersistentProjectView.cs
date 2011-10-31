@@ -1,11 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
 using CorrugatedIron;
-using CorrugatedIron.Exceptions;
 using CorrugatedIron.Models;
 using Frog.Domain.UI;
 
@@ -29,10 +24,9 @@ namespace Frog.Domain.Integration
 
         public BuildStatus GetBuildStatus(Guid id)
         {
-            var connectionManager = Riak.GetConnectionManager(host, port).CreateClient();
             try
             {
-                return connectionManager.Get<BuildStatus>(idsBucket, id.ToString());
+                return Client.Get<BuildStatus>(idsBucket, id.ToString());
             }
             catch (KeyNotFoundException)
             {
@@ -40,12 +34,23 @@ namespace Frog.Domain.Integration
             }
         }
 
+        private IRiakClient client;
+
+        private IRiakClient Client
+        {
+            get { 
+                if (client == null) 
+                    client = Riak.GetConnectionManager(host, port).CreateClient();
+                return client;
+                return Riak.GetConnectionManager(host, port).CreateClient();
+            }
+        }
+
         public Guid GetCurrentBuild(string repoUrl)
         {
-            var connectionManager = Riak.GetConnectionManager(host, port).CreateClient();
             try
             {
-                return connectionManager.Get<RepoInfo>(repoBucket, Riak.KeyGenerator(repoUrl)).CurrentBuild;
+                return Client.Get<RepoInfo>(repoBucket, Riak.KeyGenerator(repoUrl)).CurrentBuild;
             }
             catch (KeyNotFoundException)
             {
@@ -55,7 +60,7 @@ namespace Frog.Domain.Integration
 
         public void SetCurrentBuild(string repoUrl, Guid buildId, string comment, string revision)
         {
-            var connectionManager = Riak.GetConnectionManager(host, port).CreateClient();
+            var connectionManager = Client;
             var repoInfo = new RepoInfo();
             try
             {
@@ -66,16 +71,15 @@ namespace Frog.Domain.Integration
             }
             repoInfo.BuildHistory.Add(new BuildHistoryItem(){BuildId = buildId, Comment = comment, Revision = revision});
             repoInfo.CurrentBuild = buildId;
-            connectionManager.Put(new RiakObject(repoBucket, Riak.KeyGenerator(repoUrl), repoInfo));
-            connectionManager.Put(new RiakObject(idsBucket, buildId.ToString(), new BuildStatus()));
+            connectionManager.Put(repoBucket, Riak.KeyGenerator(repoUrl), repoInfo);
+            connectionManager.Put(idsBucket, buildId.ToString(), new BuildStatus());
         }
 
         public bool ProjectRegistered(string projectUrl)
         {
-            var riakContentRepository = Riak.GetConnectionManager(host, port).CreateClient();
             try
             {
-                riakContentRepository.Get<RepoInfo>(repoBucket, Riak.KeyGenerator(projectUrl));
+                Client.Get<RepoInfo>(repoBucket, Riak.KeyGenerator(projectUrl));
                 return true;
             }
             catch (KeyNotFoundException)
@@ -86,10 +90,9 @@ namespace Frog.Domain.Integration
 
         public List<BuildHistoryItem> GetListOfBuilds(string repoUrl)
         {
-            var connectionManager = Riak.GetConnectionManager(host, port).CreateClient();
             try
             {
-                return connectionManager.Get<RepoInfo>(repoBucket, Riak.KeyGenerator(repoUrl)).BuildHistory;
+                return Client.Get<RepoInfo>(repoBucket, Riak.KeyGenerator(repoUrl)).BuildHistory;
             }
             catch (KeyNotFoundException)
             {
@@ -102,8 +105,7 @@ namespace Frog.Domain.Integration
             var a = GetBuildStatus(id);
             a.BuildStarted(taskInfos);
 
-            var client = Riak.GetConnectionManager(host, port).CreateClient();
-            client.Put(new RiakObject(idsBucket, id.ToString(), a));
+            Client.Put(idsBucket, id.ToString(), a);
         }
 
         public void WipeBucket()
@@ -117,24 +119,22 @@ namespace Frog.Domain.Integration
         {
             var a = GetBuildStatus(id);
             a.BuildUpdated(taskIndex, taskStatus);
-            var riak = Riak.GetConnectionManager(host, port);
-            riak.CreateClient().Put(new RiakObject(idsBucket, id.ToString(), a));
+            Client.Put(idsBucket, id.ToString(), a);
         }
 
         public void BuildEnded(Guid id, BuildTotalEndStatus totalStatus)
         {
             var a = GetBuildStatus(id);
             a.BuildEnded(totalStatus);
-            var riak = Riak.GetConnectionManager(host, port);
-            riak.CreateClient().Put(new RiakObject(idsBucket, id.ToString(), a));
+            Client.Put(idsBucket, id.ToString(), a);
         }
 
         public void AppendTerminalOutput(Guid buildId, int taskIndex, int contentSequenceIndex, string content)
         {
             var a = GetBuildStatus(buildId);
             a.Tasks[taskIndex].AddTerminalOutput(contentSequenceIndex, content);
-            var riak = Riak.GetConnectionManager(host, port);
-            riak.CreateClient().Put(new RiakObject(idsBucket, buildId.ToString(), a));
+            Client.Put(idsBucket, buildId.ToString(), a);
+
         }
 
         private void WipeBuckett(IRiakCluster connectionManager, string bucket)

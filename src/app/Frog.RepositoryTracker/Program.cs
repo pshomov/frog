@@ -28,7 +28,7 @@ namespace Frog.RepositoryTracker
 
         private static IBus SetupBus()
         {
-            return new RabbitMQBus(Environment.GetEnvironmentVariable("RUNZ_RABBITMQ_SERVER") ?? "localhost");
+            return new RabbitMQBus(OSHelpers.RabbitHost());
         }
     }
 }

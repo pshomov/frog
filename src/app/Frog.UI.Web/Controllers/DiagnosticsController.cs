@@ -11,7 +11,7 @@ namespace Frog.UI.Web.Controllers
     {
         public ActionResult AllMessages()
         {
-            return MonoBugs.Json(ServiceLocator.AllMassages.Select(message => new {messageType = message.GetType().Name, fields = message}));
+            return MonoBugs.Json(ServiceLocator.AllMessages.Select(message => new {messageType = message.GetType().Name, fields = message}));
         }        
     }
 }
