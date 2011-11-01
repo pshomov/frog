@@ -11,6 +11,7 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
         {
             base.Given();
             RepoUrl = "http://";
+            HandleProjectCheckedOut("");
             HandleBuildStarted(DefaultTask);
         }
 

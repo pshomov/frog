@@ -10,6 +10,7 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
         {
             base.Given();
             RepoUrl = "http://";
+            HandleProjectCheckedOut("");
             HandleBuildStarted(new TaskInfo(), new TaskInfo());
         }
 
@@ -38,8 +39,7 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
         {
             base.Given();
             RepoUrl = "http://asdasda";
-            HandleBuildStarted(DefaultTask);
-            HandleBuildEnded(BuildTotalEndStatus.Success);
+            HandleABuild(BuildTotalEndStatus.Success);
         }
 
         protected override void When()

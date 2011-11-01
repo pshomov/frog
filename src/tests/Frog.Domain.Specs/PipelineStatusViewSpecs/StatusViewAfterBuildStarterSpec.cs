@@ -9,6 +9,7 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
         protected override void When()
         {
             RepoUrl = "somerepo";
+            HandleProjectCheckedOut("");
             HandleBuildStarted(DefaultTask);
         }
 

@@ -40,7 +40,7 @@ namespace Frog.LoadTests
                                    RepoUrl = repoUrl
                                });
             theBus.Publish(new BuildUpdated(){BuildId = buildId, TaskIndex = 0, TaskStatus = TaskInfo.TaskStatus.Started});
-            Enumerable.Range(0,2).ToList().ForEach(i => theBus.Publish(new TerminalUpdate(){BuildId = buildId, Content = "content", ContentSequenceIndex = i, TaskIndex = 0}));
+            Enumerable.Range(0,1000).ToList().ForEach(i => theBus.Publish(new TerminalUpdate(){BuildId = buildId, Content = "content", ContentSequenceIndex = i, TaskIndex = 0}));
             theBus.Publish(new BuildUpdated(){BuildId = buildId, TaskIndex = 0, TaskStatus = TaskInfo.TaskStatus.FinishedSuccess});
             theBus.Publish(new BuildEnded(){BuildId = buildId, TotalStatus = BuildTotalEndStatus.Success});
 
