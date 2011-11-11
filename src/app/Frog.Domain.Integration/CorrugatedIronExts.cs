@@ -24,7 +24,7 @@ namespace Frog.Domain.Integration
 
         public static void Put(this IRiakClient client, string bucket, string key, object value)
         {
-            var riakResult = client.Put(new RiakObject(bucket, key, value));
+            var riakResult = client.Put(new RiakObject(bucket, key, value), new RiakPutOptions(){ReturnBody = false});
             if (riakResult.IsSuccess) return;
             throw new RiakException(riakResult.ErrorMessage);
         }

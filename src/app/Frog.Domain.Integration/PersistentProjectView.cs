@@ -39,9 +39,6 @@ namespace Frog.Domain.Integration
         private IRiakClient Client
         {
             get { 
-                if (client == null) 
-                    client = Riak.GetConnectionManager(host, port).CreateClient();
-                return client;
                 return Riak.GetConnectionManager(host, port).CreateClient();
             }
         }
