@@ -56,6 +56,8 @@ namespace Frog.Domain
             var exitcode = process.Dispose();
             if (exitcode != 0)
                 throw new InvalidProgramException("script failed, see log for details");
+            if (result.IsNullOrEmpty()) 
+                throw new InvalidProgramException("Failed to retrieve repo revision");
             return new RevisionInfo {Revision = result};
         }
 
