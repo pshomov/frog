@@ -46,9 +46,6 @@
     <Reference Include="protobuf-net, Version=1.0.0.280, Culture=neutral, PublicKeyToken=257b51d87d2e4d67">
       <HintPath>..\..\..\libs\Data.RiakClient\protobuf-net.dll</HintPath>
     </Reference>
-    <Reference Include="riak.net, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\..\..\libs\Data.RiakClient\riak.net.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
