@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using CorrugatedIron;
 using Frog.Domain.RepositoryTracker;
@@ -7,6 +8,7 @@ namespace Frog.Domain.Integration
 {
     public class RiakProjectRepository : IProjectsRepository
     {
+        private const string ALL_PROJECTS = "all_projects";
         private readonly string host;
         private readonly int port;
         private readonly string bucket;
@@ -22,8 +24,19 @@ namespace Frog.Domain.Integration
         public void TrackRepository(string repoUrl)
         {
             var client = CreateClient();
-            client.Put(bucket, Riak.KeyGenerator(repoUrl),
+            var repoHash = Riak.KeyGenerator(repoUrl);
+            client.Put(bucket, repoHash,
                        new RepositoryDocument {revision = "", projecturl = repoUrl});
+            var allProjects = new List<string>();
+            try
+            {
+                allProjects = client.Get<List<string>>(bucket, ALL_PROJECTS);
+            }
+            catch (KeyNotFoundException)
+            {
+            }
+            allProjects.Add(repoHash);
+            client.Put(bucket, ALL_PROJECTS, allProjects);
         }
 
         public IEnumerable<RepositoryDocument> AllProjects
@@ -31,7 +44,7 @@ namespace Frog.Domain.Integration
             get
             {
                 var client = CreateClient();
-                var keys = client.ListKeyz(bucket);
+                var keys = client.Get<List<string>>(bucket, ALL_PROJECTS);
                 return keys.Select(s => client.Get<RepositoryDocument>(bucket, s));
             }
         }
@@ -47,8 +60,12 @@ namespace Frog.Domain.Integration
 
         public void RemoveProject(string repoUrl)
         {
-            var connectionManager = CreateClient();
-            connectionManager.Delete(bucket, Riak.KeyGenerator(repoUrl));
+            var client = CreateClient();
+            var repoHash = Riak.KeyGenerator(repoUrl);
+            client.Delete(bucket, repoHash);
+            var all_projects = client.Get<List<string>>(bucket, ALL_PROJECTS);
+            all_projects.Remove(repoHash);
+            client.Put(bucket, ALL_PROJECTS, all_projects);
         }
 
         public void ProjectCheckInProgress(string repoUrl)
