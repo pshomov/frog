@@ -10,7 +10,7 @@ namespace Frog.Domain.Integration
 {
     public class Riak
     {
-        public static  IRiakCluster GetConnectionManager(string host, int port)
+        public static  IRiakEndPoint GetConnectionManager(string host, int port)
         {
             if (cluster == null)
             {
@@ -32,7 +32,7 @@ namespace Frog.Domain.Integration
             return cluster;
         }
 
-        private static IRiakCluster cluster;
+        private static IRiakEndPoint cluster;
 
         public static string KeyGenerator(string repoUrl)
         {

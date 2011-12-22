@@ -134,7 +134,7 @@ namespace Frog.Domain.Integration
 
         }
 
-        private void WipeBuckett(IRiakCluster connectionManager, string bucket)
+        private void WipeBuckett(IRiakEndPoint connectionManager, string bucket)
         {
             var client = connectionManager.CreateClient();
             client.DeleteBucket(bucket);
