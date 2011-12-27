@@ -44,7 +44,15 @@ namespace Frog.Domain.Integration
             get
             {
                 var client = CreateClient();
-                var keys = client.Get<List<string>>(bucket, ALL_PROJECTS);
+                List<string> keys;
+                try
+                {
+                    keys = client.Get<List<string>>(bucket, ALL_PROJECTS);
+                }
+                catch (KeyNotFoundException)
+                {
+                    return new List<RepositoryDocument>();
+                }
                 return keys.Select(s => client.Get<RepositoryDocument>(bucket, s));
             }
         }

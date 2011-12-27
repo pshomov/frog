@@ -63,5 +63,11 @@ namespace Frog.Domain.IntegrationTests.ProjectRepository
             Assert.That(riakProject.AllProjects.Single(document => document.projecturl == projectId).CheckForUpdateRequested, Is.False);
         }
 
+        [Test]
+        public void should_get_empty_list_of_projects_when_none_is_tracked()
+        {
+            Assert.That(riakProject.AllProjects.Count(), Is.EqualTo(0));            
+        }
+
     }
 }
