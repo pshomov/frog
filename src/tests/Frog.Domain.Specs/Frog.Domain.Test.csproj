@@ -80,6 +80,7 @@
     <Compile Include="RevisionChecker\JoinsTheParty.cs" />
     <Compile Include="RevisionChecker\FailsToRetrieveRevision.cs" />
     <Compile Include="RevisionChecker\RetrievesRevisionSuccessfully.cs" />
+    <Compile Include="Support\TimeProfileSpecs.cs" />
     <Compile Include="TaskDetection\MakeTaskDetectorSpecs.cs" />
     <Compile Include="TaskDetection\TaskDetectorSpecs.cs" />
     <Compile Include="TaskDetection\TaskDetectorSpecsBase.cs" />
