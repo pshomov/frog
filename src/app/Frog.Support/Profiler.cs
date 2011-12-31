@@ -22,7 +22,7 @@ namespace Frog.Support
 
             public void TimePeriod(DateTime start, DateTime end, string msg)
             {
-                File.AppendAllText(filename, string.Format("Scope {0} started at {1} and finished at {2}", msg, start, end));
+                File.AppendAllText(filename, string.Format("Scope \"{0}\" started at {1} and finished at {2}\r\n", msg, start.ToString("o"), end.ToString("o")));
             }
         }
 
