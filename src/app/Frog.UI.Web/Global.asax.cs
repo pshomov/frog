@@ -26,6 +26,7 @@ namespace Frog.UI.Web
 
         protected void Application_Start()
         {
+            Profiler.MeasurementsBridge = new Profiler.LogFileLoggingBridge();
             serviceArea = Server.MapPath("~/App_Data");
             Directory.CreateDirectory(serviceArea);
             mapPath = Path.Combine(serviceArea, "Crash_");

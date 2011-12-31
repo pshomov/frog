@@ -1,4 +1,5 @@
 ﻿using System.Text.RegularExpressions;
+using Frog.Support;
 using SimpleCQRS;
 
 namespace Frog.Domain.UI
@@ -29,7 +30,10 @@ namespace Frog.Domain.UI
 
         public void Handle(TerminalUpdate message)
         {
-            projectView.AppendTerminalOutput(message.BuildId, message.TaskIndex, message.ContentSequenceIndex, message.Content);
+            using(Profiler.measure("terminal update processing"))
+            {
+                projectView.AppendTerminalOutput(message.BuildId, message.TaskIndex, message.ContentSequenceIndex, message.Content);
+            }
         }
 
         public void Handle(ProjectCheckedOut message)
