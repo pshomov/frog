@@ -86,7 +86,7 @@ namespace Frog.Domain.Specs
                     {
                         var cb = (Action<string>)info.Args()[0];
                         var base_folder = (string)info.Args()[2];
-                        cb(Support.Os.DirChars(string.Format("{0}\\Rakefile", base_folder)));
+                        cb(Frog.Support.Os.DirChars(string.Format("{0}\\Rakefile", base_folder)));
                     });
             _taskFileFinder = new RakeTaskFileFinder(pathFinder);
         }

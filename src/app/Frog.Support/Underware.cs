@@ -48,7 +48,7 @@ namespace Frog.Support
         }
     }
 
-    public class Os
+    public static class Os
     {
         public static bool IsUnix
         {
