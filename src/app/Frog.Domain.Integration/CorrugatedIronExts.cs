@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using CorrugatedIron;
 using CorrugatedIron.Exceptions;
 using CorrugatedIron.Models;
+using Frog.Support;
 
 namespace Frog.Domain.Integration
 {
@@ -24,9 +25,13 @@ namespace Frog.Domain.Integration
 
         public static void Put(this IRiakClient client, string bucket, string key, object value)
         {
-            var riakResult = client.Put(new RiakObject(bucket, key, value), new RiakPutOptions(){ReturnBody = false});
-            if (riakResult.IsSuccess) return;
-            throw new RiakException(riakResult.ErrorMessage);
+            using (Profiler.measure("putting value in bucket"))
+            {
+                var riakResult = client.Put(new RiakObject(bucket, key, value),
+                                            new RiakPutOptions() {ReturnBody = false});
+                if (riakResult.IsSuccess) return;
+                throw new RiakException(riakResult.ErrorMessage);
+            }
         }
 
         public static IEnumerable<string> ListKeyz(this IRiakClient client, string bucket)

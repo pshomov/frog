@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using CorrugatedIron;
 using CorrugatedIron.Models;
 using Frog.Domain.UI;
+using Frog.Support;
 
 namespace Frog.Domain.Integration
 {
@@ -24,13 +25,16 @@ namespace Frog.Domain.Integration
 
         public BuildStatus GetBuildStatus(Guid id)
         {
-            try
+            using (Profiler.measure("get build status"))
             {
-                return Client.Get<BuildStatus>(idsBucket, id.ToString());
-            }
-            catch (KeyNotFoundException)
-            {
-                throw new BuildNotFoundException();
+                try
+                {
+                    return Client.Get<BuildStatus>(idsBucket, id.ToString());
+                }
+                catch (KeyNotFoundException)
+                {
+                    throw new BuildNotFoundException();
+                }
             }
         }
 
