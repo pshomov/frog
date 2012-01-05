@@ -24,7 +24,7 @@ namespace Frog.Support
 
             public void TimePeriod(DateTime start, DateTime end, string msg)
             {
-                fileStream.WriteLine(filename, string.Format("Scope \"{0}\" started at {1} and finished at {2}, so it took {3} ms\r\n", msg, start.ToString("o"), end.ToString("o"), (end-start).TotalMilliseconds));
+                fileStream.WriteLine(string.Format("Scope \"{0}\" started at {1} and finished at {2}, so it took {3} ms\r\n", msg, start.ToString("o"), end.ToString("o"), (end-start).TotalMilliseconds));
             }
 
             public void Dispose()
