@@ -19,6 +19,7 @@ namespace Frog.LoadTests
         [SetUp]
         public void SetUp()
         {
+            Profiler.MeasurementsBridge = new Profiler.LogFileLoggingBridge();
             theBus = new RabbitMQBus(OSHelpers.RabbitHost());
 
             views = new PersistentProjectView(OSHelpers.RiakHost(), OSHelpers.RiakPort(), "loadtest_buildsIds", "loadtest_reposBucket");

@@ -22,7 +22,7 @@ namespace Frog.Support
 
             public void TimePeriod(DateTime start, DateTime end, string msg)
             {
-                File.AppendAllText(filename, string.Format("Scope \"{0}\" started at {1} and finished at {2}\r\n", msg, start.ToString("o"), end.ToString("o")));
+                File.AppendAllText(filename, string.Format("Scope \"{0}\" started at {1} and finished at {2}, so it took {3} ms\r\n", msg, start.ToString("o"), end.ToString("o"), (end-start).TotalMilliseconds));
             }
         }
 
@@ -39,6 +39,7 @@ namespace Frog.Support
 
             public void Dispose()
             {
+                if (MeasurementsBridge != null)
                 MeasurementsBridge.TimePeriod(start, DateTime.Now, message);
             }
         } 

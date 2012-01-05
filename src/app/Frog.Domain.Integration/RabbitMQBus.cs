@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using System.Threading;
 using System.Web.Script.Serialization;
+using Frog.Support;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using RabbitMQ.Client.Exceptions;
@@ -182,21 +183,25 @@ namespace Frog.Domain.Integration
 
         private void SendMessage<T>(T @event)
         {
-            string topicName = typeof(T).Name;
-            using (IModel channel = connection.CreateModel())
+            using (Profiler.measure("sending message to Rabbit MQ"))
             {
-				channel.TxSelect();
-                channel.ExchangeDeclare(topicName, ExchangeType.Fanout, true);
-                channel.QueueDeclare("all_messages", false, false, false, null);
-                channel.QueueBind("all_messages", topicName, "", null);
-                channel.TxCommit();
-            }
-            using (IModel channel = connection.CreateModel())
-            {
-                var ser = new JavaScriptSerializer();
-                string serializedForm = ser.Serialize(@event);
-                IBasicProperties basicProperties = channel.CreateBasicProperties();
-                channel.BasicPublish(topicName, "", false, false, basicProperties, Encoding.UTF8.GetBytes(serializedForm));
+                string topicName = typeof (T).Name;
+                //            using (IModel channel = connection.CreateModel())
+                //            {
+                //				channel.TxSelect();
+                //                channel.ExchangeDeclare(topicName, ExchangeType.Fanout, true);
+                //                channel.QueueDeclare("all_messages", false, false, false, null);
+                //                channel.QueueBind("all_messages", topicName, "", null);
+                //                channel.TxCommit();
+                //            }
+                using (IModel channel = connection.CreateModel())
+                {
+                    var ser = new JavaScriptSerializer();
+                    string serializedForm = ser.Serialize(@event);
+                    IBasicProperties basicProperties = channel.CreateBasicProperties();
+                    channel.BasicPublish(topicName, "", false, false, basicProperties,
+                                         Encoding.UTF8.GetBytes(serializedForm));
+                }
             }
         }
 
