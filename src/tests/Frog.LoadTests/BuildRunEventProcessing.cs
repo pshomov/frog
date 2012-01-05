@@ -27,6 +27,14 @@ namespace Frog.LoadTests
             views2 = new PersistentProjectView(OSHelpers.RiakHost(), OSHelpers.RiakPort(), "loadtest_buildsIds", "loadtest_reposBucket");
             Setup.SetupView(theBus, views);
         }
+
+        [TearDown]
+        public void TearDown()
+        {
+            Profiler.MeasurementsBridge.Dispose();
+            Profiler.MeasurementsBridge = null;
+        }
+
         [Test]
         public void should_process_1000_messages()
         {

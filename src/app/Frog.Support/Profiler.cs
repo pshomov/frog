@@ -5,7 +5,7 @@ namespace Frog.Support
 {
     public static class Profiler
     {
-        public interface LoggingBridge
+        public interface LoggingBridge : IDisposable
         {
             void TimePeriod(DateTime start, DateTime end, string msg);
         }
@@ -13,16 +13,23 @@ namespace Frog.Support
         public class LogFileLoggingBridge : LoggingBridge
         {
             private string filename;
+            private StreamWriter fileStream;
 
             public LogFileLoggingBridge()
             {
                 filename = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
                                         "runz_measurements.log");
+                fileStream = new StreamWriter(filename, true);
             }
 
             public void TimePeriod(DateTime start, DateTime end, string msg)
             {
-                File.AppendAllText(filename, string.Format("Scope \"{0}\" started at {1} and finished at {2}, so it took {3} ms\r\n", msg, start.ToString("o"), end.ToString("o"), (end-start).TotalMilliseconds));
+                fileStream.WriteLine(filename, string.Format("Scope \"{0}\" started at {1} and finished at {2}, so it took {3} ms\r\n", msg, start.ToString("o"), end.ToString("o"), (end-start).TotalMilliseconds));
+            }
+
+            public void Dispose()
+            {
+                fileStream.Dispose();
             }
         }
 
