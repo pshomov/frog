@@ -76,6 +76,11 @@
     <Compile Include="Pipeline\PipelineProcessFaultyBuild.cs" />
     <Compile Include="Pipeline\PipelineProcessSpecBase.cs" />
     <Compile Include="Pipeline\PipelinePropagateTerminalUpdateEvents.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <Compile Include="RegisterRepositoryChecksItForUpdates.cs" />
     <Compile Include="RevisionChecker\JoinsTheParty.cs" />
     <Compile Include="RevisionChecker\FailsToRetrieveRevision.cs" />
@@ -127,7 +132,13 @@
       <Name>Frog.Specs.Support</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup />
 </Project>
