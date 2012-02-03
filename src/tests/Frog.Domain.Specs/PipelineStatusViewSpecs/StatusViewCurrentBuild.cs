@@ -15,13 +15,18 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
         protected TaskInfo DefaultTask;
         protected ProjectView ProjectView;
 
-        protected override void Given()
+        protected override void GivenCleanup()
         {
-            SetupProjectView();
-            View = new PipelineStatusView(ProjectView);
+            ProjectView.WipeBucket();
         }
 
-        protected abstract void SetupProjectView();
+        protected override void Given()
+        {
+            ProjectView = SetupProjectView();
+            View = new PipelineStatusView(StoreFactory.WireupEventStore());
+        }
+
+        protected abstract ProjectView SetupProjectView();
 
         protected void HandleABuild(BuildTotalEndStatus buildTotalEndStatus)
         {
@@ -71,9 +76,9 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
             DefaultTask = new TaskInfo { Name = "task1", Status = TaskInfo.TaskStatus.NotStarted };
         }
 
-        protected override void SetupProjectView()
+        protected override ProjectView SetupProjectView()
         {
-            ProjectView = new InMemProjectView();
+            return new EventBasedProjectView(StoreFactory.WireupEventStore());
         }
     }
 

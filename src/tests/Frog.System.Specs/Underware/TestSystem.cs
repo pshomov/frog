@@ -34,7 +34,7 @@ namespace Frog.System.Specs.Underware
             SetupAgent(sourceRepoDriverFactory);
 
             Views = new InMemProjectView();
-            Setup.SetupView(TheBus, Views);
+            Setup.SetupView(TheBus, null);
 
             messages = new List<Message>();
             SetupAllEventLogging();

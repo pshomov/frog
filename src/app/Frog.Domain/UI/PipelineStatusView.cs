@@ -1,30 +1,18 @@
-﻿using System.Text.RegularExpressions;
+﻿using System;
+using System.Text.RegularExpressions;
 using EventStore;
-using EventStore.Dispatcher;
-using EventStore.Serialization;
-using Frog.Support;
 using SimpleCQRS;
 
 namespace Frog.Domain.UI
 {
     public class PipelineStatusView : Handles<BuildStarted>, Handles<BuildEnded>, Handles<BuildUpdated>, Handles<ProjectCheckedOut>
     {
-        private readonly ProjectView projectView;
+//        private readonly ProjectView projectView;
         private IStoreEvents eventStore;
 
-        public PipelineStatusView(ProjectView projectView)
+        public PipelineStatusView(IStoreEvents eventStore)
         {
-            this.projectView = projectView;
-            eventStore = WireupEventStore();
-
-        }
-        private static IStoreEvents WireupEventStore()
-        {
-            return Wireup.Init()
-               .LogToOutputWindow()
-                   .UsingMongoPersistence("EventStore",new DocumentObjectSerializer() )
-                   .InitializeStorageEngine()
-               .Build();
+            this.eventStore = eventStore;
         }
 
 
@@ -34,6 +22,7 @@ namespace Frog.Domain.UI
                 var eventStream = eventStore.OpenStream(message.BuildId, int.MinValue, int.MaxValue))
             {
                 eventStream.Add(new EventMessage(){Body = message});
+                eventStream.CommitChanges(Guid.NewGuid());
             }
 //            projectView.SetBuildStarted(message.BuildId, message.Status.Tasks);
         }
@@ -44,6 +33,7 @@ namespace Frog.Domain.UI
                 var eventStream = eventStore.OpenStream(message.BuildId, int.MinValue, int.MaxValue))
             {
                 eventStream.Add(new EventMessage(){Body = message});
+                eventStream.CommitChanges(Guid.NewGuid());
             }
 //           projectView.BuildUpdated(message.BuildId,message.TaskIndex, message.TaskStatus);
         }
@@ -54,6 +44,7 @@ namespace Frog.Domain.UI
                 var eventStream = eventStore.OpenStream(message.BuildId, int.MinValue, int.MaxValue))
             {
                 eventStream.Add(new EventMessage() { Body = message });
+                eventStream.CommitChanges(Guid.NewGuid());
             }
             //            projectView.BuildEnded(message.BuildId, message.TotalStatus);
         }
@@ -64,18 +55,13 @@ namespace Frog.Domain.UI
                 var eventStream = eventStore.OpenStream(message.BuildId, int.MinValue, int.MaxValue))
             {
                 eventStream.Add(new EventMessage() { Body = message });
+                eventStream.CommitChanges(Guid.NewGuid());
             }
             //            projectView.AppendTerminalOutput(message.BuildId, message.TaskIndex, message.ContentSequenceIndex, message.Content);
         }
 
         public void Handle(ProjectCheckedOut message)
         {
-            using (
-                var eventStream = eventStore.CreateStream(message.BuildId))
-            {
-                eventStream.Add(new EventMessage() { Body = message });
-            }
-            return;
             //
             string repoUrl = message.RepoUrl;
             var privateRepo = new Regex(@"^(http://)(\w+):(\w+)@(github.com.*)$");
@@ -84,7 +70,20 @@ namespace Frog.Domain.UI
                 var b = privateRepo.Match(repoUrl).Groups;
                 repoUrl = b[1].Value + b[4].Value;
             }
-            projectView.SetCurrentBuild(repoUrl, message.BuildId, message.CheckoutInfo.Comment, message.CheckoutInfo.Revision);
+            using (
+                var eventStream = eventStore.CreateStream(message.BuildId))
+            {
+                eventStream.Add(new EventMessage() { Body = message });
+                eventStream.CommitChanges(Guid.NewGuid());
+            }
+            using (
+                var eventStream = eventStore.OpenStream(EventBasedProjectView.KeyGenerator(repoUrl), Int32.MinValue, Int32.MaxValue))
+            {
+                eventStream.Add(new EventMessage() { Body = message });
+                eventStream.CommitChanges(Guid.NewGuid());
+            }
+            return;
+//            projectView.SetCurrentBuild(repoUrl, message.BuildId, message.CheckoutInfo.Comment, message.CheckoutInfo.Revision);
         }
     }
 }

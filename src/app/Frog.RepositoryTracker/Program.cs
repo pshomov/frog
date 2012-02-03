@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Threading;
+using EventStore;
+using EventStore.Serialization;
 using Frog.Domain.Integration;
 using Frog.Support;
 using SimpleCQRS;
@@ -21,7 +23,7 @@ namespace Frog.RepositoryTracker
             repoTracker.JoinTheMessageParty();
 
             var views = new PersistentProjectView(OSHelpers.RiakHost(), OSHelpers.RiakPort(), "buildsIds", "reposBucket");
-            Setup.SetupView(theBus, views);
+            Setup.SetupView(theBus, WireupEventStore());
 			
 			
             var sleepPeriod = 60 * 1000;
@@ -38,5 +40,14 @@ namespace Frog.RepositoryTracker
         {
             return new RabbitMQBus(OSHelpers.RabbitHost());
         }
+        public static IStoreEvents WireupEventStore()
+        {
+            return Wireup.Init()
+                .LogToOutputWindow()
+                .UsingMongoPersistence("EventStore", new DocumentObjectSerializer())
+                .InitializeStorageEngine()
+                .Build();
+        }
+
     }
 }

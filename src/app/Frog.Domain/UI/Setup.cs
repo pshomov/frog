@@ -1,12 +1,13 @@
-﻿using SimpleCQRS;
+﻿using EventStore;
+using SimpleCQRS;
 
 namespace Frog.Domain.UI
 {
     public class Setup
     {
-        public static void SetupView(IBus theBus, ProjectView projectView)
+        public static void SetupView(IBus theBus, IStoreEvents eventStore)
         {
-            var statusView = new PipelineStatusView(projectView);
+            var statusView = new PipelineStatusView(eventStore);
             theBus.RegisterHandler<BuildStarted>(statusView.Handle, "UI");
             theBus.RegisterHandler<BuildEnded>(statusView.Handle, "UI");
             theBus.RegisterHandler<BuildUpdated>(statusView.Handle, "UI");

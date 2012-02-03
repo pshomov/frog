@@ -95,6 +95,7 @@
     <Compile Include="RevisionChecker\RevisionChecker.cs" />
     <Compile Include="Task.cs" />
     <Compile Include="UI\BuildStatus.cs" />
+    <Compile Include="UI\EventBasedProjectView.cs" />
     <Compile Include="UI\PipelineStatusView.cs" />
     <Compile Include="TaskSources\CompoundTaskSource.cs" />
     <Compile Include="ExecTaskGenerator.cs" />
