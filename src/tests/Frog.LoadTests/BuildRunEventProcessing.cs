@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Linq;
+using EventStore;
 using Frog.Domain;
 using Frog.Domain.Integration;
 using Frog.Domain.UI;
+using Frog.Specs.Support;
 using Frog.Support;
 using NUnit.Framework;
 using SimpleCQRS;
@@ -15,17 +17,21 @@ namespace Frog.LoadTests
         private ProjectView views;
         private IBus theBus;
         private ProjectView views2;
+        private IStoreEvents eventStore;
 
         [SetUp]
         public void SetUp()
         {
+            eventStore = StoreFactory.WireupEventStore();
+            eventStore.Advanced.Purge();
+            eventStore.Advanced.Initialize();
             Profiler.MeasurementsBridge = new Profiler.LogFileLoggingBridge();
             theBus = new RabbitMQBus(OSHelpers.RabbitHost());
 
-            views = new PersistentProjectView(OSHelpers.RiakHost(), OSHelpers.RiakPort(), "loadtest_buildsIds", "loadtest_reposBucket");
+            views = new EventBasedProjectView(eventStore);
             views.WipeBucket();
-            views2 = new PersistentProjectView(OSHelpers.RiakHost(), OSHelpers.RiakPort(), "loadtest_buildsIds", "loadtest_reposBucket");
-            Setup.SetupView(theBus, null);
+            views2 = new EventBasedProjectView(eventStore);
+            Setup.SetupView(theBus, eventStore);
         }
 
         [TearDown]

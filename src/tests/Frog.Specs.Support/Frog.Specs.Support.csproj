@@ -35,6 +35,28 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EventStore, Version=3.1.0.0, Culture=neutral, PublicKeyToken=7735eb81c0bd9948, processorArchitecture=MSIL" />
+    <Reference Include="EventStore.Core">
+      <HintPath>..\..\..\libs\EventStore\EventStore.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="EventStore.Persistence.MongoPersistence">
+      <HintPath>..\..\..\libs\EventStore\EventStore.Persistence.MongoPersistence.dll</HintPath>
+    </Reference>
+    <Reference Include="EventStore.Persistence.MongoPersistence.Wireup">
+      <HintPath>..\..\..\libs\EventStore\EventStore.Persistence.MongoPersistence.Wireup.dll</HintPath>
+    </Reference>
+    <Reference Include="EventStore.Serialization">
+      <HintPath>..\..\..\libs\EventStore\EventStore.Serialization.dll</HintPath>
+    </Reference>
+    <Reference Include="EventStore.Serialization.Json">
+      <HintPath>..\..\..\libs\EventStore\EventStore.Serialization.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="EventStore.Serialization.Json.Wireup">
+      <HintPath>..\..\..\libs\EventStore\EventStore.Serialization.Json.Wireup.dll</HintPath>
+    </Reference>
+    <Reference Include="EventStore.Wireup">
+      <HintPath>..\..\..\libs\EventStore\EventStore.Wireup.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
     </Reference>
@@ -52,6 +74,7 @@
     <Compile Include="FileGenesis.cs" />
     <Compile Include="GitTestSupport.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StoreFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="git_support_scripts\git_commit_files.rb">

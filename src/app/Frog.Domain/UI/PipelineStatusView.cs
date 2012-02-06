@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using EventStore;
 using SimpleCQRS;
@@ -7,57 +8,55 @@ namespace Frog.Domain.UI
 {
     public class PipelineStatusView : Handles<BuildStarted>, Handles<BuildEnded>, Handles<BuildUpdated>, Handles<ProjectCheckedOut>
     {
-//        private readonly ProjectView projectView;
-        private IStoreEvents eventStore;
+        private readonly IStoreEvents eventStore;
+        private Dictionary<Guid, IEventStream> streams = new Dictionary<Guid, IEventStream>();
+        private int batch;
 
         public PipelineStatusView(IStoreEvents eventStore)
         {
             this.eventStore = eventStore;
+            batch = 0;
         }
 
+        IEventStream GetEventStream(Guid id)
+        {
+            if (streams.ContainsKey(id)) return streams[id];
+            return streams[id] = eventStore.OpenStream(id, Int32.MinValue, Int32.MaxValue);
+        }
 
         public void Handle(BuildStarted message)
         {
-            using (
-                var eventStream = eventStore.OpenStream(message.BuildId, int.MinValue, int.MaxValue))
-            {
-                eventStream.Add(new EventMessage(){Body = message});
-                eventStream.CommitChanges(Guid.NewGuid());
-            }
-//            projectView.SetBuildStarted(message.BuildId, message.Status.Tasks);
+            var eventStream = GetEventStream(message.BuildId);
+            eventStream.Add(new EventMessage(){Body = message});
+            eventStream.CommitChanges(Guid.NewGuid());
         }
 
         public void Handle(BuildUpdated message)
         {
-             using (
-                var eventStream = eventStore.OpenStream(message.BuildId, int.MinValue, int.MaxValue))
-            {
-                eventStream.Add(new EventMessage(){Body = message});
-                eventStream.CommitChanges(Guid.NewGuid());
-            }
-//           projectView.BuildUpdated(message.BuildId,message.TaskIndex, message.TaskStatus);
+            var eventStream = GetEventStream(message.BuildId);
+            eventStream.Add(new EventMessage(){Body = message});
+            eventStream.CommitChanges(Guid.NewGuid());
         }
 
         public void Handle(BuildEnded message)
         {
-            using (
-                var eventStream = eventStore.OpenStream(message.BuildId, int.MinValue, int.MaxValue))
-            {
-                eventStream.Add(new EventMessage() { Body = message });
-                eventStream.CommitChanges(Guid.NewGuid());
-            }
-            //            projectView.BuildEnded(message.BuildId, message.TotalStatus);
+            var eventStream = GetEventStream(message.BuildId);
+            eventStream.Add(new EventMessage(){Body = message});
+            eventStream.CommitChanges(Guid.NewGuid());
         }
 
         public void Handle(TerminalUpdate message)
         {
-            using (
-                var eventStream = eventStore.OpenStream(message.BuildId, int.MinValue, int.MaxValue))
+            var eventStream = GetEventStream(message.BuildId);
+            eventStream.Add(new EventMessage(){Body = message});
+            if (batch == 199)
             {
-                eventStream.Add(new EventMessage() { Body = message });
+                batch = 0;
                 eventStream.CommitChanges(Guid.NewGuid());
+            } else
+            {
+                batch++;
             }
-            //            projectView.AppendTerminalOutput(message.BuildId, message.TaskIndex, message.ContentSequenceIndex, message.Content);
         }
 
         public void Handle(ProjectCheckedOut message)
@@ -82,8 +81,6 @@ namespace Frog.Domain.UI
                 eventStream.Add(new EventMessage() { Body = message });
                 eventStream.CommitChanges(Guid.NewGuid());
             }
-            return;
-//            projectView.SetCurrentBuild(repoUrl, message.BuildId, message.CheckoutInfo.Comment, message.CheckoutInfo.Revision);
         }
     }
 }
