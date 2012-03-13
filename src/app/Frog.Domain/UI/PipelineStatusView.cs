@@ -49,14 +49,7 @@ namespace Frog.Domain.UI
         {
             var eventStream = GetEventStream(message.BuildId);
             eventStream.Add(new EventMessage(){Body = message});
-            if (batch == 199)
-            {
-                batch = 0;
-                eventStream.CommitChanges(Guid.NewGuid());
-            } else
-            {
-                batch++;
-            }
+            eventStream.CommitChanges(Guid.NewGuid());
         }
 
         public void Handle(ProjectCheckedOut message)

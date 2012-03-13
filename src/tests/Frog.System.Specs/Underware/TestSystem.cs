@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using EventStore;
 using Frog.Domain;
 using Frog.Domain.RepositoryTracker;
 using Frog.Domain.RevisionChecker;
@@ -21,6 +22,7 @@ namespace Frog.System.Specs.Underware
 
         public TaskSource TasksSource;
         public ProjectView Views;
+        public IStoreEvents Store;
         public RepositoryTracker repositoryTracker { get; private set; }
 
         public TestSystem(WorkingAreaGoverner governer, SourceRepoDriverFactory sourceRepoDriverFactory, bool runRevisionChecker = true)
@@ -32,13 +34,24 @@ namespace Frog.System.Specs.Underware
             SetupRepositoryTracker();
             if (runRevisionChecker) new RevisionChecker(TheBus, sourceRepoDriverFactory).JoinTheParty();
             SetupAgent(sourceRepoDriverFactory);
-
-            Views = new InMemProjectView();
-            Setup.SetupView(TheBus, null);
+            Store = WireupEventStore();
+            Store.Advanced.Purge();
+            Views = new EventBasedProjectView(Store);
+            Setup.SetupView(TheBus, Store);
 
             messages = new List<Message>();
             SetupAllEventLogging();
         }
+
+        public static IStoreEvents WireupEventStore()
+        {
+            return Wireup.Init()
+                .LogToOutputWindow()
+                .UsingInMemoryPersistence()
+                .InitializeStorageEngine()
+                .Build();
+        }
+
 
         PipelineOfTasks GetPipeline()
         {
