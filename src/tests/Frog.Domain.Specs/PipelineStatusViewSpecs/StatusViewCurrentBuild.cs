@@ -37,7 +37,7 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
 
         protected void HandleBuildEnded(BuildTotalEndStatus buildTotalEndStatus)
         {
-            View.Handle(new BuildEnded(NewGuid, buildTotalEndStatus));
+            View.Handle(new BuildEnded(NewGuid, buildTotalEndStatus, 0));
         }
 
         protected void HandleBuildStarted(params TaskInfo[] tasks)
@@ -48,22 +48,21 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
 
         private BuildStarted CreateBuildMessage(Guid buildId, string repoUrl, params TaskInfo[] tasks)
         {
-            return new BuildStarted
-                       {
-                           RepoUrl = repoUrl,
-                           BuildId = buildId,
-                           Status = new PipelineStatus
+            return new BuildStarted(
+                       
+                           repoUrl : repoUrl,
+                           buildId : buildId,
+                           status : new PipelineStatus
                                         {
                                             Tasks = new List<TaskInfo>(tasks)
-                                        }
-                       };
+                                        },sequenceId:0);
         }
 
         protected void HandleProjectCheckedOut(string comment)
         {
             NewGuid = Guid.NewGuid();
             var checkedOut = new ProjectCheckedOut
-                                 {BuildId = NewGuid, CheckoutInfo = new CheckoutInfo {Comment = comment}, RepoUrl = RepoUrl};
+                                 (NewGuid,0){ CheckoutInfo = new CheckoutInfo {Comment = comment}, RepoUrl = RepoUrl};
             View.Handle(checkedOut);
         }
     }

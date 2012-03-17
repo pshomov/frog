@@ -7,11 +7,16 @@ namespace Frog.Specs.Support
     {
         public static IStoreEvents WireupEventStore()
         {
-            return Wireup.Init()
-                
-                .UsingMongoPersistence("EventStore",new DocumentObjectSerializer() )
+            var eventStore = Wireup.Init()
+                .LogToOutputWindow()
+                .UsingInMemoryPersistence()
                 .InitializeStorageEngine()
                 .Build();
+
+            eventStore.Advanced.Purge();
+            eventStore.Advanced.Initialize();
+
+            return eventStore;
         }
     }
 }

@@ -47,17 +47,13 @@ namespace Frog.LoadTests
 
             var buildId = Guid.NewGuid();
             const string repoUrl = "http://github.com/never/neverland.git";
-            theBus.Publish(new ProjectCheckedOut(){BuildId = buildId, CheckoutInfo = new CheckoutInfo(){Comment = "asd", Revision = "12"}, RepoUrl = repoUrl});
-            theBus.Publish(new BuildStarted()
-                               {
-                                   BuildId = buildId,
-                                   Status = new PipelineStatus() {Tasks = As.List(new TaskInfo("t1"))},
-                                   RepoUrl = repoUrl
-                               });
-            theBus.Publish(new BuildUpdated(){BuildId = buildId, TaskIndex = 0, TaskStatus = TaskInfo.TaskStatus.Started});
-            Enumerable.Range(0,1000).ToList().ForEach(i => theBus.Publish(new TerminalUpdate(){BuildId = buildId, Content = "content", ContentSequenceIndex = i, TaskIndex = 0}));
-            theBus.Publish(new BuildUpdated(){BuildId = buildId, TaskIndex = 0, TaskStatus = TaskInfo.TaskStatus.FinishedSuccess});
-            theBus.Publish(new BuildEnded(){BuildId = buildId, TotalStatus = BuildTotalEndStatus.Success});
+            theBus.Publish(new ProjectCheckedOut(buildId,0){CheckoutInfo = new CheckoutInfo(){Comment = "asd", Revision = "12"}, RepoUrl = repoUrl});
+            theBus.Publish(new BuildStarted(buildId, new PipelineStatus() {Tasks = As.List(new TaskInfo("t1"))}, repoUrl,0
+                               ));
+            theBus.Publish(new BuildUpdated(buildId, 0, TaskInfo.TaskStatus.Started, 1));
+            Enumerable.Range(0,1000).ToList().ForEach(i => theBus.Publish(new TerminalUpdate(buildId : buildId, content : "content", contentSequenceIndex : i, taskIndex : 0,sequenceId:i+2)));
+            theBus.Publish(new BuildUpdated(buildId, 0, TaskInfo.TaskStatus.FinishedSuccess, 1002));
+            theBus.Publish(new BuildEnded(buildId, BuildTotalEndStatus.Success, 2003));
 
             Specs.Support.AssertionHelpers.WithRetries(() =>
                                                                 {

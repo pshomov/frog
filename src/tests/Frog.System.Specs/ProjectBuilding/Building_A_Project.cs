@@ -49,7 +49,7 @@ namespace Frog.System.Specs.ProjectBuilding
                                               An.Event<BuildStarted>(
                                                   ev =>
                                                   ev.BuildId == newGuid && ev.RepoUrl == RepoUrl &&
-                                                  ev.Status.Tasks.Count == 1
+                                                  ev.Status.Tasks.Count == 1 && ev.SequenceId == 1
                                                   ))));
         }
 

@@ -16,7 +16,7 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
 
         protected override void When()
         {
-            View.Handle(new TerminalUpdate("content1", 0, 0, BuildMessage.BuildId));
+            View.Handle(new TerminalUpdate("content1", 0, 0, BuildMessage.BuildId, 0));
         }
 
         [Test]
