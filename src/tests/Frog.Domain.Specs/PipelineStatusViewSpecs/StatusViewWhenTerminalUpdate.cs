@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using NUnit.Framework;
 
@@ -16,7 +17,7 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
 
         protected override void When()
         {
-            View.Handle(new TerminalUpdate("content1", 0, 0, BuildMessage.BuildId, 0));
+            View.Handle(new TerminalUpdate("content1", 0, 0, BuildMessage.BuildId, 0, Guid.NewGuid()));
         }
 
         [Test]

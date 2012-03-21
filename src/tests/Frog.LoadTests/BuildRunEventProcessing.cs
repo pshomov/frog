@@ -51,7 +51,8 @@ namespace Frog.LoadTests
             theBus.Publish(new BuildStarted(buildId, new PipelineStatus() {Tasks = As.List(new TaskInfo("t1"))}, repoUrl,0
                                ));
             theBus.Publish(new BuildUpdated(buildId, 0, TaskInfo.TaskStatus.Started, 1));
-            Enumerable.Range(0,1000).ToList().ForEach(i => theBus.Publish(new TerminalUpdate(buildId : buildId, content : "content", contentSequenceIndex : i, taskIndex : 0,sequenceId:i+2)));
+            var terminalId = Guid.NewGuid();
+            Enumerable.Range(0,1000).ToList().ForEach(i => theBus.Publish(new TerminalUpdate(content : "content", taskIndex : 0,contentSequenceIndex : i, buildId : buildId, sequenceId:i+2, terminalId: terminalId)));
             theBus.Publish(new BuildUpdated(buildId, 0, TaskInfo.TaskStatus.FinishedSuccess, 1002));
             theBus.Publish(new BuildEnded(buildId, BuildTotalEndStatus.Success, 2003));
 

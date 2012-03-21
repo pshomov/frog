@@ -31,7 +31,7 @@ namespace Frog.Domain.Specs.WorkerSpecs
                             Pipeline.OnBuildEnded +=
                                 Raise.Event<Action<BuildTotalEndStatus>>(BuildTotalEndStatus.Success);
                             Pipeline.OnTerminalUpdate +=
-                                Raise.Event<Action<TerminalUpdateInfo>>(new TerminalUpdateInfo(0, "", 0));
+                                Raise.Event<Action<TerminalUpdateInfo>>(new TerminalUpdateInfo(0, "", 0, Guid.NewGuid()));
                         });
 
             Worker = new Worker(Pipeline, WorkingAreaGovernor);

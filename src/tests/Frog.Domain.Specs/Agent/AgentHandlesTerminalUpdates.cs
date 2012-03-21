@@ -21,8 +21,8 @@ namespace Frog.Domain.Specs.Agent
             Bus.Received().Publish(
                 Arg.Is<TerminalUpdate>(
                     update =>
-                    update.BuildId == buildMessage.Id && update.Content == "content" && update.TaskIndex == 1 &&
-                    update.ContentSequenceIndex == 1));
+                    update.BuildId == buildMessage.Id && update.Content == "content" && update.TaskIndex == 1 && update.SequenceId == 0 && update.TerminalId == TerminalId &&
+                    update.ContentSequenceIndex == 0));
         }
     }
 }

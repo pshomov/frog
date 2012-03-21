@@ -32,16 +32,18 @@ namespace Frog.Domain
 
     public class TerminalUpdateInfo
     {
-        public TerminalUpdateInfo(int contentSequenceIndex, string content, int taskIndex)
+        public TerminalUpdateInfo(int contentSequenceIndex, string content, int taskIndex, Guid terminalId)
         {
             ContentSequenceIndex = contentSequenceIndex;
             Content = content;
             TaskIndex = taskIndex;
+            TerminalId = terminalId;
         }
 
         public string Content { get; private set; }
         public int ContentSequenceIndex { get; private set; }
         public int TaskIndex { get; private set; }
+        public Guid TerminalId { get; private set; }
     }
 
     public class PipelineStatus

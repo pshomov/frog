@@ -41,6 +41,19 @@ namespace Frog.System.Specs.ProjectBuilding
         }
 
         [Test]
+        public void should_announce_the_project_has_been_checked_out()
+        {
+            var prober = new PollingProber(5000, 100);
+            Assert.True(prober.check(Take.Snapshot(() => system.GetEventsSnapshot())
+                                         .Has(x => x,
+                                              An.Event<ProjectCheckedOut>(
+                                                  ev =>
+                                                  ev.BuildId == newGuid && ev.RepoUrl == RepoUrl &&
+                                                  ev.SequenceId == 0
+                                                  ))));
+        }
+
+        [Test]
         public void should_announce_the_build_has_started()
         {
             var prober = new PollingProber(5000, 100);
@@ -62,7 +75,7 @@ namespace Frog.System.Specs.ProjectBuilding
                                               An.Event<BuildUpdated>(
                                                   ev =>
                                                   ev.BuildId == newGuid && ev.TaskIndex == 0 &&
-                                                  ev.TaskStatus == TaskInfo.TaskStatus.Started
+                                                  ev.TaskStatus == TaskInfo.TaskStatus.Started && ev.SequenceId == 2
                                                   ))));
         }
 
@@ -74,11 +87,28 @@ namespace Frog.System.Specs.ProjectBuilding
                                          .Has(x => x,
                                               An.Event<TerminalUpdate>(
                                                   ev =>
-                                                  ev.BuildId == newGuid && ev.TaskIndex == 0 &&
+                                                  ev.BuildId == newGuid && 
+                                                  ev.TaskIndex == 0 &&
                                                   ev.ContentSequenceIndex == 0 &&
-                                                  ev.Content.Contains(TerminalOutput3)))));
+                                                  ev.Content.Contains(TerminalOutput3) && 
+                                                  ev.SequenceId == 0
+                                                  ))));
         }
 
+        [Test]
+        public void should_mark_the_task_as_finished_and_successful()
+        {
+            var prober = new PollingProber(5000, 100);
+            Assert.True(prober.check(Take.Snapshot(() => system.GetEventsSnapshot())
+                                         .Has(x => x,
+                                              An.Event<BuildUpdated>(
+                                                  ev =>
+                                                  ev.BuildId == newGuid &&
+                                                  ev.TaskStatus == TaskInfo.TaskStatus.FinishedSuccess && 
+                                                  ev.TaskIndex == 0 &&
+                                                  ev.SequenceId == 3
+                                                  ))));
+        }
         [Test]
         public void should_mark_the_build_as_finished_and_successful()
         {
@@ -87,7 +117,10 @@ namespace Frog.System.Specs.ProjectBuilding
                                          .Has(x => x,
                                               An.Event<BuildEnded>(
                                                   ev =>
-                                                  ev.BuildId == newGuid && ev.TotalStatus == BuildTotalEndStatus.Success))));
+                                                  ev.BuildId == newGuid &&
+                                                  ev.TotalStatus == BuildTotalEndStatus.Success && 
+                                                  ev.SequenceId == 4
+                                                  ))));
         }
 
         [Test]

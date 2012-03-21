@@ -10,6 +10,8 @@ namespace Frog.Domain.Specs.WorkerSpecs
         string content;
         int taskindex;
         int contentSequenceIndex;
+        private Guid terminalId;
+        private Guid receivedTerminalId;
 
         protected override void Given()
         {
@@ -22,12 +24,13 @@ namespace Frog.Domain.Specs.WorkerSpecs
                                                 content = info.Content;
                                                 taskindex = info.TaskIndex;
                                                 contentSequenceIndex = info.ContentSequenceIndex;
+                                                receivedTerminalId = info.TerminalId;
                                             };
+            terminalId = Guid.NewGuid();
             Pipeline.When(pipeline => pipeline.Process(Arg.Any<SourceDrop>())).Do(
                 info =>
                 Pipeline.OnTerminalUpdate +=
-                Raise.Event<Action<TerminalUpdateInfo>>(new TerminalUpdateInfo(content: "cont", taskIndex: 2,
-                                                                               contentSequenceIndex: 3)));
+                Raise.Event<Action<TerminalUpdateInfo>>(new TerminalUpdateInfo(contentSequenceIndex: 3, content: "cont", taskIndex: 2, terminalId: terminalId)));
         }
 
         protected override void When()
@@ -41,6 +44,7 @@ namespace Frog.Domain.Specs.WorkerSpecs
             Assert.That(content, Is.EqualTo("cont"));
             Assert.That(taskindex, Is.EqualTo(2));
             Assert.That(contentSequenceIndex, Is.EqualTo(3));
+            Assert.That(receivedTerminalId, Is.EqualTo(terminalId));
         }
     }
 }

@@ -35,10 +35,11 @@ namespace Frog.Domain
 
             for (int i = 0; i < execTasks.Count; i++)
             {
+                var terminalId = Guid.NewGuid();
                 var execTask = execTasks[i];
                 OnBuildUpdated(i, TaskInfo.TaskStatus.Started);
                 int sequneceIndex = 0;
-                Action<string> execTaskOnOnTerminalOutputUpdate = s => OnTerminalUpdate(new TerminalUpdateInfo(sequneceIndex++, s, i));
+                Action<string> execTaskOnOnTerminalOutputUpdate = s => OnTerminalUpdate(new TerminalUpdateInfo(sequneceIndex++, s, i, terminalId));
                 execTask.OnTerminalOutputUpdate += execTaskOnOnTerminalOutputUpdate;
                 try
                 {

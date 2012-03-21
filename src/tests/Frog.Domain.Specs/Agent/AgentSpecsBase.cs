@@ -11,6 +11,7 @@ namespace Frog.Domain.Specs.Agent
         protected Domain.Agent Agent;
         protected Worker Worker;
         protected SourceRepoDriver Repo;
+        protected Guid TerminalId;
 
         protected override void Given()
         {
@@ -25,7 +26,8 @@ namespace Frog.Domain.Specs.Agent
                                 Raise.Event<ProjectCheckedOutDelegate>(new CheckoutInfo {Comment = "committed", Revision = "2"});
                             Worker.OnBuildStarted +=
                                 Raise.Event<BuildStartedDelegate>(new PipelineStatus());
-                            Worker.OnTerminalUpdates += Raise.Event<Action<TerminalUpdateInfo>>(new TerminalUpdateInfo(content: "content", taskIndex: 1, contentSequenceIndex: 1));
+                            TerminalId = Guid.NewGuid();
+                            Worker.OnTerminalUpdates += Raise.Event<Action<TerminalUpdateInfo>>(new TerminalUpdateInfo(contentSequenceIndex: 0, content: "content", taskIndex: 1, terminalId: TerminalId));
                             Worker.OnBuildUpdated +=
                                 Raise.Event<Action<int, TaskInfo.TaskStatus>>(0, TaskInfo.TaskStatus.Started);
                             Worker.OnBuildEnded += Raise.Event<Action<BuildTotalEndStatus>>(BuildTotalEndStatus.Success);

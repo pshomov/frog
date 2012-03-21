@@ -105,17 +105,20 @@ namespace Frog.Domain
         public int TaskIndex { get;  set; }
 
         public int ContentSequenceIndex { get;  set; }
-		
+
+        public Guid TerminalId { get; private set; }
+
         public TerminalUpdate() : base()
         {
         }
 
-        public TerminalUpdate(string content, int taskIndex, int contentSequenceIndex, Guid buildId, int sequenceId)
+        public TerminalUpdate(string content, int taskIndex, int contentSequenceIndex, Guid buildId, int sequenceId, Guid terminalId)
             : base(buildId, sequenceId)
         {
             Content = content;
             TaskIndex = taskIndex;
             ContentSequenceIndex = contentSequenceIndex;
+            TerminalId = terminalId;
         }
     }
 
@@ -147,9 +150,8 @@ namespace Frog.Domain
             Action<int, TaskInfo.TaskStatus> onBuildUpdated =
                 (i, status) => theBus.Publish(new BuildUpdated(buildId: message.Id, taskIndex: i, newStatus: status, sequenceId: NextEventId));
             Action<TerminalUpdateInfo> onTerminalUpdates = info => 
-                                                         theBus.Publish(new TerminalUpdate(buildId: message.Id,
-                                                                                           content: info.Content, taskIndex: info.TaskIndex,
-                                                                                           contentSequenceIndex: info.ContentSequenceIndex, sequenceId: NextEventId));
+                                                         theBus.Publish(new TerminalUpdate(content: info.Content, taskIndex: info.TaskIndex,
+                                                                                           contentSequenceIndex: info.ContentSequenceIndex, buildId: message.Id, sequenceId: info.ContentSequenceIndex, terminalId: info.TerminalId));
             ProjectCheckedOutDelegate onProjectCheckedOut =
                 info => theBus.Publish(new ProjectCheckedOut(buildId : message.Id, sequenceId:NextEventId){ CheckoutInfo = info, RepoUrl = message.RepoUrl});
 
