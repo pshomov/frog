@@ -23,7 +23,7 @@ namespace Frog.Domain
         }
 
         public event BuildStartedDelegate OnBuildStarted = status => {};
-        public event Action<int, TaskInfo.TaskStatus> OnBuildUpdated = (i,status) => {};
+        public event Action<int, Guid, TaskInfo.TaskStatus> OnBuildUpdated = (i, terminalId, status) => {};
         public event Action<BuildTotalEndStatus> OnBuildEnded = status => {};
         public event Action<TerminalUpdateInfo> OnTerminalUpdate = info => {};
 
@@ -37,7 +37,7 @@ namespace Frog.Domain
             {
                 var terminalId = Guid.NewGuid();
                 var execTask = execTasks[i];
-                OnBuildUpdated(i, TaskInfo.TaskStatus.Started);
+                OnBuildUpdated(i, terminalId, TaskInfo.TaskStatus.Started);
                 int sequneceIndex = 0;
                 Action<string> execTaskOnOnTerminalOutputUpdate = s => OnTerminalUpdate(new TerminalUpdateInfo(sequneceIndex++, s, i, terminalId));
                 execTask.OnTerminalOutputUpdate += execTaskOnOnTerminalOutputUpdate;
@@ -54,7 +54,7 @@ namespace Frog.Domain
                 var taskStatus = execTaskStatus == ExecTaskResult.Status.Error
                                      ? TaskInfo.TaskStatus.FinishedError
                                      : TaskInfo.TaskStatus.FinishedSuccess;
-                OnBuildUpdated(i, taskStatus);
+                OnBuildUpdated(i, terminalId, taskStatus);
                 if (execTaskStatus != ExecTaskResult.Status.Success) break;
             }
 

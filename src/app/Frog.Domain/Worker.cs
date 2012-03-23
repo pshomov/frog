@@ -50,7 +50,7 @@ namespace Frog.Domain
 
         public virtual event Action<TerminalUpdateInfo> OnTerminalUpdates = info => {};
         public virtual event BuildStartedDelegate OnBuildStarted = status => {};
-        public virtual event Action<int, TaskInfo.TaskStatus> OnBuildUpdated =  (i,status) => {};
+        public virtual event Action<int, Guid, TaskInfo.TaskStatus> OnBuildUpdated =  (i, terminalId, status) => {};
         public virtual event Action<BuildTotalEndStatus> OnBuildEnded = status => {};
         public virtual event ProjectCheckedOutDelegate OnProjectCheckedOut = info => {};
     }

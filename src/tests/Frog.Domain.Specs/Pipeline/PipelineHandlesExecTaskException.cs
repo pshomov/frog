@@ -27,7 +27,7 @@ namespace Frog.Domain.Specs.Pipeline
         [Test]
         public void should_announce_the_task_with_error_status()
         {
-            PipelineOnBuildUpdated.Received().Invoke(0, TaskInfo.TaskStatus.FinishedError);
+            PipelineOnBuildUpdated.Received().Invoke(0, Arg.Any<Guid>(), TaskInfo.TaskStatus.FinishedError);
         }
 
         [Test]

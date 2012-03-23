@@ -50,10 +50,10 @@ namespace Frog.LoadTests
             theBus.Publish(new ProjectCheckedOut(buildId,0){CheckoutInfo = new CheckoutInfo(){Comment = "asd", Revision = "12"}, RepoUrl = repoUrl});
             theBus.Publish(new BuildStarted(buildId, new PipelineStatus() {Tasks = As.List(new TaskInfo("t1"))}, repoUrl,0
                                ));
-            theBus.Publish(new BuildUpdated(buildId, 0, TaskInfo.TaskStatus.Started, 1));
             var terminalId = Guid.NewGuid();
+            theBus.Publish(new BuildUpdated(buildId, 0, TaskInfo.TaskStatus.Started, 1, terminalId));
             Enumerable.Range(0,1000).ToList().ForEach(i => theBus.Publish(new TerminalUpdate(content : "content", taskIndex : 0,contentSequenceIndex : i, buildId : buildId, sequenceId:i+2, terminalId: terminalId)));
-            theBus.Publish(new BuildUpdated(buildId, 0, TaskInfo.TaskStatus.FinishedSuccess, 1002));
+            theBus.Publish(new BuildUpdated(buildId, 0, TaskInfo.TaskStatus.FinishedSuccess, 1002, terminalId));
             theBus.Publish(new BuildEnded(buildId, BuildTotalEndStatus.Success, 2003));
 
             Specs.Support.AssertionHelpers.WithRetries(() =>

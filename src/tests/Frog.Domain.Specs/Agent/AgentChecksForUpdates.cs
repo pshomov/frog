@@ -1,4 +1,5 @@
-﻿using Frog.Domain.RepositoryTracker;
+﻿using System;
+using Frog.Domain.RepositoryTracker;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -40,7 +41,7 @@ namespace Frog.Domain.Specs.Agent
         public void should_publish_BuildUpdated_event()
         {
             Bus.Received().Publish(
-                Arg.Is<BuildUpdated>(found => found.TaskStatus == TaskInfo.TaskStatus.Started && found.TaskIndex == 0 && found.BuildId == buildMessage.Id));
+                Arg.Is<BuildUpdated>(found => found.TaskStatus == TaskInfo.TaskStatus.Started && found.TaskIndex == 0 && found.BuildId == buildMessage.Id && found.TerminalId == TerminalId));
         }
 
         [Test]

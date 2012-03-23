@@ -25,7 +25,7 @@ namespace Frog.Domain
     {
         void Process(SourceDrop sourceDrop);
         event BuildStartedDelegate OnBuildStarted;
-        event Action<int, TaskInfo.TaskStatus> OnBuildUpdated;
+        event Action<int, Guid, TaskInfo.TaskStatus> OnBuildUpdated;
         event Action<BuildTotalEndStatus> OnBuildEnded;
         event Action<TerminalUpdateInfo> OnTerminalUpdate;
     }

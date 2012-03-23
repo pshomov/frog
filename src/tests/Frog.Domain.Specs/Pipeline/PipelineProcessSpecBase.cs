@@ -16,7 +16,7 @@ namespace Frog.Domain.Specs.Pipeline
         protected MSBuildTask SrcTask1;
         protected BuildStartedDelegate PipelineOnBuildStarted;
         protected Action<BuildTotalEndStatus> PipelineOnBuildEnded;
-        protected Action<int, TaskInfo.TaskStatus> PipelineOnBuildUpdated;
+        protected Action<int, Guid, TaskInfo.TaskStatus> PipelineOnBuildUpdated;
         protected Action<TerminalUpdateInfo> PipelineOnTerminalUpdate;
 
         protected override void Given()
@@ -31,7 +31,7 @@ namespace Frog.Domain.Specs.Pipeline
         {
             PipelineOnBuildStarted = Substitute.For<BuildStartedDelegate>();
             PipelineOnBuildEnded = Substitute.For<Action<BuildTotalEndStatus>>();
-            PipelineOnBuildUpdated = Substitute.For<Action<int, TaskInfo.TaskStatus>>();
+            PipelineOnBuildUpdated = Substitute.For<Action<int, Guid, TaskInfo.TaskStatus>>();
             PipelineOnTerminalUpdate = Substitute.For<Action<TerminalUpdateInfo>>();
             Pipeline.OnBuildStarted += PipelineOnBuildStarted;
             Pipeline.OnBuildUpdated += PipelineOnBuildUpdated;

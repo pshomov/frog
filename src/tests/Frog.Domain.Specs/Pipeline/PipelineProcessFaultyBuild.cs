@@ -1,3 +1,4 @@
+using System;
 using Frog.Domain.BuildSystems.Solution;
 using Frog.Domain.ExecTasks;
 using Frog.Support;
@@ -51,7 +52,7 @@ namespace Frog.Domain.Specs.Pipeline
         [Test]
         public void should_update_build_status_when_task_starts()
         {
-            PipelineOnBuildUpdated.Received().Invoke(Arg.Is(0), Arg.Is<TaskInfo.TaskStatus>(
+            PipelineOnBuildUpdated.Received().Invoke(Arg.Is(0), Arg.Any<Guid>(), Arg.Is<TaskInfo.TaskStatus>(
                 status =>
                 status == TaskInfo.TaskStatus.Started));
         }
@@ -59,7 +60,7 @@ namespace Frog.Domain.Specs.Pipeline
         [Test]
         public void should_update_build_status_when_task_finishes()
         {
-            PipelineOnBuildUpdated.Received().Invoke(Arg.Is(0), Arg.Is<TaskInfo.TaskStatus>(
+            PipelineOnBuildUpdated.Received().Invoke(Arg.Is(0), Arg.Any<Guid>(), Arg.Is<TaskInfo.TaskStatus>(
                 status =>
                 status == TaskInfo.TaskStatus.FinishedError));
         }
@@ -75,7 +76,7 @@ namespace Frog.Domain.Specs.Pipeline
         [Test]
         public void should_not_start_second_task_at_all()
         {
-            PipelineOnBuildUpdated.DidNotReceive().Invoke(Arg.Is(1), Arg.Any<TaskInfo.TaskStatus>());
+            PipelineOnBuildUpdated.DidNotReceive().Invoke(Arg.Is(1), Arg.Any<Guid>(), Arg.Any<TaskInfo.TaskStatus>());
         }
 
         [Test]

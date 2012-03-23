@@ -29,7 +29,7 @@ namespace Frog.Domain.Specs.Agent
                             TerminalId = Guid.NewGuid();
                             Worker.OnTerminalUpdates += Raise.Event<Action<TerminalUpdateInfo>>(new TerminalUpdateInfo(contentSequenceIndex: 0, content: "content", taskIndex: 1, terminalId: TerminalId));
                             Worker.OnBuildUpdated +=
-                                Raise.Event<Action<int, TaskInfo.TaskStatus>>(0, TaskInfo.TaskStatus.Started);
+                                Raise.Event<Action<int, Guid, TaskInfo.TaskStatus>>(0, TerminalId, TaskInfo.TaskStatus.Started);
                             Worker.OnBuildEnded += Raise.Event<Action<BuildTotalEndStatus>>(BuildTotalEndStatus.Success);
                         });
             Agent = new Domain.Agent(Bus, Worker, url => Repo);

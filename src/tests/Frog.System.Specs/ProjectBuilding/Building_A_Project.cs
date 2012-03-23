@@ -17,9 +17,11 @@ namespace Frog.System.Specs.ProjectBuilding
         private const string RepoUrl = "http://123";
         private SystemDriver system;
         private Guid newGuid;
+        private Guid taskGuid;
 
         protected override void Given()
         {
+            taskGuid = Guid.NewGuid();
             var sourceRepoDriver = Substitute.For<SourceRepoDriver>();
             sourceRepoDriver.GetSourceRevision(Arg.Any<string>(), Arg.Any<string>()).Returns(new CheckoutInfo(){Comment = "Fle", Revision = "123"});
             var workingAreaGoverner = Substitute.For<WorkingAreaGoverner>();
@@ -84,15 +86,28 @@ namespace Frog.System.Specs.ProjectBuilding
         {
             var prober = new PollingProber(5000, 100);
             Assert.True(prober.check(Take.Snapshot(() => system.GetEventsSnapshot())
+                                         .Has(x => x, An.Event<BuildUpdated>(
+                                             ev =>
+                                                 {
+                                                     if (ev.TaskIndex == 0 && ev.BuildId == newGuid &&
+                                                         ev.TaskStatus == TaskInfo.TaskStatus.Started)
+                                                     {
+                                                         taskGuid = ev.TerminalId;
+                                                         return true;
+                                                     }
+                                                     return false;
+                                                 }))
                                          .Has(x => x,
                                               An.Event<TerminalUpdate>(
                                                   ev =>
-                                                  ev.BuildId == newGuid && 
+                                                  ev.BuildId == newGuid &&
                                                   ev.TaskIndex == 0 &&
+                                                  ev.TerminalId == taskGuid &&
                                                   ev.ContentSequenceIndex == 0 &&
-                                                  ev.Content.Contains(TerminalOutput3) && 
+                                                  ev.Content.Contains(TerminalOutput3) &&
                                                   ev.SequenceId == 0
-                                                  ))));
+                                                  ))
+                            ));
         }
 
         [Test]
@@ -100,10 +115,22 @@ namespace Frog.System.Specs.ProjectBuilding
         {
             var prober = new PollingProber(5000, 100);
             Assert.True(prober.check(Take.Snapshot(() => system.GetEventsSnapshot())
+                                         .Has(x => x, An.Event<BuildUpdated>(
+                                             ev =>
+                                             {
+                                                 if (ev.TaskIndex == 0 && ev.BuildId == newGuid &&
+                                                     ev.TaskStatus == TaskInfo.TaskStatus.Started)
+                                                 {
+                                                     taskGuid = ev.TerminalId;
+                                                     return true;
+                                                 }
+                                                 return false;
+                                             }))
                                          .Has(x => x,
                                               An.Event<BuildUpdated>(
                                                   ev =>
                                                   ev.BuildId == newGuid &&
+                                                  ev.TerminalId == taskGuid &&
                                                   ev.TaskStatus == TaskInfo.TaskStatus.FinishedSuccess && 
                                                   ev.TaskIndex == 0 &&
                                                   ev.SequenceId == 3

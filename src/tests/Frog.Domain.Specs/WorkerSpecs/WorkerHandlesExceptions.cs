@@ -24,14 +24,15 @@ namespace Frog.Domain.Specs.WorkerSpecs
                 worker => worker.Process(Arg.Is<SourceDrop>(drop => drop.SourceDropLocation == "2"))).Do(
                     callInfo =>
                         {
+                            var terminalId = Guid.NewGuid();
                             Pipeline.OnBuildStarted +=
                                 Raise.Event<BuildStartedDelegate>(new PipelineStatus());
                             Pipeline.OnBuildUpdated +=
-                                Raise.Event<Action<int, TaskInfo.TaskStatus>>(0, TaskInfo.TaskStatus.Started);
+                                Raise.Event<Action<int, Guid, TaskInfo.TaskStatus>>(0, terminalId, TaskInfo.TaskStatus.Started);
                             Pipeline.OnBuildEnded +=
                                 Raise.Event<Action<BuildTotalEndStatus>>(BuildTotalEndStatus.Success);
                             Pipeline.OnTerminalUpdate +=
-                                Raise.Event<Action<TerminalUpdateInfo>>(new TerminalUpdateInfo(0, "", 0, Guid.NewGuid()));
+                                Raise.Event<Action<TerminalUpdateInfo>>(new TerminalUpdateInfo(0, "", 0, terminalId));
                         });
 
             Worker = new Worker(Pipeline, WorkingAreaGovernor);

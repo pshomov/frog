@@ -72,14 +72,17 @@ namespace Frog.Domain
         public int TaskIndex { get;  set; }
 
         public TaskInfo.TaskStatus TaskStatus { get; set; }
-		
+
+        public Guid TerminalId { get; private set; }
+
         public BuildUpdated() : base()
         {
         }
-        public BuildUpdated(Guid buildId, int taskIndex, TaskInfo.TaskStatus newStatus, int sequenceId) : base(buildId,sequenceId)
+        public BuildUpdated(Guid buildId, int taskIndex, TaskInfo.TaskStatus newStatus, int sequenceId, Guid terminalId) : base(buildId,sequenceId)
         {
             TaskIndex = taskIndex;
             TaskStatus = newStatus;
+            TerminalId = terminalId;
         }
     }
 
@@ -147,8 +150,8 @@ namespace Frog.Domain
             Action<BuildTotalEndStatus> onBuildEnded = started => theBus.Publish(new BuildEnded(message.Id, started, NextEventId));
             BuildStartedDelegate onBuildStarted =
                 started => theBus.Publish(new BuildStarted(buildId: message.Id, status: started, repoUrl: message.RepoUrl, sequenceId:NextEventId));
-            Action<int, TaskInfo.TaskStatus> onBuildUpdated =
-                (i, status) => theBus.Publish(new BuildUpdated(buildId: message.Id, taskIndex: i, newStatus: status, sequenceId: NextEventId));
+            Action<int, Guid, TaskInfo.TaskStatus> onBuildUpdated =
+                (i, terminalId, status) => theBus.Publish(new BuildUpdated(buildId: message.Id, taskIndex: i, newStatus: status, sequenceId: NextEventId, terminalId: terminalId));
             Action<TerminalUpdateInfo> onTerminalUpdates = info => 
                                                          theBus.Publish(new TerminalUpdate(content: info.Content, taskIndex: info.TaskIndex,
                                                                                            contentSequenceIndex: info.ContentSequenceIndex, buildId: message.Id, sequenceId: info.ContentSequenceIndex, terminalId: info.TerminalId));
