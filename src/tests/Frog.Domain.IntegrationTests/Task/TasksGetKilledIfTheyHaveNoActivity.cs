@@ -1,8 +1,8 @@
 using Frog.Domain.ExecTasks;
 using Frog.Specs.Support;
 using Frog.Support;
+using NSubstitute;
 using NUnit.Framework;
-using Rhino.Mocks;
 
 namespace Frog.Domain.IntegrationTests.Task
 {
@@ -13,8 +13,8 @@ namespace Frog.Domain.IntegrationTests.Task
 
         protected override void Given()
         {
-            processWrapper = MockRepository.GenerateMock<IProcessWrapper>();
-            processWrapper.Expect(wrapper => wrapper.ProcessTreeCPUUsageId).Return("");
+            processWrapper = Substitute.For<IProcessWrapper>();
+            processWrapper.ProcessTreeCPUUsageId.Returns("");
             task = new ExecTask("fle", "flo", "name",
                                 (s, s1, arg3) => processWrapper, periodLengthMs: 1000, quotaNrPeriods: 10);
         }
@@ -27,14 +27,13 @@ namespace Frog.Domain.IntegrationTests.Task
         [Test]
         public void should_kill_task()
         {
-            processWrapper.AssertWasCalled(wrapper => wrapper.Dispose());
+            processWrapper.Received().Dispose();
         }
 
         [Test]
         public void should_not_execute_all_quota_periods()
         {
-            processWrapper.AssertWasCalled(wrapper => wrapper.WaitForProcess(Arg<int>.Is.Anything),
-                                           options => options.Repeat.Times(1));
+            processWrapper.Received(1).WaitForProcess(Arg.Any<int>());
         }
     }
 }
