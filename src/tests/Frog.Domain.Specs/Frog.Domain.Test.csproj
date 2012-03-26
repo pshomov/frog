@@ -113,27 +113,18 @@
     <Compile Include="TaskDetection\TaskDetectorSpecs.cs" />
     <Compile Include="TaskDetection\TaskDetectorSpecsBase.cs" />
     <Compile Include="Pipeline\PipelineProcessSuccessfulBuild.cs" />
-    <Compile Include="ProcessHandlerSpecs.cs" />
     <Compile Include="TaskDetection\RubyTasksDetection.cs" />
     <Compile Include="TaskGeneratorSpec.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Task\TasksCPUQuotaMeasurementOfExitedProcessDoesNotCauseException.cs" />
-    <Compile Include="Task\TasksHaveQuotaOnRunTime.cs" />
-    <Compile Include="Task\TaskCurrentDirectory.cs" />
-    <Compile Include="Task\TaskReporting.cs" />
     <Compile Include="TaskDetection\NUnitTaskDetectorSpecs.cs" />
-    <Compile Include="Task\TaskSendsTerminalOutputEvent.cs" />
-    <Compile Include="Task\TasksGetKilledIfTheyHaveNoActivity.cs" />
     <Compile Include="TerminalOutputConsolidationMethod.cs" />
     <Compile Include="TestTypes.cs" />
     <Compile Include="WorkerSpecs\WorkerHandlesExceptions.cs" />
     <Compile Include="WorkerSpecs\WorkerPropagetesTerminalUpdateEvents.cs" />
     <Compile Include="WorkerSpecs\WorkerKicksPipelineOffWhenSourceUpdates.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Task\TaskSpec.cs" />
     <Compile Include="WorkerSpecs\WorkerSpecsBase.cs" />
-    <Compile Include="WorkingAreaAllocation.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\app\Frog.Domain\Frog.Domain.csproj">
@@ -161,7 +152,5 @@
     </None>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <ItemGroup>
-    <Folder Include="FileGeneration\" />
-  </ItemGroup>
+  <ItemGroup />
 </Project>

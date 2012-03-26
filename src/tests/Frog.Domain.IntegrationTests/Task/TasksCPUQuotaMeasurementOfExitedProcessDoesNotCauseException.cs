@@ -1,12 +1,11 @@
-﻿using System;
-using System.Linq;
+using System;
 using Frog.Domain.ExecTasks;
 using Frog.Specs.Support;
 using Frog.Support;
-using NUnit.Framework;
 using NSubstitute;
+using NUnit.Framework;
 
-namespace Frog.Domain.Specs.Task
+namespace Frog.Domain.IntegrationTests.Task
 {
     public class TasksCPUQuotaMeasurementOfExitedProcessDoesNotCauseException : BDD
     {

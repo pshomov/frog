@@ -1,9 +1,9 @@
 using Frog.Domain.ExecTasks;
 using Frog.Specs.Support;
-using NUnit.Framework;
 using Frog.Support;
+using NUnit.Framework;
 
-namespace Frog.Domain.Specs.Task
+namespace Frog.Domain.IntegrationTests.Task
 {
     [TestFixture]
     public class TaskCurrentDirectory : BDD

@@ -1,12 +1,11 @@
-﻿using System;
 using System.Linq;
 using Frog.Domain.ExecTasks;
 using Frog.Specs.Support;
 using Frog.Support;
-using NUnit.Framework;
 using NSubstitute;
+using NUnit.Framework;
 
-namespace Frog.Domain.Specs.Task
+namespace Frog.Domain.IntegrationTests.Task
 {
     public class TasksHaveQuotaOnRunTime : BDD
     {
@@ -30,7 +29,7 @@ namespace Frog.Domain.Specs.Task
         public void should_kill_process_after_timeout()
         {
             Assert.That(
-                processWrapper.ReceivedCalls().Where(call => call.GetMethodInfo().Name == "WaitForProcess" && call.GetArguments().Count() == 1).Count(),
+                (object) processWrapper.ReceivedCalls().Where(call => call.GetMethodInfo().Name == "WaitForProcess" && Enumerable.Count<object>(call.GetArguments()) == 1).Count(),
                 Is.EqualTo(3));
             processWrapper.Received().Dispose();
         }

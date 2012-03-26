@@ -1,11 +1,10 @@
-﻿using System;
 using Frog.Domain.ExecTasks;
 using Frog.Specs.Support;
 using Frog.Support;
 using NUnit.Framework;
 using Rhino.Mocks;
 
-namespace Frog.Domain.Specs.Task
+namespace Frog.Domain.IntegrationTests.Task
 {
     public class TasksGetKilledIfTheyHaveNoActivity : BDD
     {

@@ -1,11 +1,10 @@
 using System;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Text;
 using Frog.Support;
 using NUnit.Framework;
 
-namespace Frog.Domain.Specs
+namespace Frog.Domain.IntegrationTests
 {
     [TestFixture]
     public class ProcessHandlerSpec

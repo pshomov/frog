@@ -4,7 +4,7 @@ using Frog.Specs.Support;
 using Frog.Support;
 using NUnit.Framework;
 
-namespace Frog.Domain.Specs.Task
+namespace Frog.Domain.IntegrationTests.Task
 {
     [TestFixture]
     public class TaskFailsToStartSpec : BDD

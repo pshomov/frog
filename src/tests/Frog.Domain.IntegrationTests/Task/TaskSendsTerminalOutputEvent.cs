@@ -1,14 +1,12 @@
-using System;
 using System.Threading;
 using Frog.Domain.ExecTasks;
 using Frog.Specs.Support;
 using Frog.Support;
 using NUnit.Framework;
 
-namespace Frog.Domain.Specs.Task
+namespace Frog.Domain.IntegrationTests.Task
 {
     [TestFixture]
-    [Category(TestTypes.Integration)]
     public class TaskSendsTerminalOutputEventWhenStdOutputChange : BDD
     {
         string stdOutput = "";
@@ -34,7 +32,6 @@ namespace Frog.Domain.Specs.Task
     }
 
     [TestFixture]
-    [Category(TestTypes.Integration)]
     public class TaskSendsTerminalOutputEventWhenErrOutputChange : BDD
     {
         string errOutput = "";
@@ -85,7 +82,6 @@ namespace Frog.Domain.Specs.Task
     }
 
     [TestFixture]
-    [Category(TestTypes.Integration)]
     public class TaskTerminalOutputDoesNotNeedSubscribersToWork : BDD
     {
         IExecTask task;
