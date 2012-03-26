@@ -2,7 +2,7 @@ using System.IO;
 using Frog.Specs.Support;
 using Frog.Support;
 
-namespace Frog.Domain.Specs.Git
+namespace Frog.Domain.IntegrationTests.Git
 {
     public abstract class GitRepositoryDriverCheckBase : BDD
     {

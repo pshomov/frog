@@ -88,10 +88,6 @@
     <Compile Include="Agent\AgentSpecsWithTwoPeojects.cs" />
     <Compile Include="Agent\AgentJoinsThePartySpec.cs" />
     <Compile Include="FileFinderSpecs.cs" />
-    <Compile Include="Git\GitRepositoryGetSourceRev.cs" />
-    <Compile Include="Git\GitRepositoryGetRevisionSpecs.cs" />
-    <Compile Include="Git\GitRepositoryCheckForLatestRev.cs" />
-    <Compile Include="Git\GitRepositoryDriverCheckBase.cs" />
     <Compile Include="PipelineStatusViewSpecs\BuildStatusUpdating.cs" />
     <Compile Include="PipelineStatusViewSpecs\StatusViewAfterBuildCompletedSuccessfullySpec.cs" />
     <Compile Include="PipelineStatusViewSpecs\StatusViewAfterBuildCompletedWithErrorSpec.cs" />
@@ -116,7 +112,6 @@
     <Compile Include="TaskDetection\MakeTaskDetectorSpecs.cs" />
     <Compile Include="TaskDetection\TaskDetectorSpecs.cs" />
     <Compile Include="TaskDetection\TaskDetectorSpecsBase.cs" />
-    <Compile Include="PathGoble\GobleTests.cs" />
     <Compile Include="Pipeline\PipelineProcessSuccessfulBuild.cs" />
     <Compile Include="ProcessHandlerSpecs.cs" />
     <Compile Include="TaskDetection\RubyTasksDetection.cs" />
@@ -139,7 +134,6 @@
     <Compile Include="Task\TaskSpec.cs" />
     <Compile Include="WorkerSpecs\WorkerSpecsBase.cs" />
     <Compile Include="WorkingAreaAllocation.cs" />
-    <Compile Include="FileGeneration\FileGenesisTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\app\Frog.Domain\Frog.Domain.csproj">
@@ -167,5 +161,7 @@
     </None>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="FileGeneration\" />
+  </ItemGroup>
 </Project>

@@ -3,7 +3,7 @@ using Frog.Specs.Support;
 using Frog.Support;
 using NUnit.Framework;
 
-namespace Frog.Domain.Specs.FileGeneration
+namespace Frog.Domain.IntegrationTests.FileGeneration
 {
     [TestFixture]
     public class FileGenesisTests

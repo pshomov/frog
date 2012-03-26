@@ -1,10 +1,8 @@
-using System;
 using System.IO;
 using Frog.Specs.Support;
-using Frog.Support;
 using NUnit.Framework;
 
-namespace Frog.Domain.Specs.Git
+namespace Frog.Domain.IntegrationTests.Git
 {
     [TestFixture]
     public class GitRepositoryGetSourceRev : GitRepositoryDriverCheckBase

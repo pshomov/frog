@@ -42,6 +42,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="FileGeneration\FileGenesisTests.cs" />
+    <Compile Include="Git\GitRepositoryCheckForLatestRev.cs" />
+    <Compile Include="Git\GitRepositoryDriverCheckBase.cs" />
+    <Compile Include="Git\GitRepositoryGetRevisionSpecs.cs" />
+    <Compile Include="Git\GitRepositoryGetSourceRev.cs" />
+    <Compile Include="PathGoble\GobleTests.cs" />
     <Compile Include="RabbitMQ\MessageBusChecksIfShouldContinue.cs" />
     <Compile Include="RabbitMQ\RabbitMQBasicMessagingTest.cs" />
     <Compile Include="ProjectRepository\InMemoryProjectRepository.cs" />

@@ -4,9 +4,8 @@ using Frog.Specs.Support;
 using Frog.Support;
 using NUnit.Framework;
 
-namespace Frog.Domain.Specs.PathGoble
+namespace Frog.Domain.IntegrationTests.PathGoble
 {
-    [Category(TestTypes.Integration)]
     [TestFixture]
     public class GobleTests
     {
