@@ -121,7 +121,7 @@ namespace Frog.Domain.IntegrationTests
                 Process.GetProcessById(processWrapper);
                 return false;
             }
-            catch (ArgumentException e)
+            catch (ArgumentException)
             {
                 return true;
             }

@@ -38,8 +38,6 @@ namespace Frog.Domain.Integration
             }
         }
 
-        private IRiakClient client;
-
         private IRiakClient Client
         {
             get { 

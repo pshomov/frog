@@ -36,7 +36,7 @@ namespace Frog.Domain.IntegrationTests.Task
                 var a = _taskResult.ExitCode;
                 Assert.Fail("should have thrown an exception");
             }
-            catch (InvalidOperationException e)
+            catch (InvalidOperationException)
             {
             }
         }

@@ -10,12 +10,10 @@ namespace Frog.Domain.UI
     {
         private readonly IStoreEvents eventStore;
         private Dictionary<Guid, IEventStream> streams = new Dictionary<Guid, IEventStream>();
-        private int batch;
 
         public PipelineStatusView(IStoreEvents eventStore)
         {
             this.eventStore = eventStore;
-            batch = 0;
         }
 
         IEventStream GetEventStream(Guid id)

@@ -56,7 +56,7 @@ namespace Frog.Domain.UI
             {
                 return currentBuild[repoUrl];
             }
-            catch (KeyNotFoundException e)
+            catch (KeyNotFoundException)
             {
                 throw new RepositoryNotRegisteredException();
             }

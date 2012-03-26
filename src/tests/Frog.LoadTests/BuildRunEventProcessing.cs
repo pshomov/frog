@@ -64,7 +64,7 @@ namespace Frog.LoadTests
                                                                                     Is.EqualTo(
                                                                                         BuildTotalStatus.BuildEndedSuccess));
                                                                     }
-                                                                    catch (BuildNotFoundException e)
+                                                                    catch (BuildNotFoundException)
                                                                     {
                                                                         throw new AssertionException("build not found");
                                                                     }

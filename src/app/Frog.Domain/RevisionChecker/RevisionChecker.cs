@@ -22,7 +22,7 @@ namespace Frog.Domain.RevisionChecker
                 var latestRevision = driver.GetLatestRevision();
                 bus.Publish(new UpdateFound { RepoUrl = checkRevision.RepoUrl, Revision = latestRevision });
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 bus.Publish(new CheckForUpdateFailed {repoUrl = checkRevision.RepoUrl});
             }

@@ -83,8 +83,6 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
 
     class StatusViewCurrentBuildPublicRepo : StatusViewCurrentBuildPublicRepoBase
     {
-        protected PipelineStatus PipelineStatus;
-
         protected override void When()
         {
             RepoUrl = "http://lilalo";

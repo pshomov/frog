@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using CorrugatedIron;
 using Frog.Domain.RepositoryTracker;
@@ -12,7 +11,6 @@ namespace Frog.Domain.Integration
         private readonly string host;
         private readonly int port;
         private readonly string bucket;
-        private IRiakClient iRiakClient;
 
         public RiakProjectRepository(string host, int port, string bucket)
         {
@@ -101,8 +99,6 @@ namespace Frog.Domain.Integration
         private IRiakClient CreateClient()
         {
             return Riak.GetConnectionManager(host, port).CreateClient();
-            if (iRiakClient == null) iRiakClient = Riak.GetConnectionManager(host, port).CreateClient();
-            return iRiakClient;
         }
     }
 }
