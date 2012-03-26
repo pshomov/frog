@@ -62,10 +62,6 @@
       <HintPath>..\..\..\libs\EventStore\EventStore.Wireup.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="Rhino.Mocks, Version=3.6.0.0, Culture=neutral, PublicKeyToken=0b3305902db7183f">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\libs\rhino.mocks\Rhino.Mocks.dll</HintPath>
-    </Reference>
     <Reference Include="System.Core">
     </Reference>
     <Reference Include="KellermanSoftware.Compare-NET-Objects, Version=1.0.2.0, Culture=neutral, PublicKeyToken=null">
