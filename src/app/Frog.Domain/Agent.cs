@@ -24,14 +24,6 @@ namespace Frog.Domain
         }
         public BuildEvent(Guid buildId, int sequenceId): base(sequenceId)
         {
-//            var privateRepo = new Regex(@"^(http://)(\w+):(\w+)@(github.com.*)$");
-//            if (privateRepo.IsMatch(repoUrl))
-//            {
-//                var b = privateRepo.Match(repoUrl).Groups;
-//                BuildId = b[1].Value + b[4].Value;
-//            }
-//            else
-//                BuildId = repoUrl;
             BuildId = buildId;
         }
     }
