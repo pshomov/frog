@@ -31,6 +31,15 @@
     <DefineConstants>DEBUG</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EventStore, Version=3.1.0.0, Culture=neutral, PublicKeyToken=7735eb81c0bd9948, processorArchitecture=MSIL" />
+    <Reference Include="EventStore.Persistence.MongoPersistence">
+      <HintPath>..\..\..\libs\EventStore\EventStore.Persistence.MongoPersistence.dll</HintPath>
+    </Reference>
+    <Reference Include="EventStore.Persistence.MongoPersistence.Wireup">
+      <HintPath>..\..\..\libs\EventStore\EventStore.Persistence.MongoPersistence.Wireup.dll</HintPath>
+    </Reference>
+    <Reference Include="EventStore.Serialization, Version=3.1.0.0, Culture=neutral, PublicKeyToken=7735eb81c0bd9948, processorArchitecture=MSIL" />
+    <Reference Include="EventStore.Wireup, Version=3.1.0.0, Culture=neutral, PublicKeyToken=7735eb81c0bd9948, processorArchitecture=MSIL" />
     <Reference Include="Newtonsoft.Json, Version=4.0.2.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\libs\CorrugatedIron\Newtonsoft.Json.dll</HintPath>
@@ -53,12 +62,15 @@
     <Compile Include="Git\GitRepositoryGetSourceRev.cs" />
     <Compile Include="PathGoble\GobleTests.cs" />
     <Compile Include="ProcessHandlerSpecs.cs" />
+    <Compile Include="ProjectView\EventBasedProjectView.cs" />
+    <Compile Include="ProjectView\InMemProjectView.cs" />
+    <Compile Include="ProjectView\ProjectViewSpecs.cs" />
+    <Compile Include="ProjectView\RiakProjectView.cs" />
     <Compile Include="RabbitMQ\MessageBusChecksIfShouldContinue.cs" />
     <Compile Include="RabbitMQ\RabbitMQBasicMessagingTest.cs" />
     <Compile Include="ProjectRepository\InMemoryProjectRepository.cs" />
     <Compile Include="ProjectRepository\ProjectRepository.cs" />
     <Compile Include="ProjectRepository\RiakProjectRepository.cs" />
-    <Compile Include="RiakProjectView.cs" />
     <Compile Include="Task\TaskCurrentDirectory.cs" />
     <Compile Include="Task\TaskReporting.cs" />
     <Compile Include="Task\TasksCPUQuotaMeasurementOfExitedProcessDoesNotCauseException.cs" />

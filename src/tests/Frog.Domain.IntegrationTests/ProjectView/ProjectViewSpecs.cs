@@ -1,18 +1,15 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using Frog.Domain.Integration;
 using Frog.Domain.UI;
 using Frog.Support;
 using NUnit.Framework;
 
-namespace Frog.Domain.IntegrationTests
+namespace Frog.Domain.IntegrationTests.ProjectView
 {
     [TestFixture]
-    public class RiakProjectView
+    public abstract class ProjectViewSpecs
     {
-        private ProjectView view;
+        private UI.ProjectView view;
 
         [SetUp]
         public void Setup()
@@ -22,10 +19,7 @@ namespace Frog.Domain.IntegrationTests
         }
 
 
-        protected virtual ProjectView GetProjectView()
-        {
-            return new PersistentProjectView(OSHelpers.RiakHost(), OSHelpers.RiakPort(), "buildIds_test1", "repoIds_test");
-        }
+        protected abstract UI.ProjectView GetProjectView();
 
         [Test]
         public void should_have_even_for_nonexisting_builds()
@@ -144,14 +138,5 @@ namespace Frog.Domain.IntegrationTests
             Assert.That(buildHistoryItems[2].BuildId, Is.EqualTo(id3));
         }
 
-    }
-
-    [TestFixture]
-    public class InMemProjectView : RiakProjectView
-    {
-        protected override ProjectView GetProjectView()
-        {
-            return new UI.InMemProjectView();
-        }
     }
 }
