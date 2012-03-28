@@ -4,7 +4,7 @@ using NUnit.Framework;
 
 namespace Frog.Domain.IntegrationTests.ProjectView
 {
-    [TestFixture]
+    [TestFixture, Ignore]
     public class EventBasedProjectView : ProjectViewSpecs
     {
         protected override UI.ProjectView GetProjectView()
