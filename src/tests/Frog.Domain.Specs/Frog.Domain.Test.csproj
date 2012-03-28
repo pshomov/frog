@@ -60,7 +60,11 @@
     <Compile Include="PipelineStatusViewSpecs\StatusViewAfterBuildCompletedWithErrorSpec.cs" />
     <Compile Include="PipelineStatusViewSpecs\StatusViewAfterBuildStarterSpec.cs" />
     <Compile Include="PipelineStatusViewSpecs\StatusViewAfterBuildUpdateSpec.cs" />
-    <Compile Include="PipelineStatusViewSpecs\StatusViewCurrentBuild.cs" />
+    <Compile Include="PipelineStatusViewSpecs\StatusViewContractBase.cs" />
+    <Compile Include="PipelineStatusViewSpecs\StatusViewCurrentBuildPublicRepo.cs" />
+    <Compile Include="PipelineStatusViewSpecs\StatusViewCurrentBuildPrivateRepo.cs" />
+    <Compile Include="PipelineStatusViewSpecs\StatusViewListOfBuilds.cs" />
+    <Compile Include="PipelineStatusViewSpecs\StatusViewProjectCheckedOut.cs" />
     <Compile Include="PipelineStatusViewSpecs\StatusViewWhenTerminalUpdate.cs" />
     <Compile Include="Pipeline\PipelineHandlesExecTaskException.cs" />
     <Compile Include="Pipeline\PipelineProcessFaultyBuild.cs" />
