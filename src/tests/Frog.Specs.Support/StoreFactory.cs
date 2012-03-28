@@ -8,7 +8,6 @@ namespace Frog.Specs.Support
         public static IStoreEvents WireupEventStore()
         {
             var eventStore = Wireup.Init()
-                .LogToOutputWindow()
                 .UsingInMemoryPersistence()
                 .InitializeStorageEngine()
                 .Build();

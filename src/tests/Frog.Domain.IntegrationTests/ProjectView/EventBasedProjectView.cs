@@ -18,7 +18,6 @@ namespace Frog.Domain.IntegrationTests.ProjectView
         private IStoreEvents WireupEventStore()
         {
             return Wireup.Init()
-                .LogToOutputWindow()
                 .UsingMongoPersistence("EventStore", new DocumentObjectSerializer())
                 .InitializeStorageEngine()
                 .Build();

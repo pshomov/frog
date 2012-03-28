@@ -46,7 +46,6 @@ namespace Frog.System.Specs.Underware
         public static IStoreEvents WireupEventStore()
         {
             return Wireup.Init()
-                .LogToOutputWindow()
                 .UsingInMemoryPersistence()
                 .InitializeStorageEngine()
                 .Build();
