@@ -5,7 +5,7 @@ using Frog.Support;
 
 namespace Frog.Specs.Support
 {
-    public class GitTestSupport
+    public static class GitTestSupport
     {
         public static string GetTempPath()
         {

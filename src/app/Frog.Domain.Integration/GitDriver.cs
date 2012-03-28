@@ -3,27 +3,8 @@ using System.IO;
 using System.Text.RegularExpressions;
 using Frog.Support;
 
-namespace Frog.Domain
+namespace Frog.Domain.Integration
 {
-    public delegate SourceRepoDriver SourceRepoDriverFactory(string repositoryURL);
-
-    public struct RevisionInfo
-    {
-        public string Revision;
-    }
-
-    public class CheckoutInfo
-    {
-        public string Comment;
-        public string Revision;
-    }
-
-    public interface SourceRepoDriver
-    {
-        RevisionInfo GetLatestRevision();
-        CheckoutInfo GetSourceRevision(string revision, string checkoutPath);
-    }
-
     public class GitDriver : SourceRepoDriver
     {
         const string RevisionExtractingRegex = @"^([a-f,0-9]*)\s*refs/heads/master";

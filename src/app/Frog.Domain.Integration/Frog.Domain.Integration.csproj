@@ -49,6 +49,7 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="CorrugatedIronExts.cs" />
     <Compile Include="DocumentBasedProjectView.cs" />
+    <Compile Include="GitDriver.cs" />
     <Compile Include="RabbitMQBus.cs" />
     <Compile Include="Riak.cs" />
     <Compile Include="RiakProjectRepository.cs" />
@@ -67,5 +68,16 @@
       <Project>{9FAA6168-F131-420F-81C1-2228FD151BC7}</Project>
       <Name>SimpleCQRS</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="git_scripts\git_fetch.rb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="git_scripts\git_remote_latest_rev.rb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="git_scripts\ruby_tasks.rb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>
