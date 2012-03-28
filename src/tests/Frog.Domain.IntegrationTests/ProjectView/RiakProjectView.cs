@@ -9,7 +9,7 @@ namespace Frog.Domain.IntegrationTests.ProjectView
     {
         protected override UI.ProjectView GetProjectView()
         {
-            return new PersistentProjectView(OSHelpers.RiakHost(), OSHelpers.RiakPort(), "buildIds_test1", "repoIds_test");
+            return new DocumentBasedProjectView(OSHelpers.RiakHost(), OSHelpers.RiakPort(), "buildIds_test1", "repoIds_test");
         }
     }
 }

@@ -16,7 +16,7 @@ namespace Frog.Domain.UI
         BuildStatus GetBuildStatus(Guid id);
         Guid GetCurrentBuild(string repoUrl);
         void SetCurrentBuild(string repoUrl, Guid buildId, string comment, string revision);
-        bool ProjectRegistered(string projectUrl);
+        bool IsProjectRegistered(string projectUrl);
         List<BuildHistoryItem> GetListOfBuilds(string repoUrl);
         void SetBuildStarted(Guid id, IEnumerable<TaskInfo> taskInfos);
         void WipeBucket();
@@ -70,7 +70,7 @@ namespace Frog.Domain.UI
             report[buildId] = new BuildStatus();
         }
 
-        public bool ProjectRegistered(string projectUrl)
+        public bool IsProjectRegistered(string projectUrl)
         {
             return currentBuild.ContainsKey(projectUrl);
         }

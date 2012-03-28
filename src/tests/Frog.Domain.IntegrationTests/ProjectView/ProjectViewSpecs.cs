@@ -103,14 +103,14 @@ namespace Frog.Domain.IntegrationTests.ProjectView
         [Test]
         public void should_tell_when_project_is_not_registered()
         {
-            Assert.That(view.ProjectRegistered("htpp:///"), Is.False);
+            Assert.That(view.IsProjectRegistered("htpp:///"), Is.False);
         }
 
         [Test]
         public void should_tell_when_project_is_registered()
         {
             view.SetCurrentBuild("http:///", Guid.NewGuid(), "", "");
-            Assert.That(view.ProjectRegistered("http:///"), Is.True);
+            Assert.That(view.IsProjectRegistered("http:///"), Is.True);
         }
 
         [Test]

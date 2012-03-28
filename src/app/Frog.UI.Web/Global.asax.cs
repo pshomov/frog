@@ -72,7 +72,7 @@ namespace Frog.UI.Web
         {
             var theBus = new RabbitMQBus(OSHelpers.RabbitHost());
 
-            var views = new PersistentProjectView(OSHelpers.RiakHost(), OSHelpers.RiakPort(), "buildsIds", "reposBucket");
+            var views = new DocumentBasedProjectView(OSHelpers.RiakHost(), OSHelpers.RiakPort(), "buildsIds", "reposBucket");
 //            Setup.SetupView(theBus, views);
             ServiceLocator.Report = views;
             ServiceLocator.Bus = theBus;

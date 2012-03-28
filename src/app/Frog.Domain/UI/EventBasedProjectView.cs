@@ -77,10 +77,11 @@ namespace Frog.Domain.UI
 
         public void SetCurrentBuild(string repoUrl, Guid buildId, string comment, string revision)
         {
+
             throw new NotImplementedException();
         }
 
-        public bool ProjectRegistered(string projectUrl)
+        public bool IsProjectRegistered(string projectUrl)
         {
             var id = KeyGenerator(projectUrl);
             var commits = eventStore.Advanced.GetFrom(id, Int32.MinValue, Int32.MaxValue);

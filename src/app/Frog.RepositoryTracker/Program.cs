@@ -22,7 +22,7 @@ namespace Frog.RepositoryTracker
                                                                                  "projects"));
             repoTracker.JoinTheMessageParty();
 
-            var views = new PersistentProjectView(OSHelpers.RiakHost(), OSHelpers.RiakPort(), "buildsIds", "reposBucket");
+            var views = new DocumentBasedProjectView(OSHelpers.RiakHost(), OSHelpers.RiakPort(), "buildsIds", "reposBucket");
             Setup.SetupView(theBus, WireupEventStore());
 			
 			
