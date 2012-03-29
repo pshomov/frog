@@ -16,13 +16,11 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
             HandleProjectCheckedOut("");
             terminalId_task1 = Guid.NewGuid();
             terminalId_task2 = Guid.NewGuid();
-            HandleBuildStarted(new TaskInfo("t1", terminalId_task1), new TaskInfo("t2", terminalId_task2));
         }
 
         protected override void When()
         {
-            terminalId = Guid.NewGuid();
-            HandleBuildUpdated(0, TaskInfo.TaskStatus.Started, terminalId);
+            HandleBuildStarted(new TaskInfo("t1", terminalId_task1), new TaskInfo("t2", terminalId_task2));
         }
 
         [Test]
