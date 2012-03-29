@@ -8,11 +8,17 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
     public abstract class StatusViewContractBase : BDD
     {
         protected string RepoUrl;
-        protected PipelineStatusView View;
+        protected PipelineStatusEventHandler EventHandler;
         protected BuildStarted BuildMessage;
         protected Guid NewGuid;
         protected TaskInfo DefaultTask;
         protected ProjectView ProjectView;
+        private int sequnceId;
+
+        public int NextSequnceId
+        {
+            get { return sequnceId++; }
+        }
 
         protected override void GivenCleanup()
         {
@@ -21,8 +27,9 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
 
         protected override void Given()
         {
+            sequnceId = 0;
             ProjectView = SetupProjectView();
-            View = new PipelineStatusView(StoreFactory.WireupEventStore());
+            EventHandler = new PipelineStatusEventHandler(StoreFactory.WireupEventStore());
         }
 
         protected abstract ProjectView SetupProjectView();
@@ -36,13 +43,13 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
 
         protected void HandleBuildEnded(BuildTotalEndStatus buildTotalEndStatus)
         {
-            View.Handle(new BuildEnded(NewGuid, buildTotalEndStatus, 0));
+            EventHandler.Handle(new BuildEnded(NewGuid, buildTotalEndStatus, NextSequnceId));
         }
 
         protected void HandleBuildStarted(params TaskInfo[] tasks)
         {
             BuildMessage = CreateBuildMessage(NewGuid, RepoUrl, tasks);
-            View.Handle(BuildMessage);
+            EventHandler.Handle(BuildMessage);
         }
 
         private BuildStarted CreateBuildMessage(Guid buildId, string repoUrl, params TaskInfo[] tasks)
@@ -54,15 +61,20 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
                 status : new PipelineStatus
                              {
                                  Tasks = new List<TaskInfo>(tasks)
-                             },sequenceId:0);
+                             },sequenceId:NextSequnceId);
         }
 
         protected void HandleProjectCheckedOut(string comment)
         {
             NewGuid = Guid.NewGuid();
             var checkedOut = new ProjectCheckedOut
-                (NewGuid,0){ CheckoutInfo = new CheckoutInfo {Comment = comment}, RepoUrl = RepoUrl};
-            View.Handle(checkedOut);
+                (NewGuid,0){ CheckoutInfo = new CheckoutInfo {Comment = comment}, RepoUrl = RepoUrl, SequenceId = NextSequnceId};
+            EventHandler.Handle(checkedOut);
+        }
+
+        protected void HandleBuildUpdated(int taskIndex, TaskInfo.TaskStatus started, Guid terminalId)
+        {
+            EventHandler.Handle(new BuildUpdated(NewGuid, taskIndex, started, NextSequnceId, terminalId));
         }
     }
 
@@ -79,5 +91,4 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
             return new EventBasedProjectView(StoreFactory.WireupEventStore());
         }
     }
-
 }

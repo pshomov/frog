@@ -74,7 +74,7 @@
     <Compile Include="Task.cs" />
     <Compile Include="UI\BuildStatus.cs" />
     <Compile Include="UI\EventBasedProjectView.cs" />
-    <Compile Include="UI\PipelineStatusView.cs" />
+    <Compile Include="UI\PipelineStatusEventHandler.cs" />
     <Compile Include="TaskSources\CompoundTaskSource.cs" />
     <Compile Include="ExecTaskGenerator.cs" />
     <Compile Include="TaskFileFinder.cs" />
@@ -88,6 +88,8 @@
     <Compile Include="TaskSources\TaskSource.cs" />
     <Compile Include="UI\InMemProjectView.cs" />
     <Compile Include="UI\Setup.cs" />
+    <Compile Include="UI\TerminalOutputEventHandler.cs" />
+    <Compile Include="UI\TerminalOutputView.cs" />
     <Compile Include="Worker.cs" />
     <Compile Include="WorkingAreaGoverner.cs" />
   </ItemGroup>
@@ -112,7 +114,5 @@
     </None>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <ItemGroup>
-    <Folder Include="git_scripts\" />
-  </ItemGroup>
+  <ItemGroup />
 </Project>

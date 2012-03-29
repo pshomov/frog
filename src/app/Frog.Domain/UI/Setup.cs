@@ -7,7 +7,7 @@ namespace Frog.Domain.UI
     {
         public static void SetupView(IBus theBus, IStoreEvents eventStore)
         {
-            var statusView = new PipelineStatusView(eventStore);
+            var statusView = new PipelineStatusEventHandler(eventStore);
             theBus.RegisterHandler<BuildStarted>(statusView.Handle, "UI");
             theBus.RegisterHandler<BuildEnded>(statusView.Handle, "UI");
             theBus.RegisterHandler<BuildUpdated>(statusView.Handle, "UI");

@@ -6,12 +6,12 @@ using SimpleCQRS;
 
 namespace Frog.Domain.UI
 {
-    public class PipelineStatusView : Handles<BuildStarted>, Handles<BuildEnded>, Handles<BuildUpdated>, Handles<ProjectCheckedOut>
+    public class PipelineStatusEventHandler : Handles<BuildStarted>, Handles<BuildEnded>, Handles<BuildUpdated>, Handles<ProjectCheckedOut>
     {
         private readonly IStoreEvents eventStore;
         private Dictionary<Guid, IEventStream> streams = new Dictionary<Guid, IEventStream>();
 
-        public PipelineStatusView(IStoreEvents eventStore)
+        public PipelineStatusEventHandler(IStoreEvents eventStore)
         {
             this.eventStore = eventStore;
         }

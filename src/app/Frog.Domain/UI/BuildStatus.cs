@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
@@ -8,7 +9,7 @@ namespace Frog.Domain.UI
     {
         public void BuildStarted(IEnumerable<TaskInfo> taskInfos)
         {
-            tasks = new List<TaskState>(from taskInfo in taskInfos select new TaskState(taskInfo.Name));
+            tasks = new List<TaskState>(from taskInfo in taskInfos select new TaskState(taskInfo.Name, taskInfo.TerminalId));
         }
 
         public List<TaskState> tasks = new List<TaskState>();
@@ -42,6 +43,7 @@ namespace Frog.Domain.UI
         public string Name { get; set; }
         public TerminalOutput terminalOutput;
         public TaskInfo.TaskStatus status;
+        public Guid TerminalId { get; private set; }
 
         public TerminalOutput.Info GetTerminalOutput(int sinceIndex = 0)
         {
@@ -63,12 +65,13 @@ namespace Frog.Domain.UI
             this.status = status;
         }
 
-        public TaskState() : this("Unnamed, should not see this")
+        public TaskState() : this("Unnamed, should not see this", Guid.Empty)
         {
         }
 
-        public TaskState(string name)
+        public TaskState(string name, Guid terminalId)
         {
+            TerminalId = terminalId;
             Name = name;
             terminalOutput = new TerminalOutput();
             status = TaskInfo.TaskStatus.NotStarted;

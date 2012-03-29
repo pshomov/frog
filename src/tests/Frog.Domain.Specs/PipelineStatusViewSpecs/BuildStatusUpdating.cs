@@ -19,7 +19,7 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
 
         protected override void When()
         {
-            buildStatus.BuildStarted(As.List(new TaskInfo("task_name"), new TaskInfo("dd")));
+            buildStatus.BuildStarted(As.List(new TaskInfo("task_name", new Guid()), new TaskInfo("dd", new Guid())));
         }
 
         [Test]
@@ -53,7 +53,7 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
         protected override void Given()
         {
             buildStatus = new BuildStatus();
-            buildStatus.BuildStarted(As.List(new TaskInfo("task_name"), new TaskInfo("dd")));
+            buildStatus.BuildStarted(As.List(new TaskInfo("task_name", new Guid()), new TaskInfo("dd", new Guid())));
         }
 
         protected override void When()
@@ -89,7 +89,7 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
         protected override void Given()
         {
             buildStatus = new BuildStatus();
-            buildStatus.BuildStarted(As.List(new TaskInfo("task_name"), new TaskInfo("dd")));
+            buildStatus.BuildStarted(As.List(new TaskInfo("task_name", new Guid()), new TaskInfo("dd", new Guid())));
         }
 
         protected override void When()
@@ -126,7 +126,7 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
         protected override void Given()
         {
             buildStatus = new BuildStatus();
-            buildStatus.BuildStarted(As.List(new TaskInfo("task_name"), new TaskInfo("dd")));
+            buildStatus.BuildStarted(As.List(new TaskInfo("task_name", new Guid()), new TaskInfo("dd", new Guid())));
         }
 
         protected override void When()

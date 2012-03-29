@@ -18,7 +18,7 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
 
         protected override void When()
         {
-            View.Handle(new BuildUpdated(BuildMessage.BuildId, 0, TaskInfo.TaskStatus.FinishedError, 0, Guid.NewGuid()));
+            EventHandler.Handle(new BuildUpdated(BuildMessage.BuildId, 0, TaskInfo.TaskStatus.FinishedError, 0, Guid.NewGuid()));
         }
 
         [Test]

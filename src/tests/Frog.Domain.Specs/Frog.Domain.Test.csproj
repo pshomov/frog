@@ -60,11 +60,13 @@
     <Compile Include="PipelineStatusViewSpecs\StatusViewAfterBuildCompletedWithErrorSpec.cs" />
     <Compile Include="PipelineStatusViewSpecs\StatusViewAfterBuildStarterSpec.cs" />
     <Compile Include="PipelineStatusViewSpecs\StatusViewAfterBuildUpdateSpec.cs" />
+    <Compile Include="PipelineStatusViewSpecs\StatusViewAfterTheFirstBuildIsCompleteAndNewOneStarts.cs" />
     <Compile Include="PipelineStatusViewSpecs\StatusViewContractBase.cs" />
     <Compile Include="PipelineStatusViewSpecs\StatusViewCurrentBuildPublicRepo.cs" />
     <Compile Include="PipelineStatusViewSpecs\StatusViewCurrentBuildPrivateRepo.cs" />
     <Compile Include="PipelineStatusViewSpecs\StatusViewListOfBuilds.cs" />
     <Compile Include="PipelineStatusViewSpecs\StatusViewProjectCheckedOut.cs" />
+    <Compile Include="PipelineStatusViewSpecs\StatusViewTaskUpdateSetsTheTerminalId.cs" />
     <Compile Include="PipelineStatusViewSpecs\StatusViewWhenTerminalUpdate.cs" />
     <Compile Include="Pipeline\PipelineHandlesExecTaskException.cs" />
     <Compile Include="Pipeline\PipelineProcessFaultyBuild.cs" />
@@ -90,6 +92,10 @@
     </Compile>
     <Compile Include="TaskDetection\NUnitTaskDetectorSpecs.cs" />
     <Compile Include="TerminalOutputConsolidationMethod.cs" />
+    <Compile Include="TerminalOutput\TerminalOutputAFewEvents.cs" />
+    <Compile Include="TerminalOutput\TerminalOutputNoEvents.cs" />
+    <Compile Include="TerminalOutput\TerminalOutputOneUpdateSpec.cs" />
+    <Compile Include="TerminalOutput\TerminalOutputSpecBase.cs" />
     <Compile Include="TestTypes.cs" />
     <Compile Include="WorkerSpecs\WorkerHandlesExceptions.cs" />
     <Compile Include="WorkerSpecs\WorkerPropagetesTerminalUpdateEvents.cs" />

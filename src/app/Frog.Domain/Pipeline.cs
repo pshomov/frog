@@ -53,12 +53,15 @@ namespace Frog.Domain
 
     public class TaskInfo
     {
+        public Guid TerminalId { get; set; }
+
         public TaskInfo()
         {
         }
 
-        public TaskInfo(string name)
+        public TaskInfo(string name, Guid terminalId)
         {
+            TerminalId = terminalId;
             Name = name;
             Status = TaskStatus.NotStarted;
         }

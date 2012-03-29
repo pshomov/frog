@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using NUnit.Framework;
 
 namespace Frog.Domain.Specs.PipelineStatusViewSpecs
@@ -17,7 +16,7 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
 
         protected override void When()
         {
-            View.Handle(new TerminalUpdate("content1", 0, 0, BuildMessage.BuildId, 0, Guid.NewGuid()));
+            EventHandler.Handle(new TerminalUpdate("content1", 0, 0, BuildMessage.BuildId, 0, Guid.NewGuid()));
         }
 
         [Test]
@@ -30,28 +29,6 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
         public void should_return_empty_output_for_task_1()
         {
             Assert.That(ProjectView.GetBuildStatus(BuildMessage.BuildId).Tasks[1].GetTerminalOutput().Content, Is.EqualTo(""));
-        }
-    }
-
-    [TestFixture]
-    public class StatusViewAfterTheFirstBuildIsCompleteAndNewOneStarts : StatusViewCurrentBuildPublicRepoBase
-    {
-        protected override void Given()
-        {
-            base.Given();
-            RepoUrl = "http://asdasda";
-            HandleABuild(BuildTotalEndStatus.Success);
-        }
-
-        protected override void When()
-        {
-            HandleBuildStarted(new TaskInfo(), new TaskInfo(), new TaskInfo());
-        }
-
-        [Test]
-        public void should_update_terminal_output_for_task_0()
-        {
-            Assert.That(ProjectView.GetBuildStatus(BuildMessage.BuildId).Tasks.Count(), Is.EqualTo(3));
         }
     }
 }

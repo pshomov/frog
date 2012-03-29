@@ -48,7 +48,7 @@ namespace Frog.LoadTests
             var buildId = Guid.NewGuid();
             const string repoUrl = "http://github.com/never/neverland.git";
             theBus.Publish(new ProjectCheckedOut(buildId,0){CheckoutInfo = new CheckoutInfo(){Comment = "asd", Revision = "12"}, RepoUrl = repoUrl});
-            theBus.Publish(new BuildStarted(buildId, new PipelineStatus() {Tasks = As.List(new TaskInfo("t1"))}, repoUrl,0
+            theBus.Publish(new BuildStarted(buildId, new PipelineStatus() {Tasks = As.List(new TaskInfo("t1", new Guid()))}, repoUrl,0
                                ));
             var terminalId = Guid.NewGuid();
             theBus.Publish(new BuildUpdated(buildId, 0, TaskInfo.TaskStatus.Started, 1, terminalId));
