@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using EventStore;
 using SimpleCQRS;
@@ -9,7 +8,6 @@ namespace Frog.Domain.UI
     public class PipelineStatusEventHandler : Handles<BuildStarted>, Handles<BuildEnded>, Handles<BuildUpdated>, Handles<ProjectCheckedOut>
     {
         private readonly IStoreEvents eventStore;
-        private Dictionary<Guid, IEventStream> streams = new Dictionary<Guid, IEventStream>();
 
         public PipelineStatusEventHandler(IStoreEvents eventStore)
         {
@@ -18,36 +16,27 @@ namespace Frog.Domain.UI
 
         IEventStream GetEventStream(Guid id)
         {
-            if (streams.ContainsKey(id)) return streams[id];
-            return streams[id] = eventStore.OpenStream(id, Int32.MinValue, Int32.MaxValue);
+            return eventStore.OpenStream(id, Int32.MinValue, Int32.MaxValue);
         }
 
         public void Handle(BuildStarted message)
         {
-            var eventStream = GetEventStream(message.BuildId);
-            eventStream.Add(new EventMessage(){Body = message});
-            eventStream.CommitChanges(Guid.NewGuid());
+            StoreEvent(message);
         }
 
         public void Handle(BuildUpdated message)
         {
-            var eventStream = GetEventStream(message.BuildId);
-            eventStream.Add(new EventMessage(){Body = message});
-            eventStream.CommitChanges(Guid.NewGuid());
+            StoreEvent(message);
         }
 
         public void Handle(BuildEnded message)
         {
-            var eventStream = GetEventStream(message.BuildId);
-            eventStream.Add(new EventMessage(){Body = message});
-            eventStream.CommitChanges(Guid.NewGuid());
+            StoreEvent(message);
         }
 
         public void Handle(TerminalUpdate message)
         {
-            var eventStream = GetEventStream(message.BuildId);
-            eventStream.Add(new EventMessage(){Body = message});
-            eventStream.CommitChanges(Guid.NewGuid());
+            StoreEvent(message);
         }
 
         public void Handle(ProjectCheckedOut message)
@@ -70,6 +59,15 @@ namespace Frog.Domain.UI
                 var eventStream = eventStore.OpenStream(EventBasedProjectView.KeyGenerator(repoUrl), Int32.MinValue, Int32.MaxValue))
             {
                 eventStream.Add(new EventMessage() { Body = message });
+                eventStream.CommitChanges(Guid.NewGuid());
+            }
+        }
+
+        private void StoreEvent(BuildEvent message)
+        {
+            using (var eventStream = GetEventStream(message.BuildId))
+            {
+                eventStream.Add(new EventMessage() {Body = message});
                 eventStream.CommitChanges(Guid.NewGuid());
             }
         }

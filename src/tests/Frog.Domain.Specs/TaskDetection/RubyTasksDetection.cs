@@ -33,7 +33,7 @@ namespace Frog.Domain.Specs.TaskDetection
             Assert.That(tasks[0].GetType(), Is.EqualTo(typeof(RakeTask)));
         }
     }
-    public class RakeTaskDetectorSpecsBase : TaskDetectorSpecsBase
+    public abstract class RakeTaskDetectorSpecsBase : TaskDetectorSpecsBase
     {
         protected TaskFileFinder bundlerFileFinder;
         protected RubyTaskDetector taskDetector;
