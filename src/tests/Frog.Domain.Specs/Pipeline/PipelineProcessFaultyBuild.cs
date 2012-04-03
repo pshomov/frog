@@ -40,7 +40,7 @@ namespace Frog.Domain.Specs.Pipeline
         }
 
         [Test]
-        public void should_broadcast_build_started_with_two_non_stared_tasks()
+        public void should_broadcast_build_started_with_two_non_started_tasks()
         {
             PipelineOnBuildStarted.Received().Invoke(Arg.Is<PipelineStatus>(
                 started =>

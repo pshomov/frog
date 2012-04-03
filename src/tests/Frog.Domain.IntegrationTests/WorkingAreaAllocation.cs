@@ -1,4 +1,5 @@
 using System.IO;
+using Frog.Domain.Integration;
 using Frog.Specs.Support;
 using NUnit.Framework;
 
