@@ -38,6 +38,13 @@ namespace Frog.Domain.Specs.Agent
         }
 
         [Test]
+        public void should_have_one_task_with_a_non_null_terminal_id()
+        {
+            Bus.Received().Publish(
+                Arg.Is<BuildStarted>(found => found.Status.Tasks.Count == 1 && found.Status.Tasks[0].TerminalId != Guid.Empty));
+        }
+
+        [Test]
         public void should_publish_BuildUpdated_event()
         {
             Bus.Received().Publish(
