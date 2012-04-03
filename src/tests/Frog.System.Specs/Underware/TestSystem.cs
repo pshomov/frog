@@ -23,6 +23,7 @@ namespace Frog.System.Specs.Underware
         public TaskSource TasksSource;
         public ProjectView Views;
         public IStoreEvents Store;
+        public TerminalOutputView TerminalStatusView;
         public RepositoryTracker repositoryTracker { get; private set; }
 
         public TestSystem(WorkingAreaGoverner governer, SourceRepoDriverFactory sourceRepoDriverFactory, bool runRevisionChecker = true)
@@ -37,6 +38,7 @@ namespace Frog.System.Specs.Underware
             Store = WireupEventStore();
             Store.Advanced.Purge();
             Views = new EventBasedProjectView(Store);
+            TerminalStatusView = new TerminalOutputView(Store);
             Setup.SetupView(TheBus, Store);
 
             messages = new List<Message>();
@@ -131,9 +133,14 @@ namespace Frog.System.Specs.Underware
             theTestSystem.repositoryTracker.CheckForUpdates();
         }
 
-        public ProjectView GetView()
+        public ProjectView GetProjectStatusView()
         {
             return theTestSystem.Views;
+        }
+
+        public TerminalOutputView GetTerminalStatusView()
+        {
+            return theTestSystem.TerminalStatusView;
         }
 
         public void Build(string repoUrl, RevisionInfo revision, Guid buildId)

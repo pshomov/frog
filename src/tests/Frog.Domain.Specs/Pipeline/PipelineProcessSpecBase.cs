@@ -18,6 +18,7 @@ namespace Frog.Domain.Specs.Pipeline
         protected Action<BuildTotalEndStatus> PipelineOnBuildEnded;
         protected Action<int, Guid, TaskInfo.TaskStatus> PipelineOnBuildUpdated;
         protected Action<TerminalUpdateInfo> PipelineOnTerminalUpdate;
+        protected int counter = 0;
 
         protected override void Given()
         {
@@ -37,6 +38,7 @@ namespace Frog.Domain.Specs.Pipeline
             Pipeline.OnBuildUpdated += PipelineOnBuildUpdated;
             Pipeline.OnBuildEnded += PipelineOnBuildEnded;
             Pipeline.OnTerminalUpdate += PipelineOnTerminalUpdate;
+            Pipeline.OnTerminalUpdate += info => { counter++; };
         }
     }
 }

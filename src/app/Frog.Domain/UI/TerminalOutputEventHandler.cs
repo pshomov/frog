@@ -6,7 +6,7 @@ namespace Frog.Domain.UI
 {
     public class TerminalOutputEventHandler : Handles<TerminalUpdate>
     {
-        private readonly IStoreEvents eventStore;
+        readonly IStoreEvents eventStore;
 
         public TerminalOutputEventHandler(IStoreEvents eventStore)
         {
@@ -20,9 +20,11 @@ namespace Frog.Domain.UI
 
         public void Handle(TerminalUpdate message)
         {
-            var eventStream = GetEventStream(message.TerminalId);
-            eventStream.Add(new EventMessage() { Body = message });
-            eventStream.CommitChanges(Guid.NewGuid());
+            using(var eventStream = GetEventStream(message.TerminalId))
+            {
+                eventStream.Add(new EventMessage { Body = message });
+                eventStream.CommitChanges(Guid.NewGuid());
+            }
         }
     }
 }

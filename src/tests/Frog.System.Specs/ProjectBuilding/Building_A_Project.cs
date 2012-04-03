@@ -64,7 +64,7 @@ namespace Frog.System.Specs.ProjectBuilding
                                               An.Event<BuildStarted>(
                                                   ev =>
                                                   ev.BuildId == newGuid && ev.RepoUrl == RepoUrl &&
-                                                  ev.Status.Tasks.Count == 1 && ev.SequenceId == 1
+                                                  ev.Status.Tasks.Count == 1 && ev.SequenceId == 1 && ev.Status.Tasks[0].TerminalId != Guid.Empty
                                                   ))));
         }
 
@@ -154,7 +154,7 @@ namespace Frog.System.Specs.ProjectBuilding
         public void should_have_the_build_as_the_current_one_in_the_ui()
         {
             var prober = new PollingProber(5000, 100);
-            Assert.True(prober.check(Take.Snapshot(() => system.GetView())
+            Assert.True(prober.check(Take.Snapshot(() => system.GetProjectStatusView())
                                          .Has(x => x, A.Check<ProjectView>(view => view.GetCurrentBuild(RepoUrl) == newGuid))));
         }
 

@@ -48,7 +48,7 @@ namespace Frog.System.Specs.ProjectBuilding
         public void should_make_the_last_build_the_current_one()
         {
             var prober = new PollingProber(5000, 100);
-            Assert.True(prober.check(Take.Snapshot(() => system.GetView())
+            Assert.True(prober.check(Take.Snapshot(() => system.GetProjectStatusView())
                                          .Has(x => x,
                                               A.Check<ProjectView>(view => view.GetCurrentBuild(RepoUrl) == newGuid))));
         }
@@ -57,7 +57,7 @@ namespace Frog.System.Specs.ProjectBuilding
         public void should_have_the_list_of_builds()
         {
             var prober = new PollingProber(5000, 100);
-            Assert.True(prober.check(Take.Snapshot(() => system.GetView().GetListOfBuilds(RepoUrl))
+            Assert.True(prober.check(Take.Snapshot(() => system.GetProjectStatusView().GetListOfBuilds(RepoUrl))
                                          .Has(x => x,
                                               A.Check<List<BuildHistoryItem>>(
                                                   listOfBuilds =>
@@ -69,7 +69,7 @@ namespace Frog.System.Specs.ProjectBuilding
         public void should_have_the_commit_messages_associated_with_the_build_history_items()
         {
             var prober = new PollingProber(5000, 100);
-            Assert.True(prober.check(Take.Snapshot(() => system.GetView().GetListOfBuilds(RepoUrl))
+            Assert.True(prober.check(Take.Snapshot(() => system.GetProjectStatusView().GetListOfBuilds(RepoUrl))
                                          .Has(x => x,
                                               A.Check<List<BuildHistoryItem>>(
                                                   listOfBuilds =>

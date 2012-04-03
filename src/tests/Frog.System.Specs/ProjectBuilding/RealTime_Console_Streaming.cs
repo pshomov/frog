@@ -84,29 +84,29 @@ namespace Frog.System.Specs.ProjectBuilding
         public void should_update_view_with_terminal_updates()
         {
             var prober = new PollingProber(5000, 100);
-            Guid buildId = Guid.Empty;
+            var terminalId1 = Guid.Empty;
+            var terminalId2 = Guid.Empty;
             prober.check(Take.Snapshot(() => system.GetEventsSnapshot())
-                             .Has(x => x, A.Command<Build>(ev =>
+                             .Has(x => x, An.Event<BuildStarted>(ev =>
                                                                {
-                                                                   buildId = ev.Id;
+                                                                   terminalId1 = ev.Status.Tasks[0].TerminalId;
+                                                                   terminalId2 = ev.Status.Tasks[1].TerminalId;
                                                                    return true;
                                                                })));
                         
-            Assert.True(prober.check(Take.Snapshot(() => system.GetView())
+            Assert.True(prober.check(Take.Snapshot(() => system.GetTerminalStatusView())
                                          .Has(statuses => statuses,
-                                              A.Check<ProjectView>(
+                                              A.Check<TerminalOutputView>(
                                                   arg =>
-                                                  arg.GetBuildStatus(buildId).Tasks.Count() > 0 &&
-                                                  arg.GetBuildStatus(buildId).Tasks[0].GetTerminalOutput().Content.Match(
+                                                  arg.GetTerminalOutput(terminalId1).Match(
                                                       TerminalOutput1 + ".*\n.*" +
                                                       TerminalOutput2)))
                             ));
-            Assert.True(prober.check(Take.Snapshot(() => system.GetView())
+            Assert.True(prober.check(Take.Snapshot(() => system.GetTerminalStatusView())
                                          .Has(statuses => statuses,
-                                              A.Check<ProjectView>(
+                                              A.Check<TerminalOutputView>(
                                                   arg =>
-                                                  arg.GetBuildStatus(buildId).Tasks.Count() > 1 &&
-                                                  arg.GetBuildStatus(buildId).Tasks[1].GetTerminalOutput().Content.Match(
+                                                  arg.GetTerminalOutput(terminalId2).Match(
                                                       TerminalOutput3 + ".*\n.*" +
                                                       TerminalOutput4))))
                 );

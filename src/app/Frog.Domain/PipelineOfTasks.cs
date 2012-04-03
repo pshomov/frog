@@ -35,8 +35,8 @@ namespace Frog.Domain
 
             for (int i = 0; i < execTasks.Count; i++)
             {
-                var terminalId = Guid.NewGuid();
                 var execTask = execTasks[i];
+                var terminalId = status.Tasks[i].TerminalId;
                 OnBuildUpdated(i, terminalId, TaskInfo.TaskStatus.Started);
                 int sequneceIndex = 0;
                 Action<string> execTaskOnOnTerminalOutputUpdate = s => OnTerminalUpdate(new TerminalUpdateInfo(sequneceIndex++, s, i, terminalId));
@@ -79,7 +79,7 @@ namespace Frog.Domain
             foreach (var execTask in execTasks)
             {
                 pipelineStatus.Tasks.Add(new TaskInfo
-                                             {Name = execTask.Name, Status = TaskInfo.TaskStatus.NotStarted});
+                                             {Name = execTask.Name, Status = TaskInfo.TaskStatus.NotStarted, TerminalId = Guid.NewGuid()});
             }
             return pipelineStatus;
         }
