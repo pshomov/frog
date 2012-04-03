@@ -1,7 +1,7 @@
 using System.IO;
 using Frog.Support;
 
-namespace Frog.Domain
+namespace Frog.Domain.Integration
 {
     public class SubfolderWorkingAreaGoverner : WorkingAreaGoverner
     {
