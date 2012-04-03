@@ -17,7 +17,8 @@ namespace Frog.Domain.Specs.Pipeline
         {
             base.Given();
             SrcTask1 = new MSBuildTask("");
-            TaskSource.Detect(Arg.Any<string>()).Returns(As.List<Domain.Task>(SrcTask1));
+            TaskSource.Detect(Arg.Any<string>()).Returns(As.List<Task>(SrcTask1));
+
             Task1 = Substitute.For<IExecTask>();
             Task1.When(task => task.Perform(Arg.Any<SourceDrop>()))
                 .Do(info => Task1.OnTerminalOutputUpdate += Raise.Event<Action<string>>("task1"));
@@ -28,7 +29,7 @@ namespace Frog.Domain.Specs.Pipeline
                 .Do(info => Task2.OnTerminalOutputUpdate += Raise.Event<Action<string>>("task2"));
             Task2.Perform(Arg.Any<SourceDrop>()).Returns(new ExecTaskResult(ExecutionStatus.Success, 0));
 
-            ExecTaskGenerator.GimeTasks(Arg.Any<Domain.Task>()).Returns(As.List(Task1, Task2));
+            ExecTaskGenerator.GimeTasks(Arg.Any<Task>()).Returns(As.List(Task1, Task2));
 
             SaveTheTerminalIdsForTasks();
         }
