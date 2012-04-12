@@ -36,15 +36,15 @@ namespace Frog.UI.Web.Controllers
 
         internal static ActionResult GetAllTaskTerminalOutput(string projectUrl, int lastChunkIndex, int taskIndex)
         {
-            if (ServiceLocator.Report.IsProjectRegistered(projectUrl))
+            if (ServiceLocator.ProjectStatus.IsProjectRegistered(projectUrl))
             {
-                var tasks = ServiceLocator.Report.GetBuildStatus(ServiceLocator.Report.GetCurrentBuild(projectUrl)).Tasks;
+                var tasks = ServiceLocator.ProjectStatus.GetBuildStatus(ServiceLocator.ProjectStatus.GetCurrentBuild(projectUrl)).Tasks;
                 var activeTask = taskIndex;
                 var content = new StringBuilder();
                 for (var i = taskIndex; i < tasks.Count; i++)
                 {
                     var sinceIndex = i == taskIndex ? lastChunkIndex : 0;
-                    var terminalOutput = tasks[i].GetTerminalOutput(sinceIndex);
+                    var terminalOutput = ServiceLocator.TerminalOutputStatus.GetTerminalOutput(tasks[i].TerminalId, sinceIndex);
                     if (terminalOutput.LastChunkIndex <= sinceIndex) continue;
                     activeTask = i;
                     lastChunkIndex = terminalOutput.LastChunkIndex;
@@ -72,8 +72,8 @@ namespace Frog.UI.Web.Controllers
 
         protected internal ActionResult GetProjectStatus(string projectUrl)
         {
-            if (ServiceLocator.Report.IsProjectRegistered(projectUrl))
-                return MonoBugs.Json(new { status = ServiceLocator.Report.GetBuildStatus(ServiceLocator.Report.GetCurrentBuild(projectUrl)) });
+            if (ServiceLocator.ProjectStatus.IsProjectRegistered(projectUrl))
+                return MonoBugs.Json(new { status = ServiceLocator.ProjectStatus.GetBuildStatus(ServiceLocator.ProjectStatus.GetCurrentBuild(projectUrl)) });
             else
             {
                 return new HttpNotFoundResult("Project does not Runz ;(");
@@ -82,13 +82,13 @@ namespace Frog.UI.Web.Controllers
 
         public ActionResult GetProjectHistory(string projectUrl)
         {
-            if (ServiceLocator.Report.IsProjectRegistered(projectUrl))
+            if (ServiceLocator.ProjectStatus.IsProjectRegistered(projectUrl))
                 return
                     MonoBugs.Json(
                         new
                         {
                             items =
-                        ServiceLocator.Report.GetListOfBuilds(projectUrl)
+                        ServiceLocator.ProjectStatus.GetListOfBuilds(projectUrl)
                         });
             else
             {
@@ -98,13 +98,13 @@ namespace Frog.UI.Web.Controllers
 
         protected internal ActionResult GetTaskTerminalOutput(string projectUrl, int taskIndex)
         {
-            if (ServiceLocator.Report.IsProjectRegistered(projectUrl))
+            if (ServiceLocator.ProjectStatus.IsProjectRegistered(projectUrl))
                 return
                     MonoBugs.Json(
                         new
                             {
                                 terminalOutput =
-                            ServiceLocator.Report.GetBuildStatus(ServiceLocator.Report.GetCurrentBuild(projectUrl)).Tasks[taskIndex].GetTerminalOutput()
+                            ServiceLocator.TerminalOutputStatus.GetTerminalOutput(ServiceLocator.ProjectStatus.GetBuildStatus(ServiceLocator.ProjectStatus.GetCurrentBuild(projectUrl)).Tasks[taskIndex].TerminalId)
                             });
             else
             {

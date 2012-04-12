@@ -128,14 +128,6 @@ namespace Frog.Domain.Integration
             Client.Put(idsBucket, id.ToString(), a);
         }
 
-        public void AppendTerminalOutput(Guid buildId, int taskIndex, int contentSequenceIndex, string content)
-        {
-            var a = GetBuildStatus(buildId);
-            a.Tasks[taskIndex].AddTerminalOutput(contentSequenceIndex, content);
-            Client.Put(idsBucket, buildId.ToString(), a);
-
-        }
-
         private void WipeBuckett(IRiakEndPoint connectionManager, string bucket)
         {
             var client = connectionManager.CreateClient();

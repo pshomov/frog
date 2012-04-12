@@ -22,7 +22,6 @@ namespace Frog.Domain.UI
         void WipeBucket();
         void BuildUpdated(Guid id, int taskIndex, TaskInfo.TaskStatus taskStatus);
         void BuildEnded(Guid id, BuildTotalEndStatus totalStatus);
-        void AppendTerminalOutput(Guid buildId, int taskIndex, int contentSequenceIndex, string content);
     }
 
     public class InMemProjectView : ProjectView
@@ -100,13 +99,7 @@ namespace Frog.Domain.UI
         {
             GetBuildStatus(id).BuildEnded(totalStatus);
         }
-
-        public void AppendTerminalOutput(Guid buildId, int taskIndex, int contentSequenceIndex, string content)
-        {
-            GetBuildStatus(buildId).Tasks[taskIndex].AddTerminalOutput(contentSequenceIndex,
-                                                                                         content);
-        }
-    }
+     }
 
     public class RepositoryNotRegisteredException : Exception
     {

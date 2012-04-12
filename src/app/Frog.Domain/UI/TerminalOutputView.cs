@@ -14,6 +14,14 @@ namespace Frog.Domain.UI
             this.eventStore = eventStore;
         }
 
+        public TerminalOutput.Info GetTerminalOutput(Guid terminalId, int sinceIndex)
+        {
+            var commits = eventStore.Advanced.GetFrom(terminalId, Int32.MinValue, Int32.MaxValue);
+            var terminalOutputA = new TerminalOutputA(terminalId);
+            terminalOutputA.LoadsFromHistory(commits.Select(commit => (Event)commit.Events[0].Body));
+            return terminalOutputA.Info(sinceIndex);
+        }
+
         public string GetTerminalOutput(Guid terminalId)
         {
             var commits = eventStore.Advanced.GetFrom(terminalId, Int32.MinValue, Int32.MaxValue);
@@ -45,5 +53,10 @@ namespace Frog.Domain.UI
         }
 
         public string Value { get { return terminalOutput.GetContent(0).Content; } }
+
+        public TerminalOutput.Info Info(int sinceIndex)
+        {
+            return terminalOutput.GetContent(sinceIndex);
+        }
     }
 }

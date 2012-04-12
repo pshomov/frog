@@ -186,14 +186,14 @@ namespace Frog.Domain.Integration
             using (Profiler.measure("sending message to Rabbit MQ"))
             {
                 string topicName = typeof (T).Name;
-                //            using (IModel channel = connection.CreateModel())
-                //            {
-                //				channel.TxSelect();
-                //                channel.ExchangeDeclare(topicName, ExchangeType.Fanout, true);
-                //                channel.QueueDeclare("all_messages", false, false, false, null);
-                //                channel.QueueBind("all_messages", topicName, "", null);
-                //                channel.TxCommit();
-                //            }
+                using (IModel channel = connection.CreateModel())
+                {
+            		channel.TxSelect();
+                    channel.ExchangeDeclare(topicName, ExchangeType.Fanout, true);
+                    channel.QueueDeclare("all_messages", false, false, false, null);
+                    channel.QueueBind("all_messages", topicName, "", null);
+                    channel.TxCommit();
+                }
                 using (IModel channel = connection.CreateModel())
                 {
                     var ser = new JavaScriptSerializer();

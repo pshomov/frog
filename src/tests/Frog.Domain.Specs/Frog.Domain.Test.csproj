@@ -67,7 +67,6 @@
     <Compile Include="PipelineStatusViewSpecs\StatusViewListOfBuilds.cs" />
     <Compile Include="PipelineStatusViewSpecs\StatusViewProjectCheckedOut.cs" />
     <Compile Include="PipelineStatusViewSpecs\StatusViewTaskUpdateSetsTheTerminalId.cs" />
-    <Compile Include="PipelineStatusViewSpecs\StatusViewWhenTerminalUpdate.cs" />
     <Compile Include="Pipeline\PipelineHandlesExecTaskException.cs" />
     <Compile Include="Pipeline\PipelineProcessFaultyBuild.cs" />
     <Compile Include="Pipeline\PipelineProcessSpecBase.cs" />

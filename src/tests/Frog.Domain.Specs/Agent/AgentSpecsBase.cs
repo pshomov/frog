@@ -1,5 +1,6 @@
 ﻿using System;
 using Frog.Specs.Support;
+using Frog.Support;
 using NSubstitute;
 using SimpleCQRS;
 
@@ -24,9 +25,9 @@ namespace Frog.Domain.Specs.Agent
                         {
                             Worker.OnProjectCheckedOut +=
                                 Raise.Event<ProjectCheckedOutDelegate>(new CheckoutInfo {Comment = "committed", Revision = "2"});
-                            Worker.OnBuildStarted +=
-                                Raise.Event<BuildStartedDelegate>(new PipelineStatus());
                             TerminalId = Guid.NewGuid();
+                            Worker.OnBuildStarted +=
+                                Raise.Event<BuildStartedDelegate>(new PipelineStatus(){Tasks = As.List(new TaskInfo("name", TerminalId))});
                             Worker.OnTerminalUpdates += Raise.Event<Action<TerminalUpdateInfo>>(new TerminalUpdateInfo(contentSequenceIndex: 0, content: "content", taskIndex: 1, terminalId: TerminalId));
                             Worker.OnBuildUpdated +=
                                 Raise.Event<Action<int, Guid, TaskInfo.TaskStatus>>(0, TerminalId, TaskInfo.TaskStatus.Started);

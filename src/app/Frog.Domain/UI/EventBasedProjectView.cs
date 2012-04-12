@@ -39,11 +39,6 @@ namespace Frog.Domain.UI
         {
             BuildStatus.BuildEnded(msg.TotalStatus);
         }
-        void Apply(TerminalUpdate msg)
-        {
-            BuildStatus.Tasks[msg.TaskIndex].AddTerminalOutput(msg.ContentSequenceIndex, msg.Content);
-        }
-
         public BuildStatus BuildStatus
         {
             get { return buildStatus; }

@@ -15,7 +15,7 @@ namespace Frog.Domain.UI
 
         IEventStream GetEventStream(Guid id)
         {
-            return eventStore.OpenStream(id, Int32.MinValue, Int32.MaxValue);
+            return eventStore.OpenStream(id, 0, Int32.MaxValue);
         }
 
         public void Handle(TerminalUpdate message)

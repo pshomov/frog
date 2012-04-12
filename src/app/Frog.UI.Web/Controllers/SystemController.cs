@@ -12,7 +12,7 @@ namespace Frog.UI.Web.Controllers
 
         public ActionResult Index()
         {
-			return MonoBugs.Json(new {status = ServiceLocator.Report});
+			return MonoBugs.Json(new {status = ServiceLocator.ProjectStatus});
         }
 
         [AcceptVerbs(HttpVerbs.Get)]

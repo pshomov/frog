@@ -31,13 +31,6 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
         }
 
         [Test]
-        public void should_set_the_task_output_to_empty()
-        {
-            Assert.That(buildStatus.Tasks[0].GetTerminalOutput().Content, Is.EqualTo(""));
-            Assert.That(buildStatus.Tasks[1].GetTerminalOutput().Content, Is.EqualTo(""));
-        }
-
-        [Test]
         public void should_set_all_tasks_status_to_not_started()
         {
             Assert.That(buildStatus.Tasks[0].Status, Is.EqualTo(TaskInfo.TaskStatus.NotStarted));

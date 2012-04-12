@@ -34,11 +34,6 @@ namespace Frog.Domain.UI
             StoreEvent(message);
         }
 
-        public void Handle(TerminalUpdate message)
-        {
-            StoreEvent(message);
-        }
-
         public void Handle(ProjectCheckedOut message)
         {
             //

@@ -41,19 +41,8 @@ namespace Frog.Domain.UI
     public class TaskState
     {
         public string Name { get; set; }
-        public TerminalOutput terminalOutput;
         public TaskInfo.TaskStatus status;
         public Guid TerminalId { get; private set; }
-
-        public TerminalOutput.Info GetTerminalOutput(int sinceIndex = 0)
-        {
-            return terminalOutput.GetContent(sinceIndex);
-        }
-
-        public void AddTerminalOutput(int sequence, string content)
-        {
-            terminalOutput.Add(sequence, content);
-        }
 
         public TaskInfo.TaskStatus Status
         {
@@ -73,7 +62,6 @@ namespace Frog.Domain.UI
         {
             TerminalId = terminalId;
             Name = name;
-            terminalOutput = new TerminalOutput();
             status = TaskInfo.TaskStatus.NotStarted;
         }
     }

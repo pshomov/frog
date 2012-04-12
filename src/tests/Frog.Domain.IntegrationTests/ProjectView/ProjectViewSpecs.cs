@@ -68,17 +68,6 @@ namespace Frog.Domain.IntegrationTests.ProjectView
         }
 
         [Test]
-        public void should_persist_terminal_output_updates()
-        {
-            var id = Guid.NewGuid();
-            view.SetCurrentBuild("ldsfslkdf", id, "", "");
-            view.SetBuildStarted(id, As.List(new TaskInfo(){Name = "t1", Status = TaskInfo.TaskStatus.NotStarted}));
-            view.AppendTerminalOutput(id, 0, 0, "qwer");
-
-            Assert.That(view.GetBuildStatus(id).Tasks[0].GetTerminalOutput().Content, Is.EqualTo("qwer"));
-        }
-
-        [Test]
         public void should_throw_exception_when_trying_to_get_a_build_for_repo_that_has_not_been_registered()
         {
             try

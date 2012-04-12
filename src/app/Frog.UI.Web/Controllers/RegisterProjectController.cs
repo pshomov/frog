@@ -18,7 +18,11 @@ namespace Frog.UI.Web.Controllers
                 return MonoBugs.Json(new {error = "Url was not provided"});
             }
             ServiceLocator.Bus.Send(new RegisterRepository { Repo = url });
-            return MonoBugs.Json(new { projectUrl = Url.Action("status", "Project", new { user = "u", project = "p" }) });
+            var o = new
+                        {
+                            projectUrl = Url.Action("status", "Project", new {user = "u", project = "p"})
+                        };
+            return MonoBugs.Json(o);
         }
     }
 }
