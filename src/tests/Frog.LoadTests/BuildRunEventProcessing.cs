@@ -25,7 +25,7 @@ namespace Frog.LoadTests
             eventStore = StoreFactory.WireupEventStore();
             eventStore.Advanced.Purge();
             eventStore.Advanced.Initialize();
-            Profiler.MeasurementsBridge = new Profiler.LogFileLoggingBridge();
+            Profiler.MeasurementsBridge = new Profiler.LogFileLoggingBridge("system_tests.log");
             theBus = new RabbitMQBus(OSHelpers.RabbitHost());
 
             views = new EventBasedProjectView(eventStore);

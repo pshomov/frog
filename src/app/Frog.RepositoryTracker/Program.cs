@@ -13,7 +13,7 @@ namespace Frog.RepositoryTracker
     {
         private static void Main(string[] args)
         {
-            Profiler.MeasurementsBridge = new Profiler.LogFileLoggingBridge();
+            Profiler.MeasurementsBridge = new Profiler.LogFileLoggingBridge("runz_repo_tracker.log");
             IBus theBus = SetupBus();
             var repoTracker = new Domain.RepositoryTracker.RepositoryTracker(theBus,
                                                                              new RiakProjectRepository(
@@ -22,7 +22,6 @@ namespace Frog.RepositoryTracker
                                                                                  "projects"));
             repoTracker.JoinTheMessageParty();
 
-            var views = new DocumentBasedProjectView(OSHelpers.RiakHost(), OSHelpers.RiakPort(), "buildsIds", "reposBucket");
             Setup.SetupView(theBus, WireupEventStore());
 			
 			

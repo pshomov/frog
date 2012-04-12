@@ -15,10 +15,10 @@ namespace Frog.Support
             private string filename;
             private StreamWriter fileStream;
 
-            public LogFileLoggingBridge()
+            public LogFileLoggingBridge(string systemTestsLog)
             {
                 filename = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
-                                        "runz_measurements.log");
+                                        systemTestsLog);
                 fileStream = new StreamWriter(filename, true);
             }
 
