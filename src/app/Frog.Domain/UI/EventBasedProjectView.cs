@@ -44,7 +44,7 @@ namespace Frog.Domain.UI
             get { return buildStatus; }
         }
     }
-    public class EventBasedProjectView : ProjectView
+    public class EventBasedProjectView : ProjectView, BuildView, ProjectTestSupport
     {
         private readonly IStoreEvents eventStore;
 

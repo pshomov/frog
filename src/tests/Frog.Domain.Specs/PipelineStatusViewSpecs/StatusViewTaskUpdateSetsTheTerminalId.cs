@@ -25,8 +25,8 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
         [Test]
         public void should_have_terminalId_as_specified_in_the_message()
         {
-            Assert.That(ProjectView.GetBuildStatus(BuildMessage.BuildId).Tasks[0].TerminalId, Is.EqualTo(terminal_id_task1));
-            Assert.That(ProjectView.GetBuildStatus(BuildMessage.BuildId).Tasks[1].TerminalId, Is.EqualTo(terminal_id_task2));
+            Assert.That(BuildView.GetBuildStatus(BuildMessage.BuildId).Tasks[0].TerminalId, Is.EqualTo(terminal_id_task1));
+            Assert.That(BuildView.GetBuildStatus(BuildMessage.BuildId).Tasks[1].TerminalId, Is.EqualTo(terminal_id_task2));
         }
     }
 }

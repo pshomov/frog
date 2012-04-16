@@ -13,22 +13,26 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
         protected Guid NewGuid;
         protected TaskInfo DefaultTask;
         protected ProjectView ProjectView;
+        protected BuildView BuildView;
+        ProjectTestSupport project_test_support;
         private int sequnceId;
 
-        public int NextSequnceId
+        int NextSequnceId
         {
             get { return sequnceId++; }
         }
 
         protected override void GivenCleanup()
         {
-            ProjectView.WipeBucket();
+            project_test_support.WipeBucket();
         }
 
         protected override void Given()
         {
             sequnceId = 0;
             ProjectView = SetupProjectView();
+            project_test_support = ProjectView as ProjectTestSupport;
+            BuildView = ProjectView as BuildView; 
             EventHandler = new PipelineStatusEventHandler(StoreFactory.WireupEventStore());
         }
 

@@ -56,6 +56,8 @@ namespace Frog.Domain.Integration
                                                            var message =
                                                                jsonSerializer.Deserialize<T>(
                                                                    Encoding.UTF8.GetString(eventArgs.Body));
+                                                           message.Timestamp =
+                                                               eventArgs.BasicProperties.Timestamp.UnixTime;
                                                            handler(message);
                                                        };
             if (startThread)

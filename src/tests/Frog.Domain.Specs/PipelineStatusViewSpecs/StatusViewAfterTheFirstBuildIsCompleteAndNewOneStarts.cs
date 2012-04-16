@@ -21,7 +21,7 @@ namespace Frog.Domain.Specs.PipelineStatusViewSpecs
         [Test]
         public void should_update_terminal_output_for_task_0()
         {
-            Assert.That(ProjectView.GetBuildStatus(BuildMessage.BuildId).Tasks.Count(), Is.EqualTo(3));
+            Assert.That(BuildView.GetBuildStatus(BuildMessage.BuildId).Tasks.Count(), Is.EqualTo(3));
         }
     }
 }

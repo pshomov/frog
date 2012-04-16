@@ -11,20 +11,28 @@ namespace Frog.Domain.UI
         public string Revision;
     }
 
-    public interface ProjectView
+    public interface ProjectTestSupport
+    {
+        void WipeBucket();
+    }
+
+    public interface BuildView
     {
         BuildStatus GetBuildStatus(Guid id);
-        Guid GetCurrentBuild(string repoUrl);
-        void SetCurrentBuild(string repoUrl, Guid buildId, string comment, string revision);
-        bool IsProjectRegistered(string projectUrl);
-        List<BuildHistoryItem> GetListOfBuilds(string repoUrl);
         void SetBuildStarted(Guid id, IEnumerable<TaskInfo> taskInfos);
-        void WipeBucket();
         void BuildUpdated(Guid id, int taskIndex, TaskInfo.TaskStatus taskStatus);
         void BuildEnded(Guid id, BuildTotalEndStatus totalStatus);
     }
 
-    public class InMemProjectView : ProjectView
+    public interface ProjectView
+    {
+        Guid GetCurrentBuild(string repoUrl);
+        void SetCurrentBuild(string repoUrl, Guid buildId, string comment, string revision);
+        bool IsProjectRegistered(string projectUrl);
+        List<BuildHistoryItem> GetListOfBuilds(string repoUrl);
+    }
+
+    public class InMemProjectView : ProjectView, BuildView, ProjectTestSupport
     {
         private readonly ConcurrentDictionary<Guid, BuildStatus> report;
         private readonly ConcurrentDictionary<string, Guid> currentBuild;

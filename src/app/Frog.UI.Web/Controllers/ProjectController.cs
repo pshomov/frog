@@ -38,7 +38,7 @@ namespace Frog.UI.Web.Controllers
         {
             if (ServiceLocator.ProjectStatus.IsProjectRegistered(projectUrl))
             {
-                var tasks = ServiceLocator.ProjectStatus.GetBuildStatus(ServiceLocator.ProjectStatus.GetCurrentBuild(projectUrl)).Tasks;
+                var tasks = ServiceLocator.BuildStatus.GetBuildStatus(ServiceLocator.ProjectStatus.GetCurrentBuild(projectUrl)).Tasks;
                 var activeTask = taskIndex;
                 var content = new StringBuilder();
                 for (var i = taskIndex; i < tasks.Count; i++)
@@ -58,10 +58,7 @@ namespace Frog.UI.Web.Controllers
                             });
                 
             }
-            else
-            {
-                return new HttpNotFoundResult("Project does not Runz ;(");
-            }
+            return new HttpNotFoundResult("Project does not Runz ;(");
         }
 
         string GetGithubProjectUrl(string user, string project)
@@ -73,11 +70,8 @@ namespace Frog.UI.Web.Controllers
         protected internal ActionResult GetProjectStatus(string projectUrl)
         {
             if (ServiceLocator.ProjectStatus.IsProjectRegistered(projectUrl))
-                return MonoBugs.Json(new { status = ServiceLocator.ProjectStatus.GetBuildStatus(ServiceLocator.ProjectStatus.GetCurrentBuild(projectUrl)) });
-            else
-            {
-                return new HttpNotFoundResult("Project does not Runz ;(");
-            }
+                return MonoBugs.Json(new { status = ServiceLocator.BuildStatus.GetBuildStatus(ServiceLocator.ProjectStatus.GetCurrentBuild(projectUrl)) });
+            return new HttpNotFoundResult("Project does not Runz ;(");
         }
 
         public ActionResult GetProjectHistory(string projectUrl)
@@ -90,10 +84,7 @@ namespace Frog.UI.Web.Controllers
                             items =
                         ServiceLocator.ProjectStatus.GetListOfBuilds(projectUrl)
                         });
-            else
-            {
-                return new HttpNotFoundResult("Project does not Runz ;(");
-            }
+            return new HttpNotFoundResult("Project does not Runz ;(");
         }
 
         protected internal ActionResult GetTaskTerminalOutput(string projectUrl, int taskIndex)
@@ -104,12 +95,9 @@ namespace Frog.UI.Web.Controllers
                         new
                             {
                                 terminalOutput =
-                            ServiceLocator.TerminalOutputStatus.GetTerminalOutput(ServiceLocator.ProjectStatus.GetBuildStatus(ServiceLocator.ProjectStatus.GetCurrentBuild(projectUrl)).Tasks[taskIndex].TerminalId)
+                            ServiceLocator.TerminalOutputStatus.GetTerminalOutput(ServiceLocator.BuildStatus.GetBuildStatus(ServiceLocator.ProjectStatus.GetCurrentBuild(projectUrl)).Tasks[taskIndex].TerminalId)
                             });
-            else
-            {
-                return new HttpNotFoundResult("Project does not Runz ;(");
-            }
+            return new HttpNotFoundResult("Project does not Runz ;(");
         }
     }
 }

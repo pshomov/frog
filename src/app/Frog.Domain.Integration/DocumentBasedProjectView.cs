@@ -8,7 +8,7 @@ using Frog.Support;
 namespace Frog.Domain.Integration
 {
 
-    public class DocumentBasedProjectView : ProjectView
+    public class DocumentBasedProjectView : ProjectView, BuildView, ProjectTestSupport
     {
         private readonly string host;
         private readonly int port;

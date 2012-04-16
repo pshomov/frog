@@ -10,12 +10,14 @@ namespace Frog.Domain.IntegrationTests.ProjectView
     public abstract class ProjectViewSpecs
     {
         private UI.ProjectView view;
+        BuildView build_view;
 
         [SetUp]
         public void Setup()
         {
             view = GetProjectView();
-            view.WipeBucket();
+            build_view = view as BuildView;
+            ((ProjectTestSupport) view).WipeBucket();
         }
 
 
@@ -26,7 +28,7 @@ namespace Frog.Domain.IntegrationTests.ProjectView
         {
             try
             {
-                var buildStatus = view.GetBuildStatus(Guid.NewGuid());
+                var buildStatus = build_view.GetBuildStatus(Guid.NewGuid());
                 Assert.Fail("should come here for builds that do not exist");
             }
             catch (BuildNotFoundException)
@@ -39,9 +41,9 @@ namespace Frog.Domain.IntegrationTests.ProjectView
         {
             var id = Guid.NewGuid();
             view.SetCurrentBuild("ldsfslkdf", id, "", "");
-            view.SetBuildStarted(id, new List<TaskInfo>());
+            build_view.SetBuildStarted(id, new List<TaskInfo>());
 
-            Assert.That(view.GetBuildStatus(id).Overall, Is.EqualTo(BuildTotalStatus.BuildStarted));
+            Assert.That(build_view.GetBuildStatus(id).Overall, Is.EqualTo(BuildTotalStatus.BuildStarted));
         }
 
         [Test]
@@ -49,10 +51,10 @@ namespace Frog.Domain.IntegrationTests.ProjectView
         {
             var id = Guid.NewGuid();
             view.SetCurrentBuild("ldsfslkdf", id, "", "");
-            view.SetBuildStarted(id, As.List(new TaskInfo(){Name = "t1", Status = TaskInfo.TaskStatus.NotStarted}));
-            view.BuildUpdated(id, 0, TaskInfo.TaskStatus.FinishedSuccess);
+            build_view.SetBuildStarted(id, As.List(new TaskInfo(){Name = "t1", Status = TaskInfo.TaskStatus.NotStarted}));
+            build_view.BuildUpdated(id, 0, TaskInfo.TaskStatus.FinishedSuccess);
 
-            Assert.That(view.GetBuildStatus(id).Tasks[0].Status, Is.EqualTo(TaskInfo.TaskStatus.FinishedSuccess));
+            Assert.That(build_view.GetBuildStatus(id).Tasks[0].Status, Is.EqualTo(TaskInfo.TaskStatus.FinishedSuccess));
         }
 
         [Test]
@@ -60,11 +62,11 @@ namespace Frog.Domain.IntegrationTests.ProjectView
         {
             var id = Guid.NewGuid();
             view.SetCurrentBuild("ldsfslkdf", id, "", "");
-            view.SetBuildStarted(id, As.List(new TaskInfo(){Name = "t1", Status = TaskInfo.TaskStatus.NotStarted}));
-            view.BuildUpdated(id, 0, TaskInfo.TaskStatus.FinishedSuccess);
-            view.BuildEnded(id,BuildTotalEndStatus.Error);
+            build_view.SetBuildStarted(id, As.List(new TaskInfo {Name = "t1", Status = TaskInfo.TaskStatus.NotStarted}));
+            build_view.BuildUpdated(id, 0, TaskInfo.TaskStatus.FinishedSuccess);
+            build_view.BuildEnded(id,BuildTotalEndStatus.Error);
 
-            Assert.That(view.GetBuildStatus(id).Overall, Is.EqualTo(BuildTotalStatus.BuildEndedError));
+            Assert.That(build_view.GetBuildStatus(id).Overall, Is.EqualTo(BuildTotalStatus.BuildEndedError));
         }
 
         [Test]

@@ -17,7 +17,9 @@ namespace Frog.LoadTests
         private ProjectView views;
         private IBus theBus;
         private ProjectView views2;
+
         private IStoreEvents eventStore;
+        BuildView build_view;
 
         [SetUp]
         public void SetUp()
@@ -29,7 +31,8 @@ namespace Frog.LoadTests
             theBus = new RabbitMQBus(OSHelpers.RabbitHost());
 
             views = new EventBasedProjectView(eventStore);
-            views.WipeBucket();
+            build_view = (BuildView) views;
+            ((ProjectTestSupport) views).WipeBucket();
             views2 = new EventBasedProjectView(eventStore);
             Setup.SetupView(theBus, eventStore);
         }
@@ -56,11 +59,11 @@ namespace Frog.LoadTests
             theBus.Publish(new BuildUpdated(buildId, 0, TaskInfo.TaskStatus.FinishedSuccess, 1002, terminalId));
             theBus.Publish(new BuildEnded(buildId, BuildTotalEndStatus.Success, 2003));
 
-            Specs.Support.AssertionHelpers.WithRetries(() =>
+            AssertionHelpers.WithRetries(() =>
                                                                 {
                                                                     try
                                                                     {
-                                                                        Assert.That(views2.GetBuildStatus(buildId).Overall,
+                                                                        Assert.That(build_view.GetBuildStatus(buildId).Overall,
                                                                                     Is.EqualTo(
                                                                                         BuildTotalStatus.BuildEndedSuccess));
                                                                     }

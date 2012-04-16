@@ -1,8 +1,9 @@
 using System;
 namespace SimpleCQRS
 {
-	public interface Message
+	public abstract class Message
 	{
+	    public long Timestamp;
 	}
 }
 
