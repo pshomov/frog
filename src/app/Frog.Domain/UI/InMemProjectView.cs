@@ -18,31 +18,37 @@ namespace Frog.Domain.UI
 
     public interface BuildView
     {
+        void BuildEnded(Guid id, BuildTotalEndStatus totalStatus);
+        void BuildUpdated(Guid id, int taskIndex, TaskInfo.TaskStatus taskStatus);
         BuildStatus GetBuildStatus(Guid id);
         void SetBuildStarted(Guid id, IEnumerable<TaskInfo> taskInfos);
-        void BuildUpdated(Guid id, int taskIndex, TaskInfo.TaskStatus taskStatus);
-        void BuildEnded(Guid id, BuildTotalEndStatus totalStatus);
     }
 
     public interface ProjectView
     {
         Guid GetCurrentBuild(string repoUrl);
-        void SetCurrentBuild(string repoUrl, Guid buildId, string comment, string revision);
-        bool IsProjectRegistered(string projectUrl);
         List<BuildHistoryItem> GetListOfBuilds(string repoUrl);
+        bool IsProjectRegistered(string projectUrl);
+        void SetCurrentBuild(string repoUrl, Guid buildId, string comment, string revision);
     }
 
     public class InMemProjectView : ProjectView, BuildView, ProjectTestSupport
     {
-        private readonly ConcurrentDictionary<Guid, BuildStatus> report;
-        private readonly ConcurrentDictionary<string, Guid> currentBuild;
-        private readonly ConcurrentDictionary<string, List<BuildHistoryItem>> buildHistory;
-
         public InMemProjectView()
         {
             report = new ConcurrentDictionary<Guid, BuildStatus>();
             currentBuild = new ConcurrentDictionary<string, Guid>();
             buildHistory = new ConcurrentDictionary<string, List<BuildHistoryItem>>();
+        }
+
+        public void BuildEnded(Guid id, BuildTotalEndStatus totalStatus)
+        {
+            GetBuildStatus(id).BuildEnded(totalStatus);
+        }
+
+        public void BuildUpdated(Guid id, int taskIndex, TaskInfo.TaskStatus taskStatus)
+        {
+            GetBuildStatus(id).BuildUpdated(taskIndex, taskStatus);
         }
 
         public BuildStatus GetBuildStatus(Guid id)
@@ -69,12 +75,10 @@ namespace Frog.Domain.UI
             }
         }
 
-        public void SetCurrentBuild(string repoUrl, Guid buildId, string comment, string revision)
+        public List<BuildHistoryItem> GetListOfBuilds(string repoUrl)
         {
-            currentBuild[repoUrl] = buildId;
-            buildHistory.TryAdd(repoUrl, new List<BuildHistoryItem>());
-            buildHistory[repoUrl].Add(new BuildHistoryItem(){BuildId = buildId, Comment = comment, Revision = revision});
-            report[buildId] = new BuildStatus();
+            if (!buildHistory.ContainsKey(repoUrl)) return new List<BuildHistoryItem>();
+            return buildHistory[repoUrl];
         }
 
         public bool IsProjectRegistered(string projectUrl)
@@ -82,32 +86,27 @@ namespace Frog.Domain.UI
             return currentBuild.ContainsKey(projectUrl);
         }
 
-        public List<BuildHistoryItem> GetListOfBuilds(string repoUrl)
-        {
-            if (!buildHistory.ContainsKey(repoUrl)) return new List<BuildHistoryItem>();
-            return buildHistory[repoUrl];
-        }
-
         public void SetBuildStarted(Guid id, IEnumerable<TaskInfo> taskInfos)
         {
             GetBuildStatus(id).BuildStarted(taskInfos);
         }
 
+        public void SetCurrentBuild(string repoUrl, Guid buildId, string comment, string revision)
+        {
+            currentBuild[repoUrl] = buildId;
+            buildHistory.TryAdd(repoUrl, new List<BuildHistoryItem>());
+            buildHistory[repoUrl].Add(new BuildHistoryItem {BuildId = buildId, Comment = comment, Revision = revision});
+            report[buildId] = new BuildStatus();
+        }
+
         public void WipeBucket()
         {
-            
         }
 
-        public void BuildUpdated(Guid id, int taskIndex, TaskInfo.TaskStatus taskStatus)
-        {
-            GetBuildStatus(id).BuildUpdated(taskIndex, taskStatus);
-        }
-
-        public void BuildEnded(Guid id, BuildTotalEndStatus totalStatus)
-        {
-            GetBuildStatus(id).BuildEnded(totalStatus);
-        }
-     }
+        readonly ConcurrentDictionary<Guid, BuildStatus> report;
+        readonly ConcurrentDictionary<string, Guid> currentBuild;
+        readonly ConcurrentDictionary<string, List<BuildHistoryItem>> buildHistory;
+    }
 
     public class RepositoryNotRegisteredException : Exception
     {
@@ -116,5 +115,4 @@ namespace Frog.Domain.UI
     public class BuildNotFoundException : Exception
     {
     }
-
 }

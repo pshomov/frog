@@ -18,11 +18,11 @@ namespace Frog.Domain
     {
         public Guid BuildId { get; set; }
 
-        public BuildEvent() : this(Guid.Empty, -1)
+        protected BuildEvent() : this(Guid.Empty, -1)
         {
         }
 
-        public BuildEvent(Guid buildId, int sequenceId) : base(sequenceId)
+        protected BuildEvent(Guid buildId, int sequenceId) : base(sequenceId)
         {
             BuildId = buildId;
         }
