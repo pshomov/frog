@@ -1,11 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using Frog.Domain.BuildSystems.FrogSystemTest;
 using Frog.Domain.BuildSystems.Make;
 using Frog.Domain.BuildSystems.Rake;
 using Frog.Domain.BuildSystems.Solution;
 using Frog.Domain.ExecTasks;
-using Frog.Domain.TaskSources;
 using Frog.Support;
 
 namespace Frog.Domain
@@ -17,8 +15,6 @@ namespace Frog.Domain
 
     public class ExecTaskGenerator : IExecTaskGenerator
     {
-        readonly ExecTaskFactory execTaskGenerator;
-
         public ExecTaskGenerator(ExecTaskFactory execTaskGenerator)
         {
             this.execTaskGenerator = execTaskGenerator;
@@ -37,34 +33,36 @@ namespace Frog.Domain
                 var nunit = (NUnitTask) task;
                 result.Add(execTaskGenerator.CreateTask("nunit", nunit.Assembly, "unit_test"));
             }
-            if (task.GetType() == typeof(TestTaskDescription))
+            if (task.GetType() == typeof (TestTaskDescription))
             {
                 result.Add(new TestExecTask((task as TestTaskDescription).path, this));
             }
-            if (task.GetType() == typeof(FakeTaskDescription))
+            if (task.GetType() == typeof (FakeTaskDescription))
             {
                 result.Add(new FakeExecTask((task as FakeTaskDescription).messages, this));
             }
-            if (task.GetType() == typeof(RakeTask))
+            if (task.GetType() == typeof (RakeTask))
             {
                 result.Add(CreateShellTask(new ShellTask {cmd = "rake", args = ""}));
             }
-            if(task.GetType() == typeof(BundlerTask))
+            if (task.GetType() == typeof (BundlerTask))
             {
-                result.Add(CreateShellTask(new ShellTask { cmd = "bundle", args = "install --path ~/.gem" }));
+                result.Add(CreateShellTask(new ShellTask {cmd = "bundle", args = "install --path ~/.gem"}));
             }
-            if(task.GetType() == typeof(ShellTask))
+            if (task.GetType() == typeof (ShellTask))
             {
-                result.Add(CreateShellTask((ShellTask)task));
+                result.Add(CreateShellTask((ShellTask) task));
             }
-            if(task.GetType() == typeof(MakeTask))
+            if (task.GetType() == typeof (MakeTask))
             {
                 result.Add(execTaskGenerator.CreateTask("make", null, "Make task"));
             }
             return result;
         }
 
-        private IExecTask CreateShellTask(ShellTask anyTask)
+        readonly ExecTaskFactory execTaskGenerator;
+
+        IExecTask CreateShellTask(ShellTask anyTask)
         {
             var cmd = Os.IsUnix ? "/bin/bash" : "cmd.exe";
             var args = Os.IsUnix ? "-c \"" : "/c ";

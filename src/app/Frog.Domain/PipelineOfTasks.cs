@@ -7,8 +7,10 @@ namespace Frog.Domain
 {
     public class PipelineOfTasks : Pipeline
     {
-        readonly TaskSource tasksSource;
-        readonly IExecTaskGenerator execTaskGenerator;
+        public event Action<BuildTotalEndStatus> OnBuildEnded = status => { };
+        public event BuildStartedDelegate OnBuildStarted = status => { };
+        public event Action<int, Guid, TaskInfo.TaskStatus> OnBuildUpdated = (i, terminalId, status) => { };
+        public event Action<TerminalUpdateInfo> OnTerminalUpdate = info => { };
 
         public PipelineOfTasks(TaskSource tasksSource, IExecTaskGenerator execTaskGenerator)
         {
@@ -22,10 +24,8 @@ namespace Frog.Domain
             RunTasks(sourceDrop, execTasks);
         }
 
-        public event BuildStartedDelegate OnBuildStarted = status => {};
-        public event Action<int, Guid, TaskInfo.TaskStatus> OnBuildUpdated = (i, terminalId, status) => {};
-        public event Action<BuildTotalEndStatus> OnBuildEnded = status => {};
-        public event Action<TerminalUpdateInfo> OnTerminalUpdate = info => {};
+        readonly TaskSource tasksSource;
+        readonly IExecTaskGenerator execTaskGenerator;
 
         void RunTasks(SourceDrop sourceDrop, List<IExecTask> execTasks)
         {
@@ -39,13 +39,14 @@ namespace Frog.Domain
                 var terminalId = status.Tasks[i].TerminalId;
                 OnBuildUpdated(i, terminalId, TaskInfo.TaskStatus.Started);
                 int sequneceIndex = 0;
-                Action<string> execTaskOnOnTerminalOutputUpdate = s => OnTerminalUpdate(new TerminalUpdateInfo(sequneceIndex++, s, i, terminalId));
+                Action<string> execTaskOnOnTerminalOutputUpdate =
+                    s => OnTerminalUpdate(new TerminalUpdateInfo(sequneceIndex++, s, i, terminalId));
                 execTask.OnTerminalOutputUpdate += execTaskOnOnTerminalOutputUpdate;
                 try
                 {
                     execTaskStatus = execTask.Perform(sourceDrop).ExecStatus;
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     execTaskStatus = ExecTaskResult.Status.Error;
                     execTaskOnOnTerminalOutputUpdate("Runz>> Exception running the task:" + e);
@@ -79,7 +80,11 @@ namespace Frog.Domain
             foreach (var execTask in execTasks)
             {
                 pipelineStatus.Tasks.Add(new TaskInfo
-                                             {Name = execTask.Name, Status = TaskInfo.TaskStatus.NotStarted, TerminalId = Guid.NewGuid()});
+                                             {
+                                                 Name = execTask.Name,
+                                                 Status = TaskInfo.TaskStatus.NotStarted,
+                                                 TerminalId = Guid.NewGuid()
+                                             });
             }
             return pipelineStatus;
         }

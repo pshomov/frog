@@ -1,28 +1,28 @@
-﻿using System;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
 
 namespace Frog.Domain.RepositoryTracker
 {
     public class InMemoryProjectsRepository : IProjectsRepository
     {
-        private readonly ConcurrentDictionary<string, RepositoryDocument> trackedRepos;
+        public IEnumerable<RepositoryDocument> AllProjects
+        {
+            get { return trackedRepos.Values; }
+        }
 
         public InMemoryProjectsRepository()
         {
             trackedRepos = new ConcurrentDictionary<string, RepositoryDocument>();
         }
 
-        public void TrackRepository(string repoUrl)
+        public void ProjectCheckComplete(string repoUrl)
         {
-            trackedRepos.TryAdd(repoUrl, new RepositoryDocument { projecturl = repoUrl, revision = "", CheckForUpdateRequested = false});
+            trackedRepos[repoUrl].CheckForUpdateRequested = false;
         }
 
-        public IEnumerable<RepositoryDocument> AllProjects { get { return trackedRepos.Values; } }
-        public void UpdateLastKnownRevision(string repoUrl, string revision)
+        public void ProjectCheckInProgress(string repoUrl)
         {
-            trackedRepos[repoUrl].revision = revision;
-            trackedRepos[repoUrl].CheckForUpdateRequested = false;
+            trackedRepos[repoUrl].CheckForUpdateRequested = true;
         }
 
         public void RemoveProject(string repoUrl)
@@ -31,13 +31,16 @@ namespace Frog.Domain.RepositoryTracker
             trackedRepos.TryRemove(repoUrl, out value);
         }
 
-        public void ProjectCheckInProgress(string repoUrl)
+        public void TrackRepository(string repoUrl)
         {
-            trackedRepos[repoUrl].CheckForUpdateRequested = true;
+            trackedRepos.TryAdd(repoUrl,
+                                new RepositoryDocument
+                                    {projecturl = repoUrl, revision = "", CheckForUpdateRequested = false});
         }
 
-        public void ProjectCheckComplete(string repoUrl)
+        public void UpdateLastKnownRevision(string repoUrl, string revision)
         {
+            trackedRepos[repoUrl].revision = revision;
             trackedRepos[repoUrl].CheckForUpdateRequested = false;
         }
 
@@ -45,5 +48,7 @@ namespace Frog.Domain.RepositoryTracker
         {
             trackedRepos.Clear();
         }
+
+        readonly ConcurrentDictionary<string, RepositoryDocument> trackedRepos;
     }
 }

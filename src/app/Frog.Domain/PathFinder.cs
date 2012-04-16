@@ -5,13 +5,20 @@ namespace Frog.Domain
 {
     public class PathFinder
     {
-        private string pattern;
+        public virtual void FindFilesAtTheBase(Action<string> action, string pattern, string baseFolder)
+        {
+            string[] files = Directory.GetFiles(baseFolder, pattern);
+            foreach (string file in files)
+                action(file);
+        }
 
         public virtual void FindFilesRecursively(Action<string> action, string pattern, string baseFolder)
         {
             this.pattern = pattern;
-            Diver(baseFolder, action); 
+            Diver(baseFolder, action);
         }
+
+        string pattern;
 
         void Diver(string currentDir, Action<string> action)
         {
@@ -26,13 +33,6 @@ namespace Frog.Domain
                 foreach (string file in files)
                     action(file);
             }
-        }
-
-        public virtual void FindFilesAtTheBase(Action<string> action, string pattern, string baseFolder)
-        {
-            string[] files = Directory.GetFiles(baseFolder, pattern);
-            foreach (string file in files)
-                action(file);
         }
     }
 }

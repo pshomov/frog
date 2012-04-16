@@ -6,8 +6,6 @@ namespace Frog.Domain.BuildSystems.FrogSystemTest
 {
     public class TestTaskDetector : TaskSource
     {
-        readonly TaskFileFinder taskFileFinder;
-
         public TestTaskDetector(TaskFileFinder taskFileFinder)
         {
             this.taskFileFinder = taskFileFinder;
@@ -18,6 +16,8 @@ namespace Frog.Domain.BuildSystems.FrogSystemTest
             var testTaskFiles = taskFileFinder.FindFiles(projectFolder);
             return testTaskFiles.Select(s => (Task) new TestTaskDescription(s)).ToList();
         }
+
+        readonly TaskFileFinder taskFileFinder;
     }
 
     public class TestTaskDescription : Task
@@ -38,7 +38,5 @@ namespace Frog.Domain.BuildSystems.FrogSystemTest
         {
             this.messages = messages;
         }
-
     }
-
 }

@@ -7,11 +7,14 @@ namespace Frog.Domain.BuildSystems.Solution
     public class SolutionTaskFileFinder : TaskFileFinder
 
     {
-        readonly PathFinder pathFinder;
-
         public SolutionTaskFileFinder(PathFinder pathFinder)
         {
             this.pathFinder = pathFinder;
+        }
+
+        public bool FindBundlerFile(string baseFolder)
+        {
+            throw new NotImplementedException();
         }
 
         public List<string> FindFiles(string baseFolder)
@@ -22,9 +25,6 @@ namespace Frog.Domain.BuildSystems.Solution
             return slns;
         }
 
-        public bool FindBundlerFile(string baseFolder)
-        {
-            throw new NotImplementedException();
-        }
+        readonly PathFinder pathFinder;
     }
 }

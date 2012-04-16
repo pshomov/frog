@@ -9,15 +9,11 @@ namespace Frog.Domain.ExecTasks
         {
             Success,
             Error
-        } ;
+        };
 
-        readonly ExecutionStatus executionStatus;
-        readonly int exitCode;
-
-        public ExecTaskResult(ExecutionStatus executionStatus, int exitCode)
+        public Status ExecStatus
         {
-            this.executionStatus = executionStatus;
-            this.exitCode = exitCode;
+            get { return HasExecuted && ExitCode == 0 ? Status.Success : Status.Error; }
         }
 
         public int ExitCode
@@ -35,25 +31,29 @@ namespace Frog.Domain.ExecTasks
             get { return executionStatus == ExecutionStatus.Success; }
         }
 
-        public Status ExecStatus
+        public ExecTaskResult(ExecutionStatus executionStatus, int exitCode)
         {
-            get { return HasExecuted && ExitCode == 0 ? Status.Success : Status.Error; }
+            this.executionStatus = executionStatus;
+            this.exitCode = exitCode;
         }
+
+        readonly ExecutionStatus executionStatus;
+        readonly int exitCode;
     }
 
     public class ExecTask : IExecTask
     {
-        readonly string app;
-        readonly string arguments;
-        readonly string name;
-        private readonly Func<string, string, string, IProcessWrapper> processWrapperFactory;
-        private readonly int periodLengthMs;
-        private readonly int quotaNrPeriods;
-        private IProcessWrapper process;
-        public event Action<int> OnTaskStarted = pid => {};
-        public event Action<string> OnTerminalOutputUpdate = s => {};
+        public string Name
+        {
+            get { return name; }
+        }
 
-        public ExecTask(string app, string arguments, string name, Func<string, string, string, IProcessWrapper> processWrapperFactory, int periodLengthMs = 5000, int quotaNrPeriods = 60)
+        public event Action<int> OnTaskStarted = pid => { };
+        public event Action<string> OnTerminalOutputUpdate = s => { };
+
+        public ExecTask(string app, string arguments, string name,
+                        Func<string, string, string, IProcessWrapper> processWrapperFactory, int periodLengthMs = 5000,
+                        int quotaNrPeriods = 60)
         {
             this.app = app;
             this.arguments = arguments;
@@ -78,18 +78,20 @@ namespace Frog.Domain.ExecTasks
                 ObserveTask();
                 exitCode = process.Dispose();
             }
-            catch(HangingProcessDetectedException)
+            catch (HangingProcessDetectedException)
             {
                 var exitcode = process.Dispose();
-                OnTerminalOutputUpdate(string.Format("Runz>> It looks like task is hanging without doing much. Task was killed. Exit code: {0}",
-                                                        exitcode) + "\r\n");
+                OnTerminalOutputUpdate(string.Format(
+                    "Runz>> It looks like task is hanging without doing much. Task was killed. Exit code: {0}",
+                    exitcode) + "\r\n");
                 return new ExecTaskResult(ExecutionStatus.Failure, exitcode);
             }
-            catch(TaskQuotaConsumedException)
+            catch (TaskQuotaConsumedException)
             {
                 var exitcode = process.Dispose();
-                OnTerminalOutputUpdate(string.Format("Runz>> Task has consumed all its quota. Task was killed. Exit code: {0}",
-                                                     exitcode) + "\r\n");
+                OnTerminalOutputUpdate(string.Format(
+                    "Runz>> Task has consumed all its quota. Task was killed. Exit code: {0}",
+                    exitcode) + "\r\n");
                 return new ExecTaskResult(ExecutionStatus.Failure, exitcode);
             }
             catch (ApplicationNotFoundException e)
@@ -99,11 +101,19 @@ namespace Frog.Domain.ExecTasks
             }
 
             OnTerminalOutputUpdate(string.Format("Runz>> Task has exited with exitcode {0}",
-                                                    exitCode) + "\r\n");
+                                                 exitCode) + "\r\n");
             return new ExecTaskResult(ExecutionStatus.Success, exitCode);
         }
 
-        private void ObserveTask()
+        readonly string app;
+        readonly string arguments;
+        readonly string name;
+        readonly Func<string, string, string, IProcessWrapper> processWrapperFactory;
+        readonly int periodLengthMs;
+        readonly int quotaNrPeriods;
+        IProcessWrapper process;
+
+        void ObserveTask()
         {
             var lastQuotaCPU = "";
             for (int i = 0; i < quotaNrPeriods; i++)
@@ -124,14 +134,9 @@ namespace Frog.Domain.ExecTasks
             throw new TaskQuotaConsumedException();
         }
 
-        private static bool HangingTaskDetector(string lastQuotaCPU, string currentQuotaCPU)
+        static bool HangingTaskDetector(string lastQuotaCPU, string currentQuotaCPU)
         {
             return currentQuotaCPU == lastQuotaCPU;
-        }
-
-        public string Name
-        {
-            get { return name; }
         }
     }
 

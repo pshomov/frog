@@ -1,11 +1,10 @@
 using System.Collections.Generic;
+using Frog.Domain.TaskSources;
 
 namespace Frog.Domain.BuildSystems.Maven
 {
-    public class MavenTaskDetector : TaskSources.TaskSource
+    public class MavenTaskDetector : TaskSource
     {
-        readonly TaskFileFinder _taskFileFinder;
-
         public MavenTaskDetector(TaskFileFinder _taskFileFinder)
         {
             this._taskFileFinder = _taskFileFinder;
@@ -16,5 +15,7 @@ namespace Frog.Domain.BuildSystems.Maven
             var tasks = new List<Task>();
             return tasks;
         }
+
+        readonly TaskFileFinder _taskFileFinder;
     }
 }

@@ -5,9 +5,6 @@ namespace Frog.Domain.RevisionChecker
 {
     public class RevisionChecker : Handles<CheckRevision>
     {
-        private readonly IBus bus;
-        private readonly SourceRepoDriverFactory sourceRepoDriver;
-
         public RevisionChecker(IBus bus, SourceRepoDriverFactory sourceRepoDriver)
         {
             this.bus = bus;
@@ -20,7 +17,7 @@ namespace Frog.Domain.RevisionChecker
             try
             {
                 var latestRevision = driver.GetLatestRevision();
-                bus.Publish(new UpdateFound { RepoUrl = checkRevision.RepoUrl, Revision = latestRevision });
+                bus.Publish(new UpdateFound {RepoUrl = checkRevision.RepoUrl, Revision = latestRevision});
             }
             catch (Exception)
             {
@@ -32,5 +29,8 @@ namespace Frog.Domain.RevisionChecker
         {
             bus.RegisterHandler<CheckRevision>(Handle, "checksForUpdates");
         }
+
+        readonly IBus bus;
+        readonly SourceRepoDriverFactory sourceRepoDriver;
     }
 }

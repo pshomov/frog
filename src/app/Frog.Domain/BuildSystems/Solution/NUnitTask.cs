@@ -2,16 +2,16 @@
 {
     public class NUnitTask : Task
     {
-        readonly string assembly;
+        public string Assembly
+        {
+            get { return assembly; }
+        }
 
         public NUnitTask(string assembly)
         {
             this.assembly = assembly;
         }
 
-        public string Assembly
-        {
-            get { return assembly; }
-        }
+        readonly string assembly;
     }
 }

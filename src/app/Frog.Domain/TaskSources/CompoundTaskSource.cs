@@ -4,8 +4,6 @@ namespace Frog.Domain.TaskSources
 {
     public class CompoundTaskSource : TaskSource
     {
-        readonly TaskSource[] srcs;
-
         public CompoundTaskSource(params TaskSource[] srcs)
         {
             this.srcs = srcs;
@@ -20,5 +18,7 @@ namespace Frog.Domain.TaskSources
             }
             return result;
         }
+
+        readonly TaskSource[] srcs;
     }
 }

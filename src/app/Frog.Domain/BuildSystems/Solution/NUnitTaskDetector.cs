@@ -8,8 +8,6 @@ namespace Frog.Domain.BuildSystems.Solution
 {
     public class NUnitTaskDetector : TaskSource
     {
-        readonly TaskFileFinder _projectTaskFileRepo;
-
         public NUnitTaskDetector(TaskFileFinder _projectTaskFileRepo)
         {
             this._projectTaskFileRepo = _projectTaskFileRepo;
@@ -20,6 +18,8 @@ namespace Frog.Domain.BuildSystems.Solution
             var items = _projectTaskFileRepo.FindFiles(projectFolder);
             return items.Select(s => (Task) new NUnitTask(ProjectPathToAssemblyPath(s))).ToList();
         }
+
+        readonly TaskFileFinder _projectTaskFileRepo;
 
         string ProjectPathToAssemblyPath(string projectPath)
         {

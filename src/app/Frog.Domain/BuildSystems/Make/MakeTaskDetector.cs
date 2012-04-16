@@ -5,8 +5,6 @@ namespace Frog.Domain.BuildSystems.Make
 {
     public class MakeTaskDetector : TaskSource
     {
-        private readonly TaskFileFinder taskFileFinder;
-
         public MakeTaskDetector(TaskFileFinder taskFileFinder)
         {
             this.taskFileFinder = taskFileFinder;
@@ -19,5 +17,7 @@ namespace Frog.Domain.BuildSystems.Make
             if (foundFiles.Count == 1) result.Add(new MakeTask());
             return result;
         }
+
+        readonly TaskFileFinder taskFileFinder;
     }
 }

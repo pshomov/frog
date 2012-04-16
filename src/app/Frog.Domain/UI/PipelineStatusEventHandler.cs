@@ -5,18 +5,12 @@ using SimpleCQRS;
 
 namespace Frog.Domain.UI
 {
-    public class PipelineStatusEventHandler : Handles<BuildStarted>, Handles<BuildEnded>, Handles<BuildUpdated>, Handles<ProjectCheckedOut>
+    public class PipelineStatusEventHandler : Handles<BuildStarted>, Handles<BuildEnded>, Handles<BuildUpdated>,
+                                              Handles<ProjectCheckedOut>
     {
-        private readonly IStoreEvents eventStore;
-
         public PipelineStatusEventHandler(IStoreEvents eventStore)
         {
             this.eventStore = eventStore;
-        }
-
-        IEventStream GetEventStream(Guid id)
-        {
-            return eventStore.OpenStream(id, Int32.MinValue, Int32.MaxValue);
         }
 
         public void Handle(BuildStarted message)
@@ -47,22 +41,30 @@ namespace Frog.Domain.UI
             using (
                 var eventStream = eventStore.CreateStream(message.BuildId))
             {
-                eventStream.Add(new EventMessage() { Body = message });
+                eventStream.Add(new EventMessage {Body = message});
                 eventStream.CommitChanges(Guid.NewGuid());
             }
             using (
-                var eventStream = eventStore.OpenStream(EventBasedProjectView.KeyGenerator(repoUrl), Int32.MinValue, Int32.MaxValue))
+                var eventStream = eventStore.OpenStream(EventBasedProjectView.KeyGenerator(repoUrl), Int32.MinValue,
+                                                        Int32.MaxValue))
             {
-                eventStream.Add(new EventMessage() { Body = message });
+                eventStream.Add(new EventMessage {Body = message});
                 eventStream.CommitChanges(Guid.NewGuid());
             }
         }
 
-        private void StoreEvent(BuildEvent message)
+        readonly IStoreEvents eventStore;
+
+        IEventStream GetEventStream(Guid id)
+        {
+            return eventStore.OpenStream(id, Int32.MinValue, Int32.MaxValue);
+        }
+
+        void StoreEvent(BuildEvent message)
         {
             using (var eventStream = GetEventStream(message.BuildId))
             {
-                eventStream.Add(new EventMessage() {Body = message});
+                eventStream.Add(new EventMessage {Body = message});
                 eventStream.CommitChanges(Guid.NewGuid());
             }
         }

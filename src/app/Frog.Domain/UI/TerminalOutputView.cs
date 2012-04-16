@@ -7,8 +7,6 @@ namespace Frog.Domain.UI
 {
     public class TerminalOutputView
     {
-        private readonly IStoreEvents eventStore;
-
         public TerminalOutputView(IStoreEvents eventStore)
         {
             this.eventStore = eventStore;
@@ -18,7 +16,7 @@ namespace Frog.Domain.UI
         {
             var commits = eventStore.Advanced.GetFrom(terminalId, Int32.MinValue, Int32.MaxValue);
             var terminalOutputA = new TerminalOutputA(terminalId);
-            terminalOutputA.LoadsFromHistory(commits.Select(commit => (Event)commit.Events[0].Body));
+            terminalOutputA.LoadsFromHistory(commits.Select(commit => (Event) commit.Events[0].Body));
             return terminalOutputA.Info(sinceIndex);
         }
 
@@ -26,15 +24,24 @@ namespace Frog.Domain.UI
         {
             var commits = eventStore.Advanced.GetFrom(terminalId, Int32.MinValue, Int32.MaxValue);
             var terminalOutputA = new TerminalOutputA(terminalId);
-            terminalOutputA.LoadsFromHistory(commits.Select(commit => (Event)commit.Events[0].Body));
+            terminalOutputA.LoadsFromHistory(commits.Select(commit => (Event) commit.Events[0].Body));
             return terminalOutputA.Value;
         }
+
+        readonly IStoreEvents eventStore;
     }
 
     public class TerminalOutputA : AggregateRoot
     {
-        private readonly Guid terminalId;
-        private TerminalOutput terminalOutput;
+        public override Guid Id
+        {
+            get { return terminalId; }
+        }
+
+        public string Value
+        {
+            get { return terminalOutput.GetContent(0).Content; }
+        }
 
         public TerminalOutputA(Guid terminalId)
         {
@@ -42,21 +49,17 @@ namespace Frog.Domain.UI
             terminalOutput = new TerminalOutput();
         }
 
-        public override Guid Id
+        public TerminalOutput.Info Info(int sinceIndex)
         {
-            get { return terminalId; }
+            return terminalOutput.GetContent(sinceIndex);
         }
+
+        readonly Guid terminalId;
+        readonly TerminalOutput terminalOutput;
 
         void Apply(TerminalUpdate msg)
         {
             terminalOutput.Add(msg.ContentSequenceIndex, msg.Content);
-        }
-
-        public string Value { get { return terminalOutput.GetContent(0).Content; } }
-
-        public TerminalOutput.Info Info(int sinceIndex)
-        {
-            return terminalOutput.GetContent(sinceIndex);
         }
     }
 }

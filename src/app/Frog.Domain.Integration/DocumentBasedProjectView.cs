@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using CorrugatedIron;
-using CorrugatedIron.Models;
 using Frog.Domain.UI;
 using Frog.Support;
 

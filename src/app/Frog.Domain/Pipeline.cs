@@ -5,33 +5,39 @@ namespace Frog.Domain
 {
     public class SourceDrop
     {
-        readonly string sourceDropLocation;
+        public string SourceDropLocation
+        {
+            get { return sourceDropLocation; }
+        }
 
         public SourceDrop(string sourceDropLocation)
         {
             this.sourceDropLocation = sourceDropLocation;
         }
 
-        public string SourceDropLocation
-        {
-            get { return sourceDropLocation; }
-        }
+        readonly string sourceDropLocation;
     }
 
     public delegate void ProjectCheckedOutDelegate(CheckoutInfo info);
+
     public delegate void BuildStartedDelegate(PipelineStatus status);
 
     public interface Pipeline
     {
-        void Process(SourceDrop sourceDrop);
+        event Action<BuildTotalEndStatus> OnBuildEnded;
         event BuildStartedDelegate OnBuildStarted;
         event Action<int, Guid, TaskInfo.TaskStatus> OnBuildUpdated;
-        event Action<BuildTotalEndStatus> OnBuildEnded;
         event Action<TerminalUpdateInfo> OnTerminalUpdate;
+        void Process(SourceDrop sourceDrop);
     }
 
     public class TerminalUpdateInfo
     {
+        public string Content { get; private set; }
+        public int ContentSequenceIndex { get; private set; }
+        public int TaskIndex { get; private set; }
+        public Guid TerminalId { get; private set; }
+
         public TerminalUpdateInfo(int contentSequenceIndex, string content, int taskIndex, Guid terminalId)
         {
             ContentSequenceIndex = contentSequenceIndex;
@@ -39,11 +45,6 @@ namespace Frog.Domain
             TaskIndex = taskIndex;
             TerminalId = terminalId;
         }
-
-        public string Content { get; private set; }
-        public int ContentSequenceIndex { get; private set; }
-        public int TaskIndex { get; private set; }
-        public Guid TerminalId { get; private set; }
     }
 
     public class PipelineStatus
@@ -53,6 +54,16 @@ namespace Frog.Domain
 
     public class TaskInfo
     {
+        public enum TaskStatus
+        {
+            NotStarted,
+            Started,
+            FinishedSuccess,
+            FinishedError
+        }
+
+        public string Name;
+        public TaskStatus Status { get; set; }
         public Guid TerminalId { get; set; }
 
         public TaskInfo()
@@ -65,17 +76,6 @@ namespace Frog.Domain
             Name = name;
             Status = TaskStatus.NotStarted;
         }
-
-        public enum TaskStatus
-        {
-            NotStarted,
-            Started,
-            FinishedSuccess,
-            FinishedError
-        }
-
-        public string Name;
-        public TaskStatus Status { get; set; }
     }
 
     public enum BuildTotalEndStatus

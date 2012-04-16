@@ -5,8 +5,8 @@ namespace Frog.Domain
 {
     public interface IExecTask
     {
-        event Action<string> OnTerminalOutputUpdate;
         string Name { get; }
+        event Action<string> OnTerminalOutputUpdate;
         ExecTaskResult Perform(SourceDrop sourceDrop);
     }
 }

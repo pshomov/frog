@@ -9,8 +9,6 @@ namespace Frog.Domain.BuildSystems.Solution
 {
     public class MSBuildDetector : TaskSource
     {
-        readonly TaskFileFinder _taskFileFinder;
-
         public MSBuildDetector(TaskFileFinder _taskFileFinder)
         {
             this._taskFileFinder = _taskFileFinder;
@@ -24,7 +22,7 @@ namespace Frog.Domain.BuildSystems.Solution
             {
                 var rootFolderSolutions =
                     allSolutionFiles.Where(slnPath => slnPath.IndexOf(Path.DirectorySeparatorChar) == -1).ToList();
-				if (rootFolderSolutions.Count == 0) return new List<Task>();
+                if (rootFolderSolutions.Count == 0) return new List<Task>();
                 var rootBuildSlnIdx =
                     rootFolderSolutions.FindIndex(
                         s => s.Equals("build.sln", StringComparison.InvariantCultureIgnoreCase));
@@ -36,5 +34,7 @@ namespace Frog.Domain.BuildSystems.Solution
 
             return new List<Task>();
         }
+
+        readonly TaskFileFinder _taskFileFinder;
     }
 }

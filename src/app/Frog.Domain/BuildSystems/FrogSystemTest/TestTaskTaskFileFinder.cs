@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 
 namespace Frog.Domain.BuildSystems.FrogSystemTest
 {
     public class TestTaskTaskFileFinder : TaskFileFinder
     {
-        readonly PathFinder pathFinder;
-
         public TestTaskTaskFileFinder(PathFinder pathFinder)
         {
             this.pathFinder = pathFinder;
@@ -17,8 +14,11 @@ namespace Frog.Domain.BuildSystems.FrogSystemTest
         {
             var testtasks = new List<string>();
             var baseFolderFull = Path.GetFullPath(baseFolder);
-            pathFinder.FindFilesRecursively(s => testtasks.Add(s.Remove(0, baseFolderFull.Length + 1)), "*.testtask", baseFolder);
+            pathFinder.FindFilesRecursively(s => testtasks.Add(s.Remove(0, baseFolderFull.Length + 1)), "*.testtask",
+                                            baseFolder);
             return testtasks;
         }
+
+        readonly PathFinder pathFinder;
     }
 }

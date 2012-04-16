@@ -5,14 +5,17 @@ namespace Frog.Domain
 {
     public class UpdateFound : Event
     {
-        public RevisionInfo Revision;
         public string RepoUrl;
+        public RevisionInfo Revision;
     }
 
     public class Worker
     {
-        readonly Pipeline pipeline;
-        readonly WorkingAreaGoverner workingAreaGoverner;
+        public virtual event Action<BuildTotalEndStatus> OnBuildEnded = status => { };
+        public virtual event BuildStartedDelegate OnBuildStarted = status => { };
+        public virtual event Action<int, Guid, TaskInfo.TaskStatus> OnBuildUpdated = (i, terminalId, status) => { };
+        public virtual event ProjectCheckedOutDelegate OnProjectCheckedOut = info => { };
+        public virtual event Action<TerminalUpdateInfo> OnTerminalUpdates = info => { };
 
         public Worker(Pipeline pipeline, WorkingAreaGoverner workingAreaGoverner)
         {
@@ -28,6 +31,9 @@ namespace Frog.Domain
             ProcessPipeline(allocatedWorkingArea);
             workingAreaGoverner.DeallocateWorkingArea(allocatedWorkingArea);
         }
+
+        readonly Pipeline pipeline;
+        readonly WorkingAreaGoverner workingAreaGoverner;
 
         void ProcessPipeline(string allocatedWorkingArea)
         {
@@ -47,11 +53,5 @@ namespace Frog.Domain
                 pipeline.OnTerminalUpdate -= OnTerminalUpdates;
             }
         }
-
-        public virtual event Action<TerminalUpdateInfo> OnTerminalUpdates = info => {};
-        public virtual event BuildStartedDelegate OnBuildStarted = status => {};
-        public virtual event Action<int, Guid, TaskInfo.TaskStatus> OnBuildUpdated =  (i, terminalId, status) => {};
-        public virtual event Action<BuildTotalEndStatus> OnBuildEnded = status => {};
-        public virtual event ProjectCheckedOutDelegate OnProjectCheckedOut = info => {};
     }
 }

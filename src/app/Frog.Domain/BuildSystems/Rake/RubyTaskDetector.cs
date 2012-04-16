@@ -6,9 +6,6 @@ namespace Frog.Domain.BuildSystems.Rake
 {
     public class RubyTaskDetector : TaskSource
     {
-        readonly TaskFileFinder rakeTaskFileFinder;
-        private readonly TaskFileFinder bundlerFileFinder;
-
         public RubyTaskDetector(TaskFileFinder rakeTaskFileFinder, TaskFileFinder bundlerFileFinder)
         {
             this.rakeTaskFileFinder = rakeTaskFileFinder;
@@ -20,12 +17,19 @@ namespace Frog.Domain.BuildSystems.Rake
             var rakeFile = rakeTaskFileFinder.FindFiles(projectFolder);
             var bundlerFile = bundlerFileFinder.FindFiles(projectFolder);
             var tasks = new List<Task>();
-            if (rakeFile.Exists(s => s.Equals("Rakefile",StringComparison.InvariantCultureIgnoreCase) || s.Equals("Rakefile.rb", StringComparison.InvariantCultureIgnoreCase)))
+            if (
+                rakeFile.Exists(
+                    s =>
+                    s.Equals("Rakefile", StringComparison.InvariantCultureIgnoreCase) ||
+                    s.Equals("Rakefile.rb", StringComparison.InvariantCultureIgnoreCase)))
             {
-                if (bundlerFile.Count>0) tasks.Add(new BundlerTask());
+                if (bundlerFile.Count > 0) tasks.Add(new BundlerTask());
                 tasks.Add(new RakeTask());
             }
             return tasks;
         }
+
+        readonly TaskFileFinder rakeTaskFileFinder;
+        readonly TaskFileFinder bundlerFileFinder;
     }
 }

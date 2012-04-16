@@ -10,18 +10,12 @@ namespace Frog.Domain.ExecTasks
 {
     public abstract class TestTaskBase : IExecTask
     {
-        private readonly IExecTaskGenerator execTaskGenerator;
-        public event Action<string> OnTerminalOutputUpdate = s => {};
-
-        protected TestTaskBase(IExecTaskGenerator execTaskGenerator)
-        {
-            this.execTaskGenerator = execTaskGenerator;
-        }
-
         public string Name
         {
             get { return "Test task"; }
         }
+
+        public event Action<string> OnTerminalOutputUpdate = s => { };
 
         public ExecTaskResult Perform(SourceDrop sourceDrop)
         {
@@ -35,13 +29,19 @@ namespace Frog.Domain.ExecTasks
             {
                 allLines.Where(s => s.StartsWith("exec")).ToList().ForEach(s =>
                                                                                {
-                                                                                   var parsed = Regex.Match(s, @"^exec (\S+) (.*)$");
-                                                                                   var tasks = execTaskGenerator.GimeTasks(
-                                                                                       new ShellTask
-                                                                                           {
-                                                                                               cmd = parsed.Groups[1].Value,
-                                                                                               args = parsed.Groups[2].Value
-                                                                                           });
+                                                                                   var parsed = Regex.Match(s,
+                                                                                                            @"^exec (\S+) (.*)$");
+                                                                                   var tasks = execTaskGenerator.
+                                                                                       GimeTasks(
+                                                                                           new ShellTask
+                                                                                               {
+                                                                                                   cmd =
+                                                                                                       parsed.Groups[1].
+                                                                                                       Value,
+                                                                                                   args =
+                                                                                                       parsed.Groups[2].
+                                                                                                       Value
+                                                                                               });
                                                                                    var task = tasks[0];
                                                                                    task.OnTerminalOutputUpdate +=
                                                                                        OnTaskOnOnTerminalOutputUpdate;
@@ -55,7 +55,7 @@ namespace Frog.Domain.ExecTasks
                                     {"ERROR", ExecutionStatus.Failure}
                                 };
                 var lastItem = allLines.LastItem().ToUpper();
-                if (lastItem == "EXCEPTION") 
+                if (lastItem == "EXCEPTION")
                     throw new Exception("Bad things happened here");
                 if (exits.ContainsKey(lastItem))
                 {
@@ -65,7 +65,14 @@ namespace Frog.Domain.ExecTasks
             return new ExecTaskResult(execStatus, 0);
         }
 
-        private void OnTaskOnOnTerminalOutputUpdate(string s1)
+        readonly IExecTaskGenerator execTaskGenerator;
+
+        protected TestTaskBase(IExecTaskGenerator execTaskGenerator)
+        {
+            this.execTaskGenerator = execTaskGenerator;
+        }
+
+        void OnTaskOnOnTerminalOutputUpdate(string s1)
         {
             OnTerminalOutputUpdate(s1);
         }
@@ -75,12 +82,12 @@ namespace Frog.Domain.ExecTasks
 
     public class TestExecTask : TestTaskBase
     {
-        readonly string path;
-
         public TestExecTask(string path, IExecTaskGenerator execTaskGenerator) : base(execTaskGenerator)
         {
             this.path = path;
         }
+
+        readonly string path;
 
         protected override string[] ReadAllLines(SourceDrop sourceDrop)
         {
@@ -88,14 +95,14 @@ namespace Frog.Domain.ExecTasks
         }
     }
 
-    class FakeExecTask : TestTaskBase
+    internal class FakeExecTask : TestTaskBase
     {
-        private readonly string[] tasks;
-
-        public FakeExecTask(string[] tasks, IExecTaskGenerator execTaskGenerator): base(execTaskGenerator)
+        public FakeExecTask(string[] tasks, IExecTaskGenerator execTaskGenerator) : base(execTaskGenerator)
         {
             this.tasks = tasks;
         }
+
+        readonly string[] tasks;
 
         protected override string[] ReadAllLines(SourceDrop sourceDrop)
         {
