@@ -7,12 +7,12 @@ namespace Frog.Domain.IntegrationTests.ProjectView
     [TestFixture, Ignore]
     public class EventBasedProjectView : ProjectViewSpecs
     {
-        protected override UI.ProjectView GetProjectView()
+        protected override Integration.UI.ProjectView GetProjectView()
         {
             var eventStore = WireupEventStore();
             eventStore.Advanced.Purge();
             eventStore.Advanced.Initialize();
-            return new UI.EventBasedProjectView(eventStore);
+            return new Integration.UI.EventBasedProjectView(eventStore);
         }
 
         private IStoreEvents WireupEventStore()

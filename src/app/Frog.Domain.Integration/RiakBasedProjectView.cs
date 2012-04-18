@@ -1,20 +1,20 @@
 using System;
 using System.Collections.Generic;
 using CorrugatedIron;
-using Frog.Domain.UI;
+using Frog.Domain.Integration.UI;
 using Frog.Support;
 
 namespace Frog.Domain.Integration
 {
 
-    public class DocumentBasedProjectView : ProjectView, BuildView, ProjectTestSupport
+    public class RiakBasedProjectView : ProjectView, BuildView, ProjectTestSupport
     {
         private readonly string host;
         private readonly int port;
         private readonly string idsBucket;
         private readonly string repoBucket;
 
-        public DocumentBasedProjectView(string host, int port, string IdsBucket, string repoBucket)
+        public RiakBasedProjectView(string host, int port, string IdsBucket, string repoBucket)
         {
             this.host = host;
             this.port = port;

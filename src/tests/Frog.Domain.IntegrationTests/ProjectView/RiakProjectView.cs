@@ -7,9 +7,9 @@ namespace Frog.Domain.IntegrationTests.ProjectView
     [TestFixture]
     public class RiakProjectView : ProjectViewSpecs
     {
-        protected override UI.ProjectView GetProjectView()
+        protected override Integration.UI.ProjectView GetProjectView()
         {
-            return new DocumentBasedProjectView(OSHelpers.RiakHost(), OSHelpers.RiakPort(), "buildIds_test1", "repoIds_test");
+            return new RiakBasedProjectView(OSHelpers.RiakHost(), OSHelpers.RiakPort(), "buildIds_test1", "repoIds_test");
         }
     }
 }

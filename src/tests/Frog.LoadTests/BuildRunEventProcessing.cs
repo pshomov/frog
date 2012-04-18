@@ -3,7 +3,7 @@ using System.Linq;
 using EventStore;
 using Frog.Domain;
 using Frog.Domain.Integration;
-using Frog.Domain.UI;
+using Frog.Domain.Integration.UI;
 using Frog.Specs.Support;
 using Frog.Support;
 using NUnit.Framework;

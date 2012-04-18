@@ -1,7 +1,7 @@
 ﻿using System;
 using Frog.Domain;
 using Frog.Domain.BuildSystems.FrogSystemTest;
-using Frog.Domain.UI;
+using Frog.Domain.Integration.UI;
 using Frog.Specs.Support;
 using Frog.Support;
 using Frog.System.Specs.Underware;

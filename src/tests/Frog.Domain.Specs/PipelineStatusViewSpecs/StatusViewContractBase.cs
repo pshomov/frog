@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Frog.Domain.UI;
+using Frog.Domain.Integration.UI;
 using Frog.Specs.Support;
 
 namespace Frog.Domain.Specs.PipelineStatusViewSpecs

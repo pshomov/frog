@@ -3,9 +3,9 @@ using System.Threading;
 using EventStore;
 using EventStore.Serialization;
 using Frog.Domain.Integration;
+using Frog.Domain.Integration.UI;
 using Frog.Support;
 using SimpleCQRS;
-using Frog.Domain.UI;
 
 namespace Frog.RepositoryTracker
 {

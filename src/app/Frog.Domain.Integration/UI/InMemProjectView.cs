@@ -2,7 +2,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 
-namespace Frog.Domain.UI
+namespace Frog.Domain.Integration.UI
 {
     public struct BuildHistoryItem
     {
@@ -57,7 +57,7 @@ namespace Frog.Domain.UI
             {
                 return report[id];
             }
-            catch (KeyNotFoundException)
+            catch (System.Collections.Generic.KeyNotFoundException)
             {
                 throw new BuildNotFoundException();
             }
@@ -69,7 +69,7 @@ namespace Frog.Domain.UI
             {
                 return currentBuild[repoUrl];
             }
-            catch (KeyNotFoundException)
+            catch (System.Collections.Generic.KeyNotFoundException)
             {
                 throw new RepositoryNotRegisteredException();
             }

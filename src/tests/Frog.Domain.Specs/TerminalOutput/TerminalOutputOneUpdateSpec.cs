@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Frog.Domain.UI;
 using Frog.Specs.Support;
 using NUnit.Framework;
 

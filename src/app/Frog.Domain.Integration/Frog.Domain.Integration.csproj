@@ -34,6 +34,16 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\libs\CorrugatedIron\CorrugatedIron.dll</HintPath>
     </Reference>
+    <Reference Include="EventStore, Version=3.1.0.0, Culture=neutral, PublicKeyToken=7735eb81c0bd9948, processorArchitecture=MSIL" />
+    <Reference Include="EventStore.Core">
+      <HintPath>..\..\..\libs\EventStore\EventStore.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Bson">
+      <HintPath>..\..\..\libs\mongodb\MongoDB.Bson.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Driver">
+      <HintPath>..\..\..\libs\mongodb\MongoDB.Driver.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.0.2.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\libs\CorrugatedIron\Newtonsoft.Json.dll</HintPath>
@@ -43,17 +53,26 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\libs\RabbitMQ\RabbitMQ.Client.dll</HintPath>
     </Reference>
+    <Reference Include="System.Data" />
     <Reference Include="System.Web.Extensions" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="CorrugatedIronExts.cs" />
-    <Compile Include="DocumentBasedProjectView.cs" />
+    <Compile Include="RiakBasedProjectView.cs" />
     <Compile Include="GitDriver.cs" />
     <Compile Include="RabbitMQBus.cs" />
     <Compile Include="Riak.cs" />
     <Compile Include="RiakProjectRepository.cs" />
     <Compile Include="SubfolderWorkingArea.cs" />
+    <Compile Include="UI\BuildStatus.cs" />
+    <Compile Include="UI\EventBasedProjectView.cs" />
+    <Compile Include="UI\InMemProjectView.cs" />
+    <Compile Include="UI\PipelineStatusEventHandler.cs" />
+    <Compile Include="UI\Setup.cs" />
+    <Compile Include="UI\TerminalOutputEventHandler.cs" />
+    <Compile Include="UI\TerminalOutputRegister.cs" />
+    <Compile Include="UI\TerminalOutputView.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

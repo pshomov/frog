@@ -1,7 +1,8 @@
-﻿using EventStore;
+using EventStore;
+using Frog.Support;
 using SimpleCQRS;
 
-namespace Frog.Domain.UI
+namespace Frog.Domain.Integration.UI
 {
     public static class Setup
     {
@@ -22,7 +23,7 @@ namespace Frog.Domain.UI
 
         static void RegisterTerminalUpdateHandler(IBus theBus, IStoreEvents eventStore)
         {
-            var eventView = new TerminalOutputEventHandler(eventStore);
+            var eventView = new TerminalOutputEventHandler(new TerminalOutputRegister(OSHelpers.TerminalViewConnection()));
             theBus.RegisterHandler<TerminalUpdate>(eventView.Handle, "UI.Terminal");
         }
     }

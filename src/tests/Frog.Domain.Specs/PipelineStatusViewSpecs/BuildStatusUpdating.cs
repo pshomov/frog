@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using Frog.Domain.UI;
+using Frog.Domain.Integration.UI;
 using Frog.Specs.Support;
 using Frog.Support;
 using NUnit.Framework;

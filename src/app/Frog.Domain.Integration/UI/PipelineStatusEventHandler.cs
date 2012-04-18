@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using System.Text.RegularExpressions;
 using EventStore;
 using SimpleCQRS;
 
-namespace Frog.Domain.UI
+namespace Frog.Domain.Integration.UI
 {
     public class PipelineStatusEventHandler : Handles<BuildStarted>, Handles<BuildEnded>, Handles<BuildUpdated>,
                                               Handles<ProjectCheckedOut>

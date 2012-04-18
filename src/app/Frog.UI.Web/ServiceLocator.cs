@@ -1,5 +1,5 @@
 using System.Collections.Concurrent;
-using Frog.Domain.UI;
+using Frog.Domain.Integration.UI;
 using SimpleCQRS;
 
 namespace Frog.UI.Web

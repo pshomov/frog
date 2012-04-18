@@ -5,9 +5,9 @@ namespace Frog.Domain.IntegrationTests.ProjectView
     [TestFixture]
     public class InMemProjectView : ProjectViewSpecs
     {
-        protected override UI.ProjectView GetProjectView()
+        protected override Integration.UI.ProjectView GetProjectView()
         {
-            return new UI.InMemProjectView();
+            return new Integration.UI.InMemProjectView();
         }
     }
 }

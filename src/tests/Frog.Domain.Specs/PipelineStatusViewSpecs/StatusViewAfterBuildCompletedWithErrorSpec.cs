@@ -1,5 +1,5 @@
-﻿using Frog.Domain.RepositoryTracker;
-using Frog.Domain.UI;
+﻿using Frog.Domain.Integration.UI;
+using Frog.Domain.RepositoryTracker;
 using NUnit.Framework;
 
 namespace Frog.Domain.Specs.PipelineStatusViewSpecs

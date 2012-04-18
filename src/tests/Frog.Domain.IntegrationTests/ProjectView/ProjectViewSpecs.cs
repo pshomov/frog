@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Frog.Domain.UI;
+using Frog.Domain.Integration.UI;
 using Frog.Support;
 using NUnit.Framework;
 
@@ -9,7 +9,7 @@ namespace Frog.Domain.IntegrationTests.ProjectView
     [TestFixture]
     public abstract class ProjectViewSpecs
     {
-        private UI.ProjectView view;
+        private Integration.UI.ProjectView view;
         BuildView build_view;
 
         [SetUp]
@@ -21,7 +21,7 @@ namespace Frog.Domain.IntegrationTests.ProjectView
         }
 
 
-        protected abstract UI.ProjectView GetProjectView();
+        protected abstract Integration.UI.ProjectView GetProjectView();
 
         [Test]
         public void should_have_even_for_nonexisting_builds()

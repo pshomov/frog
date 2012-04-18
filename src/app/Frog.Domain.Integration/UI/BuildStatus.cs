@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Frog.Domain.UI
+namespace Frog.Domain.Integration.UI
 {
     public class BuildStatus
     {

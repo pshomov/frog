@@ -3,10 +3,11 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using EventStore;
 using Frog.Domain;
+using Frog.Domain.Integration.UI;
 using Frog.Domain.RepositoryTracker;
 using Frog.Domain.RevisionChecker;
 using Frog.Domain.TaskSources;
-using Frog.Domain.UI;
+using Frog.Support;
 using NSubstitute;
 using SimpleCQRS;
 
@@ -38,7 +39,7 @@ namespace Frog.System.Specs.Underware
             Store = WireupEventStore();
             Store.Advanced.Purge();
             Views = new EventBasedProjectView(Store);
-            TerminalStatusView = new TerminalOutputView(Store);
+            TerminalStatusView = new TerminalOutputView(OSHelpers.TerminalViewConnection());
             Setup.SetupView(TheBus, Store);
 
             messages = new List<Message>();

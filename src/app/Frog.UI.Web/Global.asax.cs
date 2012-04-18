@@ -7,7 +7,7 @@ using EventStore;
 using EventStore.Serialization;
 using Frog.Domain;
 using Frog.Domain.Integration;
-using Frog.Domain.UI;
+using Frog.Domain.Integration.UI;
 using Frog.Support;
 using SimpleCQRS;
 
@@ -76,7 +76,7 @@ namespace Frog.UI.Web
 
             var eventStore = WireupEventStore();
             ServiceLocator.ProjectStatus = new EventBasedProjectView(eventStore);
-            ServiceLocator.TerminalOutputStatus = new TerminalOutputView(eventStore);
+            ServiceLocator.TerminalOutputStatus = new TerminalOutputView(OSHelpers.TerminalViewConnection());
             ServiceLocator.Bus = theBus;
             ServiceLocator.AllMessages = new ConcurrentQueue<Message>();
         }

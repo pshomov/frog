@@ -1,6 +1,7 @@
 using System;
-using Frog.Domain.UI;
+using Frog.Domain.Integration.UI;
 using Frog.Specs.Support;
+using Frog.Support;
 
 namespace Frog.Domain.Specs.TerminalUpdateSpecs
 {
@@ -13,9 +14,8 @@ namespace Frog.Domain.Specs.TerminalUpdateSpecs
         protected override void Given()
         {
             terminalId = Guid.NewGuid();
-            var eventStore = StoreFactory.WireupEventStore();
-            eventHandler = new TerminalOutputEventHandler(eventStore);
-            view = new TerminalOutputView(eventStore);
+            eventHandler = new TerminalOutputEventHandler(new TerminalOutputRegister(OSHelpers.TerminalViewConnection()));
+            view = new TerminalOutputView(OSHelpers.TerminalViewConnection());
         }
     }
 }

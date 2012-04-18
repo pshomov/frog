@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using Frog.Domain.UI;
+using Frog.Domain.Integration.UI;
 using NUnit.Framework;
 
 namespace Frog.Domain.Specs.PipelineStatusViewSpecs

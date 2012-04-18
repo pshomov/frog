@@ -78,6 +78,7 @@
     <Compile Include="Task\TasksGetKilledIfTheyHaveNoActivity.cs" />
     <Compile Include="Task\TasksHaveQuotaOnRunTime.cs" />
     <Compile Include="Task\TaskSpec.cs" />
+    <Compile Include="TerminalView\AddTerminalOutput.cs" />
     <Compile Include="WorkingAreaAllocation.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
