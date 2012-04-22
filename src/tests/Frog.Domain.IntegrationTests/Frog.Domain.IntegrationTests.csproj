@@ -79,6 +79,11 @@
     <Compile Include="Task\TasksHaveQuotaOnRunTime.cs" />
     <Compile Include="Task\TaskSpec.cs" />
     <Compile Include="TerminalView\AddTerminalOutput.cs" />
+    <Compile Include="TerminalView\Instances.cs" />
+    <Compile Include="TerminalView\TerminalOutputAFewEvents.cs" />
+    <Compile Include="TerminalView\TerminalOutputNoEvents.cs" />
+    <Compile Include="TerminalView\TerminalOutputOneUpdateSpec.cs" />
+    <Compile Include="TerminalView\TerminalOutputSpecBase.cs" />
     <Compile Include="WorkingAreaAllocation.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

@@ -96,7 +96,7 @@ namespace Frog.System.Specs.ProjectBuilding
                         
             Assert.True(prober.check(Take.Snapshot(() => system.GetTerminalStatusView())
                                          .Has(statuses => statuses,
-                                              A.Check<TerminalOutputView>(
+                                              A.Check<ViewForTerminalOutput>(
                                                   arg =>
                                                   arg.GetTerminalOutput(terminalId1).Match(
                                                       TerminalOutput1 + ".*\n.*" +
@@ -104,7 +104,7 @@ namespace Frog.System.Specs.ProjectBuilding
                             ));
             Assert.True(prober.check(Take.Snapshot(() => system.GetTerminalStatusView())
                                          .Has(statuses => statuses,
-                                              A.Check<TerminalOutputView>(
+                                              A.Check<ViewForTerminalOutput>(
                                                   arg =>
                                                   arg.GetTerminalOutput(terminalId2).Match(
                                                       TerminalOutput3 + ".*\n.*" +

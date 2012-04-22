@@ -9,7 +9,7 @@ using SimpleCQRS;
 
 namespace Frog.Domain.Integration.UI
 {
-    public class TerminalOutputView
+    public class TerminalOutputView : ViewForTerminalOutput
     {
         const string terminalid_field = "_id";
         readonly string connection;

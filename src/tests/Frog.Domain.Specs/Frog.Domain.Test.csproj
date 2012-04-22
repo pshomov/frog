@@ -91,10 +91,6 @@
     </Compile>
     <Compile Include="TaskDetection\NUnitTaskDetectorSpecs.cs" />
     <Compile Include="TerminalOutputConsolidationMethod.cs" />
-    <Compile Include="TerminalOutput\TerminalOutputAFewEvents.cs" />
-    <Compile Include="TerminalOutput\TerminalOutputNoEvents.cs" />
-    <Compile Include="TerminalOutput\TerminalOutputOneUpdateSpec.cs" />
-    <Compile Include="TerminalOutput\TerminalOutputSpecBase.cs" />
     <Compile Include="TestTypes.cs" />
     <Compile Include="WorkerSpecs\WorkerHandlesExceptions.cs" />
     <Compile Include="WorkerSpecs\WorkerPropagetesTerminalUpdateEvents.cs" />

@@ -24,7 +24,7 @@ namespace Frog.System.Specs.Underware
         public TaskSource TasksSource;
         public ProjectView Views;
         public IStoreEvents Store;
-        public TerminalOutputView TerminalStatusView;
+        public ViewForTerminalOutput TerminalStatusView;
         public RepositoryTracker repositoryTracker { get; private set; }
 
         public TestSystem(WorkingAreaGoverner governer, SourceRepoDriverFactory sourceRepoDriverFactory, bool runRevisionChecker = true)
@@ -139,7 +139,7 @@ namespace Frog.System.Specs.Underware
             return theTestSystem.Views;
         }
 
-        public TerminalOutputView GetTerminalStatusView()
+        public ViewForTerminalOutput GetTerminalStatusView()
         {
             return theTestSystem.TerminalStatusView;
         }

@@ -103,7 +103,7 @@ namespace Frog.Domain
         public int ContentSequenceIndex { get; set; }
         public int TaskIndex { get; set; }
 
-        public Guid TerminalId { get; private set; }
+        public Guid TerminalId { get; set; }
 
         public TerminalUpdate()
         {
