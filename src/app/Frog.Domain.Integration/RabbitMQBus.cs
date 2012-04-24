@@ -66,6 +66,7 @@ namespace Frog.Domain.Integration
                                          {
                                              using(var channel = connection.CreateModel())
                                              {
+                                                 channel.BasicQos(0,1,false);
                                                  var consumer = new QueueingBasicConsumer(channel);
                                                  channel.BasicConsume(queueName, false, consumer);
                                                  while (true)
@@ -140,11 +141,6 @@ namespace Frog.Domain.Integration
             });
             job.Start();
             threads.Add(job);
-        }
-
-        private void handler(string getString, string exchange)
-        {
-            throw new NotImplementedException();
         }
 
         public void Publish<T>(T @event) where T : Event
