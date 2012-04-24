@@ -1,5 +1,6 @@
 using EventStore;
 using EventStore.Serialization;
+using Frog.Specs.Support;
 using NUnit.Framework;
 
 namespace Frog.Domain.IntegrationTests.ProjectView
@@ -9,18 +10,10 @@ namespace Frog.Domain.IntegrationTests.ProjectView
     {
         protected override Integration.UI.ProjectView GetProjectView()
         {
-            var eventStore = WireupEventStore();
+            var eventStore = StoreFactory.WireupEventStore();
             eventStore.Advanced.Purge();
             eventStore.Advanced.Initialize();
             return new Integration.UI.EventBasedProjectView(eventStore);
-        }
-
-        private IStoreEvents WireupEventStore()
-        {
-            return Wireup.Init()
-                .UsingMongoPersistence("EventStore", new DocumentObjectSerializer())
-                .InitializeStorageEngine()
-                .Build();
         }
     }
 }

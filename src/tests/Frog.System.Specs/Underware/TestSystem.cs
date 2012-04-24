@@ -7,6 +7,7 @@ using Frog.Domain.Integration.UI;
 using Frog.Domain.RepositoryTracker;
 using Frog.Domain.RevisionChecker;
 using Frog.Domain.TaskSources;
+using Frog.Specs.Support;
 using Frog.Support;
 using NSubstitute;
 using SimpleCQRS;
@@ -36,7 +37,7 @@ namespace Frog.System.Specs.Underware
             SetupRepositoryTracker();
             if (runRevisionChecker) new RevisionChecker(TheBus, sourceRepoDriverFactory).JoinTheParty();
             SetupAgent(sourceRepoDriverFactory);
-            Store = WireupEventStore();
+            Store = StoreFactory.WireupEventStore();
             Store.Advanced.Purge();
             Views = new EventBasedProjectView(Store);
             TerminalStatusView = new TerminalOutputView(OSHelpers.TerminalViewConnection());
@@ -44,14 +45,6 @@ namespace Frog.System.Specs.Underware
 
             messages = new List<Message>();
             SetupAllEventLogging();
-        }
-
-        public static IStoreEvents WireupEventStore()
-        {
-            return Wireup.Init()
-                .UsingInMemoryPersistence()
-                .InitializeStorageEngine()
-                .Build();
         }
 
 

@@ -22,7 +22,7 @@ namespace Frog.RepositoryTracker
                                                                                  "projects"));
             repoTracker.JoinTheMessageParty();
 
-            Setup.SetupView(theBus, WireupEventStore());
+            Setup.SetupView(theBus, Config.WireupEventStore());
 			
 			
             var sleepPeriod = 60 * 1000;
@@ -38,14 +38,6 @@ namespace Frog.RepositoryTracker
         private static IBus SetupBus()
         {
             return new RabbitMQBus(OSHelpers.RabbitHost());
-        }
-        public static IStoreEvents WireupEventStore()
-        {
-            return Wireup.Init()
-                .LogToOutputWindow()
-                .UsingMongoPersistence("EventStore", new DocumentObjectSerializer())
-                .InitializeStorageEngine()
-                .Build();
         }
 
     }

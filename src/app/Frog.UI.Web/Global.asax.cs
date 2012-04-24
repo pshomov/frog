@@ -3,9 +3,6 @@ using System.Collections.Concurrent;
 using System.IO;
 using System.Web.Mvc;
 using System.Web.Routing;
-using EventStore;
-using EventStore.Serialization;
-using Frog.Domain;
 using Frog.Domain.Integration;
 using Frog.Domain.Integration.UI;
 using Frog.Support;
@@ -74,22 +71,12 @@ namespace Frog.UI.Web
         {
             var theBus = new RabbitMQBus(OSHelpers.RabbitHost());
 
-            var eventStore = WireupEventStore();
+            var eventStore = Config.WireupEventStore();
             ServiceLocator.ProjectStatus = new EventBasedProjectView(eventStore);
             ServiceLocator.TerminalOutputStatus = new TerminalOutputView(OSHelpers.TerminalViewConnection());
             ServiceLocator.Bus = theBus;
             ServiceLocator.AllMessages = new ConcurrentQueue<Message>();
         }
-
-        static IStoreEvents WireupEventStore()
-        {
-            return Wireup.Init()
-                .LogToOutputWindow()
-                .UsingMongoPersistence("EventStore", new DocumentObjectSerializer())
-                .InitializeStorageEngine()
-                .Build();
-        }
-
     }
     internal class WebFrontendSetup
     {
