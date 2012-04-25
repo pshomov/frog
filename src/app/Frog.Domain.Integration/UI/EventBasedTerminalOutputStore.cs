@@ -3,16 +3,11 @@ using EventStore;
 
 namespace Frog.Domain.Integration.UI
 {
-    public interface RegisterTerminalOutput
-    {
-        void RegisterTerminalOutput(TerminalUpdate message);
-    }
-
-    public class EventBasedRegistrar : RegisterTerminalOutput
+    public class EventBasedTerminalOutputStore : TerminalOutputStore
     {
         readonly IStoreEvents event_store;
 
-        public EventBasedRegistrar(IStoreEvents eventStore)
+        public EventBasedTerminalOutputStore(IStoreEvents eventStore)
         {
             event_store = eventStore;
         }

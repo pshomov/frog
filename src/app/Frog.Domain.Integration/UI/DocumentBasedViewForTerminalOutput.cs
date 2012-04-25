@@ -1,20 +1,18 @@
 using System;
-using System.IO;
 using System.Linq;
 using System.Text;
-using EventStore;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using SimpleCQRS;
 
 namespace Frog.Domain.Integration.UI
 {
-    public class TerminalOutputView : ViewForTerminalOutput
+    public class DocumentBasedViewForTerminalOutput : ViewForTerminalOutput
     {
-        const string terminalid_field = "_id";
+        const string TERMINAL_FIELD = "_id";
         readonly string connection;
 
-        public TerminalOutputView(string connection)
+        public DocumentBasedViewForTerminalOutput(string connection)
         {
             this.connection = connection;
         }
@@ -24,12 +22,12 @@ namespace Frog.Domain.Integration.UI
             var mongoServer = MongoServer.Create(connection);
             var db = mongoServer.GetDatabase("terminal_view");
             var terminalOutputs = db.GetCollection<BsonDocument>("terminal_outputs");
-            var doc = terminalOutputs.FindOne(new QueryDocument(terminalid_field, terminalId));
+            var doc = terminalOutputs.FindOne(new QueryDocument(TERMINAL_FIELD, terminalId));
             var items = doc["items"].AsBsonArray.ToList().Where(value => value.AsBsonDocument["sequenceIndex"].AsInt32 > sinceIndex)
                 .OrderByDescending(value => value.AsBsonDocument["sequenceIndex"].AsInt32).ToList();
             var content = new StringBuilder();
             items.ForEach(value => content.Append(value.AsBsonDocument["content"].AsString));
-            return new TerminalOutput.Info(){Content = content.ToString(), LastChunkIndex = items.Last().AsBsonDocument["sequenceIndex"].AsInt32};
+            return new TerminalOutput.Info {Content = content.ToString(), LastChunkIndex = items.Last().AsBsonDocument["sequenceIndex"].AsInt32};
         }
 
         public string GetTerminalOutput(Guid terminalId)
@@ -37,7 +35,7 @@ namespace Frog.Domain.Integration.UI
             var mongoServer = MongoServer.Create(connection);
             var db = mongoServer.GetDatabase("terminal_view");
             var terminalOutputs = db.GetCollection<BsonDocument>("terminal_outputs");
-            var doc = terminalOutputs.FindOne(new QueryDocument(terminalid_field, terminalId));
+            var doc = terminalOutputs.FindOne(new QueryDocument(TERMINAL_FIELD, terminalId));
             if (doc == null) return "";
             var items = doc["items"].AsBsonArray.ToList()
                 .OrderBy(value => value.AsBsonDocument["sequenceIndex"].AsInt32).ToList();

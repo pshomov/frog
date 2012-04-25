@@ -6,9 +6,9 @@ using MongoDB.Driver;
 
 namespace Frog.Domain.Integration.UI
 {
-    public class TerminalOutputRegister : RegisterTerminalOutput
+    public class StateBasedTerminalOutputStore : TerminalOutputStore
     {
-        public TerminalOutputRegister(string terminalViewConnection)
+        public StateBasedTerminalOutputStore(string terminalViewConnection)
         {
             terminal_view_connection = terminalViewConnection;
         }

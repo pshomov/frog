@@ -10,7 +10,7 @@ namespace Frog.Domain.IntegrationTests.TerminalView
     public interface View
     {
         ViewForTerminalOutput View { get; }
-        RegisterTerminalOutput Registrar { get; }
+        TerminalOutputStore Store { get; }
     }
 
     public class EventsView : View
@@ -26,30 +26,30 @@ namespace Frog.Domain.IntegrationTests.TerminalView
         {
             get
             {
-                return new ViewForTerminalOutputImpl(event_store);
+                return new EventBasedViewForTerminalOutput(event_store);
             }
         }
 
-        public RegisterTerminalOutput Registrar
+        public TerminalOutputStore Store
         {
-            get { return new EventBasedRegistrar(event_store); }
+            get { return new EventBasedTerminalOutputStore(event_store); }
         }
     }
 
     public class MongoView : View
     {
         Func<ViewForTerminalOutput> view =
-            () => new TerminalOutputView(OSHelpers.TerminalViewConnection());
+            () => new DocumentBasedViewForTerminalOutput(OSHelpers.TerminalViewConnection());
 
-        Func<RegisterTerminalOutput> registrar =
-            () => new TerminalOutputRegister(OSHelpers.TerminalViewConnection());
+        Func<TerminalOutputStore> registrar =
+            () => new StateBasedTerminalOutputStore(OSHelpers.TerminalViewConnection());
 
         public ViewForTerminalOutput View
         {
             get { return view(); }
         }
 
-        public RegisterTerminalOutput Registrar
+        public TerminalOutputStore Store
         {
             get { return registrar(); }
         }
@@ -59,7 +59,7 @@ namespace Frog.Domain.IntegrationTests.TerminalView
     [TestFixture(typeof(EventsView))]
     public abstract class TerminalOutputSpecBase<T> : BDD where T : View, new()
     {
-        protected RegisterTerminalOutput register;
+        protected TerminalOutputStore TerminalOutputStore;
         protected ViewForTerminalOutput view;
         protected Guid terminal_id;
 
@@ -67,7 +67,7 @@ namespace Frog.Domain.IntegrationTests.TerminalView
         {
             terminal_id = Guid.NewGuid();
             var v = new T();
-            register = v.Registrar;
+            TerminalOutputStore = v.Store;
             view = v.View;
         }
     }

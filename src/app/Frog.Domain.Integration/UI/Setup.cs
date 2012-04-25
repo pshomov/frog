@@ -23,7 +23,7 @@ namespace Frog.Domain.Integration.UI
 
         static void RegisterTerminalUpdateHandler(IBus theBus, IStoreEvents eventStore)
         {
-            var eventView = new TerminalOutputEventHandler(new TerminalOutputRegister(OSHelpers.TerminalViewConnection()));
+            var eventView = new TerminalOutputEventHandler(new EventBasedTerminalOutputStore(eventStore));
             theBus.RegisterHandler<TerminalUpdate>(eventView.Handle, "UI.Terminal");
         }
     }

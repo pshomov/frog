@@ -7,7 +7,7 @@ namespace Frog.Domain.IntegrationTests.TerminalView
     {
         protected override void When()
         {
-            register.RegisterTerminalOutput(new TerminalUpdate("1", 0, 0, Guid.NewGuid(), 0, terminal_id));
+            TerminalOutputStore.RegisterTerminalOutput(new TerminalUpdate("1", 0, 0, Guid.NewGuid(), 0, terminal_id));
         }
 
         [Test]

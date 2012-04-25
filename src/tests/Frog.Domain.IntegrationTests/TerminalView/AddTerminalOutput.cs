@@ -6,7 +6,7 @@ namespace Frog.Domain.IntegrationTests.TerminalView
     {
         protected override void When()
         {
-            register.RegisterTerminalOutput(new TerminalUpdate {TerminalId = terminal_id, ContentSequenceIndex = 0, Content = "c1"});
+            TerminalOutputStore.RegisterTerminalOutput(new TerminalUpdate {TerminalId = terminal_id, ContentSequenceIndex = 0, Content = "c1"});
         }
 
         [Test]

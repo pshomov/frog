@@ -73,7 +73,7 @@ namespace Frog.UI.Web
 
             var eventStore = Config.WireupEventStore();
             ServiceLocator.ProjectStatus = new EventBasedProjectView(eventStore);
-            ServiceLocator.TerminalOutputStatus = new TerminalOutputView(OSHelpers.TerminalViewConnection());
+            ServiceLocator.TerminalOutputStatus = new DocumentBasedViewForTerminalOutput(OSHelpers.TerminalViewConnection());
             ServiceLocator.Bus = theBus;
             ServiceLocator.AllMessages = new ConcurrentQueue<Message>();
         }

@@ -57,7 +57,7 @@ namespace Frog.Specs.Support
         static int SleepABit(int retries)
         {
             retries--;
-            Thread.Sleep(100);
+            Thread.Sleep(300);
             return retries;
         }
     }

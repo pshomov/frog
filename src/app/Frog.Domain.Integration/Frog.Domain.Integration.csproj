@@ -69,13 +69,15 @@
     <Compile Include="SubfolderWorkingArea.cs" />
     <Compile Include="UI\BuildStatus.cs" />
     <Compile Include="UI\EventBasedProjectView.cs" />
+    <Compile Include="UI\EventBasedTerminalOutputStore.cs" />
+    <Compile Include="UI\EventBasedViewForTerminalOutput.cs" />
     <Compile Include="UI\InMemProjectView.cs" />
     <Compile Include="UI\PipelineStatusEventHandler.cs" />
-    <Compile Include="UI\RegisterTerminalOutput.cs" />
+    <Compile Include="UI\TerminalOutputStore.cs" />
     <Compile Include="UI\Setup.cs" />
     <Compile Include="UI\TerminalOutputEventHandler.cs" />
-    <Compile Include="UI\TerminalOutputRegister.cs" />
-    <Compile Include="UI\TerminalOutputView.cs" />
+    <Compile Include="UI\StateBasedTerminalOutputStore.cs" />
+    <Compile Include="UI\DocumentBasedViewForTerminalOutput.cs" />
     <Compile Include="UI\ViewForTerminalOutput.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

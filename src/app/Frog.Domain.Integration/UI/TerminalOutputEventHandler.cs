@@ -4,9 +4,9 @@ namespace Frog.Domain.Integration.UI
 {
     public class TerminalOutputEventHandler : Handles<TerminalUpdate>
     {
-        readonly RegisterTerminalOutput reg;
+        readonly TerminalOutputStore reg;
 
-        public TerminalOutputEventHandler(RegisterTerminalOutput reg)
+        public TerminalOutputEventHandler(TerminalOutputStore reg)
         {
             this.reg = reg;
         }
