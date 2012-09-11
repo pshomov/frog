@@ -19,7 +19,7 @@ namespace Frog.Domain.IntegrationTests.TerminalView
 
         public EventsView()
         {
-            event_store = StoreFactory.WireupEventStore();
+            event_store = Config.WireupEventStore();
         }
 
         public ViewForTerminalOutput View

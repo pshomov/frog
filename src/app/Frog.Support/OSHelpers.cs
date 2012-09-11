@@ -52,7 +52,7 @@ namespace Frog.Support
 
         public static string TerminalViewConnection()
         {
-//            return "mongodb://p:p@ds031607.mongolab.com:31607/terminal_view";
+            return "mongodb://p:p@ds031607.mongolab.com:31607/terminal_view";
             return Environment.GetEnvironmentVariable(
                 "RUNZ_TERMINAL_VIEW") ?? "localhost";
         }
