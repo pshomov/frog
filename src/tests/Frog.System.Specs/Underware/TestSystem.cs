@@ -40,7 +40,7 @@ namespace Frog.System.Specs.Underware
             Store = StoreFactory.WireupEventStore();
             Store.Advanced.Purge();
             Views = new EventBasedProjectView(Store);
-            TerminalStatusView = new DocumentBasedViewForTerminalOutput(OSHelpers.TerminalViewConnection());
+            TerminalStatusView = new EventBasedViewForTerminalOutput(Store);
             Setup.SetupView(TheBus, Store);
 
             messages = new List<Message>();
