@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Frog.Specs.Support;
@@ -26,6 +27,12 @@ namespace Frog.Domain.IntegrationTests.RabbitMQ
         {
             bus1 = new RabbitMQBus(Environment.GetEnvironmentVariable("RUNZ_TEST_RABBITMQ_SERVER") ?? "localhost");
             bus2 = new RabbitMQBus(Environment.GetEnvironmentVariable("RUNZ_TEST_RABBITMQ_SERVER") ?? "localhost");
+            bus1.PurgeQueue("unit_test1");
+            bus1.PurgeQueue("unit_test2");
+            bus1.PurgeQueue("unit_test3");
+            bus1.PurgeQueue("unit_test4");
+            bus1.PurgeQueue("unit_test5");
+            bus1.PurgeQueue("unit_test7");
         }
 
         [TearDown]
@@ -69,17 +76,30 @@ namespace Frog.Domain.IntegrationTests.RabbitMQ
             bus1.UnregisterHandler<MyEvent>("unit_test3");
         }
 
-        [Test]
-		public void should_continue_handling_messages_after_particular_message_causes_exception(){
-			var msg1 = "";
-            bus1.RegisterHandler<MyEvent>(ev => { if (ev.Data == "unit_test4_1") throw new Exception("ouch"); else msg1 = ev.Data; }, "unit_test4");
-            bus1.Publish(new MyEvent { Data = "unit_test4_1" });
-            bus1.Publish(new MyEvent { Data = "unit_test4_2" });
-            AssertionHelpers.WithRetries(() => Assert.That(msg1, Is.EqualTo("unit_test4_2")));
-            bus1.RegisterHandler<MyEvent>(ev => msg1 = ev.Data, "unit_test4");
-            AssertionHelpers.WithRetries(() => Assert.That(msg1, Is.EqualTo("unit_test4_1")));
-            bus1.UnregisterHandler<MyEvent>("unit_test4");
-        }
+	    [Test]
+	    public void should_continue_handling_messages_after_particular_message_causes_exception()
+	    {
+	        var msg1 = new List<string>();
+	        var exceptions = 3;
+	        bus1.RegisterHandler<MyEvent>(ev =>
+	                                          {
+	                                              if (ev.Data == "unit_test4_1")
+	                                                  if (exceptions > 0)
+	                                                  {
+	                                                      exceptions--;
+	                                                      throw new Exception("ouch");
+	                                                  }
+	                                                  else msg1.Add(ev.Data);
+                                                  else msg1.Add(ev.Data);
+	                                          }, "unit_test4");
+	        bus1.Publish(new MyEvent {Data = "unit_test4_1"});
+	        bus1.Publish(new MyEvent {Data = "unit_test4_2"});
+	        AssertionHelpers.WithRetries(() => Assert.That(msg1.Count, Is.EqualTo(2)));
+	        Assert.That(msg1[0], Is.EqualTo("unit_test4_1"));
+	        Assert.That(msg1[1], Is.EqualTo("unit_test4_2"));
+	        Assert.That(exceptions, Is.EqualTo(0));
+	        bus1.UnregisterHandler<MyEvent>("unit_test4");
+	    }
 
         [Test]
         public void should_handle_messages_sequentially_when_they_are_in_the_same_queue()
@@ -128,21 +148,6 @@ namespace Frog.Domain.IntegrationTests.RabbitMQ
             AssertionHelpers.WithRetries(() => Assert.That(handler1, Is.EqualTo(1)));
             AssertionHelpers.WithRetries(() => Assert.That(handler2, Is.EqualTo(1)));
         }
-
-	    [Test]
-	    [Ignore]
-	    public void should_not_go_connection_crazy()
-	    {
-	        var msgs = 0;
-	        bus1.RegisterHandler<MyEvent>(ev => msgs++, "unit_test6");
-	        Enumerable.Range(1, 10).ToList().ForEach(i =>
-	                                                     {
-	                                                         bus1.Publish(new MyEvent {Data = "unit_test66"});
-	                                                         Thread.Sleep(2000);
-	                                                     });
-	        AssertionHelpers.WithRetries(() => Assert.That(msgs, Is.EqualTo(10)));
-	        bus1.UnregisterHandler<MyEvent>("unit_test6");
-	    }
 	}
 }
 
