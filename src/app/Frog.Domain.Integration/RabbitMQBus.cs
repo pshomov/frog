@@ -167,6 +167,7 @@ namespace Frog.Domain.Integration
         {
             using(var channel = connection.CreateModel())
             {
+				channel.QueueDeclare(handlerId,false, false, false, null);
                 channel.QueuePurge(handlerId);
             }
         }
