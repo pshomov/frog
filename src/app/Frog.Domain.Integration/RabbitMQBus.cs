@@ -159,7 +159,7 @@ namespace Frog.Domain.Integration
             {
                 string topicName = typeof(T).Name;
                 string queueName = handlerId;
-                channel.QueueUnbind(queueName, topicName, "", null);
+                //channel.QueueUnbind(queueName, topicName, "", null);
             }
         }
 
@@ -167,6 +167,7 @@ namespace Frog.Domain.Integration
         {
             using(var channel = connection.CreateModel())
             {
+				channel.QueueDeclare(handlerId,false, false, false, null);
                 channel.QueuePurge(handlerId);
             }
         }
