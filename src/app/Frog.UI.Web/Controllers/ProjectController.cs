@@ -63,7 +63,7 @@ namespace Frog.UI.Web.Controllers
 
         string GetGithubProjectUrl(string user, string project)
         {
-            return String.Format("http://github.com/{0}/{1}.git", user, project);
+            return String.Format("http://github.com/{0}/{1}", user, project);
         }
 
 
