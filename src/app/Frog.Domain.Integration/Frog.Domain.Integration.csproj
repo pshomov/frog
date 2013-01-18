@@ -79,7 +79,6 @@
     <Compile Include="UI\TerminalOutputStore.cs" />
     <Compile Include="UI\Setup.cs" />
     <Compile Include="UI\TerminalOutputEventHandler.cs" />
-    <Compile Include="UI\StateBasedTerminalOutputStore.cs" />
     <Compile Include="UI\DocumentBasedViewForTerminalOutput.cs" />
     <Compile Include="UI\ViewForTerminalOutput.cs" />
   </ItemGroup>

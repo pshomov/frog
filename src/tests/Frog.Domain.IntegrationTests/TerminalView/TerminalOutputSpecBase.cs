@@ -36,26 +36,6 @@ namespace Frog.Domain.IntegrationTests.TerminalView
         }
     }
 
-    public class MongoView : View
-    {
-        Func<ViewForTerminalOutput> view =
-            () => new DocumentBasedViewForTerminalOutput(OSHelpers.TerminalViewConnection());
-
-        Func<TerminalOutputStore> registrar =
-            () => new StateBasedTerminalOutputStore(OSHelpers.TerminalViewConnection());
-
-        public ViewForTerminalOutput View
-        {
-            get { return view(); }
-        }
-
-        public TerminalOutputStore Store
-        {
-            get { return registrar(); }
-        }
-    }
-
-    [TestFixture(typeof(MongoView))]
     [TestFixture(typeof(EventsView))]
     public abstract class TerminalOutputSpecBase<T> : BDD where T : View, new()
     {

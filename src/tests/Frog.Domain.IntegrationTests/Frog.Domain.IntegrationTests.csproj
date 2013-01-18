@@ -72,7 +72,6 @@
     <Compile Include="PathGoble\GobleTests.cs" />
     <Compile Include="ProcessHandlerSpecs.cs" />
     <Compile Include="ProjectView\EventBasedProjectView.cs" />
-    <Compile Include="ProjectView\InMemProjectView.cs" />
     <Compile Include="ProjectView\ProjectViewSpecs.cs" />
     <Compile Include="ProjectView\RiakProjectView.cs" />
     <Compile Include="RabbitMQ\MessageBusChecksIfShouldContinue.cs" />
