@@ -64,7 +64,6 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="CorrugatedIronExts.cs" />
-    <Compile Include="RiakBasedProjectView.cs" />
     <Compile Include="GitDriver.cs" />
     <Compile Include="RabbitMQBus.cs" />
     <Compile Include="Riak.cs" />
