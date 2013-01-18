@@ -24,7 +24,7 @@ namespace Frog.Domain.RepositoryTracker
 
     public class RepositoryTracker : Handles<UpdateFound>, Handles<RegisterRepository>, Handles<CheckForUpdateFailed>
     {
-        public RepositoryTracker(IBus bus, IProjectsRepository projectsRepository)
+        public RepositoryTracker(IBus bus, ProjectsRepository projectsRepository)
         {
             this.bus = bus;
             this.projectsRepository = projectsRepository;
@@ -76,7 +76,7 @@ namespace Frog.Domain.RepositoryTracker
 
         const string RepositoryTrackerQueueId = "Repository_tracker";
         readonly IBus bus;
-        readonly IProjectsRepository projectsRepository;
+        readonly ProjectsRepository projectsRepository;
 
         void Track(string repoUrl)
         {

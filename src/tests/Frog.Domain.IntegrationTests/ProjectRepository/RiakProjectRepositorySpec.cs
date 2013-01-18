@@ -6,11 +6,11 @@ using NUnit.Framework;
 namespace Frog.Domain.IntegrationTests.ProjectRepository
 {
 	[TestFixture]
-    public class RiakProjectRepository : ProjectRepository
+    public class RiakProjectRepositorySpec : ProjectRepositorySpec
     {
 	    private const string Bucket = "projects_test1";
 
-        protected override IProjectsRepository GetProjectRepository()
+        protected override ProjectsRepository GetProjectsRepository()
         {
             return new Integration.RiakProjectRepository(OSHelpers.RiakHost(), OSHelpers.RiakPort(), Bucket);
         }

@@ -9,7 +9,7 @@ namespace Frog.Domain.RepositoryTracker
         public string revision;
     }
 
-    public interface IProjectsRepository
+    public interface ProjectsRepository
     {
         IEnumerable<RepositoryDocument> AllProjects { get; }
         void ProjectCheckComplete(string repoUrl);

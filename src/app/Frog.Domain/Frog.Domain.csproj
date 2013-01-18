@@ -62,7 +62,7 @@
     <Compile Include="IExecTask.cs" />
     <Compile Include="BuildSystems\Make\MakeTask.cs" />
     <Compile Include="PipelineOfTasks.cs" />
-    <Compile Include="RepositoryTracker\IProjectsRepository.cs" />
+    <Compile Include="RepositoryTracker\ProjectsRepository.cs" />
     <Compile Include="RepositoryTracker\InMemoryProjectsRepository.cs" />
     <Compile Include="RepositoryTracker\RepositoryTracker.cs" />
     <Compile Include="ExecTasks\TestExecTask.cs" />
