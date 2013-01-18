@@ -4,7 +4,7 @@ using NUnit.Framework;
 namespace Frog.Domain.IntegrationTests.ProjectRepository
 {
 	[TestFixture]
-    public class InMemoryProjectRepositorySpec : ProjectRepositorySpec
+    public class InMemoryProjectsRepositorySpec : ProjectsRepositorySpec
     {
         protected override ProjectsRepository GetProjectsRepository()
         {

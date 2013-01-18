@@ -75,9 +75,9 @@
     <Compile Include="ProjectView\ProjectViewSpecs.cs" />
     <Compile Include="RabbitMQ\MessageBusChecksIfShouldContinue.cs" />
     <Compile Include="RabbitMQ\RabbitMQBasicMessagingTest.cs" />
-    <Compile Include="ProjectRepository\InMemoryProjectRepositorySpec.cs" />
-    <Compile Include="ProjectRepository\ProjectRepositorySpec.cs" />
-    <Compile Include="ProjectRepository\RiakProjectRepositorySpec.cs" />
+    <Compile Include="ProjectRepository\InMemoryProjectsRepositorySpec.cs" />
+    <Compile Include="ProjectRepository\ProjectsRepositorySpec.cs" />
+    <Compile Include="ProjectRepository\RiakProjectsRepositorySpec.cs" />
     <Compile Include="Task\TaskCurrentDirectory.cs" />
     <Compile Include="Task\TaskReporting.cs" />
     <Compile Include="Task\TasksCPUQuotaMeasurementOfExitedProcessDoesNotCauseException.cs" />

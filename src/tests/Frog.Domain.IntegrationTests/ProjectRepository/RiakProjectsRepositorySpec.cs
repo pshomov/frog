@@ -6,7 +6,7 @@ using NUnit.Framework;
 namespace Frog.Domain.IntegrationTests.ProjectRepository
 {
 	[TestFixture]
-    public class RiakProjectRepositorySpec : ProjectRepositorySpec
+    public class RiakProjectsRepositorySpec : ProjectsRepositorySpec
     {
 	    private const string Bucket = "projects_test1";
 
