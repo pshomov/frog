@@ -14,12 +14,14 @@ namespace Frog.Domain.IntegrationTests.ProjectRepository
         [SetUp]
         public void Setup()
         {
-            projectsRepository = GetProjectsRepository();
+            var p = GetProjectsRepository();
+            projectsRepository = p.Item1;
+            var projectsRepositoryTestSupport = p.Item2;
             projectId = Guid.NewGuid().ToString();
-            projectsRepository.WipeBucket();
+            projectsRepositoryTestSupport.WipeBucket();
         }
 
-        protected abstract ProjectsRepository GetProjectsRepository();
+        protected abstract Tuple<ProjectsRepository,ProjectsRepositoryTestSupport> GetProjectsRepository();
 
         [Test]
         public void should_find_document_by_id()

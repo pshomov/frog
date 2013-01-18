@@ -5,7 +5,7 @@ using Frog.Domain.RepositoryTracker;
 
 namespace Frog.Domain.Integration
 {
-    public class RiakProjectRepository : ProjectsRepository
+    public class RiakProjectRepository : ProjectsRepository, ProjectsRepositoryTestSupport
     {
         private const string ALL_PROJECTS = "all_projects";
         private readonly string host;

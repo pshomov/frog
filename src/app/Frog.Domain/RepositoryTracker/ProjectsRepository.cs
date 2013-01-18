@@ -17,6 +17,5 @@ namespace Frog.Domain.RepositoryTracker
         void RemoveProject(string repoUrl);
         void TrackRepository(string repoUrl);
         void UpdateLastKnownRevision(string repoUrl, string revision);
-        void WipeBucket();
     }
 }

@@ -64,6 +64,7 @@
     <Compile Include="PipelineOfTasks.cs" />
     <Compile Include="RepositoryTracker\ProjectsRepository.cs" />
     <Compile Include="RepositoryTracker\InMemoryProjectsRepository.cs" />
+    <Compile Include="RepositoryTracker\ProjectsRepositoryTestSupport.cs" />
     <Compile Include="RepositoryTracker\RepositoryTracker.cs" />
     <Compile Include="ExecTasks\TestExecTask.cs" />
     <Compile Include="RevisionChecker\CheckRevision.cs" />

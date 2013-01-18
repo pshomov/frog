@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Frog.Domain.RepositoryTracker
 {
-    public class InMemoryProjectsRepository : ProjectsRepository
+    public class InMemoryProjectsRepository : ProjectsRepository, ProjectsRepositoryTestSupport
     {
         public IEnumerable<RepositoryDocument> AllProjects
         {

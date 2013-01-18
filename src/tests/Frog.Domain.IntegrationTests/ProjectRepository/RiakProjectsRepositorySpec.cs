@@ -10,9 +10,10 @@ namespace Frog.Domain.IntegrationTests.ProjectRepository
     {
 	    private const string Bucket = "projects_test1";
 
-        protected override ProjectsRepository GetProjectsRepository()
+        protected override Tuple<ProjectsRepository, ProjectsRepositoryTestSupport> GetProjectsRepository()
         {
-            return new Integration.RiakProjectRepository(OSHelpers.RiakHost(), OSHelpers.RiakPort(), Bucket);
+            var riakProjectRepository = new Integration.RiakProjectRepository(OSHelpers.RiakHost(), OSHelpers.RiakPort(), Bucket);
+            return new Tuple<ProjectsRepository, ProjectsRepositoryTestSupport>(riakProjectRepository, riakProjectRepository);
         }
     }
 }
