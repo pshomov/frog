@@ -22,7 +22,7 @@ namespace Frog.Domain.Specs.Agent
         [Test]
         public void should_check_for_updates()
         {
-            Worker.Received().CheckForUpdatesAndKickOffPipeline(Arg.Any<SourceRepoDriver>(), "2");
+            Worker.Received().ExecutePipelineForRevision(Arg.Any<SourceRepoDriver>(), "2");
         }
 
         [Test]

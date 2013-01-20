@@ -23,7 +23,7 @@ namespace Frog.Domain
             this.workingAreaGoverner = workingAreaGoverner;
         }
 
-        public virtual void CheckForUpdatesAndKickOffPipeline(SourceRepoDriver repositoryDriver, string revision)
+        public virtual void ExecutePipelineForRevision(SourceRepoDriver repositoryDriver, string revision)
         {
             var allocatedWorkingArea = workingAreaGoverner.AllocateWorkingArea();
             var checkoutInfo = repositoryDriver.GetSourceRevision(revision, allocatedWorkingArea);

@@ -43,7 +43,7 @@ namespace Frog.Domain.Specs.WorkerSpecs
 
             try
             {
-                Worker.CheckForUpdatesAndKickOffPipeline(SourceRepoDriver, "");
+                Worker.ExecutePipelineForRevision(SourceRepoDriver, "");
             }
             catch (ApplicationException)
             {
@@ -52,7 +52,7 @@ namespace Frog.Domain.Specs.WorkerSpecs
 
         protected override void When()
         {
-            Worker.CheckForUpdatesAndKickOffPipeline(SourceRepoDriver, "");
+            Worker.ExecutePipelineForRevision(SourceRepoDriver, "");
         }
 
         [Test]

@@ -17,11 +17,11 @@ namespace Frog.Domain.Specs.Agent
             var WorkerWithEvents = Worker;
             Worker = Substitute.For<Worker>(null,null);
             Worker.When(
-                worker => worker.CheckForUpdatesAndKickOffPipeline(Arg.Any<SourceRepoDriver>(), Arg.Is("2"))).Do(
+                worker => worker.ExecutePipelineForRevision(Arg.Any<SourceRepoDriver>(), Arg.Is("2"))).Do(
                     info => { throw new ApplicationException(); });
             Worker.When(
-                worker => worker.CheckForUpdatesAndKickOffPipeline(Arg.Any<SourceRepoDriver>(), Arg.Is("3"))).Do(
-                    callInfo => WorkerWithEvents.CheckForUpdatesAndKickOffPipeline(null,null));
+                worker => worker.ExecutePipelineForRevision(Arg.Any<SourceRepoDriver>(), Arg.Is("3"))).Do(
+                    callInfo => WorkerWithEvents.ExecutePipelineForRevision(null,null));
             Agent = new Domain.Agent(Bus, Worker, url => null);
             try
             {
