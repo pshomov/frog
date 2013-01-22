@@ -20,7 +20,7 @@ namespace Frog.Domain.Specs.Agent
             Repo = Substitute.For<SourceRepoDriver>();
             Worker = Substitute.For<Worker>(null, null);
             Worker.When(
-                iValve => iValve.CheckForUpdatesAndKickOffPipeline(Arg.Any<SourceRepoDriver>(), Arg.Any<string>())).Do(
+                iValve => iValve.ExecutePipelineForRevision(Arg.Any<SourceRepoDriver>(), Arg.Any<string>())).Do(
                     info =>
                         {
                             Worker.OnProjectCheckedOut +=

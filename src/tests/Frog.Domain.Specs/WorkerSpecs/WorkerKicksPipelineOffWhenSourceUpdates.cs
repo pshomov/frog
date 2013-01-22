@@ -20,7 +20,7 @@ namespace Frog.Domain.Specs.WorkerSpecs
 
         protected override void When()
         {
-            Worker.CheckForUpdatesAndKickOffPipeline(repositoryDriver: SourceRepoDriver, revision: "123");
+            Worker.ExecutePipelineForRevision(repositoryDriver: SourceRepoDriver, revision: "123");
         }
 
         [Test]

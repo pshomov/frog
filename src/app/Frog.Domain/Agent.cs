@@ -166,7 +166,7 @@ namespace Frog.Domain
             worker.OnProjectCheckedOut += onProjectCheckedOut;
             try
             {
-                worker.CheckForUpdatesAndKickOffPipeline(repoDriverFactory(message.RepoUrl), message.Revision.Revision);
+                worker.ExecutePipelineForRevision(repoDriverFactory(message.RepoUrl), message.Revision.Revision);
             }
             finally
             {
