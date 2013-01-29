@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Frog.Domain;
 using Frog.Domain.BuildSystems.FrogSystemTest;
@@ -40,8 +41,14 @@ namespace Frog.Agent
                                            new MSBuildDetector(new SolutionTaskFileFinder(pathFinder)),
                                            new NUnitTaskDetector(new NUnitTaskFileFinder(pathFinder))
                                            ),
-                                       new ExecTaskGenerator(new ExecTaskFactory()));
+                                       new ExecTaskGenerator(new ExecTaskFactory(), IsNotWindows() ? OS.Unix : OS.Windows));
         }
+
+        static bool IsNotWindows()
+        {
+            return As.List(PlatformID.Win32NT, PlatformID.Win32Windows).IndexOf(Environment.OSVersion.Platform) == -1;
+        }
+
         static IBus SetupBus()
         {
             return new RabbitMQBus(OSHelpers.RabbitHost());

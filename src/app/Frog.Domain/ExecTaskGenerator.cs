@@ -24,7 +24,7 @@ namespace Frog.Domain
 
     public class ExecTaskGenerator : IExecTaskGenerator
     {
-        public ExecTaskGenerator(ExecTaskFactory execTaskFactory, OS os = OS.Unix)
+        public ExecTaskGenerator(ExecTaskFactory execTaskFactory, OS os)
         {
             this.execTaskFactory = execTaskFactory;
             this.os = os;

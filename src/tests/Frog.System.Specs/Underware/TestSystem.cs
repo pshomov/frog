@@ -53,7 +53,7 @@ namespace Frog.System.Specs.Underware
             {
                 TasksSource = Substitute.For<TaskSource>();
                 return new PipelineOfTasks(TasksSource,
-                                           new ExecTaskGenerator(new ExecTaskFactory()));
+                                           new ExecTaskGenerator(new ExecTaskFactory(), OS.Unix));
             }
         }
 

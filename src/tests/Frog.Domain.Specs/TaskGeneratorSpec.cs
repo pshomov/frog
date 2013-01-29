@@ -19,7 +19,7 @@ namespace Frog.Domain.Specs
         protected override void Given()
         {
             execTaskFactory = Substitute.For<ExecTaskFactory>();
-            execTaskGenerator = new ExecTaskGenerator(execTaskFactory);
+            execTaskGenerator = new ExecTaskGenerator(execTaskFactory, OS.Unix);
         }
 
         protected override void When()
@@ -67,7 +67,7 @@ namespace Frog.Domain.Specs
         protected override void Given()
         {
             execTaskFactory = Substitute.For<ExecTaskFactory>();
-            execTaskGenerator = new ExecTaskGenerator(execTaskFactory);
+            execTaskGenerator = new ExecTaskGenerator(execTaskFactory, OS.Unix);
         }
 
         protected override void When()
@@ -91,7 +91,7 @@ namespace Frog.Domain.Specs
         protected override void Given()
         {
             execTaskFactory = Substitute.For<ExecTaskFactory>();
-            execTaskGenerator = new ExecTaskGenerator(execTaskFactory);
+            execTaskGenerator = new ExecTaskGenerator(execTaskFactory, OS.Unix);
         }
 
         protected override void When()
@@ -115,7 +115,7 @@ namespace Frog.Domain.Specs
         protected override void Given()
         {
             execTaskFactory = Substitute.For<ExecTaskFactory>();
-            execTaskGenerator = new ExecTaskGenerator(execTaskFactory);
+            execTaskGenerator = new ExecTaskGenerator(execTaskFactory, OS.Unix);
         }
 
         protected override void When()
@@ -139,7 +139,7 @@ namespace Frog.Domain.Specs
         protected override void Given()
         {
             execTaskFactory = Substitute.For<ExecTaskFactory>();
-            execTaskGenerator = new ExecTaskGenerator(execTaskFactory);
+            execTaskGenerator = new ExecTaskGenerator(execTaskFactory, OS.Unix);
         }
 
         protected override void When()
@@ -163,7 +163,7 @@ namespace Frog.Domain.Specs
         protected override void Given()
         {
             execTaskFactory = Substitute.For<ExecTaskFactory>();
-            execTaskGenerator = new ExecTaskGenerator(execTaskFactory);
+            execTaskGenerator = new ExecTaskGenerator(execTaskFactory, OS.Unix);
         }
 
         protected override void When()
