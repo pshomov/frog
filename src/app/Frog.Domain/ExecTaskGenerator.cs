@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Frog.Domain.BuildSystems.FrogSystemTest;
 using Frog.Domain.BuildSystems.Make;
 using Frog.Domain.BuildSystems.Rake;
@@ -13,11 +14,20 @@ namespace Frog.Domain
         List<IExecTask> GimeTasks(Task task);
     }
 
+    public enum OS
+    {
+        Unix,
+        Linux,
+        OSX,
+        Windows
+    };
+
     public class ExecTaskGenerator : IExecTaskGenerator
     {
-        public ExecTaskGenerator(ExecTaskFactory execTaskGenerator)
+        public ExecTaskGenerator(ExecTaskFactory execTaskFactory, OS os = OS.Unix)
         {
-            this.execTaskGenerator = execTaskGenerator;
+            this.execTaskFactory = execTaskFactory;
+            this.os = os;
         }
 
         public List<IExecTask> GimeTasks(Task task)
@@ -26,12 +36,12 @@ namespace Frog.Domain
             if (task.GetType() == typeof (MSBuildTask))
             {
                 var mstask = (MSBuildTask) task;
-                result.Add(execTaskGenerator.CreateTask("xbuild", mstask.SolutionFile, "build"));
+                result.Add(execTaskFactory.CreateTask(os == OS.Windows ? "{0}\\Microsoft.NET\\Framework\\v4.0.30319\\msbuild.exe".Formatt(Environment.GetEnvironmentVariable("SYSTEMROOT")) : "xbuild", mstask.SolutionFile, "build"));
             }
             if (task.GetType() == typeof (NUnitTask))
             {
                 var nunit = (NUnitTask) task;
-                result.Add(execTaskGenerator.CreateTask("nunit", nunit.Assembly, "unit_test"));
+                result.Add(execTaskFactory.CreateTask("nunit", nunit.Assembly, "unit_test"));
             }
             if (task.GetType() == typeof (TestTaskDescription))
             {
@@ -55,12 +65,13 @@ namespace Frog.Domain
             }
             if (task.GetType() == typeof (MakeTask))
             {
-                result.Add(execTaskGenerator.CreateTask("make", null, "Make task"));
+                result.Add(execTaskFactory.CreateTask("make", null, "Make task"));
             }
             return result;
         }
 
-        readonly ExecTaskFactory execTaskGenerator;
+        readonly ExecTaskFactory execTaskFactory;
+        readonly OS os;
 
         IExecTask CreateShellTask(ShellTask anyTask)
         {
@@ -70,7 +81,7 @@ namespace Frog.Domain
             args = args.Trim();
             if (Os.IsUnix) args += "\"";
 
-            var execTask = execTaskGenerator.CreateTask(cmd, args, "Shell Task");
+            var execTask = execTaskFactory.CreateTask(cmd, args, "Shell Task");
             return execTask;
         }
     }
