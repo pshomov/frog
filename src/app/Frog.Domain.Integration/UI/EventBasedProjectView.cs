@@ -155,7 +155,7 @@ namespace Frog.Domain.Integration.UI
         void Apply(ProjectCheckedOut msg)
         {
             CurrentBuildId = msg.BuildId;
-            builds.Add(new BuildHistoryItem {BuildId = msg.BuildId, Comment = msg.CheckoutInfo.Comment});
+            builds.Add(new BuildHistoryItem {BuildId = msg.BuildId, Comment = msg.CheckoutInfo.Comment, Revision = msg.CheckoutInfo.Revision});
         }
     }
 }

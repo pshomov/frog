@@ -2,6 +2,8 @@
 using System.Linq;
 using System.Text;
 using System.Web.Mvc;
+using Frog.Domain;
+using Frog.Domain.RepositoryTracker;
 using Frog.UI.Web.HttpHelpers;
 
 namespace Frog.UI.Web.Controllers
@@ -12,6 +14,14 @@ namespace Frog.UI.Web.Controllers
         public ActionResult Status(string user, string project)
         {
             return View();
+        }
+
+        public ActionResult Force(string user, string project)
+        {
+            var githubProjectUrl = GetGithubProjectUrl(user, project);
+            var lastBuild = ServiceLocator.ProjectStatus.GetListOfBuilds(githubProjectUrl).Last();
+            ServiceLocator.Bus.Send(new Build(){Id = Guid.NewGuid(), RepoUrl = githubProjectUrl, Revision = new RevisionInfo(){Revision = lastBuild.Revision}});
+            return RedirectToAction("Status");
         }
 
         public ActionResult History(string user, string project)
