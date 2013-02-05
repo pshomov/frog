@@ -46,7 +46,7 @@ namespace SimpleCQRS
             }
         }
 
-        public void Publish<T>(T @event) where T : Event
+        public void PublishOne<T>(T @event) where T : Event
         {
             OnMessage(@event);
             List<Action<Message>> handlers; 
@@ -54,6 +54,14 @@ namespace SimpleCQRS
             foreach(var handler in handlers)
             {
 				handler(@event);
+            }
+        }
+
+        public void Publish<T>(params T[] @event) where T : Event
+        {
+            foreach (var ev in @event)
+            {
+                PublishOne(ev);
             }
         }
 
@@ -72,6 +80,6 @@ namespace SimpleCQRS
     }
     public interface IEventPublisher
     {
-        void Publish<T>(T @event) where T : Event;
+        void Publish<T>(params T[] @event) where T : Event;
     }
 }

@@ -85,7 +85,7 @@ namespace Frog.System.Specs.Underware
 
         void SetupAgent(SourceRepoDriverFactory sourceRepoDriverFactory)
         {
-            agent = new Agent(TheBus, worker, sourceRepoDriverFactory);
+            agent = new Agent(TheBus, worker, sourceRepoDriverFactory, 50);
             agent.JoinTheParty();
         }
 

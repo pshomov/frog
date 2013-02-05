@@ -33,7 +33,7 @@ namespace Frog.Domain.Specs.Agent
                                 Raise.Event<Action<int, Guid, TaskInfo.TaskStatus>>(0, TerminalId, TaskInfo.TaskStatus.Started);
                             Worker.OnBuildEnded += Raise.Event<Action<BuildTotalEndStatus>>(BuildTotalEndStatus.Success);
                         });
-            Agent = new Domain.Agent(Bus, Worker, url => Repo);
+            Agent = new Domain.Agent(Bus, Worker, url => Repo, 50);
             Agent.JoinTheParty();
         }
     }
