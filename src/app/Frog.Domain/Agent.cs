@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Threading;
 using Frog.Domain.RepositoryTracker;
 using SimpleCQRS;
 
@@ -126,32 +123,28 @@ namespace Frog.Domain
 
     public class Agent : Handles<Build>
     {
-        int BatchPeriod = 3000;
-
-        public Agent(IBus theBus, Worker worker, SourceRepoDriverFactory repoDriverFactory, int batchPeriod)
+        public Agent(IBus theBus, Worker worker, SourceRepoDriverFactory repoDriverFactory)
         {
             this.theBus = theBus;
             this.worker = worker;
             this.repoDriverFactory = repoDriverFactory;
-            this.BatchPeriod = batchPeriod;
         }
 
         public void Handle(Build message)
         {
-            var terminalOutputsBatch = new ConcurrentQueue<BuildEvent>(); 
             NextEventId = 0;
             Action<BuildTotalEndStatus> onBuildEnded =
-                started => terminalOutputsBatch.Enqueue(new BuildEnded(message.Id, started, NextEventId));
+                started => theBus.Publish(new BuildEnded(message.Id, started, NextEventId));
             BuildStartedDelegate onBuildStarted =
                 started =>
-                terminalOutputsBatch.Enqueue(new BuildStarted(buildId: message.Id, status: started, repoUrl: message.RepoUrl,
+                theBus.Publish(new BuildStarted(buildId: message.Id, status: started, repoUrl: message.RepoUrl,
                                                 sequenceId: NextEventId));
             Action<int, Guid, TaskInfo.TaskStatus> onBuildUpdated =
                 (i, terminalId, status) =>
-                terminalOutputsBatch.Enqueue(new BuildUpdated(buildId: message.Id, taskIndex: i, newStatus: status,
+                theBus.Publish(new BuildUpdated(buildId: message.Id, taskIndex: i, newStatus: status,
                                                 sequenceId: NextEventId, terminalId: terminalId));
-            Action<TerminalUpdateInfo> onTerminalUpdates = info => 
-                                                           terminalOutputsBatch.Enqueue(new TerminalUpdate(content: info.Content,
+            Action<TerminalUpdateInfo> onTerminalUpdates = info =>
+                                                           theBus.Publish(new TerminalUpdate(content: info.Content,
                                                                                              taskIndex: info.TaskIndex,
                                                                                              contentSequenceIndex:
                                                                                                  info.
@@ -163,7 +156,7 @@ namespace Frog.Domain
                                                                                              terminalId: info.TerminalId));
             ProjectCheckedOutDelegate onProjectCheckedOut =
                 info =>
-                terminalOutputsBatch.Enqueue(new ProjectCheckedOut(buildId: message.Id, sequenceId: NextEventId)
+                theBus.Publish(new ProjectCheckedOut(buildId: message.Id, sequenceId: NextEventId)
                                    {CheckoutInfo = info, RepoUrl = message.RepoUrl});
 
             worker.OnTerminalUpdates += onTerminalUpdates;
@@ -171,10 +164,8 @@ namespace Frog.Domain
             worker.OnBuildUpdated += onBuildUpdated;
             worker.OnBuildEnded += onBuildEnded;
             worker.OnProjectCheckedOut += onProjectCheckedOut;
-            var t = new Timer(state => PublishPendingEventBatch(terminalOutputsBatch), null, Timeout.Infinite, BatchPeriod);
             try
             {
-                t.Change(0, BatchPeriod);
                 worker.ExecutePipelineForRevision(repoDriverFactory(message.RepoUrl), message.Revision.Revision);
             }
             finally
@@ -184,19 +175,7 @@ namespace Frog.Domain
                 worker.OnBuildUpdated -= onBuildUpdated;
                 worker.OnTerminalUpdates -= onTerminalUpdates;
                 worker.OnProjectCheckedOut -= onProjectCheckedOut;
-                var eventWaitHandle = new EventWaitHandle(false, EventResetMode.ManualReset);
-                t.Dispose(eventWaitHandle);
-                eventWaitHandle.WaitOne();
-                PublishPendingEventBatch(terminalOutputsBatch);
             }
-        }
-
-        void PublishPendingEventBatch(ConcurrentQueue<BuildEvent> terminalOutputsBatch)
-        {
-            BuildEvent newItem;
-            var itemsToSend = new List<BuildEvent>();
-            while (terminalOutputsBatch.TryDequeue(out newItem)) itemsToSend.Add(newItem);
-            theBus.Publish(itemsToSend.ToArray());
         }
 
         public void JoinTheParty()

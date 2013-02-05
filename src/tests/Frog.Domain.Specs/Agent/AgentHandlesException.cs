@@ -22,7 +22,7 @@ namespace Frog.Domain.Specs.Agent
             Worker.When(
                 worker => worker.ExecutePipelineForRevision(Arg.Any<SourceRepoDriver>(), Arg.Is("3"))).Do(
                     callInfo => WorkerWithEvents.ExecutePipelineForRevision(null,null));
-            Agent = new Domain.Agent(Bus, Worker, url => null, 50);
+            Agent = new Domain.Agent(Bus, Worker, url => null);
             try
             {
                 Agent.Handle(new Build { RepoUrl = "asda", Revision = new RevisionInfo { Revision = "2" } });

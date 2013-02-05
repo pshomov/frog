@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Web.Script.Serialization;
@@ -144,9 +143,9 @@ namespace Frog.Domain.Integration
             threads.Add(job);
         }
 
-        public void Publish<T>(params T[] @event) where T : Event
+        public void Publish<T>(T @event) where T : Event
         {
-            SendMessages(@event);
+            SendMessage(@event);
         }
 
         public void Send<T>(T command) where T : Command
@@ -183,6 +182,8 @@ namespace Frog.Domain.Integration
 
         private void SendMessage<T>(T @event)
         {
+            using (Profiler.measure("sending message to Rabbit MQ"))
+            {
                 string topicName = typeof (T).Name;
                 using (IModel channel = connection.CreateModel())
                 {
@@ -199,34 +200,6 @@ namespace Frog.Domain.Integration
                     IBasicProperties basicProperties = channel.CreateBasicProperties();
                     channel.BasicPublish(topicName, "", false, false, basicProperties,
                                          Encoding.UTF8.GetBytes(serializedForm));
-                }
-        }
-        private void SendMessages(params object[] events)
-        {
-            using (Profiler.measure("sending message to Rabbit MQ"))
-            {
-                var types = events.Select(o => o.GetType()).Distinct().ToList();
-                using (IModel channel = connection.CreateModel())
-                {
-            		channel.TxSelect();
-                    foreach (var type in types)
-                    {
-                        var topicName = type.Name;
-                        channel.ExchangeDeclare(topicName, ExchangeType.Fanout, true);
-                        channel.QueueDeclare("all_messages", false, false, false, null);
-                        channel.QueueBind("all_messages", topicName, "", null);
-                    }
-                    channel.TxCommit();
-                }
-                using (IModel channel = connection.CreateModel())
-                {
-                    var ser = new JavaScriptSerializer();
-                    var basicProperties = channel.CreateBasicProperties();
-                    foreach (var @event in events)
-                    {
-                        channel.BasicPublish(@event.GetType().Name, "", false, false, basicProperties,
-                                             Encoding.UTF8.GetBytes(ser.Serialize(@event)));
-                    }
                 }
             }
         }
