@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Web.Script.Serialization;
@@ -16,10 +18,13 @@ namespace Frog.Domain.Integration
     {
         private readonly IConnection connection;
         private readonly Dictionary<string, Dictionary<string, Action<BasicDeliverEventArgs>>> queueHandlers = new Dictionary<string, Dictionary<string, Action<BasicDeliverEventArgs>>>();
-        private readonly List<Thread> threads = new List<Thread>(); 
-            
+        private readonly List<Thread> threads = new List<Thread>();
+        ConcurrentQueue<Event> eventsBatch;
+        Timer timer;
+
         public RabbitMQBus(string server)
         {
+            StopHandling = () => false;
             var connectionFactory = new ConnectionFactory
                                         {
                                             HostName = server,
@@ -28,7 +33,8 @@ namespace Frog.Domain.Integration
                                             Protocol = Protocols.AMQP_0_9_1
                                         };
             connection = connectionFactory.CreateConnection();
-            StopHandling = () => false;
+            eventsBatch = new ConcurrentQueue<Event>();
+            timer = new Timer(state => PublishPendingEventBatch(), null, 0, 3000);
         }
 
         public Func<bool> StopHandling { get; set; }
@@ -145,7 +151,7 @@ namespace Frog.Domain.Integration
 
         public void Publish<T>(T @event) where T : Event
         {
-            SendMessage(@event);
+            eventsBatch.Enqueue(@event);
         }
 
         public void Send<T>(T command) where T : Command
@@ -173,6 +179,44 @@ namespace Frog.Domain.Integration
         }
 
         public event Action<Message> OnMessage;
+
+        void PublishPendingEventBatch()
+        {
+            Event newItem;
+            var itemsToSend = new List<Event>();
+            while (eventsBatch.TryDequeue(out newItem)) itemsToSend.Add(newItem);
+            SendEvents(itemsToSend.ToArray());
+        }
+
+        void SendEvents(params object[] events)
+        {
+            using (Profiler.measure("sending message to Rabbit MQ"))
+            {
+                var uniqueEventTypes = events.Select(o => o.GetType()).Distinct().ToList();
+                using (IModel channel = connection.CreateModel())
+                {
+                    channel.TxSelect();
+                    foreach (var type in uniqueEventTypes)
+                    {
+                        var topicName = type.Name;
+                        channel.ExchangeDeclare(topicName, ExchangeType.Fanout, true);
+                        channel.QueueDeclare("all_messages", false, false, false, null);
+                        channel.QueueBind("all_messages", topicName, "", null);
+                    }
+                    channel.TxCommit();
+                }
+                using (IModel channel = connection.CreateModel())
+                {
+                    var serializer = new JavaScriptSerializer();
+                    var basicProperties = channel.CreateBasicProperties();
+                    foreach (var @event in events)
+                    {
+                        channel.BasicPublish(@event.GetType().Name, "", false, false, basicProperties,
+                                             Encoding.UTF8.GetBytes(serializer.Serialize(@event)));
+                    }
+                }
+            }
+        }
 
         private void HandleBadMessage(BasicDeliverEventArgs basicDeliverEventArgs, Exception exception)
         {
@@ -206,6 +250,12 @@ namespace Frog.Domain.Integration
 
         public void Dispose()
         {
+            using (var eventWaitHandle = new EventWaitHandle(false, EventResetMode.ManualReset))
+            {
+                timer.Dispose(eventWaitHandle);
+                eventWaitHandle.WaitOne();
+            }
+            PublishPendingEventBatch();
             connection.Close();
             connection.Dispose();
         }
