@@ -24,7 +24,7 @@ namespace SaaS.Engine
         readonly IBus bus;
         readonly EventStore store;
         JavaScriptSerializer jsonSerializer;
-        Type[] eventsToTranslate = new[] { typeof(Frog.Domain.BuildStarted), typeof(Frog.Domain.BuildEnded), typeof(Frog.Domain.BuildUpdated), typeof(Frog.Domain.TerminalUpdate) };
+        Type[] eventsToTranslate = new[] { typeof(Frog.Domain.BuildStarted), typeof(BuildEnded), typeof(BuildUpdated), typeof(TerminalUpdate) };
 
         void Handle(string message, string exchange)
         {

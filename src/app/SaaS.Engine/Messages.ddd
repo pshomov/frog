@@ -1,22 +1,21 @@
 ﻿namespace SaaS.Engine;             // put all generated classes into this namespace
 extern "Frog.Stuff";        // namespace for code contracts over the wire
 
+TaskInfo(TerminalId id, string name, TaskStatus status)
+PipelineStatus(TaskInfo[] tasks)
+
 interface Build(BuildId id)
 {
 	if ! = IEvent<BuildId>;
 
-    BuildStarted! (TimeSpan activityThreshold)
+    BuildStarted! (string repoUrl, PipelineStatus status)
         explicit "It is done"
+    BuildEnded! (BuildTotalEndStatus status)
+    BuildUpdated! (int taskIndex, TaskStatus taskStatus)
+}
 
-    RegistrationInfo(
-      string ContactEmail, 
-      string CustomerName, 
-      string OptionalUserIdentity,
-      string OptionalUserPassword,
-      string OptionalCompanyPhone,
-      string OptionalCompanyUrl,
-      string OptionalUserDisplay,
-      RegistrationHttpHeader[] headers,
-      DateTime CreatedUtc)
-
+interface Task(TerminalId id)
+{
+	if ! = IEvent<TerminalId>;
+	TerminalUpdated! (string content, int contentSequnceIndex, BuildId buildId)
 }
