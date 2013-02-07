@@ -83,6 +83,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\AllProjectsController.cs" />
     <Compile Include="Controllers\DiagnosticsController.cs" />
     <Compile Include="Controllers\ProjectController.cs" />
     <Compile Include="Controllers\RegisterProjectController.cs" />
@@ -166,6 +167,10 @@
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Cqrs.Portable\Cqrs.Portable.csproj">
+      <Project>{4E2E749C-4D6F-4EF8-8E9D-96D467306997}</Project>
+      <Name>Cqrs.Portable</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Frog.Domain.Integration\Frog.Domain.Integration.csproj">
       <Project>{34D94FDA-6971-43A3-ABDE-B97CEA82CF26}</Project>
       <Name>Frog.Domain.Integration</Name>
@@ -177,6 +182,14 @@
     <ProjectReference Include="..\Frog.Support\Frog.Support.csproj">
       <Project>{893935D3-935A-418F-A656-5D6A203D87ED}</Project>
       <Name>Frog.Support</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SaaS.Client\SaaS.Client.csproj">
+      <Project>{F31841AC-CA87-4441-B906-6D4502307E97}</Project>
+      <Name>SaaS.Client</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SaaS.Wires\SaaS.Wires.csproj">
+      <Project>{A6870FB6-D70D-4C70-81C8-74C191765FBC}</Project>
+      <Name>SaaS.Wires</Name>
     </ProjectReference>
     <ProjectReference Include="..\SimpleCQRS\SimpleCQRS.csproj">
       <Project>{9FAA6168-F131-420F-81C1-2228FD151BC7}</Project>

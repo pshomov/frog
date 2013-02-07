@@ -6,6 +6,10 @@ using System.Web.Routing;
 using Frog.Domain.Integration;
 using Frog.Domain.Integration.UI;
 using Frog.Support;
+using Lokad.Cqrs;
+using Lokad.Cqrs.AtomicStorage;
+using SaaS.Client.Projections.Releases;
+using SaaS.Wires;
 using SimpleCQRS;
 
 namespace Frog.UI.Web
@@ -70,6 +74,9 @@ namespace Frog.UI.Web
         void WireUpUIModelInfrastructure()
         {
             var theBus = new RabbitMQBus(OSHelpers.RabbitHost());
+            var integrationPath = "file:C:/LokadData/runz";
+            var path = integrationPath.Remove(0, 5);
+            var config = FileStorage.CreateConfig(path);
 
             var eventStore = Config.WireupEventStore();
             ServiceLocator.ProjectStatus = new EventBasedProjectView(eventStore);
@@ -77,6 +84,7 @@ namespace Frog.UI.Web
             ServiceLocator.BuildStatus = new EventBasedProjectView(eventStore);
             ServiceLocator.Bus = theBus;
             ServiceLocator.AllMessages = new ConcurrentQueue<Message>();
+            ServiceLocator.Store = config.CreateDocumentStore(new ViewStrategy());
         }
     }
     internal class WebFrontendSetup
@@ -85,6 +93,8 @@ namespace Frog.UI.Web
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+            routes.MapRoute("all_projects", "allprojects",
+                            new { controller = "AllProjects", action = "index" });
             routes.MapRoute("diagnostics_all_messages", "diagnostics/messages",
                             new { controller = "Diagnostics", action = "allmessages" });
             routes.MapRoute("task_all_terminal_output", "project/github/{user}/{project}/task",

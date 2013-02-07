@@ -1,5 +1,6 @@
 using System.Collections.Concurrent;
 using Frog.Domain.Integration.UI;
+using Lokad.Cqrs.AtomicStorage;
 using SimpleCQRS;
 
 namespace Frog.UI.Web
@@ -11,5 +12,7 @@ namespace Frog.UI.Web
         public static BuildView BuildStatus { get; set; }
         public static IBus Bus { get; set; }
         public static ConcurrentQueue<Message> AllMessages { get; set; }
+
+        public static IDocumentStore Store { get; set; }
     }
 }
