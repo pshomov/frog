@@ -4,7 +4,7 @@ using SimpleCQRS;
 
 namespace Frog.Domain
 {
-    public class OrderedEvent : Event
+    public abstract class OrderedEvent : Event
     {
         public int SequenceId;
 
@@ -14,7 +14,7 @@ namespace Frog.Domain
         }
     }
 
-    public class BuildEvent : OrderedEvent
+    public abstract class BuildEvent : OrderedEvent
     {
         public Guid BuildId { get; set; }
 

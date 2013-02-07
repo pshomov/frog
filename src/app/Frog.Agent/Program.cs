@@ -6,7 +6,6 @@ using Frog.Domain.BuildSystems.FrogSystemTest;
 using Frog.Domain.BuildSystems.Make;
 using Frog.Domain.BuildSystems.Rake;
 using Frog.Domain.BuildSystems.Solution;
-using Frog.Domain.EventsArchiver;
 using Frog.Domain.Integration;
 using Frog.Domain.RevisionChecker;
 using Frog.Domain.TaskSources;
@@ -25,7 +24,6 @@ namespace Frog.Agent
             var agent = new Domain.Agent(bus, worker, sourceRepoDriverFactory);
             var revisionChecker = new RevisionChecker(bus, sourceRepoDriverFactory);
 
-            new EventsArchiver(bus).JoinTheParty();
             agent.JoinTheParty();
             revisionChecker.JoinTheParty();
             Console.ReadLine();

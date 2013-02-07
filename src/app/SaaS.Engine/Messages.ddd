@@ -1,0 +1,22 @@
+﻿namespace SaaS.Engine;             // put all generated classes into this namespace
+extern "Frog.Stuff";        // namespace for code contracts over the wire
+
+interface Build(BuildId id)
+{
+	if ! = IEvent<BuildId>;
+
+    BuildStarted! (TimeSpan activityThreshold)
+        explicit "It is done"
+
+    RegistrationInfo(
+      string ContactEmail, 
+      string CustomerName, 
+      string OptionalUserIdentity,
+      string OptionalUserPassword,
+      string OptionalCompanyPhone,
+      string OptionalCompanyUrl,
+      string OptionalUserDisplay,
+      RegistrationHttpHeader[] headers,
+      DateTime CreatedUtc)
+
+}

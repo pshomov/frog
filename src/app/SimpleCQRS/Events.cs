@@ -1,7 +1,7 @@
 using System;
 namespace SimpleCQRS
 {
-	public class Event : Message
+	public abstract class Event : Message
 	{
         public int Version;
 	}
