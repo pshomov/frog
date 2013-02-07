@@ -41,6 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="LoginView.cs" />
+    <Compile Include="Projections\Frog\Projects\RegisteredUsers.cs" />
     <Compile Include="Projections\LoginIndex\LoginsIndexView.cs" />
     <Compile Include="ClientBoundedContext.cs" />
     <Compile Include="Projections\LoginView\LoginView.cs" />
@@ -60,6 +62,7 @@
       <Name>SaaS.Contracts</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

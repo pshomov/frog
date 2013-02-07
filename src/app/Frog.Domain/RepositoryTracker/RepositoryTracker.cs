@@ -10,6 +10,11 @@ namespace Frog.Domain.RepositoryTracker
         public string Repo;
     }
 
+    public class RepositoryRegistered : Event
+    {
+        public string RepoUrl;
+    }
+
     public class Build : Command
     {
         public Guid Id { get; set; }
@@ -43,6 +48,7 @@ namespace Frog.Domain.RepositoryTracker
         public void Handle(RegisterRepository message)
         {
             Track(message.Repo);
+            bus.Publish(new RepositoryRegistered(){RepoUrl = message.Repo});
         }
 
         public void Handle(UpdateFound message)

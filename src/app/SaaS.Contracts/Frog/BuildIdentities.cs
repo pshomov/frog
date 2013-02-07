@@ -31,6 +31,27 @@ namespace SaaS.Engine
             Id = Guid.NewGuid();
         }
     }
+
+    [DataContract(Namespace = "Runz")]
+    public sealed class ProjectId : AbstractIdentity<string>
+    {
+        public const string TagValue = "project";
+
+        public ProjectId(string id)
+        {
+            Id = id;
+        }
+
+        public override string GetTag()
+        {
+            return TagValue;
+        }
+
+
+        [DataMember(Order = 1)]
+        public override string Id { get; protected set; }
+
+    }
     [DataContract(Namespace = "Runz")]
     public sealed class TerminalId : AbstractIdentity<Guid>
     {

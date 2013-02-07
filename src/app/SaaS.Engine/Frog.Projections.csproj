@@ -81,11 +81,9 @@
     <Reference Include="System.Web.Extensions" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BuildIdentities.cs" />
     <Compile Include="ConsoleObserver.cs" />
     <Compile Include="EnvelopeQuarantine.cs" />
     <Compile Include="EventsArchiver.cs" />
-    <Compile Include="Messages.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Setup.cs" />
@@ -93,7 +91,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="Messages.ddd" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Cqrs.Portable\Cqrs.Portable.csproj">

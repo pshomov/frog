@@ -12,12 +12,14 @@ namespace SaaS.Client
     {
         public static IEnumerable<object> Projections(IDocumentStore docs)
         {
-            yield return new LoginViewProjection(docs.GetWriter<UserId, LoginView>());
-            yield return new LoginsIndexProjection(docs.GetWriter<unit, LoginsIndexView>());
-            yield return new RegistrationsProjection(docs.GetWriter<RegistrationId, RegistrationView>());
-            // system
-            yield return new ReleasesProjection(docs.GetWriter<unit, ReleasesView>());
-            yield return new RegisteredProjection(docs.GetWriter<unit, RegisteredUsers>());
+//            yield return new LoginViewProjection(docs.GetWriter<UserId, LoginView>());
+//            yield return new LoginsIndexProjection(docs.GetWriter<unit, LoginsIndexView>());
+//            yield return new RegistrationsProjection(docs.GetWriter<RegistrationId, RegistrationView>());
+//            // system
+//            yield return new ReleasesProjection(docs.GetWriter<unit, ReleasesView>());
+//            yield return new RegisteredProjection(docs.GetWriter<unit, RegisteredUsers>());
+            yield return new BuildHistoryViewProjection(docs.GetWriter<unit, BuildHistoryView>());
+            yield return new ProjectsListViewProjection(docs.GetWriter<unit, Projects>());
         }
     }
 }

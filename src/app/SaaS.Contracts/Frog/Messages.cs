@@ -101,6 +101,24 @@ public partial class TerminalUpdated : IEvent<TerminalId>
             BuildId = buildId;
         }
     }
+    [DataContract(Namespace = "Frog.Stuff")]
+public partial class ProjectRegistered : IEvent<ProjectId>
+    {
+        [DataMember(Order = 1)] public ProjectId Id { get; private set; }
+        [DataMember(Order = 2)] public string RepoUrl { get; private set; }
+        
+        ProjectRegistered () {}
+        public ProjectRegistered (ProjectId id, string repoUrl)
+        {
+            Id = id;
+            RepoUrl = repoUrl;
+        }
+    }
+    
+    public interface IProjectState
+    {
+        void When(ProjectRegistered e);
+    }
     
     public interface ITaskState
     {

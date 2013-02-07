@@ -65,6 +65,7 @@
     <Reference Include="System.Runtime.Serialization" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Frog\Messages.ddd" />
     <None Include="Messages.ddd" />
   </ItemGroup>
   <ItemGroup>
@@ -79,6 +80,9 @@
     <Compile Include="Describe.cs" />
     <Compile Include="Email.cs" />
     <Compile Include="FormatUtil.cs" />
+    <Compile Include="Frog\BuildIdentities.cs" />
+    <Compile Include="Frog\Messages.cs" />
+    <Compile Include="Frog\TaskStatus.cs" />
     <Compile Include="Interfaces.cs" />
     <Compile Include="Messages.cs" />
   </ItemGroup>

@@ -19,3 +19,9 @@ interface Task(TerminalId id)
 	if ! = IEvent<TerminalId>;
 	TerminalUpdated! (string content, int contentSequnceIndex, BuildId buildId)
 }
+
+interface Project(ProjectId id)
+{
+	if ! = IEvent<ProjectId>;
+	ProjectRegistered! (string repoUrl)
+}
