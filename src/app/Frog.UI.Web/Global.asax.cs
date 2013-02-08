@@ -74,7 +74,7 @@ namespace Frog.UI.Web
         void WireUpUIModelInfrastructure()
         {
             var theBus = new RabbitMQBus(OSHelpers.RabbitHost());
-            var integrationPath = "file:C:/LokadData/runz";
+            var integrationPath = "file:/lokad/runz";
             var path = integrationPath.Remove(0, 5);
             var config = FileStorage.CreateConfig(path);
 

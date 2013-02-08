@@ -52,7 +52,7 @@ namespace SaaS.Engine
         public static Container BuildEnvironment()
         {
             ConfigureObserver();
-            var integrationPath = "file:C:/LokadData/runz";
+            var integrationPath = "file:/lokad/runz";
             var setup = new Setup();
 
             if (integrationPath.StartsWith("file:"))

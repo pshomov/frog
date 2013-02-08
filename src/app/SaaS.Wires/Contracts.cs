@@ -13,7 +13,6 @@ using System.Text;
 using Lokad.Cqrs.Envelope;
 using Lokad.Cqrs.Evil;
 using ProtoBuf;
-using ProtoBuf.Meta;
 using ServiceStack.Text;
 
 namespace SaaS.Wires
@@ -42,7 +41,7 @@ namespace SaaS.Wires
             public DataSerializer(ICollection<Type> knownTypes)
                 : base(knownTypes)
             {
-                RuntimeTypeModel.Default[typeof(DateTimeOffset)].Add("m_dateTime", "m_offsetMinutes");
+                //RuntimeTypeModel.Default[typeof(DateTimeOffset)].Add("m_dateTime", "m_offsetMinutes");
             }
 
             protected override Formatter PrepareFormatter(Type type)
