@@ -1,7 +1,6 @@
 ﻿using System;
 using Frog.Domain;
 using Frog.Domain.BuildSystems.FrogSystemTest;
-using Frog.Domain.Integration.UI;
 using Frog.Specs.Support;
 using Frog.Support;
 using Frog.System.Specs.Underware;
@@ -150,13 +149,13 @@ namespace Frog.System.Specs.ProjectBuilding
                                                   ))));
         }
 
-        [Test]
-        public void should_have_the_build_as_the_current_one_in_the_ui()
-        {
-            var prober = new PollingProber(5000, 100);
-            Assert.True(prober.check(Take.Snapshot(() => system.GetProjectStatusView())
-                                         .Has(x => x, A.Check<ProjectView>(view => view.GetCurrentBuild(RepoUrl) == newGuid))));
-        }
+//        [Test]
+//        public void should_have_the_build_as_the_current_one_in_the_ui()
+//        {
+//            var prober = new PollingProber(5000, 100);
+//            Assert.True(prober.check(Take.Snapshot(() => system.GetProjectStatusView())
+//                                         .Has(x => x, A.Check<ProjectView>(view => view.GetCurrentBuild(RepoUrl) == newGuid))));
+//        }
 
         private const string TerminalOutput3 = "Terminal output 3";
         private const string TerminalOutput4 = "Terminal output 4";

@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Threading;
-using EventStore;
-using EventStore.Serialization;
 using Frog.Domain.Integration;
-using Frog.Domain.Integration.UI;
 using Frog.Support;
 using SimpleCQRS;
 
@@ -22,7 +19,7 @@ namespace Frog.RepositoryTracker
                                                                                  "projects"));
             repoTracker.JoinTheMessageParty();
 
-            Setup.SetupView(theBus, Config.WireupEventStore());
+//            Setup.SetupView(theBus, Config.WireupEventStore());
 			
 			
             var sleepPeriod = 60 * 1000;

@@ -34,21 +34,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\libs\CorrugatedIron\CorrugatedIron.dll</HintPath>
     </Reference>
-    <Reference Include="EventStore, Version=3.1.0.0, Culture=neutral, PublicKeyToken=7735eb81c0bd9948, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\libs\EventStore\EventStore.dll</HintPath>
-    </Reference>
-    <Reference Include="EventStore.Core">
-      <HintPath>..\..\..\libs\EventStore\EventStore.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="MongoDB.Bson, Version=1.4.0.4468, Culture=neutral, PublicKeyToken=f686731cfb9cc103, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\libs\EventStore\MongoDB.Bson.dll</HintPath>
-    </Reference>
-    <Reference Include="MongoDB.Driver, Version=1.4.0.4468, Culture=neutral, PublicKeyToken=f686731cfb9cc103, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\libs\EventStore\MongoDB.Driver.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.0.2.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\libs\CorrugatedIron\Newtonsoft.Json.dll</HintPath>
@@ -69,17 +54,6 @@
     <Compile Include="Riak.cs" />
     <Compile Include="RiakProjectRepository.cs" />
     <Compile Include="SubfolderWorkingArea.cs" />
-    <Compile Include="UI\BuildStatus.cs" />
-    <Compile Include="UI\EventBasedProjectView.cs" />
-    <Compile Include="UI\EventBasedTerminalOutputStore.cs" />
-    <Compile Include="UI\EventBasedViewForTerminalOutput.cs" />
-    <Compile Include="UI\InMemProjectView.cs" />
-    <Compile Include="UI\PipelineStatusEventHandler.cs" />
-    <Compile Include="UI\TerminalOutputStore.cs" />
-    <Compile Include="UI\Setup.cs" />
-    <Compile Include="UI\TerminalOutputEventHandler.cs" />
-    <Compile Include="UI\DocumentBasedViewForTerminalOutput.cs" />
-    <Compile Include="UI\ViewForTerminalOutput.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -106,5 +80,8 @@
     <None Include="git_scripts\ruby_tasks.rb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="UI\" />
   </ItemGroup>
 </Project>

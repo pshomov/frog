@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using EventStore;
 using Frog.Domain;
-using Frog.Domain.Integration.UI;
 using Frog.Domain.RepositoryTracker;
 using Frog.Domain.RevisionChecker;
 using Frog.Domain.TaskSources;
@@ -23,9 +21,7 @@ namespace Frog.System.Specs.Underware
         Worker worker;
 
         public TaskSource TasksSource;
-        public ProjectView Views;
-        public IStoreEvents Store;
-        public ViewForTerminalOutput TerminalStatusView;
+//        public IStoreEvents Store;
         public RepositoryTracker repositoryTracker { get; private set; }
 
         public TestSystem(WorkingAreaGoverner governer, SourceRepoDriverFactory sourceRepoDriverFactory, bool runRevisionChecker = true)
@@ -37,11 +33,11 @@ namespace Frog.System.Specs.Underware
             SetupRepositoryTracker();
             if (runRevisionChecker) new RevisionChecker(TheBus, sourceRepoDriverFactory).JoinTheParty();
             SetupAgent(sourceRepoDriverFactory);
-            Store = StoreFactory.WireupEventStore();
-            Store.Advanced.Purge();
-            Views = new EventBasedProjectView(Store);
-            TerminalStatusView = new EventBasedViewForTerminalOutput(Store);
-            Setup.SetupView(TheBus, Store);
+//            Store = StoreFactory.WireupEventStore();
+//            Store.Advanced.Purge();
+//            Views = new EventBasedProjectView(Store);
+//            TerminalStatusView = new EventBasedViewForTerminalOutput(Store);
+//            Setup.SetupView(TheBus, Store);
 
             messages = new List<Message>();
             SetupAllEventLogging();
@@ -127,15 +123,15 @@ namespace Frog.System.Specs.Underware
             theTestSystem.repositoryTracker.CheckForUpdates();
         }
 
-        public ProjectView GetProjectStatusView()
-        {
-            return theTestSystem.Views;
-        }
-
-        public ViewForTerminalOutput GetTerminalStatusView()
-        {
-            return theTestSystem.TerminalStatusView;
-        }
+//        public ProjectView GetProjectStatusView()
+//        {
+//            return theTestSystem.Views;
+//        }
+//
+//        public ViewForTerminalOutput GetTerminalStatusView()
+//        {
+//            return theTestSystem.TerminalStatusView;
+//        }
 
         public void Build(string repoUrl, RevisionInfo revision, Guid buildId)
         {

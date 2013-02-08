@@ -34,10 +34,6 @@
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
-  <Reference Include="EventStore, Version=3.1.0.0, Culture=neutral, PublicKeyToken=7735eb81c0bd9948, processorArchitecture=MSIL">
-    <SpecificVersion>False</SpecificVersion>
-    <HintPath>..\..\..\libs\EventStore\EventStore.dll</HintPath>
-  </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
     </Reference>
@@ -58,18 +54,6 @@
     <Compile Include="Agent\AgentSpecsWithTwoPeojects.cs" />
     <Compile Include="Agent\AgentJoinsThePartySpec.cs" />
     <Compile Include="FileFinderSpecs.cs" />
-    <Compile Include="PipelineStatusViewSpecs\BuildStatusUpdating.cs" />
-    <Compile Include="PipelineStatusViewSpecs\StatusViewAfterBuildCompletedSuccessfullySpec.cs" />
-    <Compile Include="PipelineStatusViewSpecs\StatusViewAfterBuildCompletedWithErrorSpec.cs" />
-    <Compile Include="PipelineStatusViewSpecs\StatusViewAfterBuildStarterSpec.cs" />
-    <Compile Include="PipelineStatusViewSpecs\StatusViewAfterBuildUpdateSpec.cs" />
-    <Compile Include="PipelineStatusViewSpecs\StatusViewAfterTheFirstBuildIsCompleteAndNewOneStarts.cs" />
-    <Compile Include="PipelineStatusViewSpecs\StatusViewContractBase.cs" />
-    <Compile Include="PipelineStatusViewSpecs\StatusViewCurrentBuildPublicRepo.cs" />
-    <Compile Include="PipelineStatusViewSpecs\StatusViewCurrentBuildPrivateRepo.cs" />
-    <Compile Include="PipelineStatusViewSpecs\StatusViewListOfBuilds.cs" />
-    <Compile Include="PipelineStatusViewSpecs\StatusViewProjectCheckedOut.cs" />
-    <Compile Include="PipelineStatusViewSpecs\StatusViewTaskUpdateSetsTheTerminalId.cs" />
     <Compile Include="Pipeline\PipelineHandlesExecTaskException.cs" />
     <Compile Include="Pipeline\PipelineProcessFaultyBuild.cs" />
     <Compile Include="Pipeline\PipelineProcessSpecBase.cs" />
@@ -93,7 +77,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="TaskDetection\NUnitTaskDetectorSpecs.cs" />
-    <Compile Include="TerminalOutputConsolidationMethod.cs" />
     <Compile Include="TestTypes.cs" />
     <Compile Include="WorkerSpecs\WorkerHandlesExceptions.cs" />
     <Compile Include="WorkerSpecs\WorkerPropagetesTerminalUpdateEvents.cs" />
@@ -131,5 +114,7 @@
     </None>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="PipelineStatusViewSpecs\" />
+  </ItemGroup>
 </Project>

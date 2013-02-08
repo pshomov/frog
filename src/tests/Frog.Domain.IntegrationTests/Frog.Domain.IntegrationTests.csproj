@@ -31,28 +31,6 @@
     <DefineConstants>DEBUG</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EventStore, Version=3.1.0.0, Culture=neutral, PublicKeyToken=7735eb81c0bd9948, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\libs\EventStore\EventStore.dll</HintPath>
-    </Reference>
-    <Reference Include="EventStore.Persistence.MongoPersistence">
-      <HintPath>..\..\..\libs\EventStore\EventStore.Persistence.MongoPersistence.dll</HintPath>
-    </Reference>
-    <Reference Include="EventStore.Persistence.MongoPersistence.Wireup">
-      <HintPath>..\..\..\libs\EventStore\EventStore.Persistence.MongoPersistence.Wireup.dll</HintPath>
-    </Reference>
-    <Reference Include="EventStore.Serialization, Version=3.1.0.0, Culture=neutral, PublicKeyToken=7735eb81c0bd9948, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\libs\EventStore\EventStore.Serialization.dll</HintPath>
-    </Reference>
-    <Reference Include="EventStore.Wireup, Version=3.1.0.0, Culture=neutral, PublicKeyToken=7735eb81c0bd9948, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\libs\EventStore\EventStore.Wireup.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=4.0.2.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\libs\CorrugatedIron\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="NSubstitute">
       <HintPath>..\..\..\libs\NSubstitute\NSubstitute.dll</HintPath>
     </Reference>
@@ -71,8 +49,6 @@
     <Compile Include="Git\GitRepositoryGetSourceRev.cs" />
     <Compile Include="PathGoble\GobleTests.cs" />
     <Compile Include="ProcessHandlerSpecs.cs" />
-    <Compile Include="ProjectView\EventBasedProjectView.cs" />
-    <Compile Include="ProjectView\ProjectViewSpecs.cs" />
     <Compile Include="RabbitMQ\MessageBusChecksIfShouldContinue.cs" />
     <Compile Include="RabbitMQ\RabbitMQBasicMessagingTest.cs" />
     <Compile Include="ProjectRepository\InMemoryProjectsRepositorySpec.cs" />
@@ -85,11 +61,6 @@
     <Compile Include="Task\TasksGetKilledIfTheyHaveNoActivity.cs" />
     <Compile Include="Task\TasksHaveQuotaOnRunTime.cs" />
     <Compile Include="Task\TaskSpec.cs" />
-    <Compile Include="TerminalView\AddTerminalOutput.cs" />
-    <Compile Include="TerminalView\TerminalOutputAFewEvents.cs" />
-    <Compile Include="TerminalView\TerminalOutputNoEvents.cs" />
-    <Compile Include="TerminalView\TerminalOutputOneUpdateSpec.cs" />
-    <Compile Include="TerminalView\TerminalOutputSpecBase.cs" />
     <Compile Include="WorkingAreaAllocation.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
@@ -119,5 +90,9 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ProjectView\" />
+    <Folder Include="TerminalView\" />
   </ItemGroup>
 </Project>

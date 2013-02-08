@@ -4,7 +4,6 @@ using System.IO;
 using System.Web.Mvc;
 using System.Web.Routing;
 using Frog.Domain.Integration;
-using Frog.Domain.Integration.UI;
 using Frog.Support;
 using Lokad.Cqrs;
 using Lokad.Cqrs.AtomicStorage;
@@ -78,10 +77,10 @@ namespace Frog.UI.Web
             var path = integrationPath.Remove(0, 5);
             var config = FileStorage.CreateConfig(path);
 
-            var eventStore = Config.WireupEventStore();
-            ServiceLocator.ProjectStatus = new EventBasedProjectView(eventStore);
-            ServiceLocator.TerminalOutputStatus = new EventBasedViewForTerminalOutput(eventStore);
-            ServiceLocator.BuildStatus = new EventBasedProjectView(eventStore);
+//            var eventStore = Config.WireupEventStore();
+//            ServiceLocator.ProjectStatus = new EventBasedProjectView(eventStore);
+//            ServiceLocator.TerminalOutputStatus = new EventBasedViewForTerminalOutput(eventStore);
+//            ServiceLocator.BuildStatus = new EventBasedProjectView(eventStore);
             ServiceLocator.Bus = theBus;
             ServiceLocator.AllMessages = new ConcurrentQueue<Message>();
             ServiceLocator.Store = config.CreateDocumentStore(new ViewStrategy());
@@ -105,8 +104,6 @@ namespace Frog.UI.Web
                             new { controller = "Project" });
             routes.MapRoute("github_register_project", "project/register",
                             new { controller = "RegisterProject", action = "index" });
-            routes.MapRoute("check_projects_for_updates", "system/check",
-                            new { controller = "System", action = "check" });
         }
     }
 

@@ -44,26 +44,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EventStore, Version=3.1.0.0, Culture=neutral, PublicKeyToken=7735eb81c0bd9948, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\libs\EventStore\EventStore.dll</HintPath>
-    </Reference>
-    <Reference Include="EventStore.Persistence.MongoPersistence, Version=3.1.0.0, Culture=neutral, PublicKeyToken=7735eb81c0bd9948, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\libs\EventStore\EventStore.Persistence.MongoPersistence.dll</HintPath>
-    </Reference>
-    <Reference Include="EventStore.Persistence.MongoPersistence.Wireup, Version=3.1.0.0, Culture=neutral, PublicKeyToken=7735eb81c0bd9948, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\libs\EventStore\EventStore.Persistence.MongoPersistence.Wireup.dll</HintPath>
-    </Reference>
-    <Reference Include="EventStore.Serialization, Version=3.1.0.0, Culture=neutral, PublicKeyToken=7735eb81c0bd9948, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\libs\EventStore\EventStore.Serialization.dll</HintPath>
-    </Reference>
-    <Reference Include="EventStore.Wireup, Version=3.1.0.0, Culture=neutral, PublicKeyToken=7735eb81c0bd9948, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\libs\EventStore\EventStore.Wireup.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -87,7 +67,6 @@
     <Compile Include="Controllers\DiagnosticsController.cs" />
     <Compile Include="Controllers\ProjectController.cs" />
     <Compile Include="Controllers\RegisterProjectController.cs" />
-    <Compile Include="Controllers\SystemController.cs" />
     <Compile Include="Controllers\TestSupport\TestProjectController.cs" />
     <Compile Include="Controllers\TestSupport\TestRegisterProjectController.cs" />
     <Compile Include="Global.asax.cs">
