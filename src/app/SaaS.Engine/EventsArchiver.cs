@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Linq;
-using System.Web.Script.Serialization;
-using Frog.Domain;
 using Frog.Domain.RepositoryTracker;
-using Mono.Collections.Generic;
+using Newtonsoft.Json;
 using SimpleCQRS;
 using EventStore = SaaS.Wires.EventStore;
 
@@ -15,7 +13,6 @@ namespace SaaS.Engine
         {
             this.bus = bus;
             this.store = store;
-            jsonSerializer = new JavaScriptSerializer();
         }
 
         public void JoinTheParty()
@@ -25,7 +22,6 @@ namespace SaaS.Engine
 
         readonly IBus bus;
         readonly EventStore store;
-        JavaScriptSerializer jsonSerializer;
         Type[] eventsToTranslate = new[] { typeof(RepositoryRegistered), typeof(Frog.Domain.BuildStarted), typeof(Frog.Domain.BuildEnded), typeof(Frog.Domain.BuildUpdated), typeof(Frog.Domain.TerminalUpdate) };
 
         void Handle(string message, string exchange)
@@ -34,7 +30,7 @@ namespace SaaS.Engine
             if (types.Count == 1)
             {
                 var targetType = types.First();
-                var msg = jsonSerializer.Deserialize(message, targetType);
+                var msg = JsonConvert.DeserializeObject(message, targetType);
                 if (targetType == typeof (Frog.Domain.BuildStarted))
                 {
                     var ev = (Frog.Domain.BuildStarted) msg;
