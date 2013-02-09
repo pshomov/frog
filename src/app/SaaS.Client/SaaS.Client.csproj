@@ -41,8 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="LoginView.cs" />
-    <Compile Include="Projections\Frog\Projects\RegisteredUsers.cs" />
+    <Compile Include="Projections\Frog\Projects\BuildViewProjection.cs" />
+    <Compile Include="Projections\Frog\Projects\ProjectsListViewProjection.cs" />
     <Compile Include="Projections\LoginIndex\LoginsIndexView.cs" />
     <Compile Include="ClientBoundedContext.cs" />
     <Compile Include="Projections\LoginView\LoginView.cs" />

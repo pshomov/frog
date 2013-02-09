@@ -22,7 +22,7 @@ namespace SaaS.Engine
 
         readonly IBus bus;
         readonly EventStore store;
-        Type[] eventsToTranslate = new[] { typeof(RepositoryRegistered), typeof(Frog.Domain.BuildStarted), typeof(Frog.Domain.BuildEnded), typeof(Frog.Domain.BuildUpdated), typeof(Frog.Domain.TerminalUpdate) };
+        readonly Type[] eventsToTranslate = new[] { typeof(RepositoryRegistered), typeof(Frog.Domain.BuildStarted), typeof(Frog.Domain.BuildEnded), typeof(Frog.Domain.BuildUpdated), typeof(Frog.Domain.TerminalUpdate) };
 
         void Handle(string message, string exchange)
         {
@@ -43,16 +43,34 @@ namespace SaaS.Engine
                     store.AppendEventsToStream(conv.Id, ev.SequenceId-1, new[]{conv});
 
                 } else
+                if (targetType == typeof (Frog.Domain.BuildUpdated))
+                {
+                    var ev = (Frog.Domain.BuildUpdated) msg;
+                    var conv = new BuildUpdated(new BuildId(ev.BuildId), ev.TaskIndex, (TaskStatus) ev.TaskStatus);
+                    store.AppendEventsToStream(conv.Id, ev.SequenceId-1, new[]{conv});
+
+                } else
+                if (targetType == typeof (Frog.Domain.TerminalUpdate))
+                {
+                    var ev = (Frog.Domain.TerminalUpdate) msg;
+                    var conv = new TerminalUpdated(new TerminalId(ev.TerminalId), ev.Content, ev.ContentSequenceIndex, new BuildId(ev.BuildId));
+                    store.AppendEventsToStream(conv.Id, ev.SequenceId-1, new[]{conv});
+
+                } else
+                if (targetType == typeof (Frog.Domain.BuildEnded))
+                {
+                    var ev = (Frog.Domain.BuildEnded) msg;
+                    var conv = new BuildEnded(new BuildId(ev.BuildId), (BuildTotalEndStatus) ev.TotalStatus);
+                    store.AppendEventsToStream(conv.Id, ev.SequenceId-1, new[]{conv});
+
+                } else
                 if (targetType == typeof (RepositoryRegistered))
                 {
                     var ev = (RepositoryRegistered) msg;
                     var conv = new ProjectRegistered(new ProjectId(ev.RepoUrl), ev.RepoUrl );
                     store.AppendEventsToStream(conv.Id, -1, new[]{conv});
                 }
-//                store.AppendEventsToStream();
-
             }
-//            store.AppendEventsToStream();
         }
     }
 }

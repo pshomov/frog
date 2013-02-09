@@ -12,7 +12,7 @@ public partial class TaskInfo
     {
         [DataMember(Order = 1)] public TerminalId Id { get; private set; }
         [DataMember(Order = 2)] public string Name { get; private set; }
-        [DataMember(Order = 3)] public TaskStatus Status { get; private set; }
+        [DataMember(Order = 3)] public TaskStatus Status { get; set; }
         
         TaskInfo () {}
         public TaskInfo (TerminalId id, string name, TaskStatus status)
