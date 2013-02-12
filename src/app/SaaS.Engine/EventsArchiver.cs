@@ -34,7 +34,7 @@ namespace SaaS.Engine
                 if (targetType == typeof (Frog.Domain.BuildStarted))
                 {
                     var ev = (Frog.Domain.BuildStarted) msg;
-                    var conv = new BuildStarted(new BuildId(ev.BuildId), ev.RepoUrl,
+                    var conv = new BuildStarted(new BuildId(ev.BuildId), new ProjectId(ev.RepoUrl),
                                                 new PipelineStatus(
                                                     ev.Status.Tasks.Select(
                                                         info =>
@@ -46,21 +46,21 @@ namespace SaaS.Engine
                 if (targetType == typeof (Frog.Domain.BuildUpdated))
                 {
                     var ev = (Frog.Domain.BuildUpdated) msg;
-                    var conv = new BuildUpdated(new BuildId(ev.BuildId), ev.TaskIndex, (TaskStatus) ev.TaskStatus);
+                    var conv = new BuildUpdated(new BuildId(ev.BuildId),new ProjectId(ev.RepoURL),  ev.TaskIndex, (TaskStatus) ev.TaskStatus);
                     store.AppendEventsToStream(conv.Id, ev.SequenceId-1, new[]{conv});
 
                 } else
                 if (targetType == typeof (Frog.Domain.TerminalUpdate))
                 {
                     var ev = (Frog.Domain.TerminalUpdate) msg;
-                    var conv = new TerminalUpdated(new TerminalId(ev.TerminalId), ev.Content, ev.ContentSequenceIndex, new BuildId(ev.BuildId));
+                    var conv = new TerminalUpdated(new TerminalId(ev.TerminalId), new BuildId(ev.BuildId), new ProjectId(ev.RepoURL), ev.Content, ev.ContentSequenceIndex);
                     store.AppendEventsToStream(conv.Id, ev.SequenceId-1, new[]{conv});
 
                 } else
                 if (targetType == typeof (Frog.Domain.BuildEnded))
                 {
                     var ev = (Frog.Domain.BuildEnded) msg;
-                    var conv = new BuildEnded(new BuildId(ev.BuildId), (BuildTotalEndStatus) ev.TotalStatus);
+                    var conv = new BuildEnded(new BuildId(ev.BuildId), new ProjectId(ev.RepoURL), (BuildTotalEndStatus) ev.TotalStatus);
                     store.AppendEventsToStream(conv.Id, ev.SequenceId-1, new[]{conv});
 
                 } else

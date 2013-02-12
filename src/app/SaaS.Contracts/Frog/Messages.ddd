@@ -3,21 +3,22 @@ extern "Frog.Stuff";        // namespace for code contracts over the wire
 
 TaskInfo(TerminalId id, string name, TaskStatus status)
 PipelineStatus(TaskInfo[] tasks)
+CheckoutInfo(string comment, string revision)
 
 interface Build(BuildId id)
 {
 	if ! = IEvent<BuildId>;
 
-    BuildStarted! (string repoUrl, PipelineStatus status)
-        explicit "It is done"
-    BuildEnded! (BuildTotalEndStatus status)
-    BuildUpdated! (int taskIndex, TaskStatus taskStatus)
+	ProjectCheckedOut! (ProjectId projectId, string repoUrl, CheckoutInfo info)
+    BuildStarted! (ProjectId projectId, PipelineStatus status)
+    BuildEnded! (ProjectId projectId, BuildTotalEndStatus status)
+    BuildUpdated! (ProjectId projectId, int taskIndex, TaskStatus taskStatus)
 }
 
 interface Task(TerminalId id)
 {
 	if ! = IEvent<TerminalId>;
-	TerminalUpdated! (string content, int contentSequnceIndex, BuildId buildId)
+	TerminalUpdated! (BuildId buildId, ProjectId projectId, string content, int contentSequnceIndex)
 }
 
 interface Project(ProjectId id)

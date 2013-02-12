@@ -1,10 +1,11 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
 using Lokad.Cqrs;
 using Lokad.Cqrs.AtomicStorage;
 using SaaS.Engine;
 
-namespace SaaS.Client.Projections.Releases
+namespace SaaS.Client.Projections.Frog.Projects
 {
     [DataContract]
     public sealed class Projects
@@ -15,6 +16,11 @@ namespace SaaS.Client.Projections.Releases
         public Projects()
         {
             Items = new List<Project>();
+        }
+
+        public bool IsProjectRegistered(string projectUrl)
+        {
+            return Items.Count(project => project.Url == projectUrl) == 1;
         }
     }
 

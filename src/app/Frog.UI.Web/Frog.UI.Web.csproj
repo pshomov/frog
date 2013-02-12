@@ -165,6 +165,10 @@
       <Project>{F31841AC-CA87-4441-B906-6D4502307E97}</Project>
       <Name>SaaS.Client</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SaaS.Contracts\SaaS.Contracts.csproj">
+      <Project>{2A4A9A2C-5D8D-4078-B118-02A1D386A9FA}</Project>
+      <Name>SaaS.Contracts</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SaaS.Wires\SaaS.Wires.csproj">
       <Project>{A6870FB6-D70D-4C70-81C8-74C191765FBC}</Project>
       <Name>SaaS.Wires</Name>

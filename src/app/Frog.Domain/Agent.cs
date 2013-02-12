@@ -67,17 +67,19 @@ namespace Frog.Domain
         public TaskInfo.TaskStatus TaskStatus { get; set; }
 
         public Guid TerminalId { get; private set; }
+        public string RepoURL { get; private set; }
 
         public BuildUpdated()
         {
         }
 
-        public BuildUpdated(Guid buildId, int taskIndex, TaskInfo.TaskStatus newStatus, int sequenceId, Guid terminalId)
+        public BuildUpdated(Guid buildId, string repoUrl, int taskIndex, TaskInfo.TaskStatus newStatus, int sequenceId, Guid terminalId)
             : base(buildId, sequenceId)
         {
             TaskIndex = taskIndex;
             TaskStatus = newStatus;
             TerminalId = terminalId;
+            RepoURL = repoUrl;
         }
     }
 
@@ -85,14 +87,17 @@ namespace Frog.Domain
     {
         public BuildTotalEndStatus TotalStatus { get; set; }
 
+        public string RepoURL { get; set; }
+
         public BuildEnded()
         {
         }
 
-        public BuildEnded(Guid buildId, BuildTotalEndStatus totalStatus, int sequenceId)
+        public BuildEnded(Guid buildId, string repoURL, BuildTotalEndStatus totalStatus, int sequenceId)
             : base(buildId, sequenceId)
         {
             TotalStatus = totalStatus;
+            RepoURL = repoURL;
         }
     }
 
@@ -105,11 +110,13 @@ namespace Frog.Domain
 
         public Guid TerminalId { get; set; }
 
+        public string RepoURL { get; set; }
+
         public TerminalUpdate()
         {
         }
 
-        public TerminalUpdate(string content, int taskIndex, int contentSequenceIndex, Guid buildId, int sequenceId,
+        public TerminalUpdate(string content, int taskIndex, int contentSequenceIndex, Guid buildId, string repoURL, int sequenceId,
                               Guid terminalId)
             : base(buildId, sequenceId)
         {
@@ -117,6 +124,7 @@ namespace Frog.Domain
             TaskIndex = taskIndex;
             ContentSequenceIndex = contentSequenceIndex;
             TerminalId = terminalId;
+            RepoURL = repoURL;
         }
     }
 
@@ -134,17 +142,18 @@ namespace Frog.Domain
         {
             NextEventId = 0;
             Action<BuildTotalEndStatus> onBuildEnded =
-                started => theBus.Publish(new BuildEnded(message.Id, started, NextEventId));
+                started => theBus.Publish(new BuildEnded(message.Id, message.RepoUrl, started, NextEventId));
             BuildStartedDelegate onBuildStarted =
                 started =>
                 theBus.Publish(new BuildStarted(buildId: message.Id, status: started, repoUrl: message.RepoUrl,
                                                 sequenceId: NextEventId));
             Action<int, Guid, TaskInfo.TaskStatus> onBuildUpdated =
                 (i, terminalId, status) =>
-                theBus.Publish(new BuildUpdated(buildId: message.Id, taskIndex: i, newStatus: status,
+                theBus.Publish(new BuildUpdated(buildId: message.Id, repoUrl:message.RepoUrl, taskIndex: i, newStatus: status,
                                                 sequenceId: NextEventId, terminalId: terminalId));
             Action<TerminalUpdateInfo> onTerminalUpdates = info =>
                                                            theBus.Publish(new TerminalUpdate(content: info.Content,
+                                                                                             repoURL: message.RepoUrl,
                                                                                              taskIndex: info.TaskIndex,
                                                                                              contentSequenceIndex:
                                                                                                  info.

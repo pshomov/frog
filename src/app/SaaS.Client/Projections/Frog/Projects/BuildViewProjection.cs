@@ -1,14 +1,13 @@
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Runtime.Serialization;
-using Lokad.Cqrs;
 using Lokad.Cqrs.AtomicStorage;
 using SaaS.Engine;
 
-namespace SaaS.Client.Projections.Releases
+namespace SaaS.Client.Projections.Frog.Projects
 {
     [DataContract]
-    public sealed class Build
+    public sealed class Build            
     {
         public enum BuildOverallStatus
         {
@@ -20,6 +19,8 @@ namespace SaaS.Client.Projections.Releases
         public Dictionary<TerminalId, List<string>> TerminalOutput { get; set; }
         [DataMember(Order = 3)]
         public BuildOverallStatus Status;
+
+        public static Build None = new Build();
 
         public Build()
         {
@@ -42,31 +43,22 @@ namespace SaaS.Client.Projections.Releases
 
         public void When(BuildStarted e)
         {
-            writer.UpdateEnforcingNew(e.Id, view =>
-                {
-                    view.Tasks = new List<TaskInfo>(e.Status.Tasks);
-                    view.Tasks.ForEach(info => view.TerminalOutput[info.Id] = new List<string>());
-                    view.Status = Build.BuildOverallStatus.Started;
-                });
+            writer.UpdateEnforcingNew(e.Id, view => BuildProjection.OnBuildStarted(e, view));
         }
 
         public void When(BuildUpdated e)
         {
-            writer.UpdateOrThrow(e.Id, view => view.Tasks[e.TaskIndex].Status = e.TaskStatus);
+            writer.UpdateOrThrow(e.Id, view => BuildProjection.OnBuildUpdated(e, view));
         }
 
         public void When(TerminalUpdated e)
         {
-            writer.UpdateOrThrow(e.BuildId, view =>
-                {
-                    Contract.Requires(e.ContentSequnceIndex == view.TerminalOutput[e.Id].Count);
-                    view.TerminalOutput[e.Id].Add(e.Content);
-                });
+            writer.UpdateOrThrow(e.BuildId, view => BuildProjection.OnTerminalOutput(e, view));
         }
 
         public void When(BuildEnded e)
         {
-            writer.UpdateOrThrow(e.Id, view => view.Status = e.Status == BuildTotalEndStatus.Error ? Build.BuildOverallStatus.EndedFailure : Build.BuildOverallStatus.EndedSuccess);
+            writer.UpdateOrThrow(e.Id, view => BuildProjection.OnBuildEnded(e, view));
         }
     }
 }

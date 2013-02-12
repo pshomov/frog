@@ -12,7 +12,7 @@ public partial class TaskInfo
     {
         [DataMember(Order = 1)] public TerminalId Id { get; private set; }
         [DataMember(Order = 2)] public string Name { get; private set; }
-        [DataMember(Order = 3)] public TaskStatus Status { get; set; }
+        [DataMember(Order = 3)] public TaskStatus Status { get; private set; }
         
         TaskInfo () {}
         public TaskInfo (TerminalId id, string name, TaskStatus status)
@@ -37,35 +37,62 @@ public partial class PipelineStatus
         }
     }
     [DataContract(Namespace = "Frog.Stuff")]
+public partial class CheckoutInfo
+    {
+        [DataMember(Order = 1)] public string Comment { get; private set; }
+        [DataMember(Order = 2)] public string Revision { get; private set; }
+        
+        CheckoutInfo () {}
+        public CheckoutInfo (string comment, string revision)
+        {
+            Comment = comment;
+            Revision = revision;
+        }
+    }
+    [DataContract(Namespace = "Frog.Stuff")]
+public partial class ProjectCheckedOut : IEvent<BuildId>
+    {
+        [DataMember(Order = 1)] public BuildId Id { get; private set; }
+        [DataMember(Order = 2)] public ProjectId ProjectId { get; private set; }
+        [DataMember(Order = 3)] public string RepoUrl { get; private set; }
+        [DataMember(Order = 4)] public CheckoutInfo Info { get; private set; }
+        
+        ProjectCheckedOut () {}
+        public ProjectCheckedOut (BuildId id, ProjectId projectId, string repoUrl, CheckoutInfo info)
+        {
+            Id = id;
+            ProjectId = projectId;
+            RepoUrl = repoUrl;
+            Info = info;
+        }
+    }
+    [DataContract(Namespace = "Frog.Stuff")]
 public partial class BuildStarted : IEvent<BuildId>
     {
         [DataMember(Order = 1)] public BuildId Id { get; private set; }
-        [DataMember(Order = 2)] public string RepoUrl { get; private set; }
+        [DataMember(Order = 2)] public ProjectId ProjectId { get; private set; }
         [DataMember(Order = 3)] public PipelineStatus Status { get; private set; }
         
         BuildStarted () {}
-        public BuildStarted (BuildId id, string repoUrl, PipelineStatus status)
+        public BuildStarted (BuildId id, ProjectId projectId, PipelineStatus status)
         {
             Id = id;
-            RepoUrl = repoUrl;
+            ProjectId = projectId;
             Status = status;
-        }
-        
-        public override string ToString()
-        {
-            return string.Format(@"It is done");
         }
     }
     [DataContract(Namespace = "Frog.Stuff")]
 public partial class BuildEnded : IEvent<BuildId>
     {
         [DataMember(Order = 1)] public BuildId Id { get; private set; }
-        [DataMember(Order = 2)] public BuildTotalEndStatus Status { get; private set; }
+        [DataMember(Order = 2)] public ProjectId ProjectId { get; private set; }
+        [DataMember(Order = 3)] public BuildTotalEndStatus Status { get; private set; }
         
         BuildEnded () {}
-        public BuildEnded (BuildId id, BuildTotalEndStatus status)
+        public BuildEnded (BuildId id, ProjectId projectId, BuildTotalEndStatus status)
         {
             Id = id;
+            ProjectId = projectId;
             Status = status;
         }
     }
@@ -73,13 +100,15 @@ public partial class BuildEnded : IEvent<BuildId>
 public partial class BuildUpdated : IEvent<BuildId>
     {
         [DataMember(Order = 1)] public BuildId Id { get; private set; }
-        [DataMember(Order = 2)] public int TaskIndex { get; private set; }
-        [DataMember(Order = 3)] public TaskStatus TaskStatus { get; private set; }
+        [DataMember(Order = 2)] public ProjectId ProjectId { get; private set; }
+        [DataMember(Order = 3)] public int TaskIndex { get; private set; }
+        [DataMember(Order = 4)] public TaskStatus TaskStatus { get; private set; }
         
         BuildUpdated () {}
-        public BuildUpdated (BuildId id, int taskIndex, TaskStatus taskStatus)
+        public BuildUpdated (BuildId id, ProjectId projectId, int taskIndex, TaskStatus taskStatus)
         {
             Id = id;
+            ProjectId = projectId;
             TaskIndex = taskIndex;
             TaskStatus = taskStatus;
         }
@@ -88,17 +117,19 @@ public partial class BuildUpdated : IEvent<BuildId>
 public partial class TerminalUpdated : IEvent<TerminalId>
     {
         [DataMember(Order = 1)] public TerminalId Id { get; private set; }
-        [DataMember(Order = 2)] public string Content { get; private set; }
-        [DataMember(Order = 3)] public int ContentSequnceIndex { get; private set; }
-        [DataMember(Order = 4)] public BuildId BuildId { get; private set; }
+        [DataMember(Order = 2)] public BuildId BuildId { get; private set; }
+        [DataMember(Order = 3)] public ProjectId ProjectId { get; private set; }
+        [DataMember(Order = 4)] public string Content { get; private set; }
+        [DataMember(Order = 5)] public int ContentSequnceIndex { get; private set; }
         
         TerminalUpdated () {}
-        public TerminalUpdated (TerminalId id, string content, int contentSequnceIndex, BuildId buildId)
+        public TerminalUpdated (TerminalId id, BuildId buildId, ProjectId projectId, string content, int contentSequnceIndex)
         {
             Id = id;
+            BuildId = buildId;
+            ProjectId = projectId;
             Content = content;
             ContentSequnceIndex = contentSequnceIndex;
-            BuildId = buildId;
         }
     }
     [DataContract(Namespace = "Frog.Stuff")]
@@ -127,6 +158,7 @@ public partial class ProjectRegistered : IEvent<ProjectId>
     
     public interface IBuildState
     {
+        void When(ProjectCheckedOut e);
         void When(BuildStarted e);
         void When(BuildEnded e);
         void When(BuildUpdated e);

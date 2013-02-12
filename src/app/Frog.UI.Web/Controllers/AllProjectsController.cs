@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using Frog.UI.Web.HttpHelpers;
 using Lokad.Cqrs;
+using SaaS.Client.Projections.Frog.Projects;
 using SaaS.Client.Projections.Releases;
 
 namespace Frog.UI.Web.Controllers
