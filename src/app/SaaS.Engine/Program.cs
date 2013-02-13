@@ -10,12 +10,12 @@ using SimpleCQRS;
 
 namespace SaaS.Engine
 {
-    class Program
+    public class Program
     {
         static void Main()
         {
             var bus = SetupBus();
-            using (var env = BuildEnvironment())
+            using (var env = BuildEnvironment(false, OSHelpers.LokadStorePath()))
             using (var cts = new CancellationTokenSource())
             {
                 env.ExecuteStartupTasks(cts.Token);
@@ -49,30 +49,25 @@ namespace SaaS.Engine
             Context.SwapForDebug(s => SystemObserver.Notify(s));
         }
 
-        public static Container BuildEnvironment()
+        public static Container BuildEnvironment(bool reset_store, string storePath)
         {
             ConfigureObserver();
-            var integrationPath = "file:/lokad/runz";
             var setup = new Setup();
 
-            if (integrationPath.StartsWith("file:"))
-            {
-                var path = integrationPath.Remove(0, 5);
+            var lokadStorePath = storePath;
+            SystemObserver.Notify("Using store : {0}", lokadStorePath);
 
-                SystemObserver.Notify("Using store : {0}", path);
+            var config = FileStorage.CreateConfig(lokadStorePath, reset: reset_store);
 
-                var config = FileStorage.CreateConfig(path);
-                setup.Streaming = config.CreateStreaming();
-                setup.DocumentStoreFactory = config.CreateDocumentStore;
-                setup.QueueReaderFactory = s => config.CreateInbox(s, DecayEvil.BuildExponentialDecay(500));
-                setup.QueueWriterFactory = config.CreateQueueWriter;
-                setup.AppendOnlyStoreFactory = config.CreateAppendOnlyStore;
+            setup.Streaming = config.CreateStreaming();
+            setup.DocumentStoreFactory = config.CreateDocumentStore;
+            setup.QueueReaderFactory = s => config.CreateInbox(s, DecayEvil.BuildExponentialDecay(500));
+            setup.QueueWriterFactory = config.CreateQueueWriter;
+            setup.AppendOnlyStoreFactory = config.CreateAppendOnlyStore;
 
-                setup.ConfigureQueues(1, 1);
+            setup.ConfigureQueues(1, 1);
 
-                return setup.Build();
-            }
-            throw new InvalidOperationException("Unsupported environment");
+            return setup.Build();
         }
     }
 }

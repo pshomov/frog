@@ -27,6 +27,11 @@ namespace Frog.System.Specs.GetLatestRevision
             system.CheckProjectsForUpdates();
         }
 
+        protected override void GivenCleanup()
+        {
+            system.Stop();
+        }
+
         [Test]
         public void should_check_for_new_revision_and_request_a_build_of_it()
         {

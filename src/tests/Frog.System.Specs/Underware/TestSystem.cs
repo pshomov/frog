@@ -1,14 +1,19 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Threading;
 using Frog.Domain;
 using Frog.Domain.RepositoryTracker;
 using Frog.Domain.RevisionChecker;
 using Frog.Domain.TaskSources;
 using Frog.Specs.Support;
 using Frog.Support;
+using Lokad.Cqrs.Build;
 using NSubstitute;
+using SaaS.Engine;
+using SaaS.Wires;
 using SimpleCQRS;
+using Task = System.Threading.Tasks.Task;
 
 namespace Frog.System.Specs.Underware
 {
@@ -21,7 +26,11 @@ namespace Frog.System.Specs.Underware
         Worker worker;
 
         public TaskSource TasksSource;
-//        public IStoreEvents Store;
+        Container env;
+        CancellationTokenSource cts;
+        CqrsEngineHost engine;
+        Task task;
+        EventsArchiver eventsArchiver;
         public RepositoryTracker repositoryTracker { get; private set; }
 
         public TestSystem(WorkingAreaGoverner governer, SourceRepoDriverFactory sourceRepoDriverFactory, bool runRevisionChecker = true)
@@ -33,14 +42,21 @@ namespace Frog.System.Specs.Underware
             SetupRepositoryTracker();
             if (runRevisionChecker) new RevisionChecker(TheBus, sourceRepoDriverFactory).JoinTheParty();
             SetupAgent(sourceRepoDriverFactory);
-//            Store = StoreFactory.WireupEventStore();
-//            Store.Advanced.Purge();
-//            Views = new EventBasedProjectView(Store);
-//            TerminalStatusView = new EventBasedViewForTerminalOutput(Store);
-//            Setup.SetupView(TheBus, Store);
+            SetupProjections(TheBus);
 
             messages = new List<Message>();
             SetupAllEventLogging();
+        }
+
+        void SetupProjections(IBus bus)
+        {
+            env = Program.BuildEnvironment(true, @"c:\lokad\system_tests");
+            cts = new CancellationTokenSource();
+            env.ExecuteStartupTasks(cts.Token);
+            engine = env.BuildEngine(cts.Token);
+            task = engine.Start(cts.Token);
+            eventsArchiver = new EventsArchiver(bus, env.Store);
+            eventsArchiver.JoinTheParty();
         }
 
 
@@ -66,6 +82,13 @@ namespace Frog.System.Specs.Underware
 
         public void CleanupTestSystem()
         {
+            cts.Cancel();
+            if (!task.Wait(5000))
+            {
+                Console.WriteLine(@"Terminating");
+            }
+            engine.Dispose();
+            env.Dispose();
             messages.Clear();
         }
 
@@ -136,6 +159,11 @@ namespace Frog.System.Specs.Underware
         public void Build(string repoUrl, RevisionInfo revision, Guid buildId)
         {
             theTestSystem.TheBus.Send(new Build {RepoUrl = repoUrl, Revision = revision, Id = buildId});
+        }
+
+        public void Stop()
+        {
+            theTestSystem.CleanupTestSystem();
         }
     }
 }

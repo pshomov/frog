@@ -7,7 +7,6 @@ namespace SimpleCQRS
     public interface IBus : ICommandSender, IEventPublisher
     {
         void RegisterHandler<T>(Action<T> handler, string handlerId) where T : Message;
-        void RegisterHandler(Action<string, string> handler, string handlerId);
     }
 
     public interface IBusDebug
@@ -28,11 +27,6 @@ namespace SimpleCQRS
                 _routes.Add(typeof(T), handlers);
             }
             handlers.Add(DelegateAdjuster.CastArgument<Message, T>(x => handler(x)));
-        }
-
-        public void RegisterHandler(Action<string, string> handler, string handlerId)
-        {
-            throw new NotImplementedException();
         }
 
         public void Send<T>(T command) where T : Command

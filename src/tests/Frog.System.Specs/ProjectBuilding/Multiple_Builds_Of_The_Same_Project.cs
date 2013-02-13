@@ -43,6 +43,11 @@ namespace Frog.System.Specs.ProjectBuilding
             system.Build(RepoUrl, new RevisionInfo { Revision = "123" }, newGuid);
         }
 
+        protected override void GivenCleanup()
+        {
+            system.Stop();
+        }
+
 //        [Test]
 //        public void should_make_the_last_build_the_current_one()
 //        {

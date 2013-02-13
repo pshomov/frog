@@ -149,6 +149,11 @@ namespace Frog.System.Specs.ProjectBuilding
                                                   ))));
         }
 
+        protected override void GivenCleanup()
+        {
+            system.Stop();
+        }
+
 //        [Test]
 //        public void should_have_the_build_as_the_current_one_in_the_ui()
 //        {

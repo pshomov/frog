@@ -106,49 +106,6 @@ namespace Frog.Domain.Integration
             }
         }
 
-        public void RegisterHandler(Action<string,string> handler, string handlerId)
-        {
-            using (var channel = connection.CreateModel())
-            {
-                channel.QueueDeclare(handlerId, false, false, false, null);
-                channel.TxSelect();
-            }
-            var job = new Thread(() =>
-            {
-                using (var channel = connection.CreateModel())
-                {
-                    var consumer = new QueueingBasicConsumer(channel);
-                    channel.BasicConsume(handlerId, false, consumer);
-                    while (true)
-                    {
-                        BasicDeliverEventArgs e = null;
-                        try
-                        {
-                            e = (BasicDeliverEventArgs)consumer.Queue.Dequeue();
-                            handler(Encoding.UTF8.GetString(e.Body), e.Exchange);
-                            channel.BasicAck(e.DeliveryTag, false);
-                        }
-                        catch (EndOfStreamException)
-                        {
-                            break;
-                        }
-                        catch (OperationInterruptedException)
-                        {
-                            break;
-                        }
-                        catch (Exception ex)
-                        {
-                            HandleBadMessage(e, ex);
-                            channel.BasicReject(e.DeliveryTag, true);
-                        }
-                        if (StopHandling()) break;
-                    }
-                }
-            });
-            job.Start();
-            threads.Add(job);
-        }
-
         public void Publish<T>(T @event) where T : Event
         {
             eventsBatch.Enqueue(@event);

@@ -17,20 +17,25 @@ namespace SaaS.Engine
 
         public void JoinTheParty()
         {
-            bus.RegisterHandler(Handle, "all_messages");
+            bus.RegisterHandler<Message>(Handle, "all_messages");
         }
 
         readonly IBus bus;
         readonly EventStore store;
-        readonly Type[] eventsToTranslate = new[] { typeof(RepositoryRegistered), typeof(Frog.Domain.BuildStarted), typeof(Frog.Domain.BuildEnded), typeof(Frog.Domain.BuildUpdated), typeof(Frog.Domain.TerminalUpdate) };
+        readonly Type[] eventsToTranslate = new[] { typeof(Frog.Domain.ProjectCheckedOut), typeof(Frog.Domain.RepositoryTracker.RepositoryRegistered), typeof(Frog.Domain.BuildStarted), typeof(Frog.Domain.BuildEnded), typeof(Frog.Domain.BuildUpdated), typeof(Frog.Domain.TerminalUpdate) };
 
-        void Handle(string message, string exchange)
+        void Handle(Message msg)
         {
-            var types = eventsToTranslate.Where(type => type.Name.Equals(exchange, StringComparison.InvariantCultureIgnoreCase)).ToList();
+            var types = eventsToTranslate.Where(type => type.Name.Equals(msg.GetType().Name, StringComparison.InvariantCultureIgnoreCase)).ToList();
             if (types.Count == 1)
             {
                 var targetType = types.First();
-                var msg = JsonConvert.DeserializeObject(message, targetType);
+                if (targetType == typeof (Frog.Domain.ProjectCheckedOut))
+                {
+                    var ev = (Frog.Domain.ProjectCheckedOut) msg;
+                    var conv = new ProjectCheckedOut(new BuildId(ev.BuildId), new ProjectId(ev.RepoUrl), ev.RepoUrl, new CheckoutInfo(ev.CheckoutInfo.Comment, ev.CheckoutInfo.Revision));
+                    store.AppendEventsToStream(conv.Id, ev.SequenceId-1, new[]{conv});
+                } else
                 if (targetType == typeof (Frog.Domain.BuildStarted))
                 {
                     var ev = (Frog.Domain.BuildStarted) msg;
@@ -64,7 +69,7 @@ namespace SaaS.Engine
                     store.AppendEventsToStream(conv.Id, ev.SequenceId-1, new[]{conv});
 
                 } else
-                if (targetType == typeof (RepositoryRegistered))
+                if (targetType == typeof (Frog.Domain.RepositoryTracker.RepositoryRegistered))
                 {
                     var ev = (RepositoryRegistered) msg;
                     var conv = new ProjectRegistered(new ProjectId(ev.RepoUrl), ev.RepoUrl );

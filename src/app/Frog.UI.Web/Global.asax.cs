@@ -73,9 +73,7 @@ namespace Frog.UI.Web
         void WireUpUIModelInfrastructure()
         {
             var theBus = new RabbitMQBus(OSHelpers.RabbitHost());
-            var integrationPath = "file:/lokad/runz";
-            var path = integrationPath.Remove(0, 5);
-            var config = FileStorage.CreateConfig(path);
+            var config = FileStorage.CreateConfig(OSHelpers.LokadStorePath());
 
 //            var eventStore = Config.WireupEventStore();
 //            ServiceLocator.ProjectStatus = new EventBasedProjectView(eventStore);

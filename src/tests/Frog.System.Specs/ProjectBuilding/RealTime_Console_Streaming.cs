@@ -43,6 +43,12 @@ namespace Frog.System.Specs.ProjectBuilding
             system.CheckProjectsForUpdates();
         }
 
+        protected override void GivenCleanup()
+        {
+            system.Stop();
+        }
+
+
         [Test]
         public void should_send_TERMINAL_UPDATE_messages()
         {

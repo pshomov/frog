@@ -36,6 +36,11 @@ namespace Frog.System.Specs.GetLatestRevision
             system.CheckProjectsForUpdates();
         }
 
+        protected override void GivenCleanup()
+        {
+            system.Stop();
+        }
+
         [Test]
         public void should_send_CHECK_FOR_UPDATE_command_twice()
         {

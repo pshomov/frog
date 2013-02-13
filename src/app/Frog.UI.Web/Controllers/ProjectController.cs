@@ -3,11 +3,8 @@ using System.Linq;
 using System.Text;
 using System.Web.Mvc;
 using Frog.Domain;
-using Frog.Domain.RepositoryTracker;
 using Frog.UI.Web.HttpHelpers;
-using Lokad.Cqrs;
 using SaaS.Client.Projections.Frog.Projects;
-using SaaS.Client.Projections.Releases;
 using Lokad.Cqrs.AtomicStorage;
 using SaaS.Engine;
 
