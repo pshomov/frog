@@ -8,11 +8,13 @@ using Frog.Domain.RevisionChecker;
 using Frog.Domain.TaskSources;
 using Frog.Specs.Support;
 using Frog.Support;
+using Lokad.Cqrs.AtomicStorage;
 using Lokad.Cqrs.Build;
 using NSubstitute;
 using SaaS.Engine;
 using SaaS.Wires;
 using SimpleCQRS;
+using EventStore = SaaS.Wires.EventStore;
 using Task = System.Threading.Tasks.Task;
 
 namespace Frog.System.Specs.Underware
@@ -31,11 +33,15 @@ namespace Frog.System.Specs.Underware
         CqrsEngineHost engine;
         Task task;
         EventsArchiver eventsArchiver;
+        EventStore eventStore;
+        public IDocumentStore Store;
         public RepositoryTracker repositoryTracker { get; private set; }
 
         public TestSystem(WorkingAreaGoverner governer, SourceRepoDriverFactory sourceRepoDriverFactory, bool runRevisionChecker = true)
         {
             TheBus = SetupBus();
+            messages = new List<Message>();
+            SetupAllEventLogging();
 
             areaGoverner = governer;
             SetupWorker(GetPipeline());
@@ -43,19 +49,18 @@ namespace Frog.System.Specs.Underware
             if (runRevisionChecker) new RevisionChecker(TheBus, sourceRepoDriverFactory).JoinTheParty();
             SetupAgent(sourceRepoDriverFactory);
             SetupProjections(TheBus);
-
-            messages = new List<Message>();
-            SetupAllEventLogging();
         }
 
         void SetupProjections(IBus bus)
         {
-            env = Program.BuildEnvironment(true, @"c:\lokad\system_tests");
+            env = Program.BuildEnvironment(true, @"c:/lokad/system_tests");
+            eventStore = env.Store;
             cts = new CancellationTokenSource();
             env.ExecuteStartupTasks(cts.Token);
             engine = env.BuildEngine(cts.Token);
             task = engine.Start(cts.Token);
-            eventsArchiver = new EventsArchiver(bus, env.Store);
+            Store = env.ViewDocs;
+            eventsArchiver = new EventsArchiver(bus, eventStore);
             eventsArchiver.JoinTheParty();
         }
 
@@ -146,16 +151,6 @@ namespace Frog.System.Specs.Underware
             theTestSystem.repositoryTracker.CheckForUpdates();
         }
 
-//        public ProjectView GetProjectStatusView()
-//        {
-//            return theTestSystem.Views;
-//        }
-//
-//        public ViewForTerminalOutput GetTerminalStatusView()
-//        {
-//            return theTestSystem.TerminalStatusView;
-//        }
-
         public void Build(string repoUrl, RevisionInfo revision, Guid buildId)
         {
             theTestSystem.TheBus.Send(new Build {RepoUrl = repoUrl, Revision = revision, Id = buildId});
@@ -164,6 +159,19 @@ namespace Frog.System.Specs.Underware
         public void Stop()
         {
             theTestSystem.CleanupTestSystem();
+        }
+
+        public TEntity GetView<TKey, TEntity>(TKey id)
+        {
+            var view = default(TEntity);
+            var retry = 0;
+            while (!theTestSystem.Store.GetReader<TKey, TEntity>().TryGet(id, out view) && retry < 10)
+            {
+                Thread.Sleep(1000);
+                retry++;
+            };
+            if (view == null) throw new Exception(string.Format("Could not get entity of type {0} with id {1}", typeof(TEntity).Name, id));
+            return view;
         }
     }
 }

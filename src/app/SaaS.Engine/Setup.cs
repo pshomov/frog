@@ -71,7 +71,7 @@ namespace SaaS.Wires
             
 
             builder.Handle(QueueReaderFactory(EventProcessingQueue), aem => CallHandlers(events, aem), "watch");
-//            builder.Handle(QueueReaderFactory(AggregateHandlerQueue), aem => CallHandlers(commands, aem));
+            builder.Handle(QueueReaderFactory(AggregateHandlerQueue), aem => CallHandlers(commands, aem));
             builder.Handle(QueueReaderFactory(RouterQueueName), MakeRouter(messageStore), "watch");
             // multiple service queues
             _serviceQueues.ForEach(s => builder.Handle(QueueReaderFactory(s), aem => CallHandlers(funcs, aem)));

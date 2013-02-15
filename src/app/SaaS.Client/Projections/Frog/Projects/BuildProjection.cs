@@ -20,7 +20,8 @@ static internal class BuildProjection
 
     public static void OnTerminalOutput(TerminalUpdated e, Build view)
     {
-        Contract.Requires(e.ContentSequnceIndex == view.TerminalOutput[e.Id].Count);
+        var list = view.TerminalOutput[e.Id];
+        if (list == null) view.TerminalOutput[e.Id] = new List<string>();
         view.TerminalOutput[e.Id].Add(e.Content);
     }
 

@@ -56,6 +56,10 @@ namespace Lokad.Cqrs.AtomicStorage
             {
                 return false;
             }
+            catch (IOException)
+            {
+                return false;
+            }
         }
 
         string GetName(TKey key)
@@ -79,7 +83,7 @@ namespace Lokad.Cqrs.AtomicStorage
  
 
                 // we are locking this file.
-                using (var file = File.Open(name, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None))
+                using (var file = File.Open(name, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.Read))
                 {
                     byte[] initial = new byte[0];
                     TEntity result;

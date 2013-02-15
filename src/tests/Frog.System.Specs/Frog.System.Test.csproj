@@ -84,6 +84,10 @@
       <Project>{893935D3-935A-418F-A656-5D6A203D87ED}</Project>
       <Name>Frog.Support</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\app\SaaS.Client\SaaS.Client.csproj">
+      <Project>{F31841AC-CA87-4441-B906-6D4502307E97}</Project>
+      <Name>SaaS.Client</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\app\SaaS.Contracts\SaaS.Contracts.csproj">
       <Project>{2A4A9A2C-5D8D-4078-B118-02A1D386A9FA}</Project>
       <Name>SaaS.Contracts</Name>

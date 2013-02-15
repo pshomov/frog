@@ -8,14 +8,17 @@ using Frog.Support;
 using Frog.System.Specs.Underware;
 using NSubstitute;
 using NUnit.Framework;
+using SaaS.Engine;
 using xray;
+using BuildStarted = Frog.Domain.BuildStarted;
+using CheckoutInfo = Frog.Domain.CheckoutInfo;
 
 namespace Frog.System.Specs.ProjectBuilding
 {
     [TestFixture]
     public class RealTime_Console_Streaming : BDD
     {
-        private const string RepoUrl = "http://123";
+        private const string RepoUrl = "123";
         private SystemDriver system;
 
         protected override void Given()
@@ -48,11 +51,10 @@ namespace Frog.System.Specs.ProjectBuilding
             system.Stop();
         }
 
-
         [Test]
         public void should_send_TERMINAL_UPDATE_messages()
         {
-            var prober = new PollingProber(5000, 100);
+            var prober = new PollingProber(10000, 100);
             Guid buildId = Guid.Empty;
             Assert.True(prober.check(Take.Snapshot(() => system.GetEventsSnapshot())
                                          .Has(x => x, A.Command<Build>(ev =>
@@ -88,25 +90,25 @@ namespace Frog.System.Specs.ProjectBuilding
         [Test]
         public void should_update_view_with_terminal_updates()
         {
-//            var prober = new PollingProber(5000, 100);
-//            var terminalId1 = Guid.Empty;
-//            var terminalId2 = Guid.Empty;
-//            prober.check(Take.Snapshot(() => system.GetEventsSnapshot())
-//                             .Has(x => x, An.Event<BuildStarted>(ev =>
-//                                                               {
-//                                                                   terminalId1 = ev.Status.Tasks[0].TerminalId;
-//                                                                   terminalId2 = ev.Status.Tasks[1].TerminalId;
-//                                                                   return true;
-//                                                               })));
-//                        
-//            Assert.True(prober.check(Take.Snapshot(() => system.GetTerminalStatusView())
-//                                         .Has(statuses => statuses,
-//                                              A.Check<ViewForTerminalOutput>(
-//                                                  arg =>
-//                                                  arg.GetTerminalOutput(terminalId1).Match(
-//                                                      TerminalOutput1 + ".*\n.*" +
-//                                                      TerminalOutput2)))
-//                            ));
+            var prober = new PollingProber(5000, 100);
+            var terminalId1 = Guid.Empty;
+            var terminalId2 = Guid.Empty;
+            Guid buildId = Guid.Empty;
+            prober.check(Take.Snapshot(() => system.GetEventsSnapshot())
+                             .Has(x => x, An.Event<BuildStarted>(ev =>
+                                                               {
+                                                                   buildId = ev.BuildId;
+                                                                   terminalId1 = ev.Status.Tasks[0].TerminalId;
+                                                                   terminalId2 = ev.Status.Tasks[1].TerminalId;
+                                                                   return true;
+                                                               })));
+                        
+            Assert.True(prober.check(Take.Snapshot(() => system.GetView<BuildId, SaaS.Client.Projections.Frog.Projects.Build>(new BuildId(buildId)))
+                                         .Has(statuses => statuses,
+                                              A.Check<SaaS.Client.Projections.Frog.Projects.Build>(
+                                                  arg => arg.TerminalOutput.ContainsKey(new TerminalId(terminalId1)) && arg.TerminalOutput[new TerminalId(terminalId1)].Count > 0 &&
+                                                  arg.TerminalOutput[new TerminalId(terminalId1)][0].Match(TerminalOutput1)))
+                            ));
 //            Assert.True(prober.check(Take.Snapshot(() => system.GetTerminalStatusView())
 //                                         .Has(statuses => statuses,
 //                                              A.Check<ViewForTerminalOutput>(

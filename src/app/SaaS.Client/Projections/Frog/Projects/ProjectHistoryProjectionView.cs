@@ -45,7 +45,7 @@ namespace SaaS.Client.Projections.Frog.Projects
         Started, FinishedSuccess, FinishedFailure
     }
 
-    class ProjectHistoryProjectionView
+    public class ProjectHistoryProjectionView
     {
         readonly IDocumentWriter<ProjectId, ProjectHistory> writer;
 
