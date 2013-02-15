@@ -62,27 +62,25 @@ namespace Frog.System.Specs.ProjectBuilding
         }
 
         [Test]
-        public void should_have_the_list_of_builds()
+        public void should_have_the_second_last_in_the_list_of_builds()
         {
-//            var prober = new PollingProber(5000, 100);
-//            Assert.True(prober.check(Take.Snapshot(() => system.GetProjectStatusView().GetListOfBuilds(RepoUrl))
-//                                         .Has(x => x,
-//                                              A.Check<List<BuildHistoryItem>>(
-//                                                  listOfBuilds =>
-//                                                  listOfBuilds.Count == 2 && listOfBuilds[0].BuildId == oldGuid &&
-//                                                  listOfBuilds[1].BuildId == newGuid))));
+            var prober = new PollingProber(5000, 100);
+            Assert.True(prober.check(Take.Snapshot(() => system.GetView<ProjectId, SaaS.Client.Projections.Frog.Projects.ProjectHistory>(new ProjectId(RepoUrl)))
+                                         .Has(x => x,
+                                              A.Check<ProjectHistory>(view => view.Current.buildId == new BuildId(newGuid)))
+                                         .Has(x => x,
+                                              A.Check<ProjectHistory>(view => view.Items.Count == 1 && view.Items[0].BuildId == new BuildId(oldGuid)))));
         }
 
         [Test]
         public void should_have_the_commit_messages_associated_with_the_build_history_items()
         {
-//            var prober = new PollingProber(5000, 100);
-//            Assert.True(prober.check(Take.Snapshot(() => system.GetProjectStatusView().GetListOfBuilds(RepoUrl))
-//                                         .Has(x => x,
-//                                              A.Check<List<BuildHistoryItem>>(
-//                                                  listOfBuilds =>
-//                                                  listOfBuilds.Count == 2 && listOfBuilds[0].Comment == "comment 1" &&
-//                                                  listOfBuilds[1].Comment == "comment 2"))));
+            var prober = new PollingProber(5000, 100);
+            Assert.True(prober.check(Take.Snapshot(() => system.GetView<ProjectId, SaaS.Client.Projections.Frog.Projects.ProjectHistory>(new ProjectId(RepoUrl)))
+                                         .Has(x => x,
+                                              A.Check<ProjectHistory>(view => view.CurrentHistory.RevisionComment == "comment 2"))
+                                         .Has(x => x,
+                                              A.Check<ProjectHistory>(view => view.Items.Count == 1 && view.Items[0].RevisionComment == "comment 1"))));
         }
     }
 

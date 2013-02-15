@@ -67,7 +67,7 @@ namespace SaaS.Client.Projections.Frog.Projects
                     {
                         history.Items.Add(history.CurrentHistory);
                     }
-                    history.CurrentHistory = new ProjectBuild();
+                    history.CurrentHistory = new ProjectBuild(){BuildId = ev.Id, RevisionComment = ev.Info.Comment, RevisionNr = ev.Info.Revision, Status = BuildStatus.Started};
                     history.Current = new Build(){buildId = ev.Id};
                 });
         }

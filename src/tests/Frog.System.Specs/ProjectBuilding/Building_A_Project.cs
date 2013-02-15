@@ -6,14 +6,23 @@ using Frog.Support;
 using Frog.System.Specs.Underware;
 using NSubstitute;
 using NUnit.Framework;
+using SaaS.Client.Projections.Frog.Projects;
+using SaaS.Engine;
 using xray;
+using BuildEnded = Frog.Domain.BuildEnded;
+using BuildStarted = Frog.Domain.BuildStarted;
+using BuildTotalEndStatus = Frog.Domain.BuildTotalEndStatus;
+using BuildUpdated = Frog.Domain.BuildUpdated;
+using CheckoutInfo = Frog.Domain.CheckoutInfo;
+using ProjectCheckedOut = Frog.Domain.ProjectCheckedOut;
+using TaskInfo = Frog.Domain.TaskInfo;
 
 namespace Frog.System.Specs.ProjectBuilding
 {
     [TestFixture]
     public class Building_A_Project : BDD
     {
-        private const string RepoUrl = "http://123";
+        private const string RepoUrl = "123";
         private SystemDriver system;
         private Guid newGuid;
         private Guid taskGuid;
@@ -154,13 +163,14 @@ namespace Frog.System.Specs.ProjectBuilding
             system.Stop();
         }
 
-//        [Test]
-//        public void should_have_the_build_as_the_current_one_in_the_ui()
-//        {
-//            var prober = new PollingProber(5000, 100);
-//            Assert.True(prober.check(Take.Snapshot(() => system.GetProjectStatusView())
-//                                         .Has(x => x, A.Check<ProjectView>(view => view.GetCurrentBuild(RepoUrl) == newGuid))));
-//        }
+        [Test]
+        public void should_have_the_build_as_the_current_one_in_the_ui()
+        {
+            var prober = new PollingProber(5000, 100);
+            Assert.True(prober.check(Take.Snapshot(() => system.GetView<ProjectId, ProjectHistory>(new ProjectId(RepoUrl)))
+                                         .Has(x => x,
+                                              A.Check<ProjectHistory>(view => view.Current.buildId == new BuildId(newGuid)))));
+        }
 
         private const string TerminalOutput3 = "Terminal output 3";
         private const string TerminalOutput4 = "Terminal output 4";
