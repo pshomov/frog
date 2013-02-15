@@ -8,7 +8,7 @@ static internal class BuildProjection
     public static void OnBuildStarted(BuildStarted e, Build view)
     {
         view.Tasks = new List<TaskInfo>(e.Status.Tasks);
-        view.Tasks.ForEach(info => view.TerminalOutput[info.Id] = new List<string>());
+        view.Tasks.ForEach(info => view.TerminalOutput[info.Id] = new List<string>(){""});
         view.Status = Build.BuildOverallStatus.Started;
     }
 
@@ -20,8 +20,6 @@ static internal class BuildProjection
 
     public static void OnTerminalOutput(TerminalUpdated e, Build view)
     {
-        var list = view.TerminalOutput[e.Id];
-        if (list == null) view.TerminalOutput[e.Id] = new List<string>();
         view.TerminalOutput[e.Id].Add(e.Content);
     }
 

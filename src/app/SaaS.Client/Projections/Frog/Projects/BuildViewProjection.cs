@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using System.Linq;
 using System.Runtime.Serialization;
 using Lokad.Cqrs.AtomicStorage;
 using SaaS.Engine;
@@ -27,6 +28,13 @@ namespace SaaS.Client.Projections.Frog.Projects
             Tasks = new List<TaskInfo>();
             TerminalOutput = new Dictionary<TerminalId, List<string>>();
             Status = BuildOverallStatus.NotStarted;
+        }
+
+        public string GetTerminalOutput(TerminalId terminalId)
+        {
+            if (!TerminalOutput.ContainsKey(terminalId)) return "";
+            var terminalOutput = TerminalOutput[terminalId].Skip(1).Aggregate((s, s1) => s + s1+ "\r\n");
+            return terminalOutput;
         }
     }
 

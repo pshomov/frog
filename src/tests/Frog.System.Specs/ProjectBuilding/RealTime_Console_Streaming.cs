@@ -106,17 +106,14 @@ namespace Frog.System.Specs.ProjectBuilding
             Assert.True(prober.check(Take.Snapshot(() => system.GetView<BuildId, SaaS.Client.Projections.Frog.Projects.Build>(new BuildId(buildId)))
                                          .Has(statuses => statuses,
                                               A.Check<SaaS.Client.Projections.Frog.Projects.Build>(
-                                                  arg => arg.TerminalOutput.ContainsKey(new TerminalId(terminalId1)) && arg.TerminalOutput[new TerminalId(terminalId1)].Count > 0 &&
-                                                  arg.TerminalOutput[new TerminalId(terminalId1)][0].Match(TerminalOutput1)))
+                                                  arg => arg.GetTerminalOutput(new TerminalId(terminalId1)).Match(TerminalOutput1)))
                             ));
-//            Assert.True(prober.check(Take.Snapshot(() => system.GetTerminalStatusView())
-//                                         .Has(statuses => statuses,
-//                                              A.Check<ViewForTerminalOutput>(
-//                                                  arg =>
-//                                                  arg.GetTerminalOutput(terminalId2).Match(
-//                                                      TerminalOutput3 + ".*\n.*" +
-//                                                      TerminalOutput4))))
-//                );
+            Assert.True(prober.check(Take.Snapshot(() => system.GetView<BuildId, SaaS.Client.Projections.Frog.Projects.Build>(new BuildId(buildId)))
+                                         .Has(statuses => statuses,
+                                              A.Check<SaaS.Client.Projections.Frog.Projects.Build>(
+                                                  arg => arg.GetTerminalOutput(new TerminalId(terminalId2)).Match(TerminalOutput3 + ".*\n.*" +
+                                                      TerminalOutput4)))
+                            ));
         }
 
         private const string TerminalOutput1 = "Terminal output 1";
