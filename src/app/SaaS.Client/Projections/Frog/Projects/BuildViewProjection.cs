@@ -18,6 +18,9 @@ namespace SaaS.Client.Projections.Frog.Projects
         public List<TaskInfo> Tasks { get; set; }
         [DataMember(Order = 2)]
         public Dictionary<TerminalId, List<string>> TerminalOutput { get; set; }
+        [DataMember(Order = 4)]
+        public BuildId buildId { get; set; }
+
         [DataMember(Order = 3)]
         public BuildOverallStatus Status;
 
@@ -33,7 +36,7 @@ namespace SaaS.Client.Projections.Frog.Projects
         public string GetTerminalOutput(TerminalId terminalId)
         {
             if (!TerminalOutput.ContainsKey(terminalId)) return "";
-            var terminalOutput = TerminalOutput[terminalId].Skip(1).Aggregate((s, s1) => s + s1+ "\r\n");
+            var terminalOutput = TerminalOutput[terminalId].Skip(1).DefaultIfEmpty().Aggregate((s, s1) => s + s1+ "\r\n") ?? "";
             return terminalOutput;
         }
     }

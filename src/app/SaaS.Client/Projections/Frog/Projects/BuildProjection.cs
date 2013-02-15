@@ -7,6 +7,7 @@ static internal class BuildProjection
 {
     public static void OnBuildStarted(BuildStarted e, Build view)
     {
+        view.buildId = e.Id;
         view.Tasks = new List<TaskInfo>(e.Status.Tasks);
         view.Tasks.ForEach(info => view.TerminalOutput[info.Id] = new List<string>(){""});
         view.Status = Build.BuildOverallStatus.Started;

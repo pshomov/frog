@@ -19,16 +19,16 @@ namespace SaaS.Client.Projections.Frog.Projects
 
         public ProjectHistory()
         {
-            Items = new List<ProjectBuild>();
-            Current = Build.None;
-            CurrentHistory = ProjectBuild.None;
+            Items = new List<ProjectBuild>(0);
+            Current = null;
+            CurrentHistory = null;
         }
     }
 
     [DataContract]
     public sealed class ProjectBuild
     {
-        public static ProjectBuild None = new ProjectBuild();
+//        public static ProjectBuild None = new ProjectBuild();
 
         [DataMember(Order = 1)]
         public BuildId BuildId { get; set; }
@@ -63,12 +63,12 @@ namespace SaaS.Client.Projections.Frog.Projects
         {
             writer.UpdateOrThrow(ev.ProjectId, history =>
                 {
-                    if (history.CurrentHistory != ProjectBuild.None)
+                    if (history.CurrentHistory != null)
                     {
                         history.Items.Add(history.CurrentHistory);
                     }
                     history.CurrentHistory = new ProjectBuild();
-                    history.Current = new Build();
+                    history.Current = new Build(){buildId = ev.Id};
                 });
         }
 
@@ -91,7 +91,7 @@ namespace SaaS.Client.Projections.Frog.Projects
             writer.UpdateOrThrow(ev.ProjectId, history =>
                 {
                     BuildProjection.OnBuildEnded(ev, history.Current);
-                    history.Items.Single(build => build.BuildId == ev.Id)
+                    history.CurrentHistory
                            .Status = (ev.Status == BuildTotalEndStatus.Success)
                                          ? BuildStatus.FinishedSuccess
                                          : BuildStatus.FinishedFailure;

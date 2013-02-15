@@ -83,7 +83,7 @@ namespace Lokad.Cqrs.AtomicStorage
  
 
                 // we are locking this file.
-                using (var file = File.Open(name, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.Read))
+                using (var file = File.Open(name, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None))
                 {
                     byte[] initial = new byte[0];
                     TEntity result;

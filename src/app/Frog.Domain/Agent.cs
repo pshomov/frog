@@ -66,8 +66,8 @@ namespace Frog.Domain
 
         public TaskInfo.TaskStatus TaskStatus { get; set; }
 
-        public Guid TerminalId { get; private set; }
-        public string RepoURL { get; private set; }
+        public Guid TerminalId { get;  set; }
+        public string RepoURL { get;  set; }
 
         public BuildUpdated()
         {

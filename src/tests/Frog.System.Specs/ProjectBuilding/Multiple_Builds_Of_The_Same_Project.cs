@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using Frog.Domain;
 using Frog.Domain.BuildSystems.FrogSystemTest;
 using Frog.Specs.Support;
@@ -7,14 +8,17 @@ using Frog.Support;
 using Frog.System.Specs.Underware;
 using NSubstitute;
 using NUnit.Framework;
+using SaaS.Client.Projections.Frog.Projects;
+using SaaS.Engine;
 using xray;
+using CheckoutInfo = Frog.Domain.CheckoutInfo;
 
 namespace Frog.System.Specs.ProjectBuilding
 {
     [TestFixture]
     public class Multiple_Builds_Of_The_Same_Project : BDD
     {
-        private const string RepoUrl = "http://123";
+        private const string RepoUrl = "123";
         private SystemDriver system;
         private Guid newGuid;
         private Guid oldGuid;
@@ -48,14 +52,14 @@ namespace Frog.System.Specs.ProjectBuilding
             system.Stop();
         }
 
-//        [Test]
-//        public void should_make_the_last_build_the_current_one()
-//        {
-//            var prober = new PollingProber(5000, 100);
-//            Assert.True(prober.check(Take.Snapshot(() => system.GetProjectStatusView())
-//                                         .Has(x => x,
-//                                              A.Check<ProjectView>(view => view.GetCurrentBuild(RepoUrl) == newGuid))));
-//        }
+        [Test]
+        public void should_make_the_last_build_the_current_one()
+        {
+            var prober = new PollingProber(5000, 100);
+            Assert.True(prober.check(Take.Snapshot(() => system.GetView<ProjectId, SaaS.Client.Projections.Frog.Projects.ProjectHistory>(new ProjectId(RepoUrl)))
+                                         .Has(x => x,
+                                              A.Check<ProjectHistory>(view => view.Current.buildId == new BuildId(newGuid)))));
+        }
 
         [Test]
         public void should_have_the_list_of_builds()
