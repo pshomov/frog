@@ -39,7 +39,7 @@ namespace SaaS.Engine
 
         public ProjectId(string id)
         {
-            Id = id;
+            Id = id.Replace('/', '_').Replace(':','_');
         }
 
         public override string GetTag()

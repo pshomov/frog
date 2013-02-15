@@ -16,7 +16,7 @@ namespace Frog.System.Specs.ProjectBuilding
     [TestFixture]
     public class Multiple_Builds_Of_The_Same_Project : BDD
     {
-        private const string RepoUrl = "123";
+        private const string RepoUrl = "http://123";
         private SystemDriver system;
         private Guid newGuid;
         private Guid oldGuid;
@@ -54,7 +54,7 @@ namespace Frog.System.Specs.ProjectBuilding
         public void should_make_the_last_build_the_current_one()
         {
             var prober = new PollingProber(5000, 100);
-            Assert.True(prober.check(Take.Snapshot(() => system.GetView<ProjectId, SaaS.Client.Projections.Frog.Projects.ProjectHistory>(new ProjectId(RepoUrl)))
+            Assert.True(prober.check(Take.Snapshot(() => system.GetView<ProjectId, ProjectHistory>(new ProjectId(RepoUrl)))
                                          .Has(x => x,
                                               A.Check<ProjectHistory>(view => view.Current.buildId == new BuildId(newGuid)))));
         }
@@ -63,7 +63,7 @@ namespace Frog.System.Specs.ProjectBuilding
         public void should_have_the_second_last_in_the_list_of_builds()
         {
             var prober = new PollingProber(5000, 100);
-            Assert.True(prober.check(Take.Snapshot(() => system.GetView<ProjectId, SaaS.Client.Projections.Frog.Projects.ProjectHistory>(new ProjectId(RepoUrl)))
+            Assert.True(prober.check(Take.Snapshot(() => system.GetView<ProjectId, ProjectHistory>(new ProjectId(RepoUrl)))
                                          .Has(x => x,
                                               A.Check<ProjectHistory>(view => view.Current.buildId == new BuildId(newGuid)))
                                          .Has(x => x,
@@ -74,7 +74,7 @@ namespace Frog.System.Specs.ProjectBuilding
         public void should_have_the_commit_messages_associated_with_the_build_history_items()
         {
             var prober = new PollingProber(5000, 100);
-            Assert.True(prober.check(Take.Snapshot(() => system.GetView<ProjectId, SaaS.Client.Projections.Frog.Projects.ProjectHistory>(new ProjectId(RepoUrl)))
+            Assert.True(prober.check(Take.Snapshot(() => system.GetView<ProjectId, ProjectHistory>(new ProjectId(RepoUrl)))
                                          .Has(x => x,
                                               A.Check<ProjectHistory>(view => view.CurrentHistory.RevisionComment == "comment 2"))
                                          .Has(x => x,
