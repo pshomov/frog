@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Threading;
 using Frog.Domain;
 using Frog.Domain.BuildSystems.FrogSystemTest;
 using Frog.Specs.Support;
