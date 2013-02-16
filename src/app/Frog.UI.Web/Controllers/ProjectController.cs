@@ -94,7 +94,7 @@ namespace Frog.UI.Web.Controllers
                     if (terminalOutput.Count <= sinceIndex) continue;
                     activeTask = i;
                     lastChunkIndex = terminalOutput.Count;
-                    content.Append(terminalOutputR);
+                    content.Append(terminalOutputR.DefaultIfEmpty().Aggregate((s, s1) => s + s1 + "\r\n"));
                 }
                 return
                     MonoBugs.Json(
