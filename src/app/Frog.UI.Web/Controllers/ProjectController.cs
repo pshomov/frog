@@ -1,34 +1,24 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Web.Mvc;
 using Frog.Domain;
 using Frog.UI.Web.HttpHelpers;
-using SaaS.Client.Projections.Frog.Projects;
 using Lokad.Cqrs.AtomicStorage;
+using SaaS.Client.Projections.Frog.Projects;
 using SaaS.Engine;
+using Build = Frog.Domain.RepositoryTracker.Build;
+using TaskInfo = SaaS.Engine.TaskInfo;
 
 namespace Frog.UI.Web.Controllers
 {
     [HandleError]
     public class ProjectController : Controller
     {
-        public ActionResult Status(string user, string project)
+        public ActionResult AllTerminalOutput(string user, string project, int lastOutputChunkIndex, int taskIndex)
         {
-            return View();
-        }
-
-        public ActionResult Force(string user, string project)
-        {
-            var githubProjectUrl = GetGithubProjectUrl(user, project);
-            var lastBuild = ServiceLocator.Store.GetReader<ProjectId, ProjectHistory>().Load(new ProjectId(githubProjectUrl)).CurrentHistory;
-            ServiceLocator.Bus.Send(new Frog.Domain.RepositoryTracker.Build(){Id = Guid.NewGuid(), RepoUrl = githubProjectUrl, Revision = new RevisionInfo(){Revision = lastBuild.RevisionNr}});
-            return RedirectToAction("Status");
-        }
-
-        public ActionResult History(string user, string project)
-        {
-            return GetProjectHistory(GetGithubProjectUrl(user, project));
+            return GetAllTaskTerminalOutput(GetGithubProjectUrl(user, project), lastOutputChunkIndex, taskIndex);
         }
 
         public ActionResult Data(string user, string project)
@@ -36,31 +26,70 @@ namespace Frog.UI.Web.Controllers
             return GetProjectStatus(GetGithubProjectUrl(user, project));
         }
 
+        public ActionResult Force(string user, string project)
+        {
+            string githubProjectUrl = GetGithubProjectUrl(user, project);
+            ProjectBuild lastBuild =
+                ServiceLocator.Store.GetReader<ProjectId, ProjectHistory>()
+                              .Load(new ProjectId(githubProjectUrl))
+                              .CurrentHistory;
+            ServiceLocator.Bus.Send(new Build
+                {
+                    Id = Guid.NewGuid(),
+                    RepoUrl = githubProjectUrl,
+                    Revision = new RevisionInfo {Revision = lastBuild.RevisionNr}
+                });
+            return RedirectToAction("Status");
+        }
+
+        public ActionResult GetProjectHistory(string projectUrl)
+        {
+            IDocumentReader<ProjectId, ProjectHistory> documentReader =
+                ServiceLocator.Store.GetReader<ProjectId, ProjectHistory>();
+            ProjectHistory projectHistory;
+            if (documentReader.TryGet(new ProjectId(projectUrl), out projectHistory))
+            {
+                return MonoBugs.Json(
+                    new
+                        {
+                            items =
+                        projectHistory.Items
+                        });
+            }
+            return new HttpNotFoundResult("Project does not Runz ;(");
+        }
+
+        public ActionResult History(string user, string project)
+        {
+            return GetProjectHistory(GetGithubProjectUrl(user, project));
+        }
+
+        public ActionResult Status(string user, string project)
+        {
+            return View();
+        }
+
         public ActionResult TerminalOutput(string user, string project, int taskIndex)
         {
             return GetTaskTerminalOutput(GetGithubProjectUrl(user, project), taskIndex);
         }
 
-        public ActionResult AllTerminalOutput(string user, string project, int lastOutputChunkIndex, int taskIndex)
-        {
-            return GetAllTaskTerminalOutput(GetGithubProjectUrl(user, project), lastOutputChunkIndex, taskIndex);
-        }
-
         internal static ActionResult GetAllTaskTerminalOutput(string projectUrl, int lastChunkIndex, int taskIndex)
         {
-            var documentReader = ServiceLocator.Store.GetReader<ProjectId, ProjectHistory>();
+            IDocumentReader<ProjectId, ProjectHistory> documentReader =
+                ServiceLocator.Store.GetReader<ProjectId, ProjectHistory>();
             ProjectHistory projectHistory;
             if (documentReader.TryGet(new ProjectId(projectUrl), out projectHistory))
             {
-                var tasks = projectHistory.Current.Tasks;
-                var activeTask = taskIndex;
+                List<TaskInfo> tasks = projectHistory.Current.Tasks;
+                int activeTask = taskIndex;
                 var content = new StringBuilder();
-                for (var i = taskIndex; i < tasks.Count; i++)
+                for (int i = taskIndex; i < tasks.Count; i++)
                 {
-                    var sinceIndex = i == taskIndex ? lastChunkIndex : 0;
-                    var terminalId = projectHistory.Current.Tasks[i].Id;
-                    var terminalOutput = projectHistory.Current.TerminalOutput[terminalId];
-                    var terminalOutputR =
+                    int sinceIndex = i == taskIndex ? lastChunkIndex : 0;
+                    TerminalId terminalId = projectHistory.Current.Tasks[i].Id;
+                    List<string> terminalOutput = projectHistory.Current.TerminalOutput[terminalId];
+                    IEnumerable<string> terminalOutputR =
                         terminalOutput.Where((s, i1) => i1 > sinceIndex);
                     if (terminalOutput.Count <= sinceIndex) continue;
                     activeTask = i;
@@ -71,33 +100,11 @@ namespace Frog.UI.Web.Controllers
                     MonoBugs.Json(
                         new
                             {
-                                terminalOutput = content.ToString(), activeTask, lastChunkIndex
+                                terminalOutput = content.ToString(),
+                                activeTask,
+                                lastChunkIndex
                             });
-                            
             }
-
-//            if (ServiceLocator.ProjectStatus.IsProjectRegistered(projectUrl))
-//            {
-//                var tasks = ServiceLocator.BuildStatus.GetBuildStatus(ServiceLocator.ProjectStatus.GetCurrentBuild(projectUrl)).Tasks;
-//                var activeTask = taskIndex;
-//                var content = new StringBuilder();
-//                for (var i = taskIndex; i < tasks.Count; i++)
-//                {
-//                    var sinceIndex = i == taskIndex ? lastChunkIndex : 0;
-//                    var terminalOutput = ServiceLocator.TerminalOutputStatus.GetTerminalOutput(tasks[i].TerminalId, sinceIndex);
-//                    if (terminalOutput.LastChunkIndex <= sinceIndex) continue;
-//                    activeTask = i;
-//                    lastChunkIndex = terminalOutput.LastChunkIndex;
-//                    content.Append(terminalOutput.Content);
-//                }
-//                return
-//                    MonoBugs.Json(
-//                        new
-//                            {
-//                                terminalOutput = content.ToString(), activeTask, lastChunkIndex
-//                            });
-//                
-//            }
             return new HttpNotFoundResult("Project does not Runz ;(");
         }
 
@@ -109,62 +116,30 @@ namespace Frog.UI.Web.Controllers
 
         protected internal ActionResult GetProjectStatus(string projectUrl)
         {
-            var documentReader = ServiceLocator.Store.GetReader<ProjectId, ProjectHistory>();
+            IDocumentReader<ProjectId, ProjectHistory> documentReader =
+                ServiceLocator.Store.GetReader<ProjectId, ProjectHistory>();
             ProjectHistory projectHistory;
             if (documentReader.TryGet(new ProjectId(projectUrl), out projectHistory))
             {
-               return MonoBugs.Json(new { status = projectHistory.Current.Status });
+                return MonoBugs.Json(new {status = projectHistory.Current});
             }
-//            if (ServiceLocator.ProjectStatus.IsProjectRegistered(projectUrl))
-//                return MonoBugs.Json(new { status = ServiceLocator.BuildStatus.GetBuildStatus(ServiceLocator.ProjectStatus.GetCurrentBuild(projectUrl)) });
-            return new HttpNotFoundResult("Project does not Runz ;(");
-        }
-
-        public ActionResult GetProjectHistory(string projectUrl)
-        {
-            var documentReader = ServiceLocator.Store.GetReader<ProjectId, ProjectHistory>();
-            ProjectHistory projectHistory;
-            if (documentReader.TryGet(new ProjectId(projectUrl), out projectHistory))
-            {
-                    MonoBugs.Json(
-                        new
-                        {
-                            items =
-                        projectHistory.Items
-                        });
-            }
-//         if (ServiceLocator.ProjectStatus.IsProjectRegistered(projectUrl))
-//                return
-//                    MonoBugs.Json(
-//                        new
-//                        {
-//                            items =
-//                        ServiceLocator.ProjectStatus.GetListOfBuilds(projectUrl)
-//                        });
             return new HttpNotFoundResult("Project does not Runz ;(");
         }
 
         protected internal ActionResult GetTaskTerminalOutput(string projectUrl, int taskIndex)
         {
-            var documentReader = ServiceLocator.Store.GetReader<ProjectId, ProjectHistory>();
+            IDocumentReader<ProjectId, ProjectHistory> documentReader =
+                ServiceLocator.Store.GetReader<ProjectId, ProjectHistory>();
             ProjectHistory projectHistory;
             if (documentReader.TryGet(new ProjectId(projectUrl), out projectHistory))
             {
-                var taskInfo = projectHistory.Current.Tasks[taskIndex];
+                TaskInfo taskInfo = projectHistory.Current.Tasks[taskIndex];
                 MonoBugs.Json(
                     new
                         {
                             terminalOutput = projectHistory.Current.TerminalOutput[taskInfo.Id]
                         });
             }
-//            if (ServiceLocator.ProjectStatus.IsProjectRegistered(projectUrl))
-//                return
-//                    MonoBugs.Json(
-//                        new
-//                            {
-//                                terminalOutput =
-//                            ServiceLocator.TerminalOutputStatus.GetTerminalOutput(ServiceLocator.BuildStatus.GetBuildStatus(ServiceLocator.ProjectStatus.GetCurrentBuild(projectUrl)).Tasks[taskIndex].TerminalId)
-//                            });
             return new HttpNotFoundResult("Project does not Runz ;(");
         }
     }

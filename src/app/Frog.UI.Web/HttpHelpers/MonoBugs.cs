@@ -1,6 +1,7 @@
 using System.Web.Script.Serialization;
 using System.Web.Mvc;
 using System.Text;
+using Newtonsoft.Json;
 
 namespace Frog.UI.Web.HttpHelpers
 {
@@ -8,8 +9,8 @@ namespace Frog.UI.Web.HttpHelpers
 	{
         public static ContentResult Json(object o)
 		{
-			var ser = new JavaScriptSerializer();
-        	return new ContentResult(){Content = ser.Serialize(o), ContentType = "application/json", ContentEncoding = Encoding.UTF8};
+			
+        	return new ContentResult(){Content = JsonConvert.SerializeObject(o), ContentType = "application/json", ContentEncoding = Encoding.UTF8};
 		}
 	}
 }
