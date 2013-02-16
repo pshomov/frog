@@ -92,7 +92,7 @@
                 success: function data(msg) {
                     $('#history_items').empty();
                     for (var i = 0; i < msg.items.length; i++) {
-                        $('#history_items').prepend("<li>"+msg.items[i].RevisionComment+"</li");
+                        $('#history_items').prepend("<li>"+msg.items[i].RevisionComment+"</li>");
                     }
                 },
                 error: function () {
