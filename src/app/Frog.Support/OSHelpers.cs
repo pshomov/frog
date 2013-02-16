@@ -36,7 +36,12 @@ namespace Frog.Support
             Directory.CreateDirectory(changeset);
             return changeset;
         }
-    
+
+        public static string LokadStorePath()
+        {
+            return Environment.GetEnvironmentVariable("RUNZ_LOKAD_PATH") ?? "/lokad/runz";
+        }
+
         public static int RiakPort()
         {
             return Int32.Parse(
