@@ -121,7 +121,7 @@ namespace Frog.UI.Web.Controllers
             ProjectHistory projectHistory;
             if (documentReader.TryGet(new ProjectId(projectUrl), out projectHistory))
             {
-                return MonoBugs.Json(new {status = projectHistory.Current});
+                return MonoBugs.Json(new {status = projectHistory.Current.Status, tasks = projectHistory.CurrentTasks});
             }
             return new HttpNotFoundResult("Project does not Runz ;(");
         }

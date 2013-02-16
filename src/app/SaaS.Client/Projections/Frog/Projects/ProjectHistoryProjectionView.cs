@@ -16,12 +16,15 @@ namespace SaaS.Client.Projections.Frog.Projects
         public Build Current { get; set; }
         [DataMember(Order = 3)]
         public ProjectBuild CurrentHistory { get; set; }
+        [DataMember(Order = 4)]
+        public TaskInfo[] CurrentTasks { get; set; }
 
         public ProjectHistory()
         {
             Items = new List<ProjectBuild>(0);
             Current = null;
             CurrentHistory = null;
+            CurrentTasks = new TaskInfo[]{};
         }
     }
 
@@ -78,12 +81,21 @@ namespace SaaS.Client.Projections.Frog.Projects
         }
         public void When(BuildUpdated ev)
         {
-            writer.UpdateOrThrow(ev.ProjectId, history => BuildProjection.OnBuildUpdated(ev, history.Current));
+            writer.UpdateOrThrow(ev.ProjectId, history =>
+                {
+                    BuildProjection.OnBuildUpdated(ev, history.Current);
+                    var taskInfo = history.CurrentTasks[ev.TaskIndex];
+                    history.CurrentTasks[ev.TaskIndex] = new TaskInfo(taskInfo.Id,taskInfo.Name, ev.TaskStatus);
+                });
         }
 
         public void When(BuildStarted ev)
         {
-            writer.UpdateOrThrow(ev.ProjectId, history => BuildProjection.OnBuildStarted(ev, history.Current));
+            writer.UpdateOrThrow(ev.ProjectId, history =>
+                {
+                    BuildProjection.OnBuildStarted(ev, history.Current);
+                    history.CurrentTasks = ev.Status.Tasks;
+                });
         }
 
         public void When(BuildEnded ev)
