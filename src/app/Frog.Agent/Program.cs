@@ -14,7 +14,7 @@ using SimpleCQRS;
 
 namespace Frog.Agent
 {
-    static class Program
+    public static class Program
     {
         static void Main(string[] args)
         {
@@ -29,7 +29,7 @@ namespace Frog.Agent
             Console.ReadLine();
         }
 
-        static PipelineOfTasks GetPipeline()
+        public static PipelineOfTasks GetPipeline()
         {
             var pathFinder = new PathFinder();
             return new PipelineOfTasks(new CompoundTaskSource(
@@ -42,17 +42,17 @@ namespace Frog.Agent
                                        new ExecTaskGenerator(new ExecTaskFactory(), IsNotWindows() ? OS.Unix : OS.Windows));
         }
 
-        static bool IsNotWindows()
+        public static bool IsNotWindows()
         {
             return As.List(PlatformID.Win32NT, PlatformID.Win32Windows).IndexOf(Environment.OSVersion.Platform) == -1;
         }
 
-        static IBus SetupBus()
+        public static IBus SetupBus()
         {
             return new RabbitMQBus(OSHelpers.RabbitHost());
         }
 
-        static WorkingAreaGoverner SetupWorkingAreaGovernor()
+        public static WorkingAreaGoverner SetupWorkingAreaGovernor()
         {
             var workingAreaPath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
             Directory.CreateDirectory(workingAreaPath);
