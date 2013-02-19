@@ -1,12 +1,6 @@
 require 'rake/clean'
 require 'fileutils'
-begin
-  require 'tasks/standalone_migrations'
-rescue LoadError => e
-  puts "gem install standalone_migrations to get db:migrate:* tasks! (Error: #{e})"
-end
-require 'statsd'
-require 'rbconfig'
+
 is_windows = (RbConfig::CONFIG['host_os'] =~ /mswin|mingw|cygwin/)
 
 if is_windows
