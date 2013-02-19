@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Frog.Domain.TaskSources
 {
@@ -9,12 +10,12 @@ namespace Frog.Domain.TaskSources
             this.srcs = srcs;
         }
 
-        public IList<Task> Detect(string projectFolder)
+        public IList<Task> Detect(string projectFolder, Func<string, string> getContent)
         {
             var result = new List<Task>();
             foreach (var taskSource in srcs)
             {
-                result.AddRange(taskSource.Detect(projectFolder));
+                result.AddRange(taskSource.Detect(projectFolder, null));
             }
             return result;
         }

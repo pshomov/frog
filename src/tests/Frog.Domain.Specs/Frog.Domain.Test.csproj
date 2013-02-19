@@ -68,11 +68,13 @@
     <Compile Include="RevisionChecker\FailsToRetrieveRevision.cs" />
     <Compile Include="RevisionChecker\RetrievesRevisionSuccessfully.cs" />
     <Compile Include="Support\TimeProfileSpecs.cs" />
+    <Compile Include="TaskDetection\ExplicitTasksDetector.cs" />
     <Compile Include="TaskDetection\MakeTaskDetectorSpecs.cs" />
     <Compile Include="TaskDetection\TaskDetectorSpecs.cs" />
     <Compile Include="TaskDetection\TaskDetectorSpecsBase.cs" />
     <Compile Include="Pipeline\PipelineProcessSuccessfulBuild.cs" />
     <Compile Include="TaskDetection\RubyTasksDetection.cs" />
+    <Compile Include="CommandAndArguments.cs" />
     <Compile Include="TaskGeneratorSpec.cs">
       <SubType>Code</SubType>
     </Compile>

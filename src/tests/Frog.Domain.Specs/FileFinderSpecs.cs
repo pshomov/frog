@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using Frog.Domain.BuildSystems.Custom;
 using Frog.Domain.BuildSystems.Make;
 using Frog.Domain.BuildSystems.Rake;
 using Frog.Domain.BuildSystems.Solution;
@@ -171,6 +172,35 @@ namespace Frog.Domain.Specs
                                                      Arg.Is<string>(
                                                          s =>
                                                          s.Equals("GEMFILE",
+                                                                  StringComparison.InvariantCultureIgnoreCase)),
+                                                     "basefolder");
+        }
+    }
+
+    [TestFixture]
+    public class CustomFileFindSpec : BDD
+    {
+        private TaskFileFinder _taskFileFinder;
+        private PathFinder pathFinder;
+
+        protected override void Given()
+        {
+            pathFinder = Substitute.For<PathFinder>();
+            _taskFileFinder = new CustomFileFinder(pathFinder);
+        }
+
+        protected override void When()
+        {
+            _taskFileFinder.FindFiles("basefolder");
+        }
+
+        [Test]
+        public void should_search_for_file_RUNZ_DOT_ME_at_the_root_of_the_tree()
+        {
+            pathFinder.Received().FindFilesAtTheBase(Arg.Any<Action<string>>(),
+                                                     Arg.Is<string>(
+                                                         s =>
+                                                         s.Equals("runz.me",
                                                                   StringComparison.InvariantCultureIgnoreCase)),
                                                      "basefolder");
         }

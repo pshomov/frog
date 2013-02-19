@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Frog.Domain.TaskSources;
 
@@ -10,7 +11,7 @@ namespace Frog.Domain.BuildSystems.Maven
             this._taskFileFinder = _taskFileFinder;
         }
 
-        public IList<Task> Detect(string projectFolder)
+        public IList<Task> Detect(string projectFolder, Func<string, string> getContent)
         {
             var tasks = new List<Task>();
             return tasks;

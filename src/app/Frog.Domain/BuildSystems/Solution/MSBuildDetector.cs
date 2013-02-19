@@ -14,7 +14,7 @@ namespace Frog.Domain.BuildSystems.Solution
             this._taskFileFinder = _taskFileFinder;
         }
 
-        public IList<Task> Detect(string projectFolder)
+        public IList<Task> Detect(string projectFolder, Func<string, string> getContent)
         {
             var allSolutionFiles = _taskFileFinder.FindFiles(projectFolder);
             if (allSolutionFiles.Count == 1) return As.List<Task>(new MSBuildTask(allSolutionFiles[0]));

@@ -29,7 +29,7 @@ namespace Frog.System.Specs.ProjectBuilding
             var workingAreaGoverner = Substitute.For<WorkingAreaGoverner>();
             workingAreaGoverner.AllocateWorkingArea().Returns("fake location");
             var testSystem = new TestSystem(workingAreaGoverner, url => sourceRepoDriver);
-            testSystem.TasksSource.Detect(Arg.Any<string>()).Returns(
+            testSystem.TasksSource.Detect(Arg.Any<string>(), null).Returns(
                 As.List(
                     (Task)
                     new FakeTaskDescription(TerminalOutput1,

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Frog.Domain.TaskSources;
 
@@ -11,7 +12,7 @@ namespace Frog.Domain.BuildSystems.FrogSystemTest
             this.taskFileFinder = taskFileFinder;
         }
 
-        public IList<Task> Detect(string projectFolder)
+        public IList<Task> Detect(string projectFolder, Func<string, string> getContent)
         {
             var testTaskFiles = taskFileFinder.FindFiles(projectFolder);
             return testTaskFiles.Select(s => (Task) new TestTaskDescription(s)).ToList();

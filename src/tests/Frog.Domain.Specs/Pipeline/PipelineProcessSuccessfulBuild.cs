@@ -17,7 +17,7 @@ namespace Frog.Domain.Specs.Pipeline
         {
             base.Given();
             SrcTask1 = new MSBuildTask("");
-            TaskSource.Detect(Arg.Any<string>()).Returns(As.List<Task>(SrcTask1));
+            TaskSource.Detect(Arg.Any<string>(), null).Returns(As.List<Task>(SrcTask1));
 
             Task1 = Substitute.For<IExecTask>();
             Task1.When(task => task.Perform(Arg.Any<SourceDrop>()))
