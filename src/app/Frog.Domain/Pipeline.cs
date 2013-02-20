@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Frog.Domain
 {
@@ -50,6 +51,10 @@ namespace Frog.Domain
     public class PipelineStatus
     {
         public List<TaskInfo> Tasks = new List<TaskInfo>();
+        public override string ToString()
+        {
+            return string.Format("Pipeline: {0}", Tasks.Select(info => info.ToString()).Aggregate((info, taskInfo) => info + taskInfo + "\r\n" ));
+        }
     }
 
     public class TaskInfo
@@ -75,6 +80,11 @@ namespace Frog.Domain
             TerminalId = terminalId;
             Name = name;
             Status = TaskStatus.NotStarted;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("Name: {0}, Status {1}, Id {2}", Name, Status, TerminalId);
         }
     }
 

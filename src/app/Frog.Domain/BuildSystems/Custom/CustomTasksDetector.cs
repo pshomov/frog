@@ -7,11 +7,11 @@ using Newtonsoft.Json;
 
 namespace Frog.Domain.BuildSystems.Custom
 {
-    public class CustomTasks : TaskSource
+    public class CustomTasksDetector : TaskSource
     {
         readonly TaskFileFinder taskFileFinder;
 
-        public CustomTasks(TaskFileFinder taskFileFinder)
+        public CustomTasksDetector(TaskFileFinder taskFileFinder)
         {
             this.taskFileFinder = taskFileFinder;
         }
