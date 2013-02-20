@@ -20,7 +20,7 @@ namespace Frog.Domain.Specs.TaskDetection
 
         protected override void Given()
         {
-            customTasks = new CustomTasks(taskFileFinder);
+            customTasks = new CustomTasksDetector(taskFileFinder);
             taskFileFinder.FindFiles("basefolder").Returns(As.List("runz.me"));
         }
 

@@ -46,7 +46,7 @@
   <ItemGroup>
     <Compile Include="Agent.cs" />
     <Compile Include="BuildSystems\Custom\CustomFileFinder.cs" />
-    <Compile Include="BuildSystems\Custom\CustomTasks.cs" />
+    <Compile Include="BuildSystems\Custom\CustomTasksDetector.cs" />
     <Compile Include="BuildSystems\FrogSystemTest\TestTaskDetector.cs" />
     <Compile Include="BuildSystems\FrogSystemTest\TestTaskTaskFileFinder.cs" />
     <Compile Include="BuildSystems\Make\MakeFileFinder.cs" />
