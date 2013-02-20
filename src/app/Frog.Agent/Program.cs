@@ -34,7 +34,7 @@ namespace Frog.Agent
         {
             var pathFinder = new PathFinder();
             return new PipelineOfTasks(new CompoundTaskSource(
-                                           new CustomTasksDetector(new TestTaskTaskFileFinder(pathFinder)),
+                                           new CustomTasksDetector(new CustomFileFinder(pathFinder), File.ReadAllText),
                                            new TestTaskDetector(new TestTaskTaskFileFinder(pathFinder)),
                                            new MakeTaskDetector(new MakeFileFinder(pathFinder)),
                                            new RubyTaskDetector(new RakeTaskFileFinder(pathFinder), new BundlerFileFinder(pathFinder)),

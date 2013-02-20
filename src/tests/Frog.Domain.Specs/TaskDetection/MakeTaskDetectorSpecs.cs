@@ -23,7 +23,7 @@ namespace Frog.Domain.Specs.TaskDetection
 
         protected override void When()
         {
-            items = makeTaskDetector.Detect("basefolder", null);
+            items = makeTaskDetector.Detect("basefolder");
         }
 
         [Test]

@@ -11,7 +11,7 @@ namespace Frog.Domain.BuildSystems.Make
             this.taskFileFinder = taskFileFinder;
         }
 
-        public IList<Task> Detect(string projectFolder, Func<string, string> getContent)
+        public IList<Task> Detect(string projectFolder)
         {
             var result = new List<Task>();
             List<string> foundFiles = taskFileFinder.FindFiles(projectFolder);

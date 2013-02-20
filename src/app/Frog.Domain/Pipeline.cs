@@ -53,7 +53,7 @@ namespace Frog.Domain
         public List<TaskInfo> Tasks = new List<TaskInfo>();
         public override string ToString()
         {
-            return string.Format("Pipeline: {0}", Tasks.Select(info => info.ToString()).Aggregate((info, taskInfo) => info + taskInfo + "\r\n" ));
+            return string.Format("Pipeline:\r\n{0}", Tasks.Select(info => info.ToString()).Aggregate((info, taskInfo) => info + "\r\n"+taskInfo ));
         }
     }
 

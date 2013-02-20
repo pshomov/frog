@@ -12,7 +12,7 @@ namespace Frog.Domain.BuildSystems.FrogSystemTest
             this.taskFileFinder = taskFileFinder;
         }
 
-        public IList<Task> Detect(string projectFolder, Func<string, string> getContent)
+        public IList<Task> Detect(string projectFolder)
         {
             var testTaskFiles = taskFileFinder.FindFiles(projectFolder);
             return testTaskFiles.Select(s => (Task) new TestTaskDescription(s)).ToList();

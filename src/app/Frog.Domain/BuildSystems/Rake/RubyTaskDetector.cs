@@ -12,7 +12,7 @@ namespace Frog.Domain.BuildSystems.Rake
             this.bundlerFileFinder = bundlerFileFinder;
         }
 
-        public IList<Task> Detect(string projectFolder, Func<string, string> getContent)
+        public IList<Task> Detect(string projectFolder)
         {
             var rakeFile = rakeTaskFileFinder.FindFiles(projectFolder);
             var bundlerFile = bundlerFileFinder.FindFiles(projectFolder);

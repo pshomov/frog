@@ -10,12 +10,12 @@ namespace Frog.Domain.TaskSources
             this.srcs = srcs;
         }
 
-        public IList<Task> Detect(string projectFolder, Func<string, string> getContent)
+        public IList<Task> Detect(string projectFolder)
         {
             var result = new List<Task>();
             foreach (var taskSource in srcs)
             {
-                result.AddRange(taskSource.Detect(projectFolder, null));
+                result.AddRange(taskSource.Detect(projectFolder));
             }
             return result;
         }

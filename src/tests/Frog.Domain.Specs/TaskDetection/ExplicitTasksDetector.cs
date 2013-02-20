@@ -20,13 +20,7 @@ namespace Frog.Domain.Specs.TaskDetection
 
         protected override void Given()
         {
-            customTasks = new CustomTasksDetector(taskFileFinder);
-            taskFileFinder.FindFiles("basefolder").Returns(As.List("runz.me"));
-        }
-
-        protected override void When()
-        {
-            tasks = customTasks.Detect("basefolder", s => @"{ pipeline: [{ 
+            customTasks = new CustomTasksDetector(taskFileFinder, s => @"{ pipeline: [{ 
     stage : ""Build"",
    tasks : [""task 1"", ""task 2""]
 },
@@ -35,6 +29,12 @@ namespace Frog.Domain.Specs.TaskDetection
     tasks : [""task 3"", ""task 4""]
 }]}
 ");
+            taskFileFinder.FindFiles("basefolder").Returns(As.List("runz.me"));
+        }
+
+        protected override void When()
+        {
+            tasks = customTasks.Detect("basefolder");
         }
 
         [Test]
