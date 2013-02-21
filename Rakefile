@@ -1,11 +1,11 @@
 require 'rake/clean'
 require 'fileutils'
 require 'rbconfig'
-is_windows = (RbConfig::CONFIG['host_os'] =~ /mswin|mingw|cygwin/)
+IS_WINDOWS = (RbConfig::CONFIG['host_os'] =~ /mswin|mingw|cygwin/)
 
 CLOBBER.include('output/*', '**/bin/Debug', '**/bin/Release', '**/obj/Release', '**/obj/Debug')
 
-if is_windows
+if IS_WINDOWS
   MSBUILD_PATH = "#{ENV['SYSTEMROOT']}\\Microsoft.NET\\Framework\\v4.0.30319\\msbuild.exe"
 else
   MSBUILD_PATH = "xbuild"
@@ -118,7 +118,7 @@ end
 
 def compile_base_project (full_rebuild)
   command_line = "#{MSBUILD_PATH} Frog.Net.sln /p:Configuration=#{BUILD_MODE} /target:#{full_rebuild ? 'rebuild' : 'build'} /m"
-  if not $is_windows 
+  if not IS_WINDOWS 
     command_line = "xbuild Frog.Net.sln"
   end
   sh command_line do |ok, res|
