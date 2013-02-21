@@ -68,6 +68,8 @@
     <Compile Include="RevisionChecker\FailsToRetrieveRevision.cs" />
     <Compile Include="RevisionChecker\RetrievesRevisionSuccessfully.cs" />
     <Compile Include="Support\TimeProfileSpecs.cs" />
+    <Compile Include="TaskDetection\CompoundTask\CompoundTask_CollectsTasksFromAllSources.cs" />
+    <Compile Include="TaskDetection\CompoundTask\CompoundTask_CollectsTasksUntilSourceSaysStop.cs" />
     <Compile Include="TaskDetection\ExplicitTasks\ExplicitTasksDetector_WhenNotSpecified.cs" />
     <Compile Include="TaskDetection\ExplicitTasks\ExplicitTasksDetector_WhenTasksDetected.cs" />
     <Compile Include="TaskDetection\MakeTaskDetectorSpecs.cs" />

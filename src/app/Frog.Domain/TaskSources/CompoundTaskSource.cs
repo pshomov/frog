@@ -16,7 +16,9 @@ namespace Frog.Domain.TaskSources
             var result = new List<Task>();
             foreach (var taskSource in srcs)
             {
-                result.AddRange(taskSource.Detect(projectFolder, out shouldStop));
+                bool taskSaysShouldStop;
+                result.AddRange(taskSource.Detect(projectFolder, out taskSaysShouldStop));
+                if (taskSaysShouldStop) break;
             }
             return result;
         }
