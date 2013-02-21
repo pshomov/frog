@@ -1,0 +1,11 @@
+GEM
+  remote: http://rubygems.org/
+  specs:
+    rake (10.0.3)
+
+PLATFORMS
+  ruby
+  x86-mingw32
+
+DEPENDENCIES
+  rake
