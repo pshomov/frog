@@ -1,22 +1,19 @@
 ﻿using System.Collections.Generic;
-using System.IO;
-using System.Text;
 using Frog.Domain.BuildSystems.Custom;
 using Frog.Domain.BuildSystems.Rake;
-using Frog.Domain.ExecTasks;
 using Frog.Domain.TaskSources;
-using Frog.Specs.Support;
 using Frog.Support;
 using NSubstitute;
 using NUnit.Framework;
 
-namespace Frog.Domain.Specs.TaskDetection
+namespace Frog.Domain.Specs.TaskDetection.ExplicitTasks
 {
     [TestFixture]
-    public class ExplicitTasksDetector : TaskDetectorSpecsBase
+    public class ExplicitTasksDetector_WhenTasksDetected : TaskDetectorSpecsBase
     {
         TaskSource customTasks;
         IList<Task> tasks;
+        bool shouldStop;
 
         protected override void Given()
         {
@@ -34,7 +31,6 @@ namespace Frog.Domain.Specs.TaskDetection
 
         protected override void When()
         {
-            bool shouldStop;
             tasks = customTasks.Detect("basefolder", out shouldStop);
         }
 
@@ -51,6 +47,12 @@ namespace Frog.Domain.Specs.TaskDetection
             Assert.That(((ShellTask)tasks[1]).args, Is.EqualTo("task 2"));            
             Assert.That(((ShellTask)tasks[2]).args, Is.EqualTo("task 3"));            
             Assert.That(((ShellTask)tasks[3]).args, Is.EqualTo("task 4"));            
+        }
+
+        [Test]
+        public void should_stop_further_task_detection()
+        {
+            Assert.That(shouldStop, Is.True);            
         }
     }
 }

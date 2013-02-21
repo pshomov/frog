@@ -25,6 +25,7 @@ namespace Frog.Domain.BuildSystems.Custom
             var configPrototype = new { pipeline = new[] { new { stage = "stage name", tasks = new[] { "task 1", "task2" } } } };
             var foundFiles = taskFileFinder.FindFiles(projectFolder);
             if (foundFiles.Count == 0) return new List<Task>();
+            shouldStop = true;
             var parsedConfig = JsonConvert.DeserializeAnonymousType(getContent(Path.Combine(projectFolder, foundFiles.Single())), configPrototype);
             return parsedConfig.pipeline.SelectMany(arg => arg.tasks.Select(s => (Task)new ShellTask {args = s, cmd = ""})).ToList();
         }
