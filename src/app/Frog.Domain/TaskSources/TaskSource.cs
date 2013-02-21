@@ -5,6 +5,6 @@ namespace Frog.Domain.TaskSources
 {
     public interface TaskSource
     {
-        IList<Task> Detect(string projectFolder);
+        IList<Task> Detect(string projectFolder, out bool shouldStop);
     }
 }

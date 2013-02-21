@@ -11,8 +11,9 @@ namespace Frog.Domain.BuildSystems.Maven
             this._taskFileFinder = _taskFileFinder;
         }
 
-        public IList<Task> Detect(string projectFolder)
+        public IList<Task> Detect(string projectFolder, out bool shouldStop)
         {
+            shouldStop = false;
             var tasks = new List<Task>();
             return tasks;
         }

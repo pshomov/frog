@@ -19,9 +19,10 @@ namespace Frog.Domain.BuildSystems.Custom
             this.getContent = getContent;
         }
 
-        public IList<Task> Detect(string projectFolder)
+        public IList<Task> Detect(string projectFolder, out bool shouldStop)
         {
-            var configPrototype = new {pipeline = new[] {new {stage = "stage name", tasks = new[] {"task 1", "task2"}}}};
+            shouldStop = false;
+            var configPrototype = new { pipeline = new[] { new { stage = "stage name", tasks = new[] { "task 1", "task2" } } } };
             var foundFiles = taskFileFinder.FindFiles(projectFolder);
             if (foundFiles.Count == 0) return new List<Task>();
             var parsedConfig = JsonConvert.DeserializeAnonymousType(getContent(Path.Combine(projectFolder, foundFiles.Single())), configPrototype);

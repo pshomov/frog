@@ -67,7 +67,8 @@ namespace Frog.Domain
         List<IExecTask> GenerateTasks(SourceDrop sourceDrop)
         {
             var execTasks = new List<IExecTask>();
-            foreach (var task in tasksSource.Detect(sourceDrop.SourceDropLocation))
+            bool shouldStop;
+            foreach (var task in tasksSource.Detect(sourceDrop.SourceDropLocation, out shouldStop))
             {
                 execTasks.AddRange(execTaskGenerator.GimeTasks(task));
             }

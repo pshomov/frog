@@ -34,7 +34,8 @@ namespace Frog.Domain.Specs.TaskDetection
 
         protected override void When()
         {
-            tasks = customTasks.Detect("basefolder");
+            bool shouldStop;
+            tasks = customTasks.Detect("basefolder", out shouldStop);
         }
 
         [Test]

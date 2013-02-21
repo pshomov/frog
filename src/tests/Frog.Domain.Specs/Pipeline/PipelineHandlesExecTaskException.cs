@@ -13,7 +13,8 @@ namespace Frog.Domain.Specs.Pipeline
         {
             base.Given();
             SrcTask1 = new MSBuildTask("");
-            TaskSource.Detect(Arg.Any<string>()).Returns(As.List<Domain.Task>(SrcTask1));
+            bool shouldStop;
+            TaskSource.Detect(Arg.Any<string>(), out shouldStop).Returns(As.List<Domain.Task>(SrcTask1));
             Task2 = Substitute.For<IExecTask>();
             Task2.When(task => task.Perform(Arg.Any<SourceDrop>())).Do(info => { throw new Exception("ufff"); });
             ExecTaskGenerator.GimeTasks(Arg.Any<Domain.Task>()).Returns(As.List(Task2));

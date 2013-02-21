@@ -12,8 +12,9 @@ namespace Frog.Domain.BuildSystems.Rake
             this.bundlerFileFinder = bundlerFileFinder;
         }
 
-        public IList<Task> Detect(string projectFolder)
+        public IList<Task> Detect(string projectFolder, out bool shouldStop)
         {
+            shouldStop = false;
             var rakeFile = rakeTaskFileFinder.FindFiles(projectFolder);
             var bundlerFile = bundlerFileFinder.FindFiles(projectFolder);
             var tasks = new List<Task>();

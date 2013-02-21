@@ -23,7 +23,8 @@ namespace Frog.Domain.Specs.TaskDetection
 
         protected override void When()
         {
-            items = msbuildTaskDetecttor.Detect("basefolder");
+            bool shouldStop;
+            items = msbuildTaskDetecttor.Detect("basefolder", out shouldStop);
         }
 
         [Test]
@@ -51,7 +52,8 @@ namespace Frog.Domain.Specs.TaskDetection
 
         protected override void When()
         {
-            items = msbuildTaskDetecttor.Detect("basefolder");
+            bool shouldStop;
+            items = msbuildTaskDetecttor.Detect("basefolder", out shouldStop);
         }
 
         [Test]
@@ -79,7 +81,8 @@ namespace Frog.Domain.Specs.TaskDetection
 
         protected override void When()
         {
-            items = msbuildTaskDetecttor.Detect("basefolder");
+            bool shouldStop;
+            items = msbuildTaskDetecttor.Detect("basefolder", out shouldStop);
         }
 
         [Test]
@@ -104,7 +107,8 @@ namespace Frog.Domain.Specs.TaskDetection
 
         protected override void When()
         {
-            items = msbuildTaskDetecttor.Detect("basefolder");
+            bool shouldStop;
+            items = msbuildTaskDetecttor.Detect("basefolder", out shouldStop);
         }
 
         [Test]
@@ -128,7 +132,8 @@ namespace Frog.Domain.Specs.TaskDetection
 
         protected override void When()
         {
-            items = msbuildTaskDetector.Detect("basefolder");
+            bool shouldStop;
+            items = msbuildTaskDetector.Detect("basefolder", out shouldStop);
         }
 
         [Test]
@@ -154,7 +159,8 @@ namespace Frog.Domain.Specs.TaskDetection
 
         protected override void When()
         {
-            items = msbuildTaskDetecttor.Detect("basefolder");
+            bool shouldStop;
+            items = msbuildTaskDetecttor.Detect("basefolder", out shouldStop);
         }
 
         [Test]

@@ -14,8 +14,9 @@ namespace Frog.Domain.BuildSystems.Solution
             this._projectTaskFileRepo = _projectTaskFileRepo;
         }
 
-        public IList<Task> Detect(string projectFolder)
+        public IList<Task> Detect(string projectFolder, out bool shouldStop)
         {
+            shouldStop = false;
             var items = _projectTaskFileRepo.FindFiles(projectFolder);
             return items.Select(s => (Task) new NUnitTask(ProjectPathToAssemblyPath(s))).ToList();
         }

@@ -14,7 +14,8 @@ namespace Frog.Domain.Specs.Pipeline
         {
             base.Given();
             SrcTask1 = new MSBuildTask("");
-            TaskSource.Detect(Arg.Any<string>()).Returns(As.List<Domain.Task>(SrcTask1));
+            bool shouldStop;
+            TaskSource.Detect(Arg.Any<string>(), out shouldStop).Returns(As.List<Domain.Task>(SrcTask1));
             Task1 = Substitute.For<IExecTask>();
             Task1.Perform(Arg.Any<SourceDrop>()).Returns(new ExecTaskResult(ExecutionStatus.Failure, 4));
             Task2 = Substitute.For<IExecTask>();
@@ -30,7 +31,8 @@ namespace Frog.Domain.Specs.Pipeline
         [Test]
         public void should_get_all_tasks()
         {
-            TaskSource.Received().Detect("");
+            bool shouldStop;
+            TaskSource.Received().Detect("", out shouldStop);
         }
 
         [Test]

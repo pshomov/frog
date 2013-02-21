@@ -35,7 +35,8 @@ namespace Frog.System.Specs.ProjectBuilding
             var workingAreaGoverner = Substitute.For<WorkingAreaGoverner>();
             workingAreaGoverner.AllocateWorkingArea().Returns("fake location");
             var testSystem = new TestSystem(workingAreaGoverner, url => sourceRepoDriver);
-            testSystem.TasksSource.Detect(Arg.Any<string>()).Returns(
+            bool shouldStop;
+            testSystem.TasksSource.Detect(Arg.Any<string>(), out shouldStop).Returns(
                 As.List(
                     (Task)
                     new FakeTaskDescription(TerminalOutput3,

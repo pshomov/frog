@@ -23,7 +23,8 @@ namespace Frog.Domain.Specs.TaskDetection
 
         protected override void When()
         {
-            tasks = taskDetector.Detect("base");
+            bool shouldStop;
+            tasks = taskDetector.Detect("base", out shouldStop);
         }
 
         [Test]
@@ -49,7 +50,8 @@ namespace Frog.Domain.Specs.TaskDetection
 
         protected override void When()
         {
-            tasks = taskDetector.Detect("base");
+            bool shouldStop;
+            tasks = taskDetector.Detect("base", out shouldStop);
         }
     }
 
@@ -80,7 +82,8 @@ namespace Frog.Domain.Specs.TaskDetection
 
         protected override void When()
         {
-            tasks = taskDetector.Detect("base");
+            bool shouldStop;
+            tasks = taskDetector.Detect("base", out shouldStop);
         }
 
         [Test]
@@ -113,7 +116,8 @@ namespace Frog.Domain.Specs.TaskDetection
 
         protected override void When()
         {
-            tasks = taskDetector.Detect("base");
+            bool shouldStop;
+            tasks = taskDetector.Detect("base", out shouldStop);
         }
 
         [Test]

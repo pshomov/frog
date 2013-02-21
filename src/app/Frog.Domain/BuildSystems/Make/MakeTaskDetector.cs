@@ -11,8 +11,9 @@ namespace Frog.Domain.BuildSystems.Make
             this.taskFileFinder = taskFileFinder;
         }
 
-        public IList<Task> Detect(string projectFolder)
+        public IList<Task> Detect(string projectFolder, out bool shouldStop)
         {
+            shouldStop = false;
             var result = new List<Task>();
             List<string> foundFiles = taskFileFinder.FindFiles(projectFolder);
             if (foundFiles.Count == 1) result.Add(new MakeTask());

@@ -26,7 +26,8 @@ namespace Frog.Domain.Specs.TaskDetection
 
         protected override void When()
         {
-            items = nunitTaskDetecttor.Detect("basefolder");
+            bool shouldStop;
+            items = nunitTaskDetecttor.Detect("basefolder", out shouldStop);
         }
 
         [Test]

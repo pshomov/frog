@@ -23,7 +23,8 @@ namespace Frog.Domain.Specs.TaskDetection
 
         protected override void When()
         {
-            items = makeTaskDetector.Detect("basefolder");
+            bool shouldStop;
+            items = makeTaskDetector.Detect("basefolder", out shouldStop);
         }
 
         [Test]
