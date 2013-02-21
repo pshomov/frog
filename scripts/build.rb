@@ -25,6 +25,7 @@ cp_r "../src/app/Frog.Agent/bin/#{build_mode}", "../output/agent"
 cp_r "../src/app/Frog.RepositoryTracker/bin/#{build_mode}", "../output/repotracker"
 cp_r "../src/app/SaaS.Engine/bin/#{build_mode}", "../output/projections"
 cp_r "../src/app/Frog.Agent.Service/bin/#{build_mode}", "../output/agentservice"
+cp_r "../src/app/Frog.Runner/bin/#{build_mode}", "../output/runner"
 rm Dir.glob('../output/web/**/*.cs')
 rm Dir.glob('../output/web/**/*.csproj')
 rm Dir.glob('../output/web/**/*.pidb')
