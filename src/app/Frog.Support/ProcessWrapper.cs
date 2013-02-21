@@ -42,8 +42,8 @@ namespace Frog.Support
             get { return process; }
         }
 
-        public event Action<string> OnErrorOutput = s => Console.WriteLine(String.Format("E>{0}", s));
-        public event Action<string> OnStdOutput = s => Console.WriteLine(String.Format("S>{0}", s));
+        public event Action<string> OnErrorOutput = s => {};
+        public event Action<string> OnStdOutput = s => {};
 
         public string ProcessTreeCPUUsageId
         {

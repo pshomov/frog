@@ -19,7 +19,6 @@ namespace Frog.Domain.Integration
         public RevisionInfo GetLatestRevision()
         {
             string scriptPath = Path.Combine(Underware.GitProductionScriptsLocation, "git_remote_latest_rev.rb");
-            Console.WriteLine("Repo url is: "+repoUrl);
             var process = new ProcessWrapper("ruby",
                                              scriptPath + " \"" + repoUrl+"\"");
             string result = "";
