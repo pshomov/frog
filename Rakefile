@@ -7,8 +7,10 @@ CLOBBER.include('output/*', '**/bin/Debug', '**/bin/Release', '**/obj/Release', 
 
 if IS_WINDOWS
   MSBUILD_PATH = "#{ENV['SYSTEMROOT']}\\Microsoft.NET\\Framework\\v4.0.30319\\msbuild.exe"
+  MONO=""
 else
   MSBUILD_PATH = "xbuild"
+  MONO="mono"
 end
 
 OUTPUT_PATH = "output"
@@ -74,7 +76,7 @@ task :run_acceptance_tests do
   # ENV['PATH'] = "#{ENV['PATH']};#{File.join(Dir.pwd, 'Lib\\Selenium')}"
   ACCEPTANCE_TESTS.each do |test|
     select_bin_environment("#{OUTPUT_PATH}/#{test['artifact_folder']}", environment)
-    launch("mono Libs/NUnit/nunit-console-x86.exe #{OUTPUT_PATH}/#{test['project']}/#{test['project']}.dll")
+    launch("#{MONO} Libs/NUnit/nunit-console-x86.exe #{OUTPUT_PATH}/#{test['project']}/#{test['project']}.dll")
   end
 end
 

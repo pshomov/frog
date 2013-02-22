@@ -1,0 +1,6 @@
+{
+	pipeline : [{
+		stage : "Buildd",
+		tasks : ["bundle install --binstubs", "ruby bin\\rake --tasks"]
+	}]
+}
