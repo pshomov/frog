@@ -6,6 +6,7 @@ using Frog.UI.Web.HttpHelpers;
 namespace Frog.UI.Web.Controllers.TestSupport
 {
     [HandleError]
+    [ValidateInput(false)]
     public class TestProjectController : Controller
     {
         public ActionResult Status(string projectUrl)

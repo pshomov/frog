@@ -42,8 +42,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\libs\NUnit\nunit.framework.dll</HintPath>
     </Reference>
-    <Reference Include="WebDriver.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\..\..\libs\WebDriver\WebDriver.Common.dll</HintPath>
+    <Reference Include="WebDriver">
+      <HintPath>..\..\..\libs\WebDriver\WebDriver.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

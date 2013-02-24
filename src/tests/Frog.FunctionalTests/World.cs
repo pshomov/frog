@@ -2,6 +2,7 @@
 using System.Linq;
 using Frog.Domain.Integration;
 using Frog.Support;
+using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.Remote;
 using TechTalk.SpecFlow;
@@ -17,8 +18,8 @@ namespace Frog.FunctionalTests
         [BeforeScenario]
         public static void BeforeScenario()
         {
-            browser = new FirefoxDriver();
-            baseUrl = Environment.GetEnvironmentVariable("ACCEPTANCE_TEST_URL") ?? "http://localhost:6502/";
+            browser = new ChromeDriver();
+            baseUrl = Environment.GetEnvironmentVariable("ACCEPTANCE_TEST_URL") ?? "http://localhost:1169/";
         }
 
         [AfterScenario]

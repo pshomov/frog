@@ -75,12 +75,7 @@ namespace Frog.UI.Web
             var theBus = new RabbitMQBus(OSHelpers.RabbitHost());
             var config = FileStorage.CreateConfig(OSHelpers.LokadStorePath());
 
-//            var eventStore = Config.WireupEventStore();
-//            ServiceLocator.ProjectStatus = new EventBasedProjectView(eventStore);
-//            ServiceLocator.TerminalOutputStatus = new EventBasedViewForTerminalOutput(eventStore);
-//            ServiceLocator.BuildStatus = new EventBasedProjectView(eventStore);
             ServiceLocator.Bus = theBus;
-            ServiceLocator.AllMessages = new ConcurrentQueue<Message>();
             ServiceLocator.Store = config.CreateDocumentStore(new ViewStrategy());
         }
     }

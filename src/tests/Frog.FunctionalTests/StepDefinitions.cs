@@ -44,7 +44,7 @@ namespace Frog.FunctionalTests
             GivenITypeInTheUrlInputTheP1RepositoryURLAndPressTheRegisterButton(project);
             statusPageLink = AssertionHelpers.WithRetries(() => World.browser.FindElementById("newly_registered"));
             string target = statusPageLink.GetAttribute("href");
-            StatusPages[project] = GetFullURLfromRelative(target);
+            StatusPages[project] = target;
         }
 
         [Given(@"I have registered project URL ""(.*)""")]
