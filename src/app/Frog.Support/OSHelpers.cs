@@ -55,13 +55,6 @@ namespace Frog.Support
                 "RUNZ_RIAK_HOST") ?? "localhost";
         }
 
-        public static string TerminalViewConnection()
-        {
-            return "mongodb://p:p@ds031607.mongolab.com:31607/terminal_view";
-            return Environment.GetEnvironmentVariable(
-                "RUNZ_TERMINAL_VIEW") ?? "localhost";
-        }
-
         public static string RabbitHost()
         {
             return Environment.GetEnvironmentVariable("RUNZ_RABBITMQ_SERVER") ?? "localhost";
