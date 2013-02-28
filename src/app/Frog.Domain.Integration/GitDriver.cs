@@ -9,7 +9,7 @@ namespace Frog.Domain.Integration
     {
         const string RevisionExtractingRegex = @"^([a-f,0-9]*)\s*refs/heads/master";
         readonly string repoUrl;
-        public const int GitTimeoutInMs = 120000;
+        public const int GitTimeoutInMs = 120000*2;
 
         public GitDriver(string repo)
         {
@@ -35,7 +35,7 @@ namespace Frog.Domain.Integration
             process.WaitForProcess(GitTimeoutInMs);
             var exitcode = process.Dispose();
             if (exitcode != 0)
-                throw new InvalidProgramException("script failed, see log for details");
+                throw new InvalidProgramException(string.Format("script failed with exit code {1}: {0}", 1, exitcode));
             if (result.IsNullOrEmpty()) 
                 throw new InvalidProgramException("Failed to retrieve repo revision");
             return new RevisionInfo {Revision = result};

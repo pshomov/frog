@@ -198,10 +198,10 @@ namespace Frog.Domain
 
         int nextEventId;
 
-        protected int NextEventId
+        private int NextEventId
         {
             get { return nextEventId++; }
-            private set { nextEventId = value; }
+            set { nextEventId = value; }
         }
     }
 }

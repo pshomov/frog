@@ -31,8 +31,6 @@ namespace SaaS.Client.Projections.Frog.Projects
     [DataContract]
     public sealed class ProjectBuild
     {
-//        public static ProjectBuild None = new ProjectBuild();
-
         [DataMember(Order = 1)]
         public BuildId BuildId { get; set; }
         [DataMember(Order = 2)]
@@ -41,6 +39,8 @@ namespace SaaS.Client.Projections.Frog.Projects
         public string RevisionComment { get; set; }
         [DataMember(Order = 4)]
         public BuildStatus Status  { get; set; }
+        [DataMember(Order = 5)]
+        public string ProjectUrl  { get; set; }
     }
 
     public enum BuildStatus
@@ -70,7 +70,7 @@ namespace SaaS.Client.Projections.Frog.Projects
                     {
                         history.Items.Add(history.CurrentHistory);
                     }
-                    history.CurrentHistory = new ProjectBuild(){BuildId = ev.Id, RevisionComment = ev.Info.Comment, RevisionNr = ev.Info.Revision, Status = BuildStatus.Started};
+                    history.CurrentHistory = new ProjectBuild(){BuildId = ev.Id, RevisionComment = ev.Info.Comment, RevisionNr = ev.Info.Revision, Status = BuildStatus.Started, ProjectUrl = ev.RepoUrl};
                     history.Current = new Build(){buildId = ev.Id};
                 });
         }

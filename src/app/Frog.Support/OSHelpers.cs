@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading;
 
 namespace Frog.Support
 {
@@ -26,7 +27,20 @@ namespace Frog.Support
             if (Directory.Exists(directory))
             {
                 ClearAttributes(directory);
-                Directory.Delete(directory,true);
+                int retries = 5;
+                while (retries > 0)
+                {
+                    try
+                    {
+                        Directory.Delete(directory, true);
+                        break;
+                    }
+                    catch (IOException e)
+                    {
+                        retries--;
+                        Thread.Sleep(3000);
+                    }
+                }
             }
         }
 

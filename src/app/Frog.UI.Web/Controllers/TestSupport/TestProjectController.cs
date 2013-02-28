@@ -18,28 +18,28 @@ namespace Frog.UI.Web.Controllers.TestSupport
         {
             if (Os.IsWindows)
                 projectUrl = HttpUtility.UrlDecode(projectUrl);
-            return new ProjectController().GetProjectStatus(PathUrlConversion.Url2Path(projectUrl));
+            return ProjectActions.GetProjectStatus(PathUrlConversion.Url2Path(projectUrl));
         }
 
         public ActionResult History(string projectUrl)
         {
             if (Os.IsWindows)
                 projectUrl = HttpUtility.UrlDecode(projectUrl);
-            return new ProjectController().GetProjectHistory(PathUrlConversion.Url2Path(projectUrl));
+            return ProjectActions.GetProjectHistory(PathUrlConversion.Url2Path(projectUrl));
         }
 
         public ActionResult TerminalOutput(string projectUrl, int taskIndex)
         {
             if (Os.IsWindows)
                 projectUrl = HttpUtility.UrlDecode(projectUrl);
-            return new ProjectController().GetTaskTerminalOutput(PathUrlConversion.Url2Path(projectUrl), taskIndex);
+            return ProjectActions.GetTaskTerminalOutput(PathUrlConversion.Url2Path(projectUrl), taskIndex);
         }
 
         public ActionResult AllTerminalOutput(string projectUrl, int lastOutputChunkIndex, int taskIndex)
         {
             if (Os.IsWindows)
                 projectUrl = HttpUtility.UrlDecode(projectUrl);
-            return ProjectController.GetAllTaskTerminalOutput(PathUrlConversion.Url2Path(projectUrl), lastOutputChunkIndex, taskIndex);            
+            return ProjectActions.GetAllTaskTerminalOutput(PathUrlConversion.Url2Path(projectUrl), lastOutputChunkIndex, taskIndex);            
         }
     }
 }

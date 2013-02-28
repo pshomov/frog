@@ -4,6 +4,7 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace SaaS.Engine
 {
@@ -39,6 +40,7 @@ namespace SaaS.Engine
 
         public ProjectId(string id)
         {
+            id = Regex.Replace(id, @"//.+:.+@", "//", RegexOptions.IgnoreCase);
             Id = id.Replace('/', '_').Replace(':','_');
         }
 

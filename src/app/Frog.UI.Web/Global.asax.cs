@@ -28,8 +28,8 @@ namespace Frog.UI.Web
 
         protected void Application_Start()
         {
-            Profiler.MeasurementsBridge = new Profiler.LogFileLoggingBridge("runz_web_ui.log");
             serviceArea = Server.MapPath("~/App_Data");
+            Profiler.MeasurementsBridge = new Profiler.LogFileLoggingBridge(Path.Combine(serviceArea, "/runz_web_ui.log"));
             Directory.CreateDirectory(serviceArea);
             mapPath = Path.Combine(serviceArea, "Crash_");
 
@@ -47,10 +47,10 @@ namespace Frog.UI.Web
         {
             string mode = Environment.GetEnvironmentVariable("RUNZ_ACCEPTANCE_MODE");
             WebFrontendSetup setup;
-            if (!mode.IsNullOrEmpty() && mode == "ACCEPTANCE")
+//            if (!mode.IsNullOrEmpty() && mode == "ACCEPTANCE")
                 setup = new AcceptanceTestWebFrontendSetup();
-            else
-                setup = new WebFrontendSetup();
+//            else
+//                setup = new WebFrontendSetup();
             return setup;
         }
 
@@ -85,10 +85,13 @@ namespace Frog.UI.Web
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
-            routes.MapRoute("all_projects", "allprojects",
-                            new { controller = "AllProjects", action = "index" });
-            routes.MapRoute("diagnostics_all_messages", "diagnostics/messages",
-                            new { controller = "Diagnostics", action = "allmessages" });
+            routes.MapRoute("codebase_task_all_terminal_output", "project/codebase/{company}/{project}/{repository}/task",
+                            new { controller = "CodebaseProject", action = "allterminaloutput" });
+            routes.MapRoute("codebase_task_terminal_output", "project/codebase/{company}/{project}/{repository}/task/{taskIndex}",
+                            new { controller = "CodebaseProject", action = "terminaloutput" });
+            routes.MapRoute("codebase_status", "project/codebase/{company}/{project}/{repository}/{action}",
+                            new { controller = "CodebaseProject" });
+
             routes.MapRoute("task_all_terminal_output", "project/github/{user}/{project}/task",
                             new { controller = "Project", action = "allterminaloutput" });
             routes.MapRoute("task_terminal_output", "project/github/{user}/{project}/task/{taskIndex}",
