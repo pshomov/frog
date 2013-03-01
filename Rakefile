@@ -3,7 +3,7 @@ require 'fileutils'
 require 'rbconfig'
 IS_WINDOWS = (RbConfig::CONFIG['host_os'] =~ /mswin|mingw|cygwin/)
 
-CLOBBER.include('output/*', '**/bin/Debug', '**/bin/Release', '**/obj/Release', '**/obj/Debug')
+CLOBBER.include('output/*', '**/bin', '**/obj')
 
 if IS_WINDOWS
   MSBUILD_PATH = "#{ENV['SYSTEMROOT']}\\Microsoft.NET\\Framework\\v4.0.30319\\msbuild.exe"
