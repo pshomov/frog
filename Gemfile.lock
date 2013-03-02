@@ -2,6 +2,14 @@ GEM
   remote: http://rubygems.org/
   specs:
     rake (10.0.3)
+    win32-api (1.4.8-x86-mingw32)
+    win32-service (0.7.2-x86-mingw32)
+      windows-pr (>= 1.0.8)
+    windows-api (0.4.2)
+      win32-api (>= 1.4.5)
+    windows-pr (1.2.2)
+      win32-api (>= 1.4.5)
+      windows-api (>= 0.3.0)
 
 PLATFORMS
   ruby
@@ -9,3 +17,4 @@ PLATFORMS
 
 DEPENDENCIES
   rake
+  win32-service

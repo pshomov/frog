@@ -6,6 +6,8 @@ IS_WINDOWS = (RbConfig::CONFIG['host_os'] =~ /mswin|mingw|cygwin/)
 CLOBBER.include('output/*', '**/bin', '**/obj')
 
 if IS_WINDOWS
+  require 'win32/service'
+  include Win32
   MSBUILD_PATH = "#{ENV['SYSTEMROOT']}\\Microsoft.NET\\Framework\\v4.0.30319\\msbuild.exe"
   MONO=""
 else
@@ -15,8 +17,11 @@ end
 
 OUTPUT_PATH = "output"
 BUILD_MODE = "Debug"
-ACCOUNT = ""
-PASSWORD = ""
+ACCOUNT = ENV['ACCOUNT']
+PASSWORD = ENV['PASSWORD']
+SERVER = "eimreydv02"
+PSEXEC="Libs\\paexec \\\\#{SERVER} -u #{ACCOUNT} -p #{PASSWORD}"
+INSTALLUTIL = 'c:\windows\microsoft.net\framework\v4.0.30319\installutil'
 
 directory OUTPUT_PATH
 
@@ -57,13 +62,21 @@ task :fast_build => [OUTPUT_PATH] do
 end
 
 task :deploy do
-  environment = ENV['Env'] || local_environment
-  server = {local_environment, 'localhost',development_environment, '', staging_environment, '', production_environment, ''}[environment]
+  environment = ENV['Env'] 
+  #server = {local_environment, 'localhost',development_environment, '', staging_environment, '', production_environment, ''}[environment]
 
-  WEB_APPS.each do |app|
-    artifact_folder = File.join(Dir.pwd, OUTPUT_PATH, app['project'])
-    select_web_environment("#{OUTPUT_PATH}/#{app['project']}", environment)
-    deploy_web_service(artifact_folder, app['deployment'][environment], server)
+  # WEB_APPS.each do |app|
+  #   artifact_folder = File.join(Dir.pwd, OUTPUT_PATH, app['project'])
+  #   select_web_environment("#{OUTPUT_PATH}/#{app['project']}", environment)
+  #   deploy_web_service(artifact_folder, app['deployment'][environment], server)
+  # end
+
+  SERVICE_APPS.each do |app|
+    service_name = "#{environment}_#{app['project']}"
+    service_local_artifact_path = "c:\\Sprettur\\runz\\#{environment}\\#{app['project']}"
+    service_local_executable = "#{service_local_artifact_path}\\#{app['project']}.exe"
+    remote_artifact_folder = "\\\\#{SERVER}\\c$\\Sprettur\\runz\\#{environment}\\#{app['project']}"
+    deploy_system_service(service_name, app['project'], environment, remote_artifact_folder, service_local_artifact_path, service_local_executable)
   end
 end
 
@@ -151,6 +164,50 @@ def copy_bin_artifact(bin_project, destination)
 
   copy_all_configuration_settings(bin_output_path, bin_project)
 end
+
+def deploy_system_service(service_name, artifact_folder, environment, remote_artifact_folder, service_local_artifact_path, service_local_executable)
+  stop_service(service_name)
+  uninstall_service(service_name, service_local_executable)
+  cleanup_remote_path(service_local_artifact_path)
+  install_service(artifact_folder, remote_artifact_folder, service_name, service_local_executable)
+  start_service service_name
+end
+
+def stop_service(service_name)
+  if Service.exists?(service_name, SERVER) and (Service.status(service_name, SERVER).current_state == 'running')
+    launch "#{PSEXEC} net stop #{service_name}"
+  end
+end
+
+def start_service(service_name)
+  launch "#{PSEXEC} net start #{service_name}"
+end
+
+def uninstall_service(service_name, path_to_executable)
+  if Service.exists? service_name, SERVER
+    launch "#{PSEXEC} #{INSTALLUTIL} /ServiceName=#{service_name} /u #{path_to_executable}"
+  end
+end
+
+def install_service(artifacts, destination, service_name, path_to_executable)
+  mkdir_p destination
+  launch  "xcopy /s/y #{OUTPUT_PATH}\\#{artifacts} #{destination}"
+  launch "#{PSEXEC} #{INSTALLUTIL} /ServiceName=#{service_name} #{path_to_executable}"
+end
+
+def remotely_cmd(server, command)
+  File.open('launchme.cmd', 'w') {|f| f.write(command)}
+  launch "#{PSEXEC} -c launchme.cmd"
+  rm 'launchme.cmd'
+end
+
+
+def cleanup_remote_path(local_artifact_path)
+  sleep(3)
+  remotely_cmd SERVER, "if exist #{local_artifact_path} rmdir /s /q #{local_artifact_path}"
+  sleep(3)
+end
+
 
 def copy_all_configuration_settings(bin_output_path, bin_project)
   #cp_r "#{bin_project}/_config", bin_output_path

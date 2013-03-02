@@ -75,7 +75,7 @@ namespace Frog.Domain.ExecTasks
             {
                 process.Execute();
                 OnTaskStarted(process.Id);
-                //ObserveTask();
+                ObserveTask();
                 exitCode = process.Dispose();
             }
             catch (HangingProcessDetectedException)

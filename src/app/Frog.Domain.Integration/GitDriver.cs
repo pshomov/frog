@@ -48,11 +48,13 @@ namespace Frog.Domain.Integration
                                              scriptPath + " \"" + repoUrl + "\" " + revision + " " + " \"" + workingArea+"\"");
             var log = "";
             process.OnStdOutput += s => { if (!s.IsNullOrEmpty()) log = s; };
+            string err_log = "";
+            process.OnErrorOutput += s => err_log += s;
             process.Execute();
             process.WaitForProcess(GitTimeoutInMs);
             var exitcode = process.Dispose();
             if (exitcode != 0)
-                throw new InvalidProgramException("script failed, see log for details");
+                throw new InvalidProgramException("script failed: "+err_log);
             return new CheckoutInfo {Comment = log, Revision = revision};
         }
     }
