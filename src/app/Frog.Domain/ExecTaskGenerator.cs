@@ -77,7 +77,8 @@ namespace Frog.Domain
         {
             var cmd = Os.IsUnix ? "/bin/bash" : "cmd.exe";
             var args = Os.IsUnix ? "-c \"" : "/c ";
-            args += anyTask.cmd + " " + anyTask.args;
+            var command = anyTask.cmd + " " + anyTask.args;
+            args += command.Trim();
             args = args.Trim();
             if (Os.IsUnix) args += "\"";
 

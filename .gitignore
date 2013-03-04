@@ -16,3 +16,6 @@ SyncToy*
 *.pyc
 test-results/
 scripts/webz_virtenv/
+_bin/
+.bundle/
+.repos_cache/

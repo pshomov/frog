@@ -49,7 +49,7 @@ namespace Frog.Domain.Specs
         [Test]
         public void should_generate_shell_command()
         {
-            execTaskFactory.Received().CreateTask(Arg.Is<string>(s => s == "cmd.exe" || s == "/bin/bash"), Arg.Is<string>(s => s == "-c \" ccc /a /b\"" || s == "/c  ccc /a /b"), "Shell Task");
+            execTaskFactory.Received().CreateTask(Arg.Is<string>(s => s == "cmd.exe" || s == "/bin/bash"), Arg.Is<string>(s => s == "-c \"ccc /a /b\"" || s == "/c ccc /a /b"), "Shell Task");
         }
     }
 }
