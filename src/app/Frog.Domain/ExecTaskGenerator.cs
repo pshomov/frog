@@ -50,22 +50,10 @@ namespace Frog.Domain
             {
                 result.Add(new FakeExecTask((task as FakeTaskDescription).messages, this));
             }
-//            if (task.GetType() == typeof (RakeTask))
-//            {
-//                result.Add(CreateShellTask(new ShellTask {cmd = "rake", args = ""}));
-//            }
-//            if (task.GetType() == typeof (BundlerTask))
-//            {
-//                result.Add(CreateShellTask(new ShellTask {cmd = "bundle", args = "install --path ~/.gem"}));
-//            }
             if (task.GetType() == typeof (ShellTask))
             {
                 result.Add(CreateShellTask((ShellTask) task));
             }
-//            if (task.GetType() == typeof (MakeTask))
-//            {
-//                result.Add(execTaskFactory.CreateTask("make", null, "Make task"));
-//            }
             return result;
         }
 
