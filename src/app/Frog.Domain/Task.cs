@@ -1,7 +1,10 @@
+using System.Collections.Generic;
+
 namespace Frog.Domain
 {
-    public class Task
+    public abstract class Task
     {
+        public abstract List<IExecTask> GimeTasks(IExecTaskGenerator gen);
     }
 
     public class TestTask : Task
@@ -11,6 +14,11 @@ namespace Frog.Domain
         public TestTask(string path)
         {
             this.path = path;
+        }
+
+        public override List<IExecTask> GimeTasks(IExecTaskGenerator gen)
+        {
+                return gen.GimeTasks(this);
         }
     }
 
@@ -22,12 +30,20 @@ namespace Frog.Domain
         {
             this.messages = messages;
         }
+        public override List<IExecTask> GimeTasks(IExecTaskGenerator gen)
+        {
+            return gen.GimeTasks(this);
+        }
     }
 
     public class ShellTaskk  : Task
     {
         public string Name;
         public string Command;
-        
+        public string Arguments;
+        public override List<IExecTask> GimeTasks(IExecTaskGenerator gen)
+        {
+            return gen.GimeTasks(this);
+        }
     }
 }

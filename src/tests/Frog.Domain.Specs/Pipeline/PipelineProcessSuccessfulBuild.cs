@@ -16,9 +16,8 @@ namespace Frog.Domain.Specs.Pipeline
         protected override void Given()
         {
             base.Given();
-            SrcTask1 = new MSBuildTask("");
             bool shouldStop;
-            TaskSource.Detect(Arg.Any<string>(), out shouldStop).Returns(As.List<Task>(SrcTask1));
+            TaskSource.Detect(Arg.Any<string>(), out shouldStop).Returns(As.List<Task>(new FakeTaskDescription()));
 
             Task1 = Substitute.For<IExecTask>();
             Task1.When(task => task.Perform(Arg.Any<SourceDrop>()))
@@ -30,7 +29,7 @@ namespace Frog.Domain.Specs.Pipeline
                 .Do(info => Task2.OnTerminalOutputUpdate += Raise.Event<Action<string>>("task2"));
             Task2.Perform(Arg.Any<SourceDrop>()).Returns(new ExecTaskResult(ExecutionStatus.Success, 0));
 
-            ExecTaskGenerator.GimeTasks(Arg.Any<Task>()).Returns(As.List(Task1, Task2));
+            ExecTaskGenerator.GimeTasks(Arg.Any<FakeTaskDescription>()).Returns(As.List(Task1, Task2));
 
             SaveTheTerminalIdsForTasks();
         }

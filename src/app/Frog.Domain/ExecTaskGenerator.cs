@@ -10,7 +10,9 @@ namespace Frog.Domain
 {
     public interface IExecTaskGenerator
     {
-        List<IExecTask> GimeTasks(Task task);
+        List<IExecTask> GimeTasks(ShellTaskk task);
+        List<IExecTask> GimeTasks(TestTask task);
+        List<IExecTask> GimeTasks(FakeTaskDescription task);
     }
 
     public enum OS
@@ -29,42 +31,27 @@ namespace Frog.Domain
             this.os = os;
         }
 
-        public List<IExecTask> GimeTasks(Task task)
+        public List<IExecTask> GimeTasks(ShellTaskk task)
         {
-            var result = new List<IExecTask>();
-            if (task.GetType() == typeof (MSBuildTask))
-            {
-                var mstask = (MSBuildTask) task;
-                result.Add(execTaskFactory.CreateTask(os == OS.Windows ? ExtensionMethods.format("{0}\\Microsoft.NET\\Framework\\v4.0.30319\\msbuild.exe", Environment.GetEnvironmentVariable("SYSTEMROOT")) : "xbuild", mstask.SolutionFile, "build"));
-            }
-            if (task.GetType() == typeof (NUnitTask))
-            {
-                var nunit = (NUnitTask) task;
-                result.Add(execTaskFactory.CreateTask("nunit", nunit.Assembly, "unit_test"));
-            }
-            if (task.GetType() == typeof (TestTask))
-            {
-                result.Add(new TestExecTask((task as TestTask).path, this));
-            }
-            if (task.GetType() == typeof (FakeTaskDescription))
-            {
-                result.Add(new FakeExecTask((task as FakeTaskDescription).messages, this));
-            }
-            if (task.GetType() == typeof (ShellTask))
-            {
-                result.Add(CreateShellTask((ShellTask) task));
-            }
-            return result;
-        }
+            return As.List(CreateShellTask(task));
+        } 
+        public List<IExecTask> GimeTasks(TestTask task)
+        {
+            return As.List((IExecTask)new TestExecTask(task.path, this));
+        } 
+        public List<IExecTask> GimeTasks(FakeTaskDescription task)
+        {
+            return As.List((IExecTask)new FakeExecTask(task.messages, this));
+        } 
 
         readonly ExecTaskFactory execTaskFactory;
         readonly OS os;
 
-        IExecTask CreateShellTask(ShellTask anyTaskk)
+        IExecTask CreateShellTask(ShellTaskk anyTaskk)
         {
             var cmd = Os.IsUnix ? "/bin/bash" : "cmd.exe";
             var args = Os.IsUnix ? "-c \"" : "/c ";
-            var command = anyTaskk.cmd + " " + anyTaskk.args;
+            var command = anyTaskk.Command + " " + anyTaskk.Arguments;
             args += command.Trim();
             args = args.Trim();
             if (Os.IsUnix) args += "\"";

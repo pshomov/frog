@@ -70,7 +70,7 @@ namespace Frog.Domain
             bool shouldStop;
             foreach (var task in tasksSource.Detect(sourceDrop.SourceDropLocation, out shouldStop))
             {
-                execTasks.AddRange(execTaskGenerator.GimeTasks(task));
+                execTasks.AddRange(task.GimeTasks(execTaskGenerator));
             }
             return execTasks;
         }

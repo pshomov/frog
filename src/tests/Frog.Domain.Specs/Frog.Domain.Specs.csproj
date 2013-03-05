@@ -77,9 +77,6 @@
     <Compile Include="TaskDetection\TaskDetectorSpecsBase.cs" />
     <Compile Include="Pipeline\PipelineProcessSuccessfulBuild.cs" />
     <Compile Include="CommandAndArguments.cs" />
-    <Compile Include="TaskGeneratorSpec.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="TaskDetection\NUnitTaskDetectorSpecs.cs" />
     <Compile Include="TestTypes.cs" />
     <Compile Include="WorkerSpecs\WorkerHandlesExceptions.cs" />

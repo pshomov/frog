@@ -39,9 +39,17 @@ namespace Frog.Domain.Specs.TaskDetection
         [Test]
         public void should_have_nunit_launched_with_parameter_the_test_assembly()
         {
-            Assert.That(((ShellTaskk) items.First()).Command, Is.EqualTo("nunit {0}".format(Os.DirChars("l1\\l2\\l3\\bin\\Debug\\fle.test.dll"))));
-            Assert.That(((ShellTaskk) items.ElementAt(1)).Command, Is.EqualTo("nunit {0}".format(Os.DirChars("l1\\l2\\l4\\bin\\Debug\\fle.test.dll"))));
-            Assert.That(((ShellTaskk) items.ElementAt(2)).Command, Is.EqualTo("nunit {0}".format(Os.DirChars("l1\\l2\\l3\\bin\\Debug\\flo.tests.dll"))));
+            Assert.That(((ShellTaskk) items.First()).Arguments, Is.EqualTo(Os.DirChars("l1\\l2\\l3\\bin\\Debug\\fle.test.dll")));
+            Assert.That(((ShellTaskk) items.ElementAt(1)).Arguments, Is.EqualTo(Os.DirChars("l1\\l2\\l4\\bin\\Debug\\fle.test.dll")));
+            Assert.That(((ShellTaskk) items.ElementAt(2)).Arguments, Is.EqualTo(Os.DirChars("l1\\l2\\l3\\bin\\Debug\\flo.tests.dll")));
+        }
+
+        [Test]
+        public void should_have_nunit_as_command()
+        {
+            Assert.That(((ShellTaskk) items.First()).Command, Is.EqualTo("nunit"));
+            Assert.That(((ShellTaskk) items.ElementAt(1)).Command, Is.EqualTo("nunit"));
+            Assert.That(((ShellTaskk) items.ElementAt(2)).Command, Is.EqualTo("nunit"));
         }
     }
 }

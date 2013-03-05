@@ -10,17 +10,19 @@ namespace Frog.Domain.Specs.Pipeline
     [TestFixture]
     public class PipelineProcessFaultyBuild : PipelineProcessSpecBase
     {
+        private FakeTaskDescription taskDescription;
+
         protected override void Given()
         {
             base.Given();
-            SrcTask1 = new MSBuildTask("");
             bool shouldStop;
-            TaskSource.Detect(Arg.Any<string>(), out shouldStop).Returns(As.List<Domain.Task>(SrcTask1));
+            taskDescription = new FakeTaskDescription();
+            TaskSource.Detect(Arg.Any<string>(), out shouldStop).Returns(As.List<Domain.Task>(taskDescription));
             Task1 = Substitute.For<IExecTask>();
             Task1.Perform(Arg.Any<SourceDrop>()).Returns(new ExecTaskResult(ExecutionStatus.Failure, 4));
             Task2 = Substitute.For<IExecTask>();
             Task2.Perform(Arg.Any<SourceDrop>()).Returns(new ExecTaskResult(ExecutionStatus.Success, 0));
-            ExecTaskGenerator.GimeTasks(Arg.Any<Domain.Task>()).Returns(As.List(Task1, Task2));
+            ExecTaskGenerator.GimeTasks(Arg.Any<FakeTaskDescription>()).Returns(As.List(Task1, Task2));
         }
 
         protected override void When()
@@ -38,7 +40,7 @@ namespace Frog.Domain.Specs.Pipeline
         [Test]
         public void should_ask_task_generator_for_task_descriptions()
         {
-            ExecTaskGenerator.Received().GimeTasks(SrcTask1);
+            ExecTaskGenerator.Received().GimeTasks(taskDescription);
         }
 
         [Test]

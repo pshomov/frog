@@ -49,10 +49,7 @@
     <Compile Include="BuildSystems\Custom\CustomTasksDetector.cs" />
     <Compile Include="BuildSystems\FrogSystemTest\TestTaskDetector.cs" />
     <Compile Include="BuildSystems\FrogSystemTest\TestTaskTaskFileFinder.cs" />
-    <Compile Include="BuildSystems\ShellTask.cs" />
     <Compile Include="BuildSystems\Solution\MSBuildDetector.cs" />
-    <Compile Include="BuildSystems\Solution\MSBuildTask.cs" />
-    <Compile Include="BuildSystems\Solution\NUnitTask.cs" />
     <Compile Include="BuildSystems\Solution\NUnitTaskDetector.cs" />
     <Compile Include="BuildSystems\Solution\NUnitTaskFileFinder.cs" />
     <Compile Include="BuildSystems\Solution\SolutionTaskFileFinder.cs" />
