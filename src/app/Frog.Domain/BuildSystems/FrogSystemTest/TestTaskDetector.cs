@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Frog.Domain.ExecTasks;
 using Frog.Domain.TaskSources;
 
 namespace Frog.Domain.BuildSystems.FrogSystemTest
@@ -12,33 +13,14 @@ namespace Frog.Domain.BuildSystems.FrogSystemTest
             this.taskFileFinder = taskFileFinder;
         }
 
-        public IList<Task> Detect(string projectFolder, out bool shouldStop)
+        public IEnumerable<Task> Detect(string projectFolder, out bool shouldStop)
         {
             shouldStop = false;
             var testTaskFiles = taskFileFinder.FindFiles(projectFolder);
-            return testTaskFiles.Select(s => (Task) new TestTaskDescription(s)).ToList();
+            return testTaskFiles.Select(s => new TestTask(s));
         }
 
         readonly TaskFileFinder taskFileFinder;
     }
 
-    public class TestTaskDescription : Task
-    {
-        public readonly string path;
-
-        public TestTaskDescription(string path)
-        {
-            this.path = path;
-        }
-    }
-
-    public class FakeTaskDescription : Task
-    {
-        public readonly string[] messages;
-
-        public FakeTaskDescription(params string[] messages)
-        {
-            this.messages = messages;
-        }
-    }
 }

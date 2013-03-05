@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Frog.Domain.TaskSources
 {
     public interface TaskSource
     {
-        IList<Task> Detect(string projectFolder, out bool shouldStop);
+        IEnumerable<Task> Detect(string projectFolder, out bool shouldStop);
     }
 }

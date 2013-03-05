@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Frog.Domain.BuildSystems.Custom;
 using Frog.Domain.TaskSources;
 using NSubstitute;
@@ -10,7 +11,7 @@ namespace Frog.Domain.Specs.TaskDetection.ExplicitTasks
     public class ExplicitTasksDetector_WhenNotSpecified : TaskDetectorSpecsBase
     {
         TaskSource customTasks;
-        IList<Task> tasks;
+        IEnumerable<Task> tasks;
         bool shouldStop;
 
         protected override void Given()
@@ -27,7 +28,7 @@ namespace Frog.Domain.Specs.TaskDetection.ExplicitTasks
         [Test]
         public void should_detect_0_tasks()
         {
-            Assert.That(tasks.Count, Is.EqualTo(0));            
+            Assert.That(tasks.Count(), Is.EqualTo(0));            
         }
 
         [Test]

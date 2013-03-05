@@ -10,7 +10,7 @@ namespace Frog.Domain.TaskSources
             this.srcs = srcs;
         }
 
-        public IList<Task> Detect(string projectFolder, out bool shouldStop)
+        public IEnumerable<Task> Detect(string projectFolder, out bool shouldStop)
         {
             shouldStop = false;
             var result = new List<Task>();

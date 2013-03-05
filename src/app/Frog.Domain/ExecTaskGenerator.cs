@@ -35,16 +35,16 @@ namespace Frog.Domain
             if (task.GetType() == typeof (MSBuildTask))
             {
                 var mstask = (MSBuildTask) task;
-                result.Add(execTaskFactory.CreateTask(os == OS.Windows ? "{0}\\Microsoft.NET\\Framework\\v4.0.30319\\msbuild.exe".Formatt(Environment.GetEnvironmentVariable("SYSTEMROOT")) : "xbuild", mstask.SolutionFile, "build"));
+                result.Add(execTaskFactory.CreateTask(os == OS.Windows ? ExtensionMethods.format("{0}\\Microsoft.NET\\Framework\\v4.0.30319\\msbuild.exe", Environment.GetEnvironmentVariable("SYSTEMROOT")) : "xbuild", mstask.SolutionFile, "build"));
             }
             if (task.GetType() == typeof (NUnitTask))
             {
                 var nunit = (NUnitTask) task;
                 result.Add(execTaskFactory.CreateTask("nunit", nunit.Assembly, "unit_test"));
             }
-            if (task.GetType() == typeof (TestTaskDescription))
+            if (task.GetType() == typeof (TestTask))
             {
-                result.Add(new TestExecTask((task as TestTaskDescription).path, this));
+                result.Add(new TestExecTask((task as TestTask).path, this));
             }
             if (task.GetType() == typeof (FakeTaskDescription))
             {
@@ -60,11 +60,11 @@ namespace Frog.Domain
         readonly ExecTaskFactory execTaskFactory;
         readonly OS os;
 
-        IExecTask CreateShellTask(ShellTask anyTask)
+        IExecTask CreateShellTask(ShellTask anyTaskk)
         {
             var cmd = Os.IsUnix ? "/bin/bash" : "cmd.exe";
             var args = Os.IsUnix ? "-c \"" : "/c ";
-            var command = anyTask.cmd + " " + anyTask.args;
+            var command = anyTaskk.cmd + " " + anyTaskk.args;
             args += command.Trim();
             args = args.Trim();
             if (Os.IsUnix) args += "\"";

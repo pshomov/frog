@@ -9,12 +9,13 @@ namespace Frog.Domain.BuildSystems.Solution
 {
     public class MSBuildDetector : TaskSource
     {
-        public MSBuildDetector(TaskFileFinder _taskFileFinder)
+        public MSBuildDetector(TaskFileFinder _taskFileFinder, OS os)
         {
             this._taskFileFinder = _taskFileFinder;
+            this.os = os;
         }
 
-        public IList<Task> Detect(string projectFolder, out bool shouldStop)
+        public IEnumerable<Task> Detect(string projectFolder, out bool shouldStop)
         {
             shouldStop = false;
             var allSolutionFiles = _taskFileFinder.FindFiles(projectFolder);
@@ -30,12 +31,24 @@ namespace Frog.Domain.BuildSystems.Solution
                 if (rootBuildSlnIdx > -1)
                     return As.List<Task>(new MSBuildTask(rootFolderSolutions[rootBuildSlnIdx]));
                 if (rootFolderSolutions.Count > 1) return new List<Task>();
-                return As.List<Task>(new MSBuildTask(rootFolderSolutions[0]));
+                return
+                    As.List(new ShellTaskk()
+                        {
+                            Command =
+                                (os == OS.Windows
+                                    ? "{0}\\Microsoft.NET\\Framework\\v4.0.30319\\msbuild.exe".format(
+                                        Environment.GetEnvironmentVariable("SYSTEMROOT"))
+                                    : "xbuild") + " " +
+                                      rootFolderSolutions[0],
+                            Name =
+                                "build"
+                        });
             }
 
             return new List<Task>();
         }
 
         readonly TaskFileFinder _taskFileFinder;
+        private readonly OS os;
     }
 }

@@ -106,7 +106,7 @@ namespace Frog.Support
             return Regex.IsMatch(str, pattern);
         }
 
-        public static string Formatt(this string str, params object[] objs)
+        public static string format(this string str, params object[] objs)
         {
             return string.Format(str, objs);
         }

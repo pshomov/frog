@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Frog.Domain.BuildSystems.Solution;
 using Frog.Domain.TaskSources;
 using Frog.Support;
@@ -7,15 +8,18 @@ using NUnit.Framework;
 
 namespace Frog.Domain.Specs.TaskDetection
 {
-    [TestFixture]
-    public class TaskDetectorSpecs : TaskDetectorSpecsBase
+    public abstract class MsBuildSpecBase : TaskDetectorSpecsBase
     {
-        MSBuildDetector msbuildTaskDetecttor;
-        IList<Domain.Task> items;
+        protected MSBuildDetector msbuildTaskDetecttor;
+        protected IEnumerable<Task> items;
+    }
 
+    [TestFixture]
+    public class TaskDetectorSpecs : MsBuildSpecBase
+    {
         protected override void Given()
         {
-            msbuildTaskDetecttor = new MSBuildDetector(taskFileFinder);
+            msbuildTaskDetecttor = new MSBuildDetector(taskFileFinder, OS.Windows);
             taskFileFinder.FindFiles("basefolder").Returns(As.List(Os.DirChars("a1.sln"),
                                                                              Os.DirChars("a1\\a2.sln"),
                                                                              Os.DirChars("a2\\asdas\\asd\\b.sln")));
@@ -30,20 +34,17 @@ namespace Frog.Domain.Specs.TaskDetection
         [Test]
         public void should_prefer_root_file_sln_over_any_other_down_the_hierarchy()
         {
-            Assert.That(items.Count, Is.EqualTo(1));
-            Assert.That((items[0] as MSBuildTask).SolutionFile, Is.EqualTo("a1.sln"));
+            Assert.That(items.Count(), Is.EqualTo(1));
+            Assert.That((items.First() as ShellTaskk).Command.Contains("a1.sln"), Is.True);
         }
     }
 
     [TestFixture]
-    public class TaskDetectorMultipleSolutionsAtTheRootSpecs : TaskDetectorSpecsBase
+    public class TaskDetectorMultipleSolutionsAtTheRootSpecs : MsBuildSpecBase
     {
-        MSBuildDetector msbuildTaskDetecttor;
-        IList<Domain.Task> items;
-
         protected override void Given()
         {
-            msbuildTaskDetecttor = new MSBuildDetector(taskFileFinder);
+            msbuildTaskDetecttor = new MSBuildDetector(taskFileFinder, OS.Windows);
             taskFileFinder.FindFiles("basefolder").Returns(As.List(Os.DirChars("a1.sln"),
                                                                              Os.DirChars("a2.sln"),
                                                                              Os.DirChars(
@@ -59,19 +60,16 @@ namespace Frog.Domain.Specs.TaskDetection
         [Test]
         public void should_not_build_anything_if_it_looks_confusing()
         {
-            Assert.That(items.Count, Is.EqualTo(0));
+            Assert.That(items.Count(), Is.EqualTo(0));
         }
     }
 
     [TestFixture]
-    public class TaskDetectorMultipleSolutionsAtTheRootWithBuildOneSpecs : TaskDetectorSpecsBase
+    public class TaskDetectorMultipleSolutionsAtTheRootWithBuildOneSpecs : MsBuildSpecBase
     {
-        MSBuildDetector msbuildTaskDetecttor;
-        IList<Domain.Task> items;
-
         protected override void Given()
         {
-            msbuildTaskDetecttor = new MSBuildDetector(taskFileFinder);
+            msbuildTaskDetecttor = new MSBuildDetector(taskFileFinder, OS.Windows);
             taskFileFinder.FindFiles("basefolder").Returns(As.List(Os.DirChars("a1.sln"),
                                                                              Os.DirChars("a2.sln"),
                                                                              Os.DirChars("Build.sln"),
@@ -88,20 +86,18 @@ namespace Frog.Domain.Specs.TaskDetection
         [Test]
         public void should_always_prefer_the_solution_called_BUILD()
         {
-            Assert.That(items.Count, Is.EqualTo(1));
-            Assert.That((items[0] as MSBuildTask).SolutionFile, Is.EqualTo("Build.sln"));
+            Assert.That(items.Count(), Is.EqualTo(1));
+            Assert.That((items.First() as MSBuildTask).SolutionFile, Is.EqualTo("Build.sln"));
         }
     }
 
     [TestFixture]
-    public class NoSolutionsAtAllSpecs : TaskDetectorSpecsBase
+    public class NoSolutionsAtAllSpecs : MsBuildSpecBase
     {
-        MSBuildDetector msbuildTaskDetecttor;
-        IList<Domain.Task> items;
 
         protected override void Given()
         {
-            msbuildTaskDetecttor = new MSBuildDetector(taskFileFinder);
+            msbuildTaskDetecttor = new MSBuildDetector(taskFileFinder, OS.Windows);
             taskFileFinder.FindFiles("basefolder").Returns(new List<string>());
         }
 
@@ -114,45 +110,40 @@ namespace Frog.Domain.Specs.TaskDetection
         [Test]
         public void should_always_prefer_the_solution_called_BUILD()
         {
-            Assert.That(items.Count, Is.EqualTo(0));
+            Assert.That(items.Count(), Is.EqualTo(0));
         }
     }
 
     [TestFixture]
-    public class OneSolutionAnywhereGetsSelectedForBuildSpecs : TaskDetectorSpecsBase
+    public class OneSolutionAnywhereGetsSelectedForBuildSpecs : MsBuildSpecBase
     {
-        MSBuildDetector msbuildTaskDetector;
-        IList<Domain.Task> items;
 
         protected override void Given()
         {
-            msbuildTaskDetector = new MSBuildDetector(taskFileFinder);
+            msbuildTaskDetecttor = new MSBuildDetector(taskFileFinder, OS.Windows);
             taskFileFinder.FindFiles("basefolder").Returns(As.List(Os.DirChars("fle\\flo\\a.sln")));
         }
 
         protected override void When()
         {
             bool shouldStop;
-            items = msbuildTaskDetector.Detect("basefolder", out shouldStop);
+            items = msbuildTaskDetecttor.Detect("basefolder", out shouldStop);
         }
 
         [Test]
         public void should_always_select_the_only_solution_file()
         {
-            Assert.That(items.Count, Is.EqualTo(1));
-            Assert.That((items[0] as MSBuildTask).SolutionFile, Is.EqualTo(Os.DirChars("fle\\flo\\a.sln")));
+            Assert.That(items.Count(), Is.EqualTo(1));
+            Assert.That((items.First() as MSBuildTask).SolutionFile, Is.EqualTo(Os.DirChars("fle\\flo\\a.sln")));
         }
     }
 	
     [TestFixture]
-    public class MultipleSplutionsButNoneAtTheRootSpecs : TaskDetectorSpecsBase
+    public class MultipleSplutionsButNoneAtTheRootSpecs : MsBuildSpecBase
     {
-        MSBuildDetector msbuildTaskDetecttor;
-        IList<Domain.Task> items;
-
         protected override void Given()
         {
-            msbuildTaskDetecttor = new MSBuildDetector(taskFileFinder);
+            msbuildTaskDetecttor = new MSBuildDetector(taskFileFinder, OS.Windows);
             taskFileFinder.FindFiles("basefolder").Returns(As.List(Os.DirChars("a1\\a2.sln"),
                                                                     Os.DirChars("a2\\asdas\\asd\\b.sln")));
         }
@@ -166,7 +157,7 @@ namespace Frog.Domain.Specs.TaskDetection
         [Test]
         public void should_prefer_root_file_sln_over_any_other_down_the_hierarchy()
         {
-            Assert.That(items.Count, Is.EqualTo(0));
+            Assert.That(items.Count(), Is.EqualTo(0));
         }
     }
 	

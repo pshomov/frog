@@ -31,13 +31,14 @@ namespace Frog.Agent
         public static PipelineOfTasks GetPipeline()
         {
             var pathFinder = new PathFinder();
+            var os = IsNotWindows() ? OS.Unix : OS.Windows;
             return new PipelineOfTasks(new CompoundTaskSource(
                                            new CustomTasksDetector(new CustomFileFinder(pathFinder), File.ReadAllText),
                                            new TestTaskDetector(new TestTaskTaskFileFinder(pathFinder)),
-                                           new MSBuildDetector(new SolutionTaskFileFinder(pathFinder)),
+                                           new MSBuildDetector(new SolutionTaskFileFinder(pathFinder), os),
                                            new NUnitTaskDetector(new NUnitTaskFileFinder(pathFinder))
                                            ),
-                                       new ExecTaskGenerator(new ExecTaskFactory(), IsNotWindows() ? OS.Unix : OS.Windows));
+                                       new ExecTaskGenerator(new ExecTaskFactory(), os));
         }
 
         public static bool IsNotWindows()

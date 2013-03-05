@@ -1,6 +1,6 @@
 using System.Collections.Generic;
+using System.Linq;
 using Frog.Domain.BuildSystems.Solution;
-using Frog.Domain.TaskSources;
 using Frog.Specs.Support;
 using Frog.Support;
 using NSubstitute;
@@ -11,15 +11,15 @@ namespace Frog.Domain.Specs.TaskDetection
     [TestFixture]
     public class NUnitTaskDetectorAllAssembliesSpecs : BDD
     {
-        TaskFileFinder _projectTaskFileRepo;
+        TaskFileFinder projectTaskFileRepo;
         NUnitTaskDetector nunitTaskDetecttor;
-        IList<Domain.Task> items;
+        IEnumerable<Task> items;
 
         protected override void Given()
         {
-            _projectTaskFileRepo = Substitute.For<TaskFileFinder>();
-            nunitTaskDetecttor = new NUnitTaskDetector(_projectTaskFileRepo);
-            _projectTaskFileRepo.FindFiles("basefolder").Returns(As.List(Os.DirChars("l1\\l2\\l3\\fle.test.csproj"),
+            projectTaskFileRepo = Substitute.For<TaskFileFinder>();
+            nunitTaskDetecttor = new NUnitTaskDetector(projectTaskFileRepo);
+            projectTaskFileRepo.FindFiles("basefolder").Returns(As.List(Os.DirChars("l1\\l2\\l3\\fle.test.csproj"),
                                                                      Os.DirChars("l1\\l2\\l4\\fle.test.csproj"),
                                                                      Os.DirChars("l1\\l2\\l3\\flo.tests.csproj")));
         }
@@ -33,15 +33,15 @@ namespace Frog.Domain.Specs.TaskDetection
         [Test]
         public void should_have_as_many_nunt_tasks_as_detected_non_conflicting_assemblies()
         {
-            Assert.That(items.Count, Is.EqualTo(3));
+            Assert.That(items.Count(), Is.EqualTo(3));
         }
 
         [Test]
-        public void should_have_project_path_as_arg0_of_the_task()
+        public void should_have_nunit_launched_with_parameter_the_test_assembly()
         {
-            Assert.That((items[0] as NUnitTask).Assembly, Is.EqualTo(Os.DirChars("l1\\l2\\l3\\bin\\Debug\\fle.test.dll")));
-            Assert.That((items[1] as NUnitTask).Assembly, Is.EqualTo(Os.DirChars("l1\\l2\\l4\\bin\\Debug\\fle.test.dll")));
-            Assert.That((items[2] as NUnitTask).Assembly, Is.EqualTo(Os.DirChars("l1\\l2\\l3\\bin\\Debug\\flo.tests.dll")));
+            Assert.That(((ShellTaskk) items.First()).Command, Is.EqualTo("nunit {0}".format(Os.DirChars("l1\\l2\\l3\\bin\\Debug\\fle.test.dll"))));
+            Assert.That(((ShellTaskk) items.ElementAt(1)).Command, Is.EqualTo("nunit {0}".format(Os.DirChars("l1\\l2\\l4\\bin\\Debug\\fle.test.dll"))));
+            Assert.That(((ShellTaskk) items.ElementAt(2)).Command, Is.EqualTo("nunit {0}".format(Os.DirChars("l1\\l2\\l3\\bin\\Debug\\flo.tests.dll"))));
         }
     }
 }

@@ -51,7 +51,7 @@ namespace Frog.Domain.Specs
         [Test]
         public void should_have_msbuild_task()
         {
-            execTaskFactory.Received().CreateTask("{0}\\Microsoft.NET\\Framework\\v4.0.30319\\msbuild.exe".Formatt(Environment.GetEnvironmentVariable("SYSTEMROOT")), Arg.Any<string>(), "build");
+            execTaskFactory.Received().CreateTask(ExtensionMethods.format("{0}\\Microsoft.NET\\Framework\\v4.0.30319\\msbuild.exe", Environment.GetEnvironmentVariable("SYSTEMROOT")), Arg.Any<string>(), "build");
         }
     }
 
