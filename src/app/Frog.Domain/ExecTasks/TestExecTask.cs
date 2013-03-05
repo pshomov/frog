@@ -33,7 +33,7 @@ namespace Frog.Domain.ExecTasks
                                                                                                             @"^exec (\S+) (.*)$");
                                                                                    var tasks = execTaskGenerator.
                                                                                        GimeTasks(
-                                                                                           new ShellTaskk
+                                                                                           new ShellTask
                                                                                                {
                                                                                                    Command = 
                                                                                                        parsed.Groups[1].

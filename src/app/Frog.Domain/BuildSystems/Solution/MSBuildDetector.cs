@@ -20,7 +20,7 @@ namespace Frog.Domain.BuildSystems.Solution
             shouldStop = false;
             var allSolutionFiles = _taskFileFinder.FindFiles(projectFolder);
             var comand = os == OS.Windows ? "{0}\\Microsoft.NET\\Framework\\v4.0.30319\\msbuild.exe".format(Environment.GetEnvironmentVariable("SYSTEMROOT")) : "xbuild";
-            if (allSolutionFiles.Count == 1) return As.List<Task>(new ShellTaskk() { Arguments = allSolutionFiles[0], Command = comand});
+            if (allSolutionFiles.Count == 1) return As.List<Task>(new ShellTask() { Arguments = allSolutionFiles[0], Command = comand});
             if (allSolutionFiles.Count > 0)
             {
                 var rootFolderSolutions =
@@ -30,10 +30,10 @@ namespace Frog.Domain.BuildSystems.Solution
                     rootFolderSolutions.FindIndex(
                         s => s.Equals("build.sln", StringComparison.InvariantCultureIgnoreCase));
                 if (rootBuildSlnIdx > -1)
-                    return As.List<Task>(new ShellTaskk(){Arguments = rootFolderSolutions[rootBuildSlnIdx], Command = comand});
+                    return As.List<Task>(new ShellTask(){Arguments = rootFolderSolutions[rootBuildSlnIdx], Command = comand});
                 if (rootFolderSolutions.Count > 1) return new List<Task>();
                 return
-                    As.List(new ShellTaskk()
+                    As.List(new ShellTask()
                         {
                             Command =
                                 comand,

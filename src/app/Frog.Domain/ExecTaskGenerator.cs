@@ -10,7 +10,7 @@ namespace Frog.Domain
 {
     public interface IExecTaskGenerator
     {
-        List<IExecTask> GimeTasks(ShellTaskk task);
+        List<IExecTask> GimeTasks(ShellTask task);
         List<IExecTask> GimeTasks(TestTask task);
         List<IExecTask> GimeTasks(FakeTaskDescription task);
     }
@@ -31,13 +31,13 @@ namespace Frog.Domain
             this.os = os;
         }
 
-        public List<IExecTask> GimeTasks(ShellTaskk task)
+        public List<IExecTask> GimeTasks(ShellTask task)
         {
             return As.List(CreateShellTask(task));
         } 
         public List<IExecTask> GimeTasks(TestTask task)
         {
-            return As.List((IExecTask)new TestExecTask(task.path, this));
+            return As.List((IExecTask)new TestExecTask(task.Path, this));
         } 
         public List<IExecTask> GimeTasks(FakeTaskDescription task)
         {
@@ -47,11 +47,11 @@ namespace Frog.Domain
         readonly ExecTaskFactory execTaskFactory;
         readonly OS os;
 
-        IExecTask CreateShellTask(ShellTaskk anyTaskk)
+        IExecTask CreateShellTask(ShellTask anyTask)
         {
             var cmd = Os.IsUnix ? "/bin/bash" : "cmd.exe";
             var args = Os.IsUnix ? "-c \"" : "/c ";
-            var command = anyTaskk.Command + " " + anyTaskk.Arguments;
+            var command = anyTask.Command + " " + anyTask.Arguments;
             args += command.Trim();
             args = args.Trim();
             if (Os.IsUnix) args += "\"";

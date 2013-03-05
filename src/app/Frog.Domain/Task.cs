@@ -9,16 +9,16 @@ namespace Frog.Domain
 
     public class TestTask : Task
     {
-        public readonly string path;
+        public readonly string Path;
 
         public TestTask(string path)
         {
-            this.path = path;
+            Path = path;
         }
 
         public override List<IExecTask> GimeTasks(IExecTaskGenerator gen)
         {
-                return gen.GimeTasks(this);
+            return gen.GimeTasks(this);
         }
     }
 
@@ -30,17 +30,19 @@ namespace Frog.Domain
         {
             this.messages = messages;
         }
+
         public override List<IExecTask> GimeTasks(IExecTaskGenerator gen)
         {
             return gen.GimeTasks(this);
         }
     }
 
-    public class ShellTaskk  : Task
+    public class ShellTask : Task
     {
         public string Name;
         public string Command;
         public string Arguments;
+
         public override List<IExecTask> GimeTasks(IExecTaskGenerator gen)
         {
             return gen.GimeTasks(this);

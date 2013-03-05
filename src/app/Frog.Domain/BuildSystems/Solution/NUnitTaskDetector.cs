@@ -18,7 +18,7 @@ namespace Frog.Domain.BuildSystems.Solution
         {
             shouldStop = false;
             var items = _projectTaskFileRepo.FindFiles(projectFolder);
-            return items.Select(s => new ShellTaskk() {Command = "nunit", Arguments = ProjectPathToAssemblyPath(s)});
+            return items.Select(s => new ShellTask() {Command = "nunit", Arguments = ProjectPathToAssemblyPath(s)});
         }
 
         readonly TaskFileFinder _projectTaskFileRepo;

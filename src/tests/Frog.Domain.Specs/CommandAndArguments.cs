@@ -19,7 +19,7 @@ namespace Frog.Domain.Specs
 
         protected override void When()
         {
-            execTaskGenerator.GimeTasks(new ShellTaskk(){Command = "ccc", Arguments = "/a /b"});
+            execTaskGenerator.GimeTasks(new ShellTask(){Command = "ccc", Arguments = "/a /b"});
         }
 
         [Test]
@@ -43,7 +43,7 @@ namespace Frog.Domain.Specs
 
         protected override void When()
         {
-            execTaskGenerator.GimeTasks(new ShellTaskk(){Command = "", Arguments = "ccc /a /b"});
+            execTaskGenerator.GimeTasks(new ShellTask(){Command = "", Arguments = "ccc /a /b"});
         }
 
         [Test]
