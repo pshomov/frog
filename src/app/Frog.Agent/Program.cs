@@ -4,8 +4,6 @@ using System.IO;
 using Frog.Domain;
 using Frog.Domain.BuildSystems.Custom;
 using Frog.Domain.BuildSystems.FrogSystemTest;
-using Frog.Domain.BuildSystems.Make;
-using Frog.Domain.BuildSystems.Rake;
 using Frog.Domain.BuildSystems.Solution;
 using Frog.Domain.Integration;
 using Frog.Domain.RevisionChecker;
@@ -36,8 +34,6 @@ namespace Frog.Agent
             return new PipelineOfTasks(new CompoundTaskSource(
                                            new CustomTasksDetector(new CustomFileFinder(pathFinder), File.ReadAllText),
                                            new TestTaskDetector(new TestTaskTaskFileFinder(pathFinder)),
-                                           new MakeTaskDetector(new MakeFileFinder(pathFinder)),
-                                           new RubyTaskDetector(new RakeTaskFileFinder(pathFinder), new BundlerFileFinder(pathFinder)),
                                            new MSBuildDetector(new SolutionTaskFileFinder(pathFinder)),
                                            new NUnitTaskDetector(new NUnitTaskFileFinder(pathFinder))
                                            ),
