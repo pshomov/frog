@@ -52,7 +52,7 @@
     <Compile Include="BuildSystems\Make\MakeFileFinder.cs" />
     <Compile Include="BuildSystems\Make\MakeTaskDetector.cs" />
     <Compile Include="BuildSystems\Maven\MavenTaskDetector.cs" />
-    <Compile Include="BuildSystems\Rake\ShellTask.cs" />
+    <Compile Include="BuildSystems\ShellTask.cs" />
     <Compile Include="BuildSystems\Rake\BundlerFileFinder.cs" />
     <Compile Include="BuildSystems\Rake\RubyTaskDetector.cs" />
     <Compile Include="BuildSystems\Rake\RakeTaskFileFinder.cs" />

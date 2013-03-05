@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Frog.Domain.BuildSystems;
 using Frog.Domain.BuildSystems.Rake;
 using Frog.Support;
 

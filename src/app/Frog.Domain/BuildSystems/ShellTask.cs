@@ -1,4 +1,4 @@
-namespace Frog.Domain.BuildSystems.Rake
+namespace Frog.Domain.BuildSystems
 {
     public class ShellTask : Task
     {
