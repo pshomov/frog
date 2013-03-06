@@ -4,7 +4,10 @@ namespace Frog.Domain
 {
     public abstract class Task
     {
-        public abstract List<IExecTask> GimeTasks(IExecTaskGenerator gen);
+        public List<IExecTask> GimeTasks(IExecTaskGenerator gen)
+        {
+            return gen.GimeTasks((dynamic)this);
+        }
     }
 
     public class TestTask : Task
@@ -16,10 +19,6 @@ namespace Frog.Domain
             Path = path;
         }
 
-        public override List<IExecTask> GimeTasks(IExecTaskGenerator gen)
-        {
-            return gen.GimeTasks(this);
-        }
     }
 
     public class FakeTaskDescription : Task
@@ -30,11 +29,6 @@ namespace Frog.Domain
         {
             this.messages = messages;
         }
-
-        public override List<IExecTask> GimeTasks(IExecTaskGenerator gen)
-        {
-            return gen.GimeTasks(this);
-        }
     }
 
     public class ShellTask : Task
@@ -42,10 +36,5 @@ namespace Frog.Domain
         public string Name;
         public string Command;
         public string Arguments;
-
-        public override List<IExecTask> GimeTasks(IExecTaskGenerator gen)
-        {
-            return gen.GimeTasks(this);
-        }
     }
 }
