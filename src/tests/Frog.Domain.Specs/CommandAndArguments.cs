@@ -14,7 +14,7 @@ namespace Frog.Domain.Specs
         protected override void Given()
         {
             execTaskFactory = Substitute.For<ExecTaskFactory>();
-            execTaskGenerator = new ExecTaskGenerator(execTaskFactory, OS.Unix);
+            execTaskGenerator = new ExecTaskGenerator(execTaskFactory);
         }
 
         protected override void When()
@@ -38,7 +38,7 @@ namespace Frog.Domain.Specs
         protected override void Given()
         {
             execTaskFactory = Substitute.For<ExecTaskFactory>();
-            execTaskGenerator = new ExecTaskGenerator(execTaskFactory, OS.Unix);
+            execTaskGenerator = new ExecTaskGenerator(execTaskFactory);
         }
 
         protected override void When()

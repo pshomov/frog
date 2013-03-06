@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Frog.Domain.BuildSystems;
-using Frog.Domain.BuildSystems.FrogSystemTest;
-using Frog.Domain.BuildSystems.Solution;
+﻿using System.Collections.Generic;
 using Frog.Domain.ExecTasks;
 using Frog.Support;
 
@@ -25,10 +21,9 @@ namespace Frog.Domain
 
     public class ExecTaskGenerator : IExecTaskGenerator
     {
-        public ExecTaskGenerator(ExecTaskFactory execTaskFactory, OS os)
+        public ExecTaskGenerator(ExecTaskFactory execTaskFactory)
         {
             this.execTaskFactory = execTaskFactory;
-            this.os = os;
         }
 
         public List<IExecTask> GimeTasks(ShellTask task)
@@ -45,7 +40,6 @@ namespace Frog.Domain
         } 
 
         readonly ExecTaskFactory execTaskFactory;
-        readonly OS os;
 
         IExecTask CreateShellTask(ShellTask anyTask)
         {

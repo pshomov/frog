@@ -38,7 +38,7 @@ namespace Frog.Agent
                                            new MSBuildDetector(new SolutionTaskFileFinder(pathFinder), os),
                                            new NUnitTaskDetector(new NUnitTaskFileFinder(pathFinder))
                                            ),
-                                       new ExecTaskGenerator(new ExecTaskFactory(), os));
+                                       new ExecTaskGenerator(new ExecTaskFactory()));
         }
 
         public static bool IsNotWindows()
