@@ -26,7 +26,7 @@ namespace Frog.Domain.BuildSystems.Custom
             if (foundFiles.Count == 0) return new List<Task>();
             shouldStop = true;
             var parsedConfig = JsonConvert.DeserializeAnonymousType(getContent(Path.Combine(projectFolder, foundFiles.Single())), configPrototype);
-            return parsedConfig.pipeline.SelectMany(arg => arg.tasks.Select(s => new ShellTask {Command = s}));
+            return parsedConfig.pipeline.SelectMany(arg => arg.tasks.Select(s => new ShellTask {Arguments = s, Name = ""}));
         }
     }
 }
