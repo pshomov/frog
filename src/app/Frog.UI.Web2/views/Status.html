@@ -1,0 +1,160 @@
+﻿<html>
+    <head>
+    <title>Check status</title>
+    <script type="text/javascript" src="/content/scripts/jquery-1.5.1.js"></script>
+    <script type="text/javascript" src="/content/scripts/raphael-min.js"></script>
+    <link media="screen" rel="stylesheet" type="text/css" href="/content/content/site.css" />
+    <script type="text/javascript" language="javascript">
+        var paper;
+        var lastOutputChunkIndex = 0;
+        var taskIndex = 0;
+        $(
+            function () {
+                paper = Raphael("tasks", 640, 400);
+                setInterval("update_status()", 5000);
+                update_status();
+            }
+        );
+            function esc(str) {
+                return str.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+            }    
+            function colorize(line) {
+                var nothing = undefined;
+                var translate = {
+                    1: nothing,
+                    2: nothing,
+                    4: nothing,
+                    5: nothing,
+                    7: nothing,
+                    30: "black",
+                    31: "red",
+                    32: "green",
+                    33: "yellow",
+                    34: "blue",
+                    35: "magenta",
+                    36: "cyan",
+                    37: "white",
+                    40: nothing,
+                    41: nothing,
+                    43: nothing,
+                    44: nothing,
+                    45: nothing,
+                    46: nothing,
+                    47: nothing
+                };
+                for (var prop in translate) {
+                    if (translate.hasOwnProperty(prop)) {
+                        if (translate[prop] === nothing) {
+                            var regex = new RegExp(esc("[" + prop + "m"), "gi");
+                            line = line.replace(regex, "<span>");
+                        } else {
+                            var regex = new RegExp(esc('[' + prop + 'm'), 'gi');
+                            line = line.replace(regex, "<span style=\"color:" + translate[prop] + "\">");
+                        }
+                    }
+                }
+                line = line.replace(/\[0m/, '<\span>');
+                return line;
+            }
+
+            function update_status() {
+            $.ajax({
+                url: "data.json",
+                success: function data(msg) {
+                    switch (msg.status) {
+                        case 0: set_status("Build not started", "yellow");
+                            break;
+                        case 1: set_status("Build started", "yellow");
+                            break;
+                        case 3: set_status("Build ended with a failure", "red");
+                            break;
+                        case 2: set_status("Build ended with success", "green");
+                            break;
+                        default:
+                            set_status("Unknown build status", "cyan");
+                    }
+
+                    var tasks = msg.tasks;
+                    update_tasks(tasks);
+                    update_terminal_output();
+                },
+                error: function () {
+                    $("#status").text("Nothing to see here, moving along");
+                }
+            });
+            $.ajax({
+                url: "history.json",
+                success: function data(msg) {
+                    $('#history_items').empty();
+                    for (var i = 0; i < msg.items.length; i++) {
+                        $('#history_items').prepend("<li>"+msg.items[i].revisionComment+"</li>");
+                    }
+                },
+                error: function () {
+                    $("#status").text("Nothing to see here, moving along");
+                }
+            });
+        };
+        function set_status(msg, color) {
+            $("#status").text(msg);
+            $("body").attr("style", "background : " + color + ";");
+        };
+
+        function get_console_output(taskIndex) {
+            $.getJSON(
+                "task/" + taskIndex+".json",
+                function (msg) {
+                    $("#terminal").text(msg.terminalOutput);
+                },
+                function () {
+                    console.log("Error retriving the terminal output");
+                }
+            );
+        };
+
+        function update_terminal_output() {
+            $.ajax({
+                url: "task.json",
+                data: { lastOutputChunkIndex: lastOutputChunkIndex, taskIndex: taskIndex },
+                success: function (msg) {
+                    var to = "<p>" + msg.terminalOutput.replace(/\r\n/g, '</p><p>') + "</p>";
+                    to = colorize(to);
+                    $("#terminal").append(to);
+                    lastOutputChunkIndex = msg.lastChunkIndex;
+                    taskIndex = msg.activeTask;
+                },
+                error: function () {
+                    console.log("Error retriving the terminal output");
+                }
+            });
+        }
+
+        function update_tasks(tasks) {
+            paper.clear();
+            var taskStatusToColor = { 0: "gray", 1: "yellow", 2: "green", 3: "red" };
+            for (var i = 0; i < tasks.length; i++) {
+                var r = paper.rect(-50, -25, 100, 50);
+                var text = paper.text(0, 0, tasks[i].name);
+                text.attr("fill", "#f1f1f1");
+                text.attr("font-size", "18");
+                text.attr("font-family", "Helvetica");
+                r.attr("fill", taskStatusToColor[tasks[i].status]);
+                var st = paper.set();
+                st.push(r);
+                st.push(text);
+                st.translate(100 * (i + 1), 100);
+            }
+        };
+    </script>
+    </head>
+    <body>
+        <div id="status"></div>
+        <a href="force">Force Build</a>
+        <div id="history">
+        Latest builds
+        <ul id="history_items"></ul>
+        </div>
+        <div id="tasks"></div>
+        <div id="terminal" style="width:100%;height:30%;margin-bottom:0;"></div>
+    </body>
+</html>
