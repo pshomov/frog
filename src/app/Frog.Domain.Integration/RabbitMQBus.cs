@@ -187,7 +187,11 @@ namespace Frog.Domain.Integration
             Event newItem;
             var itemsToSend = new List<Event>();
             while (eventsBatch.TryDequeue(out newItem)) itemsToSend.Add(newItem);
-            SendEvents(itemsToSend.ToArray());
+            var events = itemsToSend.ToArray();
+            if (events.Length > 0)
+            {
+                SendEvents(events);
+            }
         }
 
         void SendEvents(params object[] events)

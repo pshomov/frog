@@ -1,5 +1,7 @@
 ﻿using Frog.Domain.RepositoryTracker;
+using Frog.Support;
 using Nancy;
+using Nancy.Responses;
 
 namespace Frog.UI.Web2
 {
@@ -20,8 +22,8 @@ namespace Frog.UI.Web2
                 {
                     ProjectActions.ForceBuild(ProjectActions.GetCodebaseProjectUrl(request.company, request.project,
                                                                                    request.repository));
-
-                    return HttpStatusCode.OK;
+                    return Response.AsRedirect("/project/codebase/{0}/{1}/{2}/status".format((string)request.company, (string)request.project,
+                                                                                   (string)request.repository), RedirectResponse.RedirectType.SeeOther);
                 };
             Get["/project/codebase/{company}/{project}/{repository}/history"] =
                 request => ProjectActions.GetProjectHistory(ProjectActions.GetCodebaseProjectUrl(request.company,
