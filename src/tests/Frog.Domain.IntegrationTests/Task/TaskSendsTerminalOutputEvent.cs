@@ -10,11 +10,11 @@ namespace Frog.Domain.IntegrationTests.Task
     public class TaskSendsTerminalOutputEventWhenStdOutputChange : BDD
     {
         string stdOutput = "";
-        IExecTask task;
+        ExecTask task;
 
         protected override void Given()
         {
-            task = new ExecTask("ruby", "-e ' STDOUT.sync = true; puts \"output\";'", "name", (p1, p2, p3) => new ProcessWrapper(p1, p2, p3));
+            task = new OSExecuatableTask("ruby", "-e ' STDOUT.sync = true; puts \"output\";'", "name", (p1, p2, p3) => new ProcessWrapper(p1, p2, p3));
             task.OnTerminalOutputUpdate += s => stdOutput += s;
         }
 
@@ -35,11 +35,11 @@ namespace Frog.Domain.IntegrationTests.Task
     public class TaskSendsTerminalOutputEventWhenErrOutputChange : BDD
     {
         string errOutput = "";
-        IExecTask task;
+        ExecTask task;
 
         protected override void Given()
         {
-            task = new ExecTask("ruby", "-e ' STDERR.sync = true; $stderr.puts \"error output\";'", "name", (p1, p2, p3) => new ProcessWrapper(p1, p2, p3));
+            task = new OSExecuatableTask("ruby", "-e ' STDERR.sync = true; $stderr.puts \"error output\";'", "name", (p1, p2, p3) => new ProcessWrapper(p1, p2, p3));
             task.OnTerminalOutputUpdate += s => errOutput += s;
         }
 
@@ -60,11 +60,11 @@ namespace Frog.Domain.IntegrationTests.Task
     public class TaskSendErrorCodeToErrorOutputEventWhenProgramNotFound : BDD
     {
         string errOutput = "";
-        IExecTask task;
+        ExecTask task;
 
         protected override void Given()
         {
-            task = new ExecTask("flipflof", "-e ' STDERR.sync = true; $stderr.puts \"error output\";'", "name", (p1, p2, p3) => new ProcessWrapper(p1, p2, p3));
+            task = new OSExecuatableTask("flipflof", "-e ' STDERR.sync = true; $stderr.puts \"error output\";'", "name", (p1, p2, p3) => new ProcessWrapper(p1, p2, p3));
             task.OnTerminalOutputUpdate += s => errOutput += s;
         }
 
@@ -84,11 +84,11 @@ namespace Frog.Domain.IntegrationTests.Task
     [TestFixture]
     public class TaskTerminalOutputDoesNotNeedSubscribersToWork : BDD
     {
-        IExecTask task;
+        ExecTask task;
 
         protected override void Given()
         {
-            task = new ExecTask("ruby", "-e ' STDERR.sync = true; $stderr.puts \"error output\";'", "name", (p1, p2, p3) => new ProcessWrapper(p1, p2, p3));
+            task = new OSExecuatableTask("ruby", "-e ' STDERR.sync = true; $stderr.puts \"error output\";'", "name", (p1, p2, p3) => new ProcessWrapper(p1, p2, p3));
         }
 
         protected override void When()

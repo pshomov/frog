@@ -13,7 +13,7 @@ namespace Frog.Domain.Specs.TaskDetection
     {
         TaskFileFinder projectTaskFileRepo;
         NUnitTaskDetector nunitTaskDetecttor;
-        IEnumerable<Task> items;
+        IEnumerable<TaskDescription> items;
 
         protected override void Given()
         {
@@ -39,17 +39,17 @@ namespace Frog.Domain.Specs.TaskDetection
         [Test]
         public void should_have_nunit_launched_with_parameter_the_test_assembly()
         {
-            Assert.That(((ShellTask) items.First()).Arguments, Is.EqualTo(Os.DirChars("l1\\l2\\l3\\bin\\Debug\\fle.test.dll")));
-            Assert.That(((ShellTask) items.ElementAt(1)).Arguments, Is.EqualTo(Os.DirChars("l1\\l2\\l4\\bin\\Debug\\fle.test.dll")));
-            Assert.That(((ShellTask) items.ElementAt(2)).Arguments, Is.EqualTo(Os.DirChars("l1\\l2\\l3\\bin\\Debug\\flo.tests.dll")));
+            Assert.That(((ShellTaskDescription) items.First()).Arguments, Is.EqualTo(Os.DirChars("l1\\l2\\l3\\bin\\Debug\\fle.test.dll")));
+            Assert.That(((ShellTaskDescription) items.ElementAt(1)).Arguments, Is.EqualTo(Os.DirChars("l1\\l2\\l4\\bin\\Debug\\fle.test.dll")));
+            Assert.That(((ShellTaskDescription) items.ElementAt(2)).Arguments, Is.EqualTo(Os.DirChars("l1\\l2\\l3\\bin\\Debug\\flo.tests.dll")));
         }
 
         [Test]
         public void should_have_nunit_as_command()
         {
-            Assert.That(((ShellTask) items.First()).Command, Is.EqualTo("nunit"));
-            Assert.That(((ShellTask) items.ElementAt(1)).Command, Is.EqualTo("nunit"));
-            Assert.That(((ShellTask) items.ElementAt(2)).Command, Is.EqualTo("nunit"));
+            Assert.That(((ShellTaskDescription) items.First()).Command, Is.EqualTo("nunit"));
+            Assert.That(((ShellTaskDescription) items.ElementAt(1)).Command, Is.EqualTo("nunit"));
+            Assert.That(((ShellTaskDescription) items.ElementAt(2)).Command, Is.EqualTo("nunit"));
         }
     }
 }

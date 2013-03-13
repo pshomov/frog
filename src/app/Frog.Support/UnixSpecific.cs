@@ -8,7 +8,7 @@ namespace Frog.Support
     {
         public static string UnixTotalProcessorTime(int processId)
         {
-            var p = new ProcessWrapper("python",string.Format("{0} {1}", Path.Combine(Underware.SupportScriptsLocation, "cpu_times.py"), processId));
+            var p = new ProcessWrapper("python",string.Format("{0} {1}", Path.Combine(Locations.SupportScriptsLocation, "cpu_times.py"), processId));
             var processStrings = new List<String>();
             var errorStrings = new List<String>();
             p.OnStdOutput += s => { if (!s.IsNullOrEmpty()) processStrings.Add(s); };

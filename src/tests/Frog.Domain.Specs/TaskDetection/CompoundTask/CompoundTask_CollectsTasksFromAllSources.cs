@@ -20,10 +20,10 @@ namespace Frog.Domain.Specs.TaskDetection.CompoundTask
             task1.Detect(Arg.Any<string>(), out stop).Returns(info =>
                 {
                     info[1] = false;
-                    return new List<Task>();
+                    return new List<TaskDescription>();
                 });
             task2 = Substitute.For<TaskSource>();
-            task2.Detect("", out stop).ReturnsForAnyArgs(new List<Task>());
+            task2.Detect("", out stop).ReturnsForAnyArgs(new List<TaskDescription>());
             compoundTaskSource = new CompoundTaskSource(task1, task2);
         }
 

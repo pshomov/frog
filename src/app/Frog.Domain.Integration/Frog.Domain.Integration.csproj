@@ -51,11 +51,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="CorrugatedIronExts.cs" />
+    <Compile Include="Underware\CorrugatedIronExts.cs" />
     <Compile Include="GitDriver.cs" />
+    <Compile Include="ProjectRepository\InMemoryProjectsRepository.cs" />
     <Compile Include="RabbitMQBus.cs" />
-    <Compile Include="Riak.cs" />
-    <Compile Include="RiakProjectRepository.cs" />
+    <Compile Include="Underware\Riak.cs" />
+    <Compile Include="ProjectRepository\RiakProjectRepository.cs" />
     <Compile Include="SubfolderWorkingArea.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
@@ -84,7 +85,5 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="UI\" />
-  </ItemGroup>
+  <ItemGroup />
 </Project>

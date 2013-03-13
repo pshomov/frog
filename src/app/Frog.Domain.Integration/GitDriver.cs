@@ -18,7 +18,7 @@ namespace Frog.Domain.Integration
 
         public RevisionInfo GetLatestRevision()
         {
-            string scriptPath = Path.Combine(Underware.GitProductionScriptsLocation, "git_remote_latest_rev.rb");
+            string scriptPath = Path.Combine(Locations.GitProductionScriptsLocation, "git_remote_latest_rev.rb");
             var process = new ProcessWrapper("ruby",
                                              scriptPath + " \"" + repoUrl+"\"");
             string result = "";
@@ -43,7 +43,7 @@ namespace Frog.Domain.Integration
 
         public CheckoutInfo GetSourceRevision(string revision, string workingArea)
         {
-            var scriptPath = Path.Combine(Underware.GitProductionScriptsLocation, "git_fetch.rb");
+            var scriptPath = Path.Combine(Locations.GitProductionScriptsLocation, "git_fetch.rb");
             var process = new ProcessWrapper("ruby",
                                              scriptPath + " \"" + repoUrl + "\" " + revision + " " + " \"" + workingArea+"\"");
             var log = "";

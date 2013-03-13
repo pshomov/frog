@@ -9,12 +9,12 @@ namespace Frog.Domain.IntegrationTests.Task
     [TestFixture]
     public class TaskFailsToStartSpec : BDD
     {
-        private IExecTask _task;
+        private ExecTask _task;
         private ExecTaskResult _taskResult;
 
         protected override void Given()
         {
-            _task = new ExecTask("ad43wsWasdasd", "", "task_name", (p1, p2, p3) => new ProcessWrapper(p1, p2, p3));
+            _task = new OSExecuatableTask("ad43wsWasdasd", "", "task_name", (p1, p2, p3) => new ProcessWrapper(p1, p2, p3));
         }
 
         protected override void When()
@@ -51,12 +51,12 @@ namespace Frog.Domain.IntegrationTests.Task
     [TestFixture]
     public class TaskStartsButExitsWithNonZeroSpec : BDD
     {
-        private IExecTask _task;
+        private ExecTask _task;
         private ExecTaskResult _taskResult;
 
         protected override void Given()
         {
-            _task = new ExecTask("ruby", @"-e 'exit 4'", "task_name", (p1, p2, p3) => new ProcessWrapper(p1, p2, p3));
+            _task = new OSExecuatableTask("ruby", @"-e 'exit 4'", "task_name", (p1, p2, p3) => new ProcessWrapper(p1, p2, p3));
         }
 
         protected override void When()
@@ -86,12 +86,12 @@ namespace Frog.Domain.IntegrationTests.Task
     [TestFixture]
     public class TaskStartsAndFinishesWithExitCodeZeroSpec : BDD
     {
-        private IExecTask _task;
+        private ExecTask _task;
         private ExecTaskResult _taskResult;
 
         protected override void Given()
         {
-            _task = new ExecTask("ruby", @"-e 'exit 0'", "task_name", (p1, p2, p3) => new ProcessWrapper(p1, p2, p3));
+            _task = new OSExecuatableTask("ruby", @"-e 'exit 0'", "task_name", (p1, p2, p3) => new ProcessWrapper(p1, p2, p3));
         }
 
         protected override void When()

@@ -2,28 +2,28 @@ using System.Collections.Generic;
 
 namespace Frog.Domain
 {
-    public abstract class Task
+    public abstract class TaskDescription
     {
         public string Name;
 
-        public List<IExecTask> GimeTasks(IExecTaskGenerator gen)
+        public List<ExecTask> GimeTasks(IExecTaskGenerator gen)
         {
             return gen.GimeTasks((dynamic)this);
         }
     }
 
-    public class TestTask : Task
+    public class TestTaskDescription : TaskDescription
     {
         public readonly string Path;
 
-        public TestTask(string path)
+        public TestTaskDescription(string path)
         {
             Path = path;
         }
 
     }
 
-    public class FakeTaskDescription : Task
+    public class FakeTaskDescription : TaskDescription
     {
         public readonly string[] messages;
 
@@ -33,7 +33,7 @@ namespace Frog.Domain
         }
     }
 
-    public class ShellTask : Task
+    public class ShellTaskDescription : TaskDescription
     {
         public string Command;
         public string Arguments;

@@ -14,8 +14,8 @@ namespace Frog.Domain.Specs.Pipeline
         {
             base.Given();
             bool shouldStop;
-            TaskSource.Detect(Arg.Any<string>(), out shouldStop).Returns(As.List<Domain.Task>(new FakeTaskDescription()));
-            Task1 = Substitute.For<IExecTask>();
+            TaskSource.Detect(Arg.Any<string>(), out shouldStop).Returns(As.List<Domain.TaskDescription>(new FakeTaskDescription()));
+            Task1 = Substitute.For<ExecTask>();
             Task1.Perform(Arg.Any<SourceDrop>()).Returns(new ExecTaskResult(ExecutionStatus.Success, 4));
             Task1.When(task => task.Perform(Arg.Any<SourceDrop>())).Do(info =>
                                                                            {

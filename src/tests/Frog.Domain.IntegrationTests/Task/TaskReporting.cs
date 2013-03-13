@@ -8,13 +8,13 @@ namespace Frog.Domain.IntegrationTests.Task
     [TestFixture]
     public class TaskReporting : BDD
     {
-        ExecTask task;
+        OSExecuatableTask task;
         int taskStarted;
         int pid;
 
         protected override void Given()
         {
-            task = new ExecTask("ruby", "-e 'exit 0'", "task_name", (p1, p2, p3) => new ProcessWrapper(p1, p2, p3));
+            task = new OSExecuatableTask("ruby", "-e 'exit 0'", "task_name", (p1, p2, p3) => new ProcessWrapper(p1, p2, p3));
             taskStarted = 0;
             task.OnTaskStarted += pid =>
                                       {

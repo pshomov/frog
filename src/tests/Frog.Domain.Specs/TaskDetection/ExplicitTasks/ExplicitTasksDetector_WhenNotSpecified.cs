@@ -11,7 +11,7 @@ namespace Frog.Domain.Specs.TaskDetection.ExplicitTasks
     public class ExplicitTasksDetector_WhenNotSpecified : TaskDetectorSpecsBase
     {
         TaskSource customTasks;
-        IEnumerable<Task> tasks;
+        IEnumerable<TaskDescription> tasks;
         bool shouldStop;
 
         protected override void Given()

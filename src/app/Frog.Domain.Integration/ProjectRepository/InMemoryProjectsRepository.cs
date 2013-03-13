@@ -1,7 +1,8 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
+using Frog.Domain.RepositoryTracker;
 
-namespace Frog.Domain.RepositoryTracker
+namespace Frog.Domain.Integration
 {
     public class InMemoryProjectsRepository : ProjectsRepository, ProjectsRepositoryTestSupport
     {

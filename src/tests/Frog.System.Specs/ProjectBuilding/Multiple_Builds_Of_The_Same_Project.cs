@@ -31,7 +31,7 @@ namespace Frog.System.Specs.ProjectBuilding
             bool shouldStop;
             testSystem.TasksSource.Detect(Arg.Any<string>(), out shouldStop).Returns(
                 As.List(
-                    (Task)
+                    (TaskDescription)
                     new FakeTaskDescription("fle")));
             system = new SystemDriver(testSystem);
             system.RegisterNewProject(RepoUrl);

@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 
 namespace Frog.Support
 {
-    public class Underware
+    public class Locations
     {
         static string GitScriptsLocation(string subfolder)
         {

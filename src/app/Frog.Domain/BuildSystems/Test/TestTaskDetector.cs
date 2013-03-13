@@ -13,11 +13,11 @@ namespace Frog.Domain.BuildSystems.FrogSystemTest
             this.taskFileFinder = taskFileFinder;
         }
 
-        public IEnumerable<Task> Detect(string projectFolder, out bool shouldStop)
+        public IEnumerable<TaskDescription> Detect(string projectFolder, out bool shouldStop)
         {
             shouldStop = false;
             var testTaskFiles = taskFileFinder.FindFiles(projectFolder);
-            return testTaskFiles.Select(s => new TestTask(s));
+            return testTaskFiles.Select(s => new TestTaskDescription(s));
         }
 
         readonly TaskFileFinder taskFileFinder;

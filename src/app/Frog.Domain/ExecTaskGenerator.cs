@@ -6,9 +6,9 @@ namespace Frog.Domain
 {
     public interface IExecTaskGenerator
     {
-        List<IExecTask> GimeTasks(ShellTask task);
-        List<IExecTask> GimeTasks(TestTask task);
-        List<IExecTask> GimeTasks(FakeTaskDescription task);
+        List<ExecTask> GimeTasks(ShellTaskDescription taskDescription);
+        List<ExecTask> GimeTasks(TestTaskDescription taskDescription);
+        List<ExecTask> GimeTasks(FakeTaskDescription task);
     }
 
     public enum OS
@@ -26,31 +26,31 @@ namespace Frog.Domain
             this.execTaskFactory = execTaskFactory;
         }
 
-        public List<IExecTask> GimeTasks(ShellTask task)
+        public List<ExecTask> GimeTasks(ShellTaskDescription taskDescription)
         {
-            return As.List(CreateShellTask(task));
+            return As.List(CreateShellTask(taskDescription));
         } 
-        public List<IExecTask> GimeTasks(TestTask task)
+        public List<ExecTask> GimeTasks(TestTaskDescription taskDescription)
         {
-            return As.List((IExecTask)new TestExecTask(task.Path, this));
+            return As.List((ExecTask)new TestExecTask(taskDescription.Path, this));
         } 
-        public List<IExecTask> GimeTasks(FakeTaskDescription task)
+        public List<ExecTask> GimeTasks(FakeTaskDescription task)
         {
-            return As.List((IExecTask)new FakeExecTask(task.messages, this));
+            return As.List((ExecTask)new FakeExecTask(task.messages, this));
         } 
 
         readonly ExecTaskFactory execTaskFactory;
 
-        IExecTask CreateShellTask(ShellTask anyTask)
+        ExecTask CreateShellTask(ShellTaskDescription anyTaskDescription)
         {
             var cmd = Os.IsUnix ? "/bin/bash" : "cmd.exe";
             var args = Os.IsUnix ? "-c \"" : "/c ";
-            var command = anyTask.Command + " " + anyTask.Arguments;
+            var command = anyTaskDescription.Command + " " + anyTaskDescription.Arguments;
             args += command.Trim();
             args = args.Trim();
             if (Os.IsUnix) args += "\"";
 
-            var execTask = execTaskFactory.CreateTask(cmd, args, anyTask.Name.IsNullOrEmpty() ? cmd + " "+args : anyTask.Name);
+            var execTask = execTaskFactory.CreateOSExecutableTask(cmd, args, anyTaskDescription.Name.IsNullOrEmpty() ? cmd + " "+args : anyTaskDescription.Name);
             return execTask;
         }
     }

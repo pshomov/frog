@@ -41,7 +41,7 @@ namespace Frog.Domain.ExecTasks
         readonly int exitCode;
     }
 
-    public class ExecTask : IExecTask
+    public class OSExecuatableTask : ExecTask
     {
         public string Name
         {
@@ -51,7 +51,7 @@ namespace Frog.Domain.ExecTasks
         public event Action<int> OnTaskStarted = pid => { };
         public event Action<string> OnTerminalOutputUpdate = s => { };
 
-        public ExecTask(string app, string arguments, string name,
+        public OSExecuatableTask(string app, string arguments, string name,
                         Func<string, string, string, IProcessWrapper> processWrapperFactory, int periodLengthMs = 5000,
                         int quotaNrPeriods = 60)
         {
@@ -75,7 +75,7 @@ namespace Frog.Domain.ExecTasks
             {
                 process.Execute();
                 OnTaskStarted(process.Id);
-                ObserveTask();
+                ObserveTaskPerformance();
                 exitCode = process.Dispose();
             }
             catch (HangingProcessDetectedException)
@@ -113,7 +113,7 @@ namespace Frog.Domain.ExecTasks
         readonly int quotaNrPeriods;
         IProcessWrapper process;
 
-        void ObserveTask()
+        void ObserveTaskPerformance()
         {
             var lastQuotaCPU = "";
             for (int i = 0; i < quotaNrPeriods; i++)

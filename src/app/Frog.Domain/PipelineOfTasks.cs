@@ -27,7 +27,7 @@ namespace Frog.Domain
         readonly TaskSource tasksSource;
         readonly IExecTaskGenerator execTaskGenerator;
 
-        void RunTasks(SourceDrop sourceDrop, List<IExecTask> execTasks)
+        void RunTasks(SourceDrop sourceDrop, List<ExecTask> execTasks)
         {
             ExecTaskResult.Status execTaskStatus = ExecTaskResult.Status.Success;
             PipelineStatus status = GeneratePipelineStatus(execTasks);
@@ -64,9 +64,9 @@ namespace Frog.Domain
                              : BuildTotalEndStatus.Success);
         }
 
-        List<IExecTask> GenerateTasks(SourceDrop sourceDrop)
+        List<ExecTask> GenerateTasks(SourceDrop sourceDrop)
         {
-            var execTasks = new List<IExecTask>();
+            var execTasks = new List<ExecTask>();
             bool shouldStop;
             foreach (var task in tasksSource.Detect(sourceDrop.SourceDropLocation, out shouldStop))
             {
@@ -75,7 +75,7 @@ namespace Frog.Domain
             return execTasks;
         }
 
-        PipelineStatus GeneratePipelineStatus(List<IExecTask> execTasks)
+        PipelineStatus GeneratePipelineStatus(List<ExecTask> execTasks)
         {
             var pipelineStatus = new PipelineStatus();
             foreach (var execTask in execTasks)

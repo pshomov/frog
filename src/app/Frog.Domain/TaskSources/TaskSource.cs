@@ -4,6 +4,6 @@ namespace Frog.Domain.TaskSources
 {
     public interface TaskSource
     {
-        IEnumerable<Task> Detect(string projectFolder, out bool shouldStop);
+        IEnumerable<TaskDescription> Detect(string projectFolder, out bool shouldStop);
     }
 }

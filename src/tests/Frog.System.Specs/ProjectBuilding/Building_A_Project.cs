@@ -38,7 +38,7 @@ namespace Frog.System.Specs.ProjectBuilding
             bool shouldStop;
             testSystem.TasksSource.Detect(Arg.Any<string>(), out shouldStop).Returns(
                 As.List(
-                    (Task)
+                    (TaskDescription)
                     new FakeTaskDescription(TerminalOutput3,
                                             TerminalOutput4)));
             system = new SystemDriver(testSystem);

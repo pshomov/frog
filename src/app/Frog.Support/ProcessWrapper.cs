@@ -85,7 +85,7 @@ namespace Frog.Support
 
         public int Dispose()
         {
-			string paramz = Path.Combine(Underware.SupportScriptsLocation,"killtree.py") + " " +process.Id.ToString();
+			string paramz = Path.Combine(Locations.SupportScriptsLocation,"killtree.py") + " " +process.Id.ToString();
             if (!process.HasExited)
             {
                 using (var killProcess = Process.Start("python", paramz))

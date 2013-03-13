@@ -15,26 +15,26 @@ namespace Frog.Domain.BuildSystems.Solution
             this.os = os;
         }
 
-        public IEnumerable<Task> Detect(string projectFolder, out bool shouldStop)
+        public IEnumerable<TaskDescription> Detect(string projectFolder, out bool shouldStop)
         {
             shouldStop = false;
             var allSolutionFiles = taskFileFinder.FindFiles(projectFolder);
             var name = "Build solution";
             var comand = os == OS.Windows ? "{0}\\Microsoft.NET\\Framework\\v4.0.30319\\msbuild.exe".format(Environment.GetEnvironmentVariable("SYSTEMROOT")) : "xbuild";
-            if (allSolutionFiles.Count == 1) return As.List<Task>(new ShellTask() { Arguments = allSolutionFiles[0], Command = comand, Name = name});
+            if (allSolutionFiles.Count == 1) return As.List<TaskDescription>(new ShellTaskDescription() { Arguments = allSolutionFiles[0], Command = comand, Name = name});
             if (allSolutionFiles.Count > 0)
             {
                 var rootFolderSolutions =
                     allSolutionFiles.Where(slnPath => slnPath.IndexOf(Path.DirectorySeparatorChar) == -1).ToList();
-                if (rootFolderSolutions.Count == 0) return new List<Task>();
+                if (rootFolderSolutions.Count == 0) return new List<TaskDescription>();
                 var rootBuildSlnIdx =
                     rootFolderSolutions.FindIndex(
                         s => s.Equals("build.sln", StringComparison.InvariantCultureIgnoreCase));
                 if (rootBuildSlnIdx > -1)
-                    return As.List<Task>(new ShellTask(){Arguments = rootFolderSolutions[rootBuildSlnIdx], Command = comand, Name = name});
-                if (rootFolderSolutions.Count > 1) return new List<Task>();
+                    return As.List<TaskDescription>(new ShellTaskDescription(){Arguments = rootFolderSolutions[rootBuildSlnIdx], Command = comand, Name = name});
+                if (rootFolderSolutions.Count > 1) return new List<TaskDescription>();
                 return
-                    As.List(new ShellTask()
+                    As.List(new ShellTaskDescription()
                         {
                             Command =
                                 comand,
@@ -44,7 +44,7 @@ namespace Frog.Domain.BuildSystems.Solution
                         });
             }
 
-            return new List<Task>();
+            return new List<TaskDescription>();
         }
 
         readonly TaskFileFinder taskFileFinder;

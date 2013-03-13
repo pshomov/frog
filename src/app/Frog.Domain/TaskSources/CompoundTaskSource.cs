@@ -10,10 +10,10 @@ namespace Frog.Domain.TaskSources
             this.srcs = srcs;
         }
 
-        public IEnumerable<Task> Detect(string projectFolder, out bool shouldStop)
+        public IEnumerable<TaskDescription> Detect(string projectFolder, out bool shouldStop)
         {
             shouldStop = false;
-            var result = new List<Task>();
+            var result = new List<TaskDescription>();
             foreach (var taskSource in srcs)
             {
                 bool taskSaysShouldStop;

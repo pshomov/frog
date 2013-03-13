@@ -1,11 +1,10 @@
-using System;
 using System.Collections.Generic;
 using CorrugatedIron;
 using CorrugatedIron.Exceptions;
 using CorrugatedIron.Models;
 using Frog.Support;
 
-namespace Frog.Domain.Integration
+namespace Frog.Domain.Integration.Underware
 {
     public static class CorrugatedIronExts
     {

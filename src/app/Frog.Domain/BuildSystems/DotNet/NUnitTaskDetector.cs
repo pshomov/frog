@@ -14,11 +14,11 @@ namespace Frog.Domain.BuildSystems.Solution
             this._projectTaskFileRepo = _projectTaskFileRepo;
         }
 
-        public IEnumerable<Task> Detect(string projectFolder, out bool shouldStop)
+        public IEnumerable<TaskDescription> Detect(string projectFolder, out bool shouldStop)
         {
             shouldStop = false;
             var items = _projectTaskFileRepo.FindFiles(projectFolder);
-            return items.Select(s => new ShellTask() {Command = "nunit", Arguments = ProjectPathToAssemblyPath(s)});
+            return items.Select(s => new ShellTaskDescription() {Command = "nunit", Arguments = ProjectPathToAssemblyPath(s)});
         }
 
         readonly TaskFileFinder _projectTaskFileRepo;

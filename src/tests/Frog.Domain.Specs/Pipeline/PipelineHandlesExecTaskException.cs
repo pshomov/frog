@@ -13,8 +13,8 @@ namespace Frog.Domain.Specs.Pipeline
         {
             base.Given();
             bool shouldStop;
-            TaskSource.Detect(Arg.Any<string>(), out shouldStop).Returns(As.List<Domain.Task>(new FakeTaskDescription()));
-            Task2 = Substitute.For<IExecTask>();
+            TaskSource.Detect(Arg.Any<string>(), out shouldStop).Returns(As.List<Domain.TaskDescription>(new FakeTaskDescription()));
+            Task2 = Substitute.For<ExecTask>();
             Task2.When(task => task.Perform(Arg.Any<SourceDrop>())).Do(info => { throw new Exception("ufff"); });
             ExecTaskGenerator.GimeTasks(Arg.Any<FakeTaskDescription>()).Returns(As.List(Task2));
         }

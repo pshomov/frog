@@ -1,4 +1,5 @@
 using System;
+using Frog.Domain.Integration;
 using Frog.Domain.RepositoryTracker;
 using NUnit.Framework;
 

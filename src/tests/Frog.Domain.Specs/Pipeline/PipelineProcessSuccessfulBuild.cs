@@ -1,5 +1,4 @@
 using System;
-using Frog.Domain.BuildSystems.Solution;
 using Frog.Domain.ExecTasks;
 using Frog.Support;
 using NSubstitute;
@@ -17,14 +16,14 @@ namespace Frog.Domain.Specs.Pipeline
         {
             base.Given();
             bool shouldStop;
-            TaskSource.Detect(Arg.Any<string>(), out shouldStop).Returns(As.List<Task>(new FakeTaskDescription()));
+            TaskSource.Detect(Arg.Any<string>(), out shouldStop).Returns(As.List<TaskDescription>(new FakeTaskDescription()));
 
-            Task1 = Substitute.For<IExecTask>();
+            Task1 = Substitute.For<ExecTask>();
             Task1.When(task => task.Perform(Arg.Any<SourceDrop>()))
                 .Do(info => Task1.OnTerminalOutputUpdate += Raise.Event<Action<string>>("task1"));
             Task1.Perform(Arg.Any<SourceDrop>()).Returns(new ExecTaskResult(ExecutionStatus.Success, 0));
             
-            Task2 = Substitute.For<IExecTask>();
+            Task2 = Substitute.For<ExecTask>();
             Task2.When(task => task.Perform(Arg.Any<SourceDrop>()))
                 .Do(info => Task2.OnTerminalOutputUpdate += Raise.Event<Action<string>>("task2"));
             Task2.Perform(Arg.Any<SourceDrop>()).Returns(new ExecTaskResult(ExecutionStatus.Success, 0));

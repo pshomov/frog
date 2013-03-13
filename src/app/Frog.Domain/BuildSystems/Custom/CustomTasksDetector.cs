@@ -18,15 +18,15 @@ namespace Frog.Domain.BuildSystems.Custom
             this.getContent = getContent;
         }
 
-        public IEnumerable<Task> Detect(string projectFolder, out bool shouldStop)
+        public IEnumerable<TaskDescription> Detect(string projectFolder, out bool shouldStop)
         {
             shouldStop = false;
             var configPrototype = new { pipeline = new[] { new { stage = "stage name", tasks = new[] { "task 1", "task2" } } } };
             var foundFiles = taskFileFinder.FindFiles(projectFolder);
-            if (foundFiles.Count == 0) return new List<Task>();
+            if (foundFiles.Count == 0) return new List<TaskDescription>();
             shouldStop = true;
             var parsedConfig = JsonConvert.DeserializeAnonymousType(getContent(Path.Combine(projectFolder, foundFiles.Single())), configPrototype);
-            return parsedConfig.pipeline.SelectMany(arg => arg.tasks.Select(s => new ShellTask {Arguments = s, Name = s}));
+            return parsedConfig.pipeline.SelectMany(arg => arg.tasks.Select(s => new ShellTaskDescription {Arguments = s, Name = s}));
         }
     }
 }

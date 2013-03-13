@@ -8,7 +8,7 @@ using Frog.Support;
 
 namespace Frog.Domain.ExecTasks
 {
-    public abstract class TestTaskBase : IExecTask
+    public abstract class TestTaskBase : ExecTask
     {
         public string Name
         {
@@ -33,7 +33,7 @@ namespace Frog.Domain.ExecTasks
                                                                                                             @"^exec (\S+) (.*)$");
                                                                                    var tasks = execTaskGenerator.
                                                                                        GimeTasks(
-                                                                                           new ShellTask
+                                                                                           new ShellTaskDescription
                                                                                                {
                                                                                                    Command = 
                                                                                                        parsed.Groups[1].

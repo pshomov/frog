@@ -8,7 +8,7 @@ namespace Frog.Domain.IntegrationTests.Task
     [TestFixture]
     public class TaskCurrentDirectory : BDD
     {
-        IExecTask _task;
+        ExecTask _task;
         ExecTaskResult taskResult;
         private string _arguments;
 
@@ -17,7 +17,7 @@ namespace Frog.Domain.IntegrationTests.Task
             string _app = "adasdasd";
             if (Os.IsWindows) {_app = @"cmd.exe"; _arguments=@"/c if %CD%==c:\ exit /b 41";}
             if (Os.IsUnix) {_app = "/bin/bash"; _arguments = @"-c ""test `pwd` == '/usr/bin' && (echo 'matches'; exit 41)""";}
-            _task = new ExecTask(_app, _arguments, "task_name", (p1, p2, p3) => new ProcessWrapper(p1, p2, p3));
+            _task = new OSExecuatableTask(_app, _arguments, "task_name", (p1, p2, p3) => new ProcessWrapper(p1, p2, p3));
         }
 
         protected override void When()

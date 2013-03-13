@@ -87,6 +87,10 @@
     <Compile Include="WorkerSpecs\WorkerSpecsBase.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\app\Frog.Domain.Integration\Frog.Domain.Integration.csproj">
+      <Project>{34D94FDA-6971-43A3-ABDE-B97CEA82CF26}</Project>
+      <Name>Frog.Domain.Integration</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\app\Frog.Domain\Frog.Domain.csproj">
       <Project>{8A446F8C-6B38-4153-A996-CC162DACF795}</Project>
       <Name>Frog.Domain</Name>

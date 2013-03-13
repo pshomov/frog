@@ -9,14 +9,14 @@ namespace Frog.Domain.IntegrationTests.Task
 {
     public class TasksCPUQuotaMeasurementOfExitedProcessDoesNotCauseException : BDD
     {
-        private ExecTask task;
+        private OSExecuatableTask task;
         private IProcessWrapper processWrapper;
 
         protected override void Given()
         {
             processWrapper = Substitute.For<IProcessWrapper>();
             processWrapper.ProcessTreeCPUUsageId.Returns(info => {throw new InvalidOperationException("process is gone");});
-            task = new ExecTask("fle", "flo", "name",
+            task = new OSExecuatableTask("fle", "flo", "name",
                                 (s, s1, arg3) => processWrapper, periodLengthMs: 1000, quotaNrPeriods: 3);
         }
 

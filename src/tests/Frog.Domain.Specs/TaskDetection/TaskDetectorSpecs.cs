@@ -11,7 +11,7 @@ namespace Frog.Domain.Specs.TaskDetection
     public abstract class MsBuildSpecBase : TaskDetectorSpecsBase
     {
         protected MSBuildDetector msbuildTaskDetecttor;
-        protected IEnumerable<Task> items;
+        protected IEnumerable<TaskDescription> items;
     }
 
     [TestFixture]
@@ -35,14 +35,14 @@ namespace Frog.Domain.Specs.TaskDetection
         public void should_have_msbuild_as_command()
         {
             Assert.That(items.Count(), Is.EqualTo(1));
-            Assert.That((items.First() as ShellTask).Command.Contains("msbuild.exe"), Is.True);
+            Assert.That((items.First() as ShellTaskDescription).Command.Contains("msbuild.exe"), Is.True);
         }
 
         [Test]
         public void should_prefer_root_file_sln_over_any_other_down_the_hierarchy()
         {
             Assert.That(items.Count(), Is.EqualTo(1));
-            Assert.That((items.First() as ShellTask).Arguments.Contains("a1.sln"), Is.True);
+            Assert.That((items.First() as ShellTaskDescription).Arguments.Contains("a1.sln"), Is.True);
         }
     }
 
@@ -67,7 +67,7 @@ namespace Frog.Domain.Specs.TaskDetection
         public void should_have_msbuild_as_command()
         {
             Assert.That(items.Count(), Is.EqualTo(1));
-            Assert.That((items.First() as ShellTask).Command.Contains("xbuild"), Is.True);
+            Assert.That((items.First() as ShellTaskDescription).Command.Contains("xbuild"), Is.True);
         }
     }
 
@@ -119,7 +119,7 @@ namespace Frog.Domain.Specs.TaskDetection
         public void should_always_prefer_the_solution_called_BUILD()
         {
             Assert.That(items.Count(), Is.EqualTo(1));
-            Assert.That((items.First() as ShellTask).Arguments, Is.EqualTo("Build.sln"));
+            Assert.That((items.First() as ShellTaskDescription).Arguments, Is.EqualTo("Build.sln"));
         }
     }
 
@@ -166,7 +166,7 @@ namespace Frog.Domain.Specs.TaskDetection
         public void should_always_select_the_only_solution_file()
         {
             Assert.That(items.Count(), Is.EqualTo(1));
-            Assert.That((items.First() as ShellTask).Arguments, Is.EqualTo(Os.DirChars("fle\\flo\\a.sln")));
+            Assert.That((items.First() as ShellTaskDescription).Arguments, Is.EqualTo(Os.DirChars("fle\\flo\\a.sln")));
         }
     }
 	
