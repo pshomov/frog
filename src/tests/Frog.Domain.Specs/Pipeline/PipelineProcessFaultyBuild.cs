@@ -4,7 +4,7 @@ using Frog.Support;
 using NSubstitute;
 using NUnit.Framework;
 
-namespace Frog.Domain.Specs.Pipeline
+namespace Frog.Domain.Specs
 {
     [TestFixture]
     public class PipelineProcessFaultyBuild : PipelineProcessSpecBase

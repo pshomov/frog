@@ -26,7 +26,7 @@ namespace Frog.Domain.Specs.WorkerSpecs
                         {
                             var terminalId = Guid.NewGuid();
                             Pipeline.OnBuildStarted +=
-                                Raise.Event<BuildStartedDelegate>(new PipelineStatus());
+                                Raise.Event<Pipeline.BuildStartedDelegate>(new PipelineStatus());
                             Pipeline.OnBuildUpdated +=
                                 Raise.Event<Action<int, Guid, TaskInfo.TaskStatus>>(0, terminalId, TaskInfo.TaskStatus.Started);
                             Pipeline.OnBuildEnded +=

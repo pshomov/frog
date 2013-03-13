@@ -61,11 +61,11 @@ namespace Frog.System.Specs.Underware
         }
 
 
-        PipelineOfTasks GetPipeline()
+        Pipeline GetPipeline()
         {
             {
                 TasksSource = Substitute.For<TaskSource>();
-                return new PipelineOfTasks(TasksSource,
+                return new Pipeline(TasksSource,
                                            new ExecutableTaskGenerator(new ExecTaskFactory()));
             }
         }
@@ -98,7 +98,7 @@ namespace Frog.System.Specs.Underware
             return new FakeBus();
         }
 
-        void SetupWorker(PipelineOfTasks pipeline)
+        void SetupWorker(Pipeline pipeline)
         {
             worker = new Worker(pipeline, areaGoverner);
         }

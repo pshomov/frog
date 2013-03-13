@@ -24,10 +24,10 @@ namespace Frog.Domain.Specs.Agent
                     info =>
                         {
                             Worker.OnProjectCheckedOut +=
-                                Raise.Event<ProjectCheckedOutDelegate>(new CheckoutInfo {Comment = "committed", Revision = "2"});
+                                Raise.Event<Pipeline.ProjectCheckedOutDelegate>(new CheckoutInfo {Comment = "committed", Revision = "2"});
                             TerminalId = Guid.NewGuid();
                             Worker.OnBuildStarted +=
-                                Raise.Event<BuildStartedDelegate>(new PipelineStatus(){Tasks = As.List(new TaskInfo("name", TerminalId))});
+                                Raise.Event<Pipeline.BuildStartedDelegate>(new PipelineStatus(){Tasks = As.List(new TaskInfo("name", TerminalId))});
                             Worker.OnTerminalUpdates += Raise.Event<Action<TerminalUpdateInfo>>(new TerminalUpdateInfo(contentSequenceIndex: 0, content: "content", taskIndex: 1, terminalId: TerminalId));
                             Worker.OnBuildUpdated +=
                                 Raise.Event<Action<int, Guid, TaskInfo.TaskStatus>>(0, TerminalId, TaskInfo.TaskStatus.Started);

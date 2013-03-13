@@ -17,7 +17,7 @@ namespace Frog.Domain
             NextEventId = 0;
             Action<BuildTotalEndStatus> onBuildEnded =
                 started => theBus.Publish(new BuildEnded(message.Id, message.RepoUrl, started, NextEventId));
-            BuildStartedDelegate onBuildStarted =
+            Pipeline.BuildStartedDelegate onBuildStarted =
                 started =>
                 theBus.Publish(new BuildStarted(buildId: message.Id, status: started, repoUrl: message.RepoUrl,
                                                 sequenceId: NextEventId));
@@ -37,7 +37,7 @@ namespace Frog.Domain
                                                                                                  info.
                                                                                                  ContentSequenceIndex,
                                                                                              terminalId: info.TerminalId));
-            ProjectCheckedOutDelegate onProjectCheckedOut =
+            Pipeline.ProjectCheckedOutDelegate onProjectCheckedOut =
                 info =>
                 theBus.Publish(new ProjectCheckedOut(buildId: message.Id, sequenceId: NextEventId)
                                    {CheckoutInfo = info, RepoUrl = message.RepoUrl});

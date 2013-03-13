@@ -1,96 +1,98 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using Frog.Domain.ExecTasks;
 
 namespace Frog.Domain
 {
-    public class SourceDrop
+    public class Pipeline
     {
-        public string SourceDropLocation
+        public delegate void ProjectCheckedOutDelegate(CheckoutInfo info);
+
+        public delegate void BuildStartedDelegate(PipelineStatus status);
+
+        public virtual event Action<BuildTotalEndStatus> OnBuildEnded = status => { };
+        public virtual event BuildStartedDelegate OnBuildStarted = status => { };
+        public virtual event Action<int, Guid, TaskInfo.TaskStatus> OnBuildUpdated = (i, terminalId, status) => { };
+        public virtual event Action<TerminalUpdateInfo> OnTerminalUpdate = info => { };
+
+        public Pipeline(){}
+
+        public Pipeline(TaskSource tasksSource, ExecTaskGenerator execTaskGenerator)
         {
-            get { return sourceDropLocation; }
+            this.tasksSource = tasksSource;
+            this.execTaskGenerator = execTaskGenerator;
         }
 
-        public SourceDrop(string sourceDropLocation)
+        public virtual void Process(SourceDrop sourceDrop)
         {
-            this.sourceDropLocation = sourceDropLocation;
+            var execTasks = GenerateTasks(sourceDrop);
+            RunTasks(sourceDrop, execTasks);
         }
 
-        readonly string sourceDropLocation;
-    }
+        readonly TaskSource tasksSource;
+        readonly ExecTaskGenerator execTaskGenerator;
 
-    public delegate void ProjectCheckedOutDelegate(CheckoutInfo info);
-
-    public delegate void BuildStartedDelegate(PipelineStatus status);
-
-    public interface Pipeline
-    {
-        event Action<BuildTotalEndStatus> OnBuildEnded;
-        event BuildStartedDelegate OnBuildStarted;
-        event Action<int, Guid, TaskInfo.TaskStatus> OnBuildUpdated;
-        event Action<TerminalUpdateInfo> OnTerminalUpdate;
-        void Process(SourceDrop sourceDrop);
-    }
-
-    public class TerminalUpdateInfo
-    {
-        public string Content { get; private set; }
-        public int ContentSequenceIndex { get; private set; }
-        public int TaskIndex { get; private set; }
-        public Guid TerminalId { get; private set; }
-
-        public TerminalUpdateInfo(int contentSequenceIndex, string content, int taskIndex, Guid terminalId)
+        void RunTasks(SourceDrop sourceDrop, List<ExecutableTask> execTasks)
         {
-            ContentSequenceIndex = contentSequenceIndex;
-            Content = content;
-            TaskIndex = taskIndex;
-            TerminalId = terminalId;
-        }
-    }
+            var execTaskStatus = ExecTaskResult.Status.Success;
+            var status = GeneratePipelineStatus(execTasks);
+            OnBuildStarted(status);
 
-    public class PipelineStatus
-    {
-        public List<TaskInfo> Tasks = new List<TaskInfo>();
-        public override string ToString()
-        {
-            return string.Format("Pipeline:\r\n{0}", Tasks.Select(info => info.ToString()).Aggregate((info, taskInfo) => info + "\r\n"+taskInfo ));
-        }
-    }
+            for (var i = 0; i < execTasks.Count; i++)
+            {
+                var execTask = execTasks[i];
+                var terminalId = status.Tasks[i].TerminalId;
+                OnBuildUpdated(i, terminalId, TaskInfo.TaskStatus.Started);
+                var sequneceIndex = 0;
+                Action<string> execTaskOnOnTerminalOutputUpdate =
+                    s => OnTerminalUpdate(new TerminalUpdateInfo(sequneceIndex++, s, i, terminalId));
+                execTask.OnTerminalOutputUpdate += execTaskOnOnTerminalOutputUpdate;
+                try
+                {
+                    execTaskStatus = execTask.Perform(sourceDrop).ExecStatus;
+                }
+                catch (Exception e)
+                {
+                    execTaskStatus = ExecTaskResult.Status.Error;
+                    execTaskOnOnTerminalOutputUpdate("Runz>> Exception running the task:" + e);
+                }
+                execTask.OnTerminalOutputUpdate -= execTaskOnOnTerminalOutputUpdate;
+                var taskStatus = execTaskStatus == ExecTaskResult.Status.Error
+                                     ? TaskInfo.TaskStatus.FinishedError
+                                     : TaskInfo.TaskStatus.FinishedSuccess;
+                OnBuildUpdated(i, terminalId, taskStatus);
+                if (execTaskStatus != ExecTaskResult.Status.Success) break;
+            }
 
-    public class TaskInfo
-    {
-        public enum TaskStatus
-        {
-            NotStarted,
-            Started,
-            FinishedSuccess,
-            FinishedError
+            OnBuildEnded(execTaskStatus == ExecTaskResult.Status.Error
+                             ? BuildTotalEndStatus.Error
+                             : BuildTotalEndStatus.Success);
         }
 
-        public string Name;
-        public TaskStatus Status { get; set; }
-        public Guid TerminalId { get; set; }
-
-        public TaskInfo()
+        List<ExecutableTask> GenerateTasks(SourceDrop sourceDrop)
         {
+            var execTasks = new List<ExecutableTask>();
+            bool shouldStop;
+            foreach (var task in tasksSource.Detect(sourceDrop.SourceDropLocation, out shouldStop))
+            {
+                execTasks.AddRange(task.GimeTasks(execTaskGenerator));
+            }
+            return execTasks;
         }
 
-        public TaskInfo(string name, Guid terminalId)
+        PipelineStatus GeneratePipelineStatus(List<ExecutableTask> execTasks)
         {
-            TerminalId = terminalId;
-            Name = name;
-            Status = TaskStatus.NotStarted;
+            var pipelineStatus = new PipelineStatus();
+            foreach (var execTask in execTasks)
+            {
+                pipelineStatus.Tasks.Add(new TaskInfo
+                                             {
+                                                 Name = execTask.Name,
+                                                 Status = TaskInfo.TaskStatus.NotStarted,
+                                                 TerminalId = Guid.NewGuid()
+                                             });
+            }
+            return pipelineStatus;
         }
-
-        public override string ToString()
-        {
-            return string.Format("Name: {0}, Status {1}, Id {2}", Name, Status, TerminalId);
-        }
-    }
-
-    public enum BuildTotalEndStatus
-    {
-        Error,
-        Success
     }
 }

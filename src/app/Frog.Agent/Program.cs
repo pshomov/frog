@@ -28,11 +28,11 @@ namespace Frog.Agent
             Console.ReadLine();
         }
 
-        public static PipelineOfTasks GetPipeline()
+        public static Pipeline GetPipeline()
         {
             var pathFinder = new PathFinder();
             var os = IsNotWindows() ? OS.Unix : OS.Windows;
-            return new PipelineOfTasks(new CompoundTaskSource(
+            return new Pipeline(new CompoundTaskSource(
                                            new CustomTasksDetector(new CustomFileFinder(pathFinder), File.ReadAllText),
                                            new TestTaskDetector(new TestTaskTaskFileFinder(pathFinder)),
                                            new MSBuildDetector(new SolutionTaskFileFinder(pathFinder), os),

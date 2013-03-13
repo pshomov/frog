@@ -12,9 +12,9 @@ namespace Frog.Domain
     public class Worker
     {
         public virtual event Action<BuildTotalEndStatus> OnBuildEnded = status => { };
-        public virtual event BuildStartedDelegate OnBuildStarted = status => { };
+        public virtual event Pipeline.BuildStartedDelegate OnBuildStarted = status => { };
         public virtual event Action<int, Guid, TaskInfo.TaskStatus> OnBuildUpdated = (i, terminalId, status) => { };
-        public virtual event ProjectCheckedOutDelegate OnProjectCheckedOut = info => { };
+        public virtual event Pipeline.ProjectCheckedOutDelegate OnProjectCheckedOut = info => { };
         public virtual event Action<TerminalUpdateInfo> OnTerminalUpdates = info => { };
 
         public Worker(Pipeline pipeline, WorkingAreaGoverner workingAreaGoverner)

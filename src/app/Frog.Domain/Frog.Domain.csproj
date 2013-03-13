@@ -43,6 +43,10 @@
   <ItemGroup>
     <Compile Include="Agent.cs" />
     <Compile Include="Agent\Events\BuildEnded.cs" />
+    <Compile Include="Agent\Pipeline\PipelineStatus.cs" />
+    <Compile Include="Agent\SourceDrop.cs" />
+    <Compile Include="Agent\Pipeline\TaskInfo.cs" />
+    <Compile Include="Agent\Pipeline\TerminalUpdateInfo.cs" />
     <Compile Include="Underware\BuildEvent.cs" />
     <Compile Include="Agent\Events\BuildStarted.cs" />
     <Compile Include="Agent\Events\BuildUpdated.cs" />
@@ -55,7 +59,7 @@
     <Compile Include="RevisionChecker\Events\CheckForUpdateFailed.cs" />
     <Compile Include="Agent\ExecutableTask.cs" />
     <Compile Include="Agent\ExecTaskGenerator.cs" />
-    <Compile Include="Agent\PipelineOfTasks.cs" />
+    <Compile Include="Agent\Pipeline.cs" />
     <Compile Include="RepositoryTracker\ProjectsRepository.cs" />
     <Compile Include="RepositoryTracker.cs" />
     <Compile Include="Agent\ExecTasks\TestExecTask.cs" />
@@ -65,7 +69,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Agent\ExecTasks\OSExecuatableTask.cs" />
     <Compile Include="RevisionChecker\SourceRepoDriver.cs" />
-    <Compile Include="Agent\Pipeline.cs" />
+    <Compile Include="Agent\Pipeline\BuildTotalEndStatus.cs" />
     <Compile Include="Agent\TaskSource.cs" />
     <Compile Include="Agent\Worker.cs" />
     <Compile Include="Agent\WorkingAreaGoverner.cs" />

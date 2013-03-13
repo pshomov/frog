@@ -2,7 +2,7 @@
 using Frog.Specs.Support;
 using NSubstitute;
 
-namespace Frog.Domain.Specs.Pipeline
+namespace Frog.Domain.Specs
 {
     public abstract class PipelineProcessSpecBase : BDD
     {
@@ -11,7 +11,7 @@ namespace Frog.Domain.Specs.Pipeline
         protected ExecutableTask Task2;
         protected TaskSource TaskSource;
         protected ExecTaskGenerator ExecTaskGenerator;
-        protected BuildStartedDelegate PipelineOnBuildStarted;
+        protected Pipeline.BuildStartedDelegate PipelineOnBuildStarted;
         protected Action<BuildTotalEndStatus> PipelineOnBuildEnded;
         protected Action<int, Guid, TaskInfo.TaskStatus> PipelineOnBuildUpdated;
         protected Action<TerminalUpdateInfo> PipelineOnTerminalUpdate;
@@ -21,13 +21,13 @@ namespace Frog.Domain.Specs.Pipeline
         {
             TaskSource = Substitute.For<TaskSource>();
             ExecTaskGenerator = Substitute.For<ExecTaskGenerator>();
-            Pipeline = new PipelineOfTasks(TaskSource, ExecTaskGenerator);
+            Pipeline = new Pipeline(TaskSource, ExecTaskGenerator);
             ObservingEvents();
         }
 
         void ObservingEvents()
         {
-            PipelineOnBuildStarted = Substitute.For<BuildStartedDelegate>();
+            PipelineOnBuildStarted = Substitute.For<Pipeline.BuildStartedDelegate>();
             PipelineOnBuildEnded = Substitute.For<Action<BuildTotalEndStatus>>();
             PipelineOnBuildUpdated = Substitute.For<Action<int, Guid, TaskInfo.TaskStatus>>();
             PipelineOnTerminalUpdate = Substitute.For<Action<TerminalUpdateInfo>>();
