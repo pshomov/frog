@@ -20,9 +20,6 @@ namespace Frog.RepositoryTracker
                                                                                  "projects"));
             repoTracker.JoinTheMessageParty();
 
-//            Setup.SetupView(theBus, Config.WireupEventStore());
-			
-			
             var sleepPeriod = 60 * 1000;
             string mode = Environment.GetEnvironmentVariable("RUNZ_ACCEPTANCE_MODE");
             if (!mode.IsNullOrEmpty() && mode == "ACCEPTANCE") sleepPeriod = 4 * 1000;
