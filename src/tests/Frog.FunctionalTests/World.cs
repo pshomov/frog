@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Frog.Domain.Integration;
+using Frog.Domain.Integration.ProjectRepository;
 using Frog.Support;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Firefox;

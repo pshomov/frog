@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using Frog.Domain.ExecTasks;
 using Frog.Domain.TaskSources;
 
-namespace Frog.Domain.BuildSystems.FrogSystemTest
+namespace Frog.Domain.BuildSystems.Test
 {
     public class TestTaskDetector : TaskSource
     {

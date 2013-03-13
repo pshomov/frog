@@ -12,9 +12,9 @@ using Lokad.Cqrs.Partition;
 using Lokad.Cqrs.StreamingStorage;
 using Lokad.Cqrs.TapeStorage;
 using SaaS.Client;
-using SaaS.Engine;
+using SaaS.Wires;
 
-namespace SaaS.Wires
+namespace SaaS.Engine
 {
     public sealed class Setup
     {

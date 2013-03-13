@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Frog.Domain.Integration;
+using Frog.Domain.Integration.ProjectRepository;
 using Frog.Domain.RepositoryTracker;
 using Frog.Domain.RevisionChecker;
 using Frog.Specs.Support;

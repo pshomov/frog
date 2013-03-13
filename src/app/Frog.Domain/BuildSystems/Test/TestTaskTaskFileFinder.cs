@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 
-namespace Frog.Domain.BuildSystems.FrogSystemTest
+namespace Frog.Domain.BuildSystems.Test
 {
     public class TestTaskTaskFileFinder : TaskFileFinder
     {

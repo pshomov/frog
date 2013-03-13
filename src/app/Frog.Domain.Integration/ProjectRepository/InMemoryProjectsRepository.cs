@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Frog.Domain.RepositoryTracker;
 
-namespace Frog.Domain.Integration
+namespace Frog.Domain.Integration.ProjectRepository
 {
     public class InMemoryProjectsRepository : ProjectsRepository, ProjectsRepositoryTestSupport
     {

@@ -5,7 +5,7 @@ using Frog.Domain.Integration.Underware;
 using Frog.Domain.RepositoryTracker;
 using KeyNotFoundException = Frog.Domain.Integration.Underware.KeyNotFoundException;
 
-namespace Frog.Domain.Integration
+namespace Frog.Domain.Integration.ProjectRepository
 {
     public class RiakProjectRepository : ProjectsRepository, ProjectsRepositoryTestSupport
     {

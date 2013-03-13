@@ -1,5 +1,4 @@
 using System;
-using Frog.Domain.BuildSystems.Solution;
 using Frog.Domain.ExecTasks;
 using Frog.Support;
 using NSubstitute;

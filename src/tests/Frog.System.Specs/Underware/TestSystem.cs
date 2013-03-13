@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading;
 using Frog.Domain;
 using Frog.Domain.Integration;
+using Frog.Domain.Integration.ProjectRepository;
 using Frog.Domain.RepositoryTracker;
 using Frog.Domain.RevisionChecker;
 using Frog.Domain.TaskSources;

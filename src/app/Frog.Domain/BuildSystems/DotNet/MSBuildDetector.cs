@@ -5,7 +5,7 @@ using System.Linq;
 using Frog.Domain.TaskSources;
 using Frog.Support;
 
-namespace Frog.Domain.BuildSystems.Solution
+namespace Frog.Domain.BuildSystems.DotNet
 {
     public class MSBuildDetector : TaskSource
     {

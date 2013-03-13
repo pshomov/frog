@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using Frog.Domain.BuildSystems.Solution;
+using Frog.Domain.BuildSystems.DotNet;
 using Frog.Domain.TaskSources;
 using Frog.Support;
 using NSubstitute;

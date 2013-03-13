@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 using Frog.Domain.BuildSystems.Custom;
-using Frog.Domain.BuildSystems.Solution;
+using Frog.Domain.BuildSystems.DotNet;
 using Frog.Specs.Support;
 using NSubstitute;
 using NUnit.Framework;

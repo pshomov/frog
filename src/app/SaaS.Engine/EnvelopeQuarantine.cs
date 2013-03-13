@@ -7,9 +7,10 @@ using Lokad.Cqrs;
 using Lokad.Cqrs.Envelope;
 using Lokad.Cqrs.Evil;
 using Lokad.Cqrs.StreamingStorage;
+using SaaS.Wires;
 using ServiceStack.Text;
 
-namespace SaaS.Wires
+namespace SaaS.Engine
 {
     public sealed class EnvelopeQuarantine : IEnvelopeQuarantine
     {
