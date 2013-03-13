@@ -1,9 +1,8 @@
 using System;
-using SimpleCQRS;
 
-namespace Frog.Domain.RepositoryTracker
+namespace Frog.Domain
 {
-    public class Build : Command
+    public class Build : SimpleCQRS.Command
     {
         public Guid Id { get; set; }
         public string RepoUrl { get; set; }

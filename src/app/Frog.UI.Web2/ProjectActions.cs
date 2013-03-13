@@ -5,7 +5,7 @@ using Frog.Domain;
 using Lokad.Cqrs.AtomicStorage;
 using SaaS.Client.Projections.Frog.Projects;
 using SaaS.Engine;
-using Build = Frog.Domain.RepositoryTracker.Build;
+using Build = Frog.Domain.Build;
 using TaskInfo = SaaS.Engine.TaskInfo;
 
 namespace Frog.UI.Web2

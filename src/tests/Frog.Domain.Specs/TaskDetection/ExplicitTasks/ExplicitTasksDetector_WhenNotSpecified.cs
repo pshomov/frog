@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Frog.Domain.Integration.TaskSources.BuildSystems.Custom;
-using Frog.Domain.TaskSources;
 using NSubstitute;
 using NUnit.Framework;
 

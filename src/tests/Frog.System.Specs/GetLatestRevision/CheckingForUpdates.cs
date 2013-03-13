@@ -1,7 +1,5 @@
 using System.Linq;
 using Frog.Domain;
-using Frog.Domain.RepositoryTracker;
-using Frog.Domain.RevisionChecker;
 using Frog.Specs.Support;
 using Frog.System.Specs.Underware;
 using NSubstitute;

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Frog.Domain.RevisionChecker;
 using Frog.Specs.Support;
 using NSubstitute;
 using NUnit.Framework;
@@ -12,7 +11,7 @@ namespace Frog.Domain.Specs.RevisionChecker
 {
     class RetrievesRevisionSuccessfully : BDD
     {
-        private Domain.RevisionChecker.RevisionChecker rc;
+        private Domain.RevisionChecker rc;
         private SourceRepoDriver sr;
         private IBus bus;
 
@@ -21,7 +20,7 @@ namespace Frog.Domain.Specs.RevisionChecker
             sr = Substitute.For<SourceRepoDriver>();
             sr.GetLatestRevision().Returns(new RevisionInfo { Revision = "456" });
             bus = NSubstitute.Substitute.For<IBus>();
-            rc = new Frog.Domain.RevisionChecker.RevisionChecker(bus, url => sr);
+            rc = new Domain.RevisionChecker(bus, url => sr);
         }
 
         protected override void When()

@@ -1,6 +1,6 @@
 using SimpleCQRS;
 
-namespace Frog.Domain.RepositoryTracker
+namespace Frog.Domain
 {
     public class RepositoryRegistered : Event
     {

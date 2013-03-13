@@ -1,5 +1,4 @@
 ﻿using System;
-using Frog.Domain.RevisionChecker;
 using Frog.Specs.Support;
 using NSubstitute;
 using NUnit.Framework;
@@ -9,7 +8,7 @@ namespace Frog.Domain.Specs.RevisionChecker
 {
     class JoinsTheParty : BDD
     {
-        private Domain.RevisionChecker.RevisionChecker rc;
+        private Domain.RevisionChecker rc;
         private SourceRepoDriver sr;
         private IBus bus;
 
@@ -17,7 +16,7 @@ namespace Frog.Domain.Specs.RevisionChecker
         {
             sr = Substitute.For<SourceRepoDriver>();
             bus = Substitute.For<IBus>();
-            rc = new Domain.RevisionChecker.RevisionChecker(bus, url => sr);
+            rc = new Domain.RevisionChecker(bus, url => sr);
         }
 
         protected override void When()

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Frog.Domain.RepositoryTracker
+namespace Frog.Domain
 {
     public class RepositoryDocument
     {

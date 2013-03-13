@@ -7,8 +7,6 @@ using Frog.Domain.Integration.TaskSources;
 using Frog.Domain.Integration.TaskSources.BuildSystems.Custom;
 using Frog.Domain.Integration.TaskSources.BuildSystems.DotNet;
 using Frog.Domain.Integration.TaskSources.BuildSystems.Test;
-using Frog.Domain.RevisionChecker;
-using Frog.Domain.TaskSources;
 using Frog.Support;
 using SimpleCQRS;
 using ExecutableTaskGenerator = Frog.Domain.Integration.ExecutableTaskGenerator;

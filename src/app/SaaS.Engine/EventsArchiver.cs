@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using Frog.Domain.RepositoryTracker;
+using Frog.Domain;
 using Newtonsoft.Json;
 using SimpleCQRS;
 using EventStore = SaaS.Wires.EventStore;
@@ -22,7 +22,7 @@ namespace SaaS.Engine
 
         readonly IBus bus;
         readonly EventStore store;
-        readonly Type[] eventsToTranslate = new[] { typeof(Frog.Domain.ProjectCheckedOut), typeof(Frog.Domain.RepositoryTracker.RepositoryRegistered), typeof(Frog.Domain.BuildStarted), typeof(Frog.Domain.BuildEnded), typeof(Frog.Domain.BuildUpdated), typeof(Frog.Domain.TerminalUpdate) };
+        readonly Type[] eventsToTranslate = new[] { typeof(Frog.Domain.ProjectCheckedOut), typeof(RepositoryRegistered), typeof(Frog.Domain.BuildStarted), typeof(Frog.Domain.BuildEnded), typeof(Frog.Domain.BuildUpdated), typeof(TerminalUpdate) };
 
         void Handle(string message, string exchange)
         {
@@ -59,9 +59,9 @@ namespace SaaS.Engine
 
                         }
                         else
-                            if (targetType == typeof(Frog.Domain.TerminalUpdate))
+                            if (targetType == typeof(TerminalUpdate))
                             {
-                                var ev = (Frog.Domain.TerminalUpdate)msg;
+                                var ev = (TerminalUpdate)msg;
                                 var conv = new TerminalUpdated(new TerminalId(ev.TerminalId), new BuildId(ev.BuildId), new ProjectId(ev.RepoURL), ev.Content, ev.ContentSequenceIndex);
                                 store.AppendEventsToStream(conv.Id, ev.SequenceId, new[] { conv });
 
@@ -75,7 +75,7 @@ namespace SaaS.Engine
 
                                 }
                                 else
-                                    if (targetType == typeof(Frog.Domain.RepositoryTracker.RepositoryRegistered))
+                                    if (targetType == typeof(RepositoryRegistered))
                                     {
                                         var ev = (RepositoryRegistered)msg;
                                         var conv = new ProjectRegistered(new ProjectId(ev.RepoUrl), ev.RepoUrl);

@@ -2,7 +2,6 @@
 using System.Linq;
 using CorrugatedIron;
 using Frog.Domain.Integration.Underware;
-using Frog.Domain.RepositoryTracker;
 using KeyNotFoundException = Frog.Domain.Integration.Underware.KeyNotFoundException;
 
 namespace Frog.Domain.Integration.ProjectRepository

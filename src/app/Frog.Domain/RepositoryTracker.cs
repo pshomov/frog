@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Linq;
-using Frog.Domain.RevisionChecker;
 using SimpleCQRS;
 
-namespace Frog.Domain.RepositoryTracker
+namespace Frog.Domain
 {
     public class RepositoryTracker : Handles<UpdateFound>, Handles<RegisterRepository>, Handles<CheckForUpdateFailed>
     {

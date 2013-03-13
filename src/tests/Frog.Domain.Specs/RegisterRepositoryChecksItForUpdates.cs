@@ -2,8 +2,6 @@ using System;
 using System.Linq;
 using Frog.Domain.Integration;
 using Frog.Domain.Integration.ProjectRepository;
-using Frog.Domain.RepositoryTracker;
-using Frog.Domain.RevisionChecker;
 using Frog.Specs.Support;
 using NSubstitute;
 using NUnit.Framework;
@@ -13,13 +11,13 @@ namespace Frog.Domain.Specs
 {
     public abstract class RepositoryTrackerSpecsBase : BDD
     {
-        protected RepositoryTracker.RepositoryTracker repositoryTracker;
+        protected RepositoryTracker repositoryTracker;
         protected IBus bus;
 
         protected override void Given()
         {
             bus = Substitute.For<IBus>();
-            repositoryTracker = new RepositoryTracker.RepositoryTracker(bus, new InMemoryProjectsRepository());
+            repositoryTracker = new RepositoryTracker(bus, new InMemoryProjectsRepository());
         }
     }
 

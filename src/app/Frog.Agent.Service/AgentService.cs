@@ -1,7 +1,6 @@
 ﻿using System.ServiceProcess;
 using Frog.Domain;
 using Frog.Domain.Integration;
-using Frog.Domain.RevisionChecker;
 
 namespace Frog.Agent.Service
 {

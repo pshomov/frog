@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using Frog.Domain;
-using Frog.Domain.RepositoryTracker;
 using Frog.Specs.Support;
 using Frog.Support;
 using Frog.System.Specs.Underware;

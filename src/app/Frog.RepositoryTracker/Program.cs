@@ -13,7 +13,7 @@ namespace Frog.RepositoryTracker
         {
             Profiler.MeasurementsBridge = new Profiler.LogFileLoggingBridge("runz_repo_tracker.log");
             IBus theBus = SetupBus();
-            var repoTracker = new Domain.RepositoryTracker.RepositoryTracker(theBus,
+            var repoTracker = new Domain.RepositoryTracker(theBus,
                                                                              new RiakProjectRepository(
                                                                                  OSHelpers.RiakHost(),
                                                                                  OSHelpers.RiakPort(),

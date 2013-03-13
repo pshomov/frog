@@ -1,8 +1,6 @@
-using SimpleCQRS;
-
-namespace Frog.Domain.RevisionChecker
+namespace Frog.Domain
 {
-    public class CheckRevision : Command
+    public class CheckRevision : SimpleCQRS.Command
     {
         public string RepoUrl;
     }

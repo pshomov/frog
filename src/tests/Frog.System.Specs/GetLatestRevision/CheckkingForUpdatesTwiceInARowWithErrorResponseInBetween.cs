@@ -1,6 +1,5 @@
 using System;
 using Frog.Domain;
-using Frog.Domain.RevisionChecker;
 using Frog.Specs.Support;
 using Frog.System.Specs.Underware;
 using NSubstitute;

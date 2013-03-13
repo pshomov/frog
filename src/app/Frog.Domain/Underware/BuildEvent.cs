@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Frog.Domain
+namespace Frog.Domain.Underware
 {
     public abstract class BuildEvent : OrderedEvent
     {

@@ -1,6 +1,5 @@
 using System;
 using Frog.Domain.Integration.ProjectRepository;
-using Frog.Domain.RepositoryTracker;
 using Frog.Support;
 using NUnit.Framework;
 

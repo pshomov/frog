@@ -1,7 +1,7 @@
 using System;
 using SimpleCQRS;
 
-namespace Frog.Domain.RevisionChecker
+namespace Frog.Domain
 {
     public class RevisionChecker : Handles<CheckRevision>
     {

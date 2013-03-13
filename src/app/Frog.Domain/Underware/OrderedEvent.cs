@@ -1,6 +1,6 @@
 ﻿using SimpleCQRS;
 
-namespace Frog.Domain
+namespace Frog.Domain.Underware
 {
     public abstract class OrderedEvent : Event
     {

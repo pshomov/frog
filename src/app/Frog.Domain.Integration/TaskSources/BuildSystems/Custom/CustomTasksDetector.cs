@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Frog.Domain.TaskSources;
 using Newtonsoft.Json;
 
 namespace Frog.Domain.Integration.TaskSources.BuildSystems.Custom
