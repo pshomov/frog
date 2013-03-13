@@ -50,7 +50,7 @@ namespace Frog.Domain
             args = args.Trim();
             if (Os.IsUnix) args += "\"";
 
-            var execTask = execTaskFactory.CreateTask(cmd, args, anyTask.Name);
+            var execTask = execTaskFactory.CreateTask(cmd, args, anyTask.Name.IsNullOrEmpty() ? cmd + " "+args : anyTask.Name);
             return execTask;
         }
     }

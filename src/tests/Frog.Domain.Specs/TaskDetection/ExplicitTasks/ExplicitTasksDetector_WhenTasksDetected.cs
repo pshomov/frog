@@ -44,10 +44,10 @@ namespace Frog.Domain.Specs.TaskDetection.ExplicitTasks
         [Test]
         public void should_detect_tasks_in_correct_sequence_tasks()
         {
-            Assert.That(((ShellTask)tasks.First()).Command, Is.EqualTo("task 1"));            
-            Assert.That(((ShellTask)tasks.ElementAt(1)).Command, Is.EqualTo("task 2"));            
-            Assert.That(((ShellTask)tasks.ElementAt(2)).Command, Is.EqualTo("task 3"));            
-            Assert.That(((ShellTask)tasks.ElementAt(3)).Command, Is.EqualTo("task 4"));            
+            Assert.That(((ShellTask)tasks.First()).Arguments, Is.EqualTo("task 1"));            
+            Assert.That(((ShellTask)tasks.ElementAt(1)).Arguments, Is.EqualTo("task 2"));            
+            Assert.That(((ShellTask)tasks.ElementAt(2)).Arguments, Is.EqualTo("task 3"));            
+            Assert.That(((ShellTask)tasks.ElementAt(3)).Arguments, Is.EqualTo("task 4"));            
         }
 
         [Test]

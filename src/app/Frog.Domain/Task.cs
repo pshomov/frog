@@ -4,6 +4,8 @@ namespace Frog.Domain
 {
     public abstract class Task
     {
+        public string Name;
+
         public List<IExecTask> GimeTasks(IExecTaskGenerator gen)
         {
             return gen.GimeTasks((dynamic)this);
@@ -33,7 +35,6 @@ namespace Frog.Domain
 
     public class ShellTask : Task
     {
-        public string Name;
         public string Command;
         public string Arguments;
     }

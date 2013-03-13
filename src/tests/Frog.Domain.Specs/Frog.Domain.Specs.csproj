@@ -71,6 +71,7 @@
     <Compile Include="Support\TimeProfileSpecs.cs" />
     <Compile Include="TaskDetection\CompoundTask\CompoundTask_CollectsTasksFromAllSources.cs" />
     <Compile Include="TaskDetection\CompoundTask\CompoundTask_CollectsTasksUntilSourceSaysStop.cs" />
+    <Compile Include="TaskDetection\ExplicitTasks\CustomTaskParsing.cs" />
     <Compile Include="TaskDetection\ExplicitTasks\ExplicitTasksDetector_WhenNotSpecified.cs" />
     <Compile Include="TaskDetection\ExplicitTasks\ExplicitTasksDetector_WhenTasksDetected.cs" />
     <Compile Include="TaskDetection\TaskDetectorSpecs.cs" />
