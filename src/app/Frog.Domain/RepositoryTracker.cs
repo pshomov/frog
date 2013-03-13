@@ -5,28 +5,6 @@ using SimpleCQRS;
 
 namespace Frog.Domain.RepositoryTracker
 {
-    public class RegisterRepository : Command
-    {
-        public string Repo;
-    }
-
-    public class RepositoryRegistered : Event
-    {
-        public string RepoUrl;
-    }
-
-    public class Build : Command
-    {
-        public Guid Id { get; set; }
-        public string RepoUrl { get; set; }
-        public RevisionInfo Revision { get; set; }
-
-        public Build()
-        {
-            Id = Guid.NewGuid();
-        }
-    }
-
     public class RepositoryTracker : Handles<UpdateFound>, Handles<RegisterRepository>, Handles<CheckForUpdateFailed>
     {
         public RepositoryTracker(IBus bus, ProjectsRepository projectsRepository)

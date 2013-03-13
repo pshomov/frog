@@ -42,14 +42,24 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Agent.cs" />
-    <Compile Include="RevisionChecker\CheckForUpdateFailed.cs" />
+    <Compile Include="Agent\Events\BuildEnded.cs" />
+    <Compile Include="Underware\BuildEvent.cs" />
+    <Compile Include="Agent\Events\BuildStarted.cs" />
+    <Compile Include="Agent\Events\BuildUpdated.cs" />
+    <Compile Include="Agent\Events\ProjectCheckedOut.cs" />
+    <Compile Include="Agent\Events\TerminalUpdate.cs" />
+    <Compile Include="Agent\Command\Build.cs" />
+    <Compile Include="RepositoryTracker\Command\RegisterRepository.cs" />
+    <Compile Include="RepositoryTracker\Events\RepositoryRegistered.cs" />
+    <Compile Include="Underware\OrderedEvent.cs" />
+    <Compile Include="RevisionChecker\Events\CheckForUpdateFailed.cs" />
     <Compile Include="Agent\ExecutableTask.cs" />
     <Compile Include="Agent\ExecTaskGenerator.cs" />
     <Compile Include="Agent\PipelineOfTasks.cs" />
     <Compile Include="RepositoryTracker\ProjectsRepository.cs" />
     <Compile Include="RepositoryTracker.cs" />
     <Compile Include="Agent\ExecTasks\TestExecTask.cs" />
-    <Compile Include="RevisionChecker\CheckRevision.cs" />
+    <Compile Include="RevisionChecker\Command\CheckRevision.cs" />
     <Compile Include="RevisionChecker.cs" />
     <Compile Include="Agent\TaskDescription.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
