@@ -1,16 +1,9 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Frog.Domain.ExecTasks;
 using Frog.Support;
 
-namespace Frog.Domain
+namespace Frog.Domain.Integration
 {
-    public interface IExecTaskGenerator
-    {
-        List<ExecTask> GimeTasks(ShellTaskDescription taskDescription);
-        List<ExecTask> GimeTasks(TestTaskDescription taskDescription);
-        List<ExecTask> GimeTasks(FakeTaskDescription task);
-    }
-
     public enum OS
     {
         Unix,
@@ -19,29 +12,29 @@ namespace Frog.Domain
         Windows
     };
 
-    public class ExecTaskGenerator : IExecTaskGenerator
+    public class ExecutableTaskGenerator : ExecTaskGenerator
     {
-        public ExecTaskGenerator(ExecTaskFactory execTaskFactory)
+        public ExecutableTaskGenerator(ExecTaskFactory execTaskFactory)
         {
             this.execTaskFactory = execTaskFactory;
         }
 
-        public List<ExecTask> GimeTasks(ShellTaskDescription taskDescription)
+        public List<ExecutableTask> GimeTasks(ShellTaskDescription taskDescription)
         {
             return As.List(CreateShellTask(taskDescription));
         } 
-        public List<ExecTask> GimeTasks(TestTaskDescription taskDescription)
+        public List<ExecutableTask> GimeTasks(TestTaskDescription taskDescription)
         {
-            return As.List((ExecTask)new TestExecTask(taskDescription.Path, this));
+            return As.List((ExecutableTask)new TestExecTask(taskDescription.Path, this));
         } 
-        public List<ExecTask> GimeTasks(FakeTaskDescription task)
+        public List<ExecutableTask> GimeTasks(FakeTaskDescription taskDescription)
         {
-            return As.List((ExecTask)new FakeExecTask(task.messages, this));
+            return As.List((ExecutableTask)new FakeExecTask(taskDescription.messages, this));
         } 
 
         readonly ExecTaskFactory execTaskFactory;
 
-        ExecTask CreateShellTask(ShellTaskDescription anyTaskDescription)
+        ExecutableTask CreateShellTask(ShellTaskDescription anyTaskDescription)
         {
             var cmd = Os.IsUnix ? "/bin/bash" : "cmd.exe";
             var args = Os.IsUnix ? "-c \"" : "/c ";

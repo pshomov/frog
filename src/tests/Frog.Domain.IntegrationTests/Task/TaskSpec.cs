@@ -9,7 +9,7 @@ namespace Frog.Domain.IntegrationTests.Task
     [TestFixture]
     public class TaskFailsToStartSpec : BDD
     {
-        private ExecTask _task;
+        private ExecutableTask _task;
         private ExecTaskResult _taskResult;
 
         protected override void Given()
@@ -51,7 +51,7 @@ namespace Frog.Domain.IntegrationTests.Task
     [TestFixture]
     public class TaskStartsButExitsWithNonZeroSpec : BDD
     {
-        private ExecTask _task;
+        private ExecutableTask _task;
         private ExecTaskResult _taskResult;
 
         protected override void Given()
@@ -86,7 +86,7 @@ namespace Frog.Domain.IntegrationTests.Task
     [TestFixture]
     public class TaskStartsAndFinishesWithExitCodeZeroSpec : BDD
     {
-        private ExecTask _task;
+        private ExecutableTask _task;
         private ExecTaskResult _taskResult;
 
         protected override void Given()

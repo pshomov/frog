@@ -41,7 +41,7 @@ namespace Frog.Domain.ExecTasks
         readonly int exitCode;
     }
 
-    public class OSExecuatableTask : ExecTask
+    public class OSExecuatableTask : ExecutableTask
     {
         public string Name
         {

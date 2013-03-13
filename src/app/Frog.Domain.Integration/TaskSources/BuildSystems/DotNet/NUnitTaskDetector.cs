@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Frog.Domain.TaskSources;
 using Frog.Support;
 
-namespace Frog.Domain.BuildSystems.DotNet
+namespace Frog.Domain.Integration.TaskSources.BuildSystems.DotNet
 {
     public class NUnitTaskDetector : TaskSource
     {

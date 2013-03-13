@@ -8,10 +8,10 @@ namespace Frog.Domain.Specs.Pipeline
     public abstract class PipelineProcessSpecBase : BDD
     {
         protected Domain.Pipeline Pipeline;
-        protected ExecTask Task1;
-        protected ExecTask Task2;
+        protected ExecutableTask Task1;
+        protected ExecutableTask Task2;
         protected TaskSource TaskSource;
-        protected IExecTaskGenerator ExecTaskGenerator;
+        protected ExecTaskGenerator ExecTaskGenerator;
         protected BuildStartedDelegate PipelineOnBuildStarted;
         protected Action<BuildTotalEndStatus> PipelineOnBuildEnded;
         protected Action<int, Guid, TaskInfo.TaskStatus> PipelineOnBuildUpdated;
@@ -21,7 +21,7 @@ namespace Frog.Domain.Specs.Pipeline
         protected override void Given()
         {
             TaskSource = Substitute.For<TaskSource>();
-            ExecTaskGenerator = Substitute.For<IExecTaskGenerator>();
+            ExecTaskGenerator = Substitute.For<ExecTaskGenerator>();
             Pipeline = new PipelineOfTasks(TaskSource, ExecTaskGenerator);
             ObservingEvents();
         }

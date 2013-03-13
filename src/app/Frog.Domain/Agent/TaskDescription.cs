@@ -6,7 +6,7 @@ namespace Frog.Domain
     {
         public string Name;
 
-        public List<ExecTask> GimeTasks(IExecTaskGenerator gen)
+        public List<ExecutableTask> GimeTasks(ExecTaskGenerator gen)
         {
             return gen.GimeTasks((dynamic)this);
         }

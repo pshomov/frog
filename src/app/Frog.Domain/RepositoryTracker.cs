@@ -70,7 +70,7 @@ namespace Frog.Domain.RepositoryTracker
 
         public void Handle(CheckForUpdateFailed message)
         {
-            projectsRepository.ProjectCheckComplete(message.repoUrl);
+            projectsRepository.ProjectCheckComplete(message.RepoUrl);
         }
 
         public void JoinTheMessageParty()

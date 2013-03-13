@@ -12,7 +12,7 @@ namespace Frog.Domain
         public event Action<int, Guid, TaskInfo.TaskStatus> OnBuildUpdated = (i, terminalId, status) => { };
         public event Action<TerminalUpdateInfo> OnTerminalUpdate = info => { };
 
-        public PipelineOfTasks(TaskSource tasksSource, IExecTaskGenerator execTaskGenerator)
+        public PipelineOfTasks(TaskSource tasksSource, ExecTaskGenerator execTaskGenerator)
         {
             this.tasksSource = tasksSource;
             this.execTaskGenerator = execTaskGenerator;
@@ -25,20 +25,20 @@ namespace Frog.Domain
         }
 
         readonly TaskSource tasksSource;
-        readonly IExecTaskGenerator execTaskGenerator;
+        readonly ExecTaskGenerator execTaskGenerator;
 
-        void RunTasks(SourceDrop sourceDrop, List<ExecTask> execTasks)
+        void RunTasks(SourceDrop sourceDrop, List<ExecutableTask> execTasks)
         {
-            ExecTaskResult.Status execTaskStatus = ExecTaskResult.Status.Success;
-            PipelineStatus status = GeneratePipelineStatus(execTasks);
+            var execTaskStatus = ExecTaskResult.Status.Success;
+            var status = GeneratePipelineStatus(execTasks);
             OnBuildStarted(status);
 
-            for (int i = 0; i < execTasks.Count; i++)
+            for (var i = 0; i < execTasks.Count; i++)
             {
                 var execTask = execTasks[i];
                 var terminalId = status.Tasks[i].TerminalId;
                 OnBuildUpdated(i, terminalId, TaskInfo.TaskStatus.Started);
-                int sequneceIndex = 0;
+                var sequneceIndex = 0;
                 Action<string> execTaskOnOnTerminalOutputUpdate =
                     s => OnTerminalUpdate(new TerminalUpdateInfo(sequneceIndex++, s, i, terminalId));
                 execTask.OnTerminalOutputUpdate += execTaskOnOnTerminalOutputUpdate;
@@ -64,9 +64,9 @@ namespace Frog.Domain
                              : BuildTotalEndStatus.Success);
         }
 
-        List<ExecTask> GenerateTasks(SourceDrop sourceDrop)
+        List<ExecutableTask> GenerateTasks(SourceDrop sourceDrop)
         {
-            var execTasks = new List<ExecTask>();
+            var execTasks = new List<ExecutableTask>();
             bool shouldStop;
             foreach (var task in tasksSource.Detect(sourceDrop.SourceDropLocation, out shouldStop))
             {
@@ -75,7 +75,7 @@ namespace Frog.Domain
             return execTasks;
         }
 
-        PipelineStatus GeneratePipelineStatus(List<ExecTask> execTasks)
+        PipelineStatus GeneratePipelineStatus(List<ExecutableTask> execTasks)
         {
             var pipelineStatus = new PipelineStatus();
             foreach (var execTask in execTasks)

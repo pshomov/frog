@@ -21,7 +21,7 @@ namespace Frog.Domain.RevisionChecker
             }
             catch (Exception)
             {
-                bus.Publish(new CheckForUpdateFailed {repoUrl = checkRevision.RepoUrl});
+                bus.Publish(new CheckForUpdateFailed {RepoUrl = checkRevision.RepoUrl});
             }
         }
 

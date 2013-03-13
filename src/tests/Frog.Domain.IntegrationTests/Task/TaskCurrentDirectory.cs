@@ -8,7 +8,7 @@ namespace Frog.Domain.IntegrationTests.Task
     [TestFixture]
     public class TaskCurrentDirectory : BDD
     {
-        ExecTask _task;
+        ExecutableTask _task;
         ExecTaskResult taskResult;
         private string _arguments;
 

@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
-namespace Frog.Domain
+namespace Frog.Domain.Integration.TaskSources.BuildSystems
 {
     public interface TaskFileFinder
     {

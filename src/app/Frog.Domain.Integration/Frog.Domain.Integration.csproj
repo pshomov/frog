@@ -51,6 +51,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="ExecTaskFactory.cs" />
+    <Compile Include="ExecutableTaskGenerator.cs" />
+    <Compile Include="PathFinder.cs" />
+    <Compile Include="ProjectRepository\ProjectsRepositoryTestSupport.cs" />
+    <Compile Include="TaskSources\BuildSystems\Custom\CustomFileFinder.cs" />
+    <Compile Include="TaskSources\BuildSystems\Custom\CustomTasksDetector.cs" />
+    <Compile Include="TaskSources\BuildSystems\DotNet\MSBuildDetector.cs" />
+    <Compile Include="TaskSources\BuildSystems\DotNet\NUnitTaskDetector.cs" />
+    <Compile Include="TaskSources\BuildSystems\DotNet\NUnitTaskFileFinder.cs" />
+    <Compile Include="TaskSources\BuildSystems\DotNet\SolutionTaskFileFinder.cs" />
+    <Compile Include="TaskSources\BuildSystems\TaskFileFinder.cs" />
+    <Compile Include="TaskSources\BuildSystems\Test\TestTaskDetector.cs" />
+    <Compile Include="TaskSources\BuildSystems\Test\TestTaskTaskFileFinder.cs" />
+    <Compile Include="TaskSources\CompoundTaskSource.cs" />
     <Compile Include="Underware\CorrugatedIronExts.cs" />
     <Compile Include="GitDriver.cs" />
     <Compile Include="ProjectRepository\InMemoryProjectsRepository.cs" />
@@ -85,5 +99,14 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="support_scripts\cpu_times.py">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="support_scripts\killtree.py">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>

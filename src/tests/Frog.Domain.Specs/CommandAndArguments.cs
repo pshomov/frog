@@ -1,4 +1,4 @@
-using Frog.Domain.BuildSystems;
+using Frog.Domain.Integration;
 using Frog.Specs.Support;
 using NSubstitute;
 using NUnit.Framework;
@@ -8,18 +8,18 @@ namespace Frog.Domain.Specs
     [TestFixture]
     public class CommandAndArguments : BDD
     {
-        ExecTaskGenerator execTaskGenerator;
+        Integration.ExecutableTaskGenerator executableTaskGenerator;
         ExecTaskFactory execTaskFactory;
 
         protected override void Given()
         {
             execTaskFactory = Substitute.For<ExecTaskFactory>();
-            execTaskGenerator = new ExecTaskGenerator(execTaskFactory);
+            executableTaskGenerator = new Integration.ExecutableTaskGenerator(execTaskFactory);
         }
 
         protected override void When()
         {
-            execTaskGenerator.GimeTasks(new ShellTaskDescription(){Command = "ccc", Arguments = "/a /b", Name = "Shell Task"});
+            executableTaskGenerator.GimeTasks(new ShellTaskDescription(){Command = "ccc", Arguments = "/a /b", Name = "Shell Task"});
         }
 
         [Test]
@@ -32,18 +32,18 @@ namespace Frog.Domain.Specs
     [TestFixture]
     public class NoCommandJustArguments : BDD
     {
-        ExecTaskGenerator execTaskGenerator;
+        Integration.ExecutableTaskGenerator executableTaskGenerator;
         ExecTaskFactory execTaskFactory;
 
         protected override void Given()
         {
             execTaskFactory = Substitute.For<ExecTaskFactory>();
-            execTaskGenerator = new ExecTaskGenerator(execTaskFactory);
+            executableTaskGenerator = new Integration.ExecutableTaskGenerator(execTaskFactory);
         }
 
         protected override void When()
         {
-            execTaskGenerator.GimeTasks(new ShellTaskDescription(){Command = "", Arguments = "ccc /a /b"});
+            executableTaskGenerator.GimeTasks(new ShellTaskDescription(){Command = "", Arguments = "ccc /a /b"});
         }
 
         [Test]
@@ -55,18 +55,18 @@ namespace Frog.Domain.Specs
     [TestFixture]
     public class TaskNameDefaultsToTheCommand : BDD
     {
-        ExecTaskGenerator execTaskGenerator;
+        Integration.ExecutableTaskGenerator executableTaskGenerator;
         ExecTaskFactory execTaskFactory;
 
         protected override void Given()
         {
             execTaskFactory = Substitute.For<ExecTaskFactory>();
-            execTaskGenerator = new ExecTaskGenerator(execTaskFactory);
+            executableTaskGenerator = new Integration.ExecutableTaskGenerator(execTaskFactory);
         }
 
         protected override void When()
         {
-            execTaskGenerator.GimeTasks(new ShellTaskDescription(){Command = "", Arguments = "ccc /a /b"});
+            executableTaskGenerator.GimeTasks(new ShellTaskDescription(){Command = "", Arguments = "ccc /a /b"});
         }
 
         [Test]

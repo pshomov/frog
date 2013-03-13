@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace Frog.Domain.BuildSystems.Custom
+namespace Frog.Domain.Integration.TaskSources.BuildSystems.Custom
 {
     public class CustomFileFinder : TaskFileFinder
     {

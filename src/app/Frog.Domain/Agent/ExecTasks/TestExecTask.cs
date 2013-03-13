@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Frog.Domain.BuildSystems;
 using Frog.Support;
 
 namespace Frog.Domain.ExecTasks
 {
-    public abstract class TestTaskBase : ExecTask
+    public abstract class TestTaskBase : ExecutableTask
     {
         public string Name
         {
@@ -65,9 +64,9 @@ namespace Frog.Domain.ExecTasks
             return new ExecTaskResult(execStatus, 0);
         }
 
-        readonly IExecTaskGenerator execTaskGenerator;
+        readonly ExecTaskGenerator execTaskGenerator;
 
-        protected TestTaskBase(IExecTaskGenerator execTaskGenerator)
+        protected TestTaskBase(ExecTaskGenerator execTaskGenerator)
         {
             this.execTaskGenerator = execTaskGenerator;
         }
@@ -82,7 +81,7 @@ namespace Frog.Domain.ExecTasks
 
     public class TestExecTask : TestTaskBase
     {
-        public TestExecTask(string path, IExecTaskGenerator execTaskGenerator) : base(execTaskGenerator)
+        public TestExecTask(string path, ExecTaskGenerator execTaskGenerator) : base(execTaskGenerator)
         {
             this.path = path;
         }
@@ -95,9 +94,9 @@ namespace Frog.Domain.ExecTasks
         }
     }
 
-    internal class FakeExecTask : TestTaskBase
+    public class FakeExecTask : TestTaskBase
     {
-        public FakeExecTask(string[] tasks, IExecTaskGenerator execTaskGenerator) : base(execTaskGenerator)
+        public FakeExecTask(string[] tasks, ExecTaskGenerator execTaskGenerator) : base(execTaskGenerator)
         {
             this.tasks = tasks;
         }

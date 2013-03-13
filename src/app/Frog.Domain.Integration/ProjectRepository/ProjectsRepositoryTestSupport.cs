@@ -1,4 +1,4 @@
-﻿namespace Frog.Domain.RepositoryTracker
+﻿namespace Frog.Domain.Integration.ProjectRepository
 {
     public interface ProjectsRepositoryTestSupport
     {

@@ -1,11 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Frog.Domain.TaskSources;
 using Newtonsoft.Json;
 
-namespace Frog.Domain.BuildSystems.Custom
+namespace Frog.Domain.Integration.TaskSources.BuildSystems.Custom
 {
     public class CustomTasksDetector : TaskSource
     {

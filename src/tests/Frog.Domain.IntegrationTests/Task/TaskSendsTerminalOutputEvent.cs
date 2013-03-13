@@ -10,7 +10,7 @@ namespace Frog.Domain.IntegrationTests.Task
     public class TaskSendsTerminalOutputEventWhenStdOutputChange : BDD
     {
         string stdOutput = "";
-        ExecTask task;
+        ExecutableTask task;
 
         protected override void Given()
         {
@@ -35,7 +35,7 @@ namespace Frog.Domain.IntegrationTests.Task
     public class TaskSendsTerminalOutputEventWhenErrOutputChange : BDD
     {
         string errOutput = "";
-        ExecTask task;
+        ExecutableTask task;
 
         protected override void Given()
         {
@@ -60,7 +60,7 @@ namespace Frog.Domain.IntegrationTests.Task
     public class TaskSendErrorCodeToErrorOutputEventWhenProgramNotFound : BDD
     {
         string errOutput = "";
-        ExecTask task;
+        ExecutableTask task;
 
         protected override void Given()
         {
@@ -84,7 +84,7 @@ namespace Frog.Domain.IntegrationTests.Task
     [TestFixture]
     public class TaskTerminalOutputDoesNotNeedSubscribersToWork : BDD
     {
-        ExecTask task;
+        ExecutableTask task;
 
         protected override void Given()
         {

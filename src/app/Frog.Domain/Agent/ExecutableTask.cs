@@ -3,7 +3,7 @@ using Frog.Domain.ExecTasks;
 
 namespace Frog.Domain
 {
-    public interface ExecTask
+    public interface ExecutableTask
     {
         string Name { get; }
         event Action<string> OnTerminalOutputUpdate;

@@ -1,14 +1,14 @@
-﻿using System;
+using System;
 using System.IO;
 
-namespace Frog.Domain
+namespace Frog.Domain.Integration
 {
     public class PathFinder
     {
         public virtual void FindFilesAtTheBase(Action<string> action, string pattern, string baseFolder)
         {
-            string[] files = Directory.GetFiles(baseFolder, pattern);
-            foreach (string file in files)
+            var files = Directory.GetFiles(baseFolder, pattern);
+            foreach (var file in files)
                 action(file);
         }
 

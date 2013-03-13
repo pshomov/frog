@@ -2,11 +2,11 @@
 using Frog.Domain.ExecTasks;
 using Frog.Support;
 
-namespace Frog.Domain
+namespace Frog.Domain.Integration
 {
     public class ExecTaskFactory
     {
-        public virtual ExecTask CreateOSExecutableTask(string app, string args, string name)
+        public virtual ExecutableTask CreateOSExecutableTask(string app, string args, string name)
         {
             if (Os.IsUnix)
                 return new OSExecuatableTask(app, args, name, (p1, p2, p3) => new ProcessWrapper(p1, p2, p3));

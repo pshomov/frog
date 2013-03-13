@@ -17,9 +17,9 @@ namespace Frog.Domain.Specs.Pipeline
             bool shouldStop;
             taskDescription = new FakeTaskDescription();
             TaskSource.Detect(Arg.Any<string>(), out shouldStop).Returns(As.List<Domain.TaskDescription>(taskDescription));
-            Task1 = Substitute.For<ExecTask>();
+            Task1 = Substitute.For<ExecutableTask>();
             Task1.Perform(Arg.Any<SourceDrop>()).Returns(new ExecTaskResult(ExecutionStatus.Failure, 4));
-            Task2 = Substitute.For<ExecTask>();
+            Task2 = Substitute.For<ExecutableTask>();
             Task2.Perform(Arg.Any<SourceDrop>()).Returns(new ExecTaskResult(ExecutionStatus.Success, 0));
             ExecTaskGenerator.GimeTasks(Arg.Any<FakeTaskDescription>()).Returns(As.List(Task1, Task2));
         }

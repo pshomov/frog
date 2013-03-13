@@ -1,7 +1,9 @@
 using System;
 using System.IO;
-using Frog.Domain.BuildSystems.Custom;
-using Frog.Domain.BuildSystems.DotNet;
+using Frog.Domain.Integration;
+using Frog.Domain.Integration.TaskSources.BuildSystems;
+using Frog.Domain.Integration.TaskSources.BuildSystems.Custom;
+using Frog.Domain.Integration.TaskSources.BuildSystems.DotNet;
 using Frog.Specs.Support;
 using NSubstitute;
 using NUnit.Framework;

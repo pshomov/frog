@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
 using Frog.Domain;
@@ -8,15 +7,13 @@ using Frog.Domain.Integration.ProjectRepository;
 using Frog.Domain.RepositoryTracker;
 using Frog.Domain.RevisionChecker;
 using Frog.Domain.TaskSources;
-using Frog.Specs.Support;
-using Frog.Support;
 using Lokad.Cqrs.AtomicStorage;
 using Lokad.Cqrs.Build;
 using NSubstitute;
 using SaaS.Engine;
-using SaaS.Wires;
 using SimpleCQRS;
 using EventStore = SaaS.Wires.EventStore;
+using ExecutableTaskGenerator = Frog.Domain.Integration.ExecutableTaskGenerator;
 using Task = System.Threading.Tasks.Task;
 
 namespace Frog.System.Specs.Underware
@@ -72,7 +69,7 @@ namespace Frog.System.Specs.Underware
             {
                 TasksSource = Substitute.For<TaskSource>();
                 return new PipelineOfTasks(TasksSource,
-                                           new ExecTaskGenerator(new ExecTaskFactory()));
+                                           new ExecutableTaskGenerator(new ExecTaskFactory()));
             }
         }
 

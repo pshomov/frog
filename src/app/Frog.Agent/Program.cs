@@ -2,14 +2,16 @@
 using System.Collections.Generic;
 using System.IO;
 using Frog.Domain;
-using Frog.Domain.BuildSystems.Custom;
-using Frog.Domain.BuildSystems.DotNet;
-using Frog.Domain.BuildSystems.Test;
 using Frog.Domain.Integration;
+using Frog.Domain.Integration.TaskSources;
+using Frog.Domain.Integration.TaskSources.BuildSystems.Custom;
+using Frog.Domain.Integration.TaskSources.BuildSystems.DotNet;
+using Frog.Domain.Integration.TaskSources.BuildSystems.Test;
 using Frog.Domain.RevisionChecker;
 using Frog.Domain.TaskSources;
 using Frog.Support;
 using SimpleCQRS;
+using ExecutableTaskGenerator = Frog.Domain.Integration.ExecutableTaskGenerator;
 
 namespace Frog.Agent
 {
@@ -38,7 +40,7 @@ namespace Frog.Agent
                                            new MSBuildDetector(new SolutionTaskFileFinder(pathFinder), os),
                                            new NUnitTaskDetector(new NUnitTaskFileFinder(pathFinder))
                                            ),
-                                       new ExecTaskGenerator(new ExecTaskFactory()));
+                                       new ExecutableTaskGenerator(new ExecTaskFactory()));
         }
 
         public static bool IsNotWindows()

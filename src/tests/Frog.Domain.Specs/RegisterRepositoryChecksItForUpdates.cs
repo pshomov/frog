@@ -155,7 +155,7 @@ namespace Frog.Domain.Specs
             base.Given();
             repositoryTracker.Handle(new RegisterRepository { Repo = "http://fle" });
             repositoryTracker.CheckForUpdates();
-            repositoryTracker.Handle(new CheckForUpdateFailed{repoUrl = "http://fle"});
+            repositoryTracker.Handle(new CheckForUpdateFailed{RepoUrl = "http://fle"});
             bus.ClearReceivedCalls();
         }
 

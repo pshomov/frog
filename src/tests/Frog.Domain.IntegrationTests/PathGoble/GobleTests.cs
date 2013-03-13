@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using Frog.Domain.Integration;
 using Frog.Specs.Support;
 using Frog.Support;
 using NUnit.Framework;

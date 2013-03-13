@@ -29,7 +29,7 @@ namespace Frog.Domain.Specs.RevisionChecker
         [Test]
         public void should_send_event_with_revision_found()
         {
-            bus.Received().Publish(Arg.Is<CheckForUpdateFailed>(found => found.repoUrl == "http://fle"));
+            bus.Received().Publish(Arg.Is<CheckForUpdateFailed>(found => found.RepoUrl == "http://fle"));
         }
     }
 }

@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace Frog.Domain.BuildSystems.DotNet
+namespace Frog.Domain.Integration.TaskSources.BuildSystems.DotNet
 {
     public class NUnitTaskFileFinder : TaskFileFinder
     {

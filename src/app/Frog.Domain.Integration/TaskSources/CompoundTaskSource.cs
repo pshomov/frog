@@ -1,7 +1,7 @@
-﻿using System;
 using System.Collections.Generic;
+using Frog.Domain.TaskSources;
 
-namespace Frog.Domain.TaskSources
+namespace Frog.Domain.Integration.TaskSources
 {
     public class CompoundTaskSource : TaskSource
     {
