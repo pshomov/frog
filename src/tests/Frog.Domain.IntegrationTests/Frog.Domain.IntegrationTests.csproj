@@ -34,6 +34,9 @@
     <Reference Include="NSubstitute">
       <HintPath>..\..\..\libs\NSubstitute\NSubstitute.dll</HintPath>
     </Reference>
+    <Reference Include="protobuf-net">
+      <HintPath>..\..\..\libs\CorrugatedIron\protobuf-net.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="nunit.framework, Version=2.5.6.10205, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77">
       <SpecificVersion>False</SpecificVersion>

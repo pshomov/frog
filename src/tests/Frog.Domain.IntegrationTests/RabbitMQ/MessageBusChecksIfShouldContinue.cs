@@ -30,7 +30,7 @@ namespace Frog.Domain.IntegrationTests.RabbitMQ
             bus.RegisterHandler<MyEvent>(ev => { messagesHandled[0]++; }, "should_continue");
             bus.Publish(new MyEvent());
             bus.Publish(new MyEvent());
-            bus.WaitForHandlersToFinish(1000);
+            bus.WaitForHandlersToFinish(7000);
             Assert.That(messagesHandled[0], Is.EqualTo(1));
         }
 
@@ -45,7 +45,7 @@ namespace Frog.Domain.IntegrationTests.RabbitMQ
             bus.RegisterHandler<MyEvent>(ev => { messagesHandled[0]++; }, "should_continue_2");
             bus.Publish(new MyEvent());
             bus.Publish(new MyEvent());
-            bus.WaitForHandlersToFinish(1000);
+            bus.WaitForHandlersToFinish(7000);
             Assert.That(messagesHandled[0], Is.EqualTo(2));
         }
 
