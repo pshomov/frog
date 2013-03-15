@@ -1,8 +1,8 @@
 #!/usr/bin/env ruby
 require 'fileutils'
 include FileUtils
-
-cache_sub_folder = ARGV[0].rpartition('/')[2]
+require 'digest/md5'
+cache_sub_folder = Digest::MD5.hexdigest(ARGV[0])
 cache_folder = ".repos_cache/#{cache_sub_folder}"
 current_dir = Dir.pwd
 if not File.exists?(cache_folder)
