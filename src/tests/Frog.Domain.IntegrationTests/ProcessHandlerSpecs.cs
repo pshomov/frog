@@ -77,9 +77,9 @@ namespace Frog.Domain.IntegrationTests
         {
             var pw = new ProcessWrapper("ruby", "-e 'sleep 30'");
             pw.Execute();
-            pw.WaitForProcess(100);
+            pw.WaitForProcess(1000);
             var tpt = pw.ProcessTreeCPUUsageId;
-            pw.WaitForProcess(200);
+            pw.WaitForProcess(2000);
             var tpt1 = pw.ProcessTreeCPUUsageId;
             pw.Dispose();
 			
@@ -101,7 +101,10 @@ namespace Frog.Domain.IntegrationTests
         {
             var pw = new ProcessWrapper("ruby", @"-e exit 0");
             pw.Execute();
-            pw.WaitForProcess(100);
+            pw.WaitForProcess(1000);
+            var processId = pw.Id;
+//            pw.Dispose();
+            Assert.That(ProcessHasExited(processId));
             try
             {
                 var tpt = pw.ProcessTreeCPUUsageId;
