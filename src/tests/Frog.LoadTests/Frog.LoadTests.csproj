@@ -38,10 +38,8 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BuildRunEventProcessing.cs" />
     <Compile Include="MessagePublishingAndConsuming.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TerminalOutputProcessing.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\app\Frog.Domain.Integration\Frog.Domain.Integration.csproj">
