@@ -39,16 +39,22 @@ CONSOLE_APPS = [
 SERVICE_APPS = [
     {'src' => APPS_FOLDER, 'project' => 'Frog.Agent.Service'},
             ]
-ACCEPTANCE_TESTS = [
+UNIT_TESTS = [
     {'src' => TESTS_FOLDER, 'project' => 'Frog.Domain.Specs'},
+]
+SYSTEM_TESTS = [
     {'src' => TESTS_FOLDER, 'project' => 'Frog.System.Specs'},
+]
+INTEGRATION_TESTS = [
     {'src' => TESTS_FOLDER, 'project' => 'Frog.Domain.IntegrationTests'},
 ]
 
 task :build => [:clobber, OUTPUT_PATH] do
   compile_base_project(true)
   copy_web_artifacts(WEB_APPS)
-  copy_bin_artifacts(ACCEPTANCE_TESTS)
+  copy_bin_artifacts(UNIT_TESTS)
+  copy_bin_artifacts(SYSTEM_TESTS)
+  copy_bin_artifacts(INTEGRATION_TESTS)  
   copy_bin_artifacts(CONSOLE_APPS)
   copy_bin_artifacts(SERVICE_APPS)
 end
@@ -56,7 +62,9 @@ end
 task :fast_build => [OUTPUT_PATH] do
   compile_base_project(false)
   copy_web_artifacts(WEB_APPS)
-  copy_bin_artifacts(ACCEPTANCE_TESTS)
+  copy_bin_artifacts(UNIT_TESTS)
+  copy_bin_artifacts(SYSTEM_TESTS)
+  copy_bin_artifacts(INTEGRATION_TESTS)  
   copy_bin_artifacts(CONSOLE_APPS)
   copy_bin_artifacts(SERVICE_APPS)
 end
@@ -84,18 +92,21 @@ task :select_local_env do
   select_env_for_source_code(local_environment)
 end
 
-task :run_acceptance_tests do
-  environment = ENV['Env']
-  # ENV['PATH'] = "#{ENV['PATH']};#{File.join(Dir.pwd, 'Lib\\Selenium')}"
-  ACCEPTANCE_TESTS.each do |test|
-    select_bin_environment("#{OUTPUT_PATH}/#{test['artifact_folder']}", environment)
+task :run_unit_tests do
+  UNIT_TESTS.each do |test|
+    launch("#{MONO} Libs/NUnit/nunit-console-x86.exe #{OUTPUT_PATH}/#{test['project']}/#{test['project']}.dll")
+  end
+end
+
+task :run_system_tests do
+  SYSTEM_TESTS.each do |test|
     launch("#{MONO} Libs/NUnit/nunit-console-x86.exe #{OUTPUT_PATH}/#{test['project']}/#{test['project']}.dll")
   end
 end
 
 def select_env_for_source_code(env)
   WEB_APPS.each {|app| select_web_environment(app['src'], env)}
-  ACCEPTANCE_TESTS.each {|app| select_bin_environment(app['src'], env)}
+  # ACCEPTANCE_TESTS.each {|app| select_bin_environment(app['src'], env)}
 end
 
 def copy_web_artifacts(apps)
