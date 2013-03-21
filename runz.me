@@ -1,12 +1,12 @@
 {
 	pipeline : [{
 		stage : "Build",
-		tasks : ["bundle install --binstubs", "ruby _bin\\rake build"]
+		tasks : ["bundle install --binstubs", "ruby _bin/rake build"]
 	}, {
 		stage : "Run unit tests",
-		tasks : ["ruby _bin\\rake run_unit_tests"]
+		tasks : ["ruby _bin/rake run_unit_tests"]
 	},{
 		stage : "Run system tests",
-		tasks : ["ruby _bin\\rake run_system_tests"]
+		tasks : ["ruby _bin/rake run_system_tests"]
 	}]
 }
