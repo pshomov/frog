@@ -20,12 +20,13 @@ namespace Frog.Domain.Integration.TaskSources.BuildSystems.Custom
         public IEnumerable<TaskDescription> Detect(string projectFolder, out bool shouldStop)
         {
             shouldStop = false;
-            var configPrototype = new { pipeline = new[] { new { stage = "stage name", tasks = new[] { "task 1", "task2" } } } };
-            var foundFiles = taskFileFinder.FindFiles(projectFolder);
-            if (foundFiles.Count == 0) return new List<TaskDescription>();
+            var config_prototype = new { pipeline = new[] { new { stage = "stage name", tasks = new[] { "task 1", "task2" } } }, start_each_stage = new[]{"task1"} };
+            var found_files = taskFileFinder.FindFiles(projectFolder);
+            if (found_files.Count == 0) return new List<TaskDescription>();
             shouldStop = true;
-            var parsedConfig = JsonConvert.DeserializeAnonymousType(getContent(Path.Combine(projectFolder, foundFiles.Single())), configPrototype);
-            return parsedConfig.pipeline.SelectMany(arg => arg.tasks.Select(s => new ShellTaskDescription {Arguments = s, Name = s}));
+            var parsed_config = JsonConvert.DeserializeAnonymousType(getContent(Path.Combine(projectFolder, found_files.Single())), config_prototype);
+            var start_tasks = (parsed_config.start_each_stage ?? new string[0]).Select(s => new ShellTaskDescription {Arguments = s, Name = s});
+            return parsed_config.pipeline.SelectMany(arg => start_tasks.Concat(arg.tasks.Select(s => new ShellTaskDescription {Arguments = s, Name = s})));
         }
     }
 }
