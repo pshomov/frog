@@ -5,7 +5,6 @@ using Frog.Domain.Integration;
 using Frog.Support;
 using Lokad.Cqrs;
 using Lokad.Cqrs.Evil;
-using SaaS.Wires;
 using SimpleCQRS;
 
 namespace SaaS.Engine

@@ -35,6 +35,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\libs\Lokad.CQRS\Lokad.Cqrs.Portable.dll</HintPath>
     </Reference>
+    <Reference Include="Npgsql">
+      <HintPath>..\..\..\libs\PostgreSQL\Npgsql.dll</HintPath>
+    </Reference>
     <Reference Include="protobuf-net, Version=2.0.0.470, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\libs\ProtoBuf-net\protobuf-net.dll</HintPath>
@@ -45,6 +48,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -52,6 +56,7 @@
     <Compile Include="Contracts.cs" />
     <Compile Include="DocumentStrategy.cs" />
     <Compile Include="EventStore.cs" />
+    <Compile Include="SqlEventStore.cs" />
     <Compile Include="TypedMessageSender.cs" />
   </ItemGroup>
   <ItemGroup>
