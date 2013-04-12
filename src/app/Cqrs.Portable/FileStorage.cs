@@ -74,7 +74,10 @@ namespace Lokad.Cqrs
         }
         public static FileAppendOnlyStore CreateAppendOnlyStore(this FileStorageConfig cfg, string name)
         {
-            return new SqlEventStore("Server=172.16.161.1;Database=lokad_eventstore;User Id=petar;");
+
+            var store = new FileAppendOnlyStore(new DirectoryInfo(Path.Combine(cfg.FullPath, name)));
+            store.Initialize();
+            return store;
         }
 
         public static MessageSender CreateMessageSender(this FileStorageConfig account, IEnvelopeStreamer streamer, string queueName)
