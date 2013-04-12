@@ -49,7 +49,7 @@ namespace Frog.System.Specs.Underware
 
         void SetupProjections(IBus bus)
         {
-            env = Program.BuildEnvironment(true, @"c:/lokad/system_tests");
+            env = Program.BuildEnvironment(true, @"c:/lokad/system_tests", "Server=172.16.161.1;Database=lokad_eventstore;User Id=petar;");
             eventStore = env.Store;
             cts = new CancellationTokenSource();
             env.ExecuteStartupTasks(cts.Token);

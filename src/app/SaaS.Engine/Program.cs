@@ -5,6 +5,7 @@ using Frog.Domain.Integration;
 using Frog.Support;
 using Lokad.Cqrs;
 using Lokad.Cqrs.Evil;
+using Sample.Storage.Sql;
 using SimpleCQRS;
 
 namespace SaaS.Engine
@@ -14,7 +15,7 @@ namespace SaaS.Engine
         static void Main()
         {
             var bus = SetupBus();
-            using (var env = BuildEnvironment(false, OSHelpers.LokadStorePath()))
+            using (var env = BuildEnvironment(false, OSHelpers.LokadStorePath(), "Server=166.78.137.91;Database=lokad_eventstore;User Id=store_appender;Password=showmethemoney"))
             using (var cts = new CancellationTokenSource())
             {
                 env.ExecuteStartupTasks(cts.Token);
@@ -48,7 +49,7 @@ namespace SaaS.Engine
             Context.SwapForDebug(s => SystemObserver.Notify(s));
         }
 
-        public static Container BuildEnvironment(bool reset_store, string storePath)
+        public static Container BuildEnvironment(bool reset_store, string storePath, string storeConnection)
         {
             ConfigureObserver();
             var setup = new Setup();
@@ -62,7 +63,13 @@ namespace SaaS.Engine
             setup.DocumentStoreFactory = config.CreateDocumentStore;
             setup.QueueReaderFactory = s => config.CreateInbox(s, DecayEvil.BuildExponentialDecay(500));
             setup.QueueWriterFactory = config.CreateQueueWriter;
-            setup.AppendOnlyStoreFactory = config.CreateAppendOnlyStore;
+            setup.AppendOnlyStoreFactory = (name) =>
+                {
+                    var sql_event_store = new SqlEventStore(storeConnection);
+                    sql_event_store.Initialize();
+                    if (reset_store) sql_event_store.ResetStore();
+                    return sql_event_store;
+                };
 
             setup.ConfigureQueues(1, 1);
 
