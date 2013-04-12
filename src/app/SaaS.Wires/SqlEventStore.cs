@@ -54,23 +54,7 @@ CREATE TABLE IF NOT EXISTS ES_Events (
                 conn.Open();
                 using (var tx = conn.BeginTransaction())
                 {
-                    const string sql =
-                        @"SELECT COALESCE(MAX(Version),0) 
-                            FROM ES_Events 
-                            WHERE Name=:name";
-                    int version;
-                    using (var cmd = new NpgsqlCommand(sql, conn, tx))
-                    {
-                        cmd.Parameters.AddWithValue(":name", name);
-                        version = (int)cmd.ExecuteScalar();
-                        if (expectedVersion != -1)
-                        {
-                            if (version != expectedVersion)
-                            {
-                                throw new AppendOnlyStoreConcurrencyException(version, expectedVersion, name);
-                            }
-                        }
-                    }
+                    var version = MakeSureLastVersionMatches(name, expectedVersion, conn, tx);
 
                     const string txt =
                            @"INSERT INTO ES_Events (Name, Version, Data) 
@@ -86,6 +70,29 @@ CREATE TABLE IF NOT EXISTS ES_Events (
                     tx.Commit();
                 }
             }
+        }
+
+        private static int MakeSureLastVersionMatches(string name, long expectedVersion, NpgsqlConnection conn,
+                                                      NpgsqlTransaction tx)
+        {
+            const string sql =
+                @"SELECT COALESCE(MAX(Version),0) 
+                            FROM ES_Events 
+                            WHERE Name=:name";
+            int version;
+            using (var cmd = new NpgsqlCommand(sql, conn, tx))
+            {
+                cmd.Parameters.AddWithValue(":name", name);
+                version = (int) cmd.ExecuteScalar();
+                if (expectedVersion != -1)
+                {
+                    if (version != expectedVersion)
+                    {
+                        throw new AppendOnlyStoreConcurrencyException(version, expectedVersion, name);
+                    }
+                }
+            }
+            return version;
         }
 
         public IEnumerable<DataWithVersion> ReadRecords(string name, long afterVersion, int maxCount)
