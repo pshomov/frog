@@ -9,19 +9,22 @@ namespace Frog.Support
 {
     public class Config : DynamicObject
     {
-        private readonly string appHome;
         private readonly List<JObject> cfg  = new List<JObject>();
 
         public Config(string app_home)
         {
-            appHome = app_home;
-            AddConfigIfPresent(appHome);
-            DirectoryInfo parent = new DirectoryInfo(app_home);
+            AddConfigIfPresent(app_home);
+            var parent = new DirectoryInfo(app_home);
             while((parent = Directory.GetParent(app_home)) != null)
             {
                 app_home = parent.FullName;
                 AddConfigIfPresent(app_home);
             }
+        }
+
+        Config(JObject cfg)
+        {
+            this.cfg = new List<JObject>(){cfg};
         }
 
         private void AddConfigIfPresent(string directory)
@@ -34,10 +37,13 @@ namespace Frog.Support
         public override bool TryGetMember(GetMemberBinder binder, out object result)
         {
             JToken val;
-            var setting_values = cfg.Where(o => o.TryGetValue(binder.Name, out val));
-            if (setting_values.Count() == 0) throw new SettingNotDefined();
+            var setting_values = cfg.Where(o => o.TryGetValue(binder.Name, out val)).ToList();
+            if (!setting_values.Any()) throw new SettingNotDefined();
             setting_values.First().TryGetValue(binder.Name, out val);
-            result = val.Value<object>();
+            if (val.HasValues) 
+                result = new Config((JObject) val);
+            else 
+                result = val.Value<object>();
             return true;
         }
     }
