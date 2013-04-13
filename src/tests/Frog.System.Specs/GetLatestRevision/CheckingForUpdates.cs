@@ -15,8 +15,12 @@ namespace Frog.System.Specs.GetLatestRevision
 
         protected override void Given()
         {
-            system = new SystemDriver();
-            system.SourceRepoDriver.GetLatestRevision().Returns(new RevisionInfo { Revision = "12" });
+            var source_repo_driver = Substitute.For<SourceRepoDriver>();
+            source_repo_driver.GetLatestRevision().Returns(new RevisionInfo { Revision = "12" });
+            var testSystem = new TestSystem().
+                WithRepositoryTracker().
+                WithRevisionChecker(url => source_repo_driver);
+            system = new SystemDriver(testSystem);
             system.RegisterNewProject("http://123");
         }
 

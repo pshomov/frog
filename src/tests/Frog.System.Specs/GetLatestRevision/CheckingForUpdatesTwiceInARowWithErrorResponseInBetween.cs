@@ -9,18 +9,24 @@ using xray;
 namespace Frog.System.Specs.GetLatestRevision
 {
     [TestFixture]
-    public class CheckkingForUpdatesTwiceInARowWithErrorResponseInBetween : BDD
+    public class CheckingForUpdatesTwiceInARowWithErrorResponseInBetween : BDD
     {
         SystemDriver system;
         private PollingProber prober;
 
         protected override void Given()
         {
-            system = new SystemDriver();
-            system.SourceRepoDriver.GetLatestRevision().Returns(info =>
+            var source_repo_driver = Substitute.For<SourceRepoDriver>();
+            source_repo_driver.GetLatestRevision().Returns(info =>
             {
                 throw new NullReferenceException("fake one");
             });
+
+            var testSystem = new TestSystem().
+                WithRepositoryTracker().
+                WithRevisionChecker(url => source_repo_driver);
+            system = new SystemDriver(testSystem);
+
             system.RegisterNewProject("http://123");
             system.CheckProjectsForUpdates();
             prober = new PollingProber(5000, 100);

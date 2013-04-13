@@ -17,11 +17,9 @@ namespace Frog.System.Specs.Underware
 {
     public class TestSystem
     {
-        readonly List<Message> messages;
-        public readonly IBus TheBus;
-        readonly WorkingAreaGoverner areaGoverner;
-        Agent agent;
-        Worker worker;
+        List<Message> messages;
+        public IBus TheBus;
+        List<Agent> agent = new List<Agent>();
 
         public TaskSource TasksSource;
         Container env;
@@ -33,21 +31,20 @@ namespace Frog.System.Specs.Underware
         public IDocumentStore Store;
         public RepositoryTracker repositoryTracker { get; private set; }
 
-        public TestSystem(WorkingAreaGoverner governer, SourceRepoDriverFactory sourceRepoDriverFactory, bool runRevisionChecker = true)
+        public TestSystem()
         {
             TheBus = SetupBus();
             messages = new List<Message>();
             SetupAllEventLogging();
-
-            areaGoverner = governer;
-            SetupWorker(GetPipeline());
-            SetupRepositoryTracker();
-            if (runRevisionChecker) new RevisionChecker(TheBus, sourceRepoDriverFactory).JoinTheParty();
-            SetupAgent(sourceRepoDriverFactory);
-            SetupProjections(TheBus);
         }
 
-        void SetupProjections(IBus bus)
+        public TestSystem WithRevisionChecker(SourceRepoDriverFactory sourceRepoDriverFactory)
+        {
+            new RevisionChecker(TheBus, sourceRepoDriverFactory).JoinTheParty();
+            return this;
+        }
+
+        public TestSystem SetupProjections()
         {
             env = Program.BuildEnvironment(true, @"c:/lokad/system_tests", "Server=172.16.161.1;Database=lokad_eventstore;User Id=petar;");
             eventStore = env.Store;
@@ -56,18 +53,17 @@ namespace Frog.System.Specs.Underware
             engine = env.BuildEngine(cts.Token);
             task = engine.Start(cts.Token);
             Store = env.ViewDocs;
-            eventsArchiver = new EventsArchiver(bus, eventStore);
+            eventsArchiver = new EventsArchiver(TheBus, eventStore);
             eventsArchiver.JoinTheParty();
+            return this;
         }
 
 
         Pipeline GetPipeline()
         {
-            {
                 TasksSource = Substitute.For<TaskSource>();
                 return new Pipeline(TasksSource,
                                            new ExecutableTaskGenerator(new ExecTaskFactory()));
-            }
         }
 
         void SetupAllEventLogging()
@@ -83,13 +79,16 @@ namespace Frog.System.Specs.Underware
 
         public void CleanupTestSystem()
         {
-            cts.Cancel();
-            if (!task.Wait(5000))
+            if (cts != null)
             {
-                Console.WriteLine(@"Terminating");
+                cts.Cancel();
+                if (!task.Wait(5000))
+                {
+                    Console.WriteLine(@"Terminating");
+                }
+                engine.Dispose();
+                env.Dispose();
             }
-            engine.Dispose();
-            env.Dispose();
             messages.Clear();
         }
 
@@ -98,38 +97,35 @@ namespace Frog.System.Specs.Underware
             return new FakeBus();
         }
 
-        void SetupWorker(Pipeline pipeline)
+        public TestSystem SetupAgent(SourceRepoDriverFactory sourceRepoDriverFactory, WorkingAreaGoverner governer)
         {
-            worker = new Worker(pipeline, areaGoverner);
-        }
-
-        void SetupAgent(SourceRepoDriverFactory sourceRepoDriverFactory)
-        {
-            agent = new Agent(TheBus, worker, sourceRepoDriverFactory);
+            var worker = new Worker(GetPipeline(), governer);
+            var agent = new Agent(TheBus, worker, sourceRepoDriverFactory);
             agent.JoinTheParty();
+            
+            return this;
         }
 
-        void SetupRepositoryTracker()
+        public TestSystem WithRepositoryTracker()
         {
             repositoryTracker = new RepositoryTracker(TheBus, new InMemoryProjectsRepository());
             repositoryTracker.JoinTheMessageParty();
+            return this;
         }
     }
 
     public class SystemDriver
     {
         readonly TestSystem theTestSystem;
-        public SourceRepoDriver SourceRepoDriver;
 
         public SystemDriver(TestSystem system)
         {
             theTestSystem = system;
         }
 
-        public SystemDriver(bool runRevisionChecker = true)
+        public SystemDriver()
         {
-            SourceRepoDriver = Substitute.For<SourceRepoDriver>();
-            theTestSystem = new TestSystem(Substitute.For<WorkingAreaGoverner>(), url => SourceRepoDriver, runRevisionChecker);
+            theTestSystem = new TestSystem();
         }
 
         public List<Message> GetEventsSnapshot()

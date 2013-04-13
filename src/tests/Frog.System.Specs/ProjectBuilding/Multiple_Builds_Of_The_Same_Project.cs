@@ -26,7 +26,11 @@ namespace Frog.System.Specs.ProjectBuilding
             sourceRepoDriver.GetSourceRevision(Arg.Any<string>(), Arg.Any<string>()).Returns(new CheckoutInfo{Comment = "comment 1"}, new CheckoutInfo {Comment = "comment 2"});
             var workingAreaGoverner = Substitute.For<WorkingAreaGoverner>();
             workingAreaGoverner.AllocateWorkingArea().Returns("fake location");
-            var testSystem = new TestSystem(workingAreaGoverner, url => sourceRepoDriver);
+            var testSystem = new TestSystem()
+                .WithRepositoryTracker()
+                .WithRevisionChecker(url => sourceRepoDriver)
+                .SetupAgent(url => sourceRepoDriver, workingAreaGoverner)
+                .SetupProjections();
             bool shouldStop;
             testSystem.TasksSource.Detect(Arg.Any<string>(), out shouldStop).Returns(
                 As.List(

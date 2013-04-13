@@ -9,15 +9,18 @@ using xray;
 namespace Frog.System.Specs.GetLatestRevision
 {
     [TestFixture]
-    public class CheckkingForUpdatesTwiceInARowWhileAgentIsNotRunning : BDD
+    public class CheckingForUpdatesTwiceInARowWhileAgentIsNotRunning : BDD
     {
         SystemDriver system;
 
         protected override void Given()
         {
             var repoUrl = Guid.NewGuid().ToString();
-            system = new SystemDriver(runRevisionChecker : false);
-            system.SourceRepoDriver.GetLatestRevision().Returns(new RevisionInfo{Revision = "14"});
+            var source_repo_driver = Substitute.For<SourceRepoDriver>();
+            source_repo_driver.GetLatestRevision().Returns(new RevisionInfo { Revision = "14" });
+            var testSystem = new TestSystem().
+                WithRepositoryTracker();
+            system = new SystemDriver(testSystem);
             system.RegisterNewProject(repoUrl);
             system.CheckProjectsForUpdates();
             make_sure_one_CHECK_FOR_UPDATE_message_is_sent();

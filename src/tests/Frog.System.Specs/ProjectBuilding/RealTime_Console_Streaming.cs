@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using Frog.Domain;
 using Frog.Specs.Support;
 using Frog.Support;
@@ -24,9 +23,16 @@ namespace Frog.System.Specs.ProjectBuilding
             var sourceRepoDriver = Substitute.For<SourceRepoDriver>();
             sourceRepoDriver.GetLatestRevision().Returns(new RevisionInfo { Revision = "12" });
             sourceRepoDriver.GetSourceRevision("12", Arg.Any<string>()).Returns(new CheckoutInfo(){Comment = "comment", Revision = "12"});
+
             var workingAreaGoverner = Substitute.For<WorkingAreaGoverner>();
             workingAreaGoverner.AllocateWorkingArea().Returns("fake location");
-            var testSystem = new TestSystem(workingAreaGoverner, url => sourceRepoDriver);
+
+            var testSystem = new TestSystem()
+                .WithRepositoryTracker()
+                .WithRevisionChecker(url => sourceRepoDriver)
+                .SetupAgent(url => sourceRepoDriver, workingAreaGoverner)
+                .SetupProjections();
+
             bool shouldStop;
             testSystem.TasksSource.Detect(Arg.Any<string>(), out shouldStop).Returns(
                 As.List(
@@ -37,6 +43,7 @@ namespace Frog.System.Specs.ProjectBuilding
                     new FakeTaskDescription(TerminalOutput3,
                                             TerminalOutput4)));
             system = new SystemDriver(testSystem);
+
             system.RegisterNewProject(RepoUrl);
         }
 
