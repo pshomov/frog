@@ -48,6 +48,7 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Configuration\ConfigReadsJson.cs" />
     <Compile Include="Configuration\ConfigReadsHierarchyOfJson.cs" />
+    <Compile Include="Configuration\ConfigWorksEvenWhenNoJsonPresent.cs" />
     <Compile Include="FileGeneration\FileGenesisTests.cs" />
     <Compile Include="Git\GitRepositoryCheckForLatestRev.cs" />
     <Compile Include="Git\GitRepositoryDriverCheckBase.cs" />
