@@ -64,6 +64,7 @@ namespace Frog.Domain
         public void JoinTheParty()
         {
             theBus.RegisterHandler<Build>(Handle, "Agent");
+            theBus.Publish(new AgentJoined());
         }
 
         readonly IBus theBus;
@@ -78,4 +79,9 @@ namespace Frog.Domain
             set { nextEventId = value; }
         }
     }
+
+    public class AgentJoined : Event
+    {
+    }
+
 }
