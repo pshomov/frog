@@ -12,6 +12,8 @@ namespace Frog.Domain.Specs.Agent
 
         protected override void When()
         {
+            Agent = new Domain.Agent(Bus, Worker, url => Repo);
+            Agent.JoinTheParty();
             buildMessage1 = new Build { RepoUrl = "http://fle", Revision = new RevisionInfo { Revision = "2" } };
             Agent.Handle(buildMessage1);
             buildMessage2 = new Build { RepoUrl = "http://flo", Revision = new RevisionInfo { Revision = "2" } };
