@@ -1,5 +1,4 @@
-﻿using System.IO;
-using Frog.Specs.Support;
+﻿using Frog.Specs.Support;
 using Frog.Support;
 using NUnit.Framework;
 
@@ -12,7 +11,7 @@ namespace Frog.Domain.IntegrationTests.Configuration
 
         protected override void Given()
         {
-            directory = GetTemporaryDirectory();
+            directory = IO.GetTemporaryDirectory();
             var genesis = new FileGenesis(directory);
             genesis.File("config.json", "{setting1 : 'v1'}");
         }
@@ -38,13 +37,6 @@ namespace Frog.Domain.IntegrationTests.Configuration
             catch (SettingNotDefined)
             {
             }
-        }
-
-        string GetTemporaryDirectory()
-        {
-            string temp_directory = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
-            Directory.CreateDirectory(temp_directory);
-            return temp_directory;
         }
     }
 

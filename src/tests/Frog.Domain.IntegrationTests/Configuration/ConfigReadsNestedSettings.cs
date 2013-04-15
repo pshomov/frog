@@ -9,12 +9,12 @@ namespace Frog.Domain.IntegrationTests.Configuration
     {
         private dynamic config;
         private string directory;
-        private string sub_folder_name = "sub";
+        private FileGenesis genesis;
 
         protected override void Given()
         {
-            directory = GetTemporaryDirectory();
-            var genesis = new FileGenesis(directory);
+            directory = IO.GetTemporaryDirectory();
+            genesis = new FileGenesis(directory);
             genesis.File("config.json", "{level1 : {level2 : '1', level21 : {level3 : 'level3'}} }");
         }
 
@@ -33,13 +33,6 @@ namespace Frog.Domain.IntegrationTests.Configuration
         public void should_reach_level3()
         {
             Assert.That(config.level1.level21.level3, Is.EqualTo("level3"));
-        }
-
-        string GetTemporaryDirectory()
-        {
-            string temp_directory = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
-            Directory.CreateDirectory(temp_directory);
-            return temp_directory;
         }
     }
 }

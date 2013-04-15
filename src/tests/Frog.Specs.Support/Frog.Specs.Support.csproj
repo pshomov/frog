@@ -51,6 +51,7 @@
     <Compile Include="BDD.cs" />
     <Compile Include="FileGenesis.cs" />
     <Compile Include="GitTestSupport.cs" />
+    <Compile Include="IO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

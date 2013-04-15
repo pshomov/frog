@@ -13,7 +13,7 @@ namespace Frog.Domain.IntegrationTests.Configuration
 
         protected override void Given()
         {
-            directory = GetTemporaryDirectory();
+            directory = IO.GetTemporaryDirectory();
             var genesis = new FileGenesis(directory);
             genesis.File("config.json", "{setting1 : 'v1', setting2 : 'wow' }")
                    .Folder(sub_folder_name)
@@ -35,13 +35,6 @@ namespace Frog.Domain.IntegrationTests.Configuration
         public void should_use_the_setting_value_found_in_parent_when_no_value_present_locally()
         {
             Assert.That(config.setting2, Is.EqualTo("wow"));
-        }
-
-        string GetTemporaryDirectory()
-        {
-            string temp_directory = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
-            Directory.CreateDirectory(temp_directory);
-            return temp_directory;
         }
     }
 
