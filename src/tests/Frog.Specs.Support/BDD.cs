@@ -16,7 +16,14 @@ namespace Frog.Specs.Support
             }
             catch (Exception)
             {
-                GivenCleanup();
+                try
+                {
+                    GivenCleanup();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
                 throw;
             }
             try
@@ -25,8 +32,15 @@ namespace Frog.Specs.Support
             }
             catch (Exception)
             {
-                GivenCleanup();
-                WhenCleanup();
+                try
+                {
+                    GivenCleanup();
+                    WhenCleanup();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
                 throw;
             }
         }
