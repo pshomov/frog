@@ -1,0 +1,11 @@
+﻿{
+	dev_win : {
+		connection_string : 'Server=166.78.137.91;Database=lokad_eventstore;User Id=store_appender;Password=showmethemoney'
+	},
+	dev_osx : {
+		connection_string : 'Server=127.0.0.1;Database=lokad_eventstore;User Id=store_appender;Password=showmethemoney'
+	},
+	production : {
+		connection_string : 'Server=166.78.137.91;Database=lokad_eventstore;User Id=store_appender;Password=showmethemoney'
+	},
+}

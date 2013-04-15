@@ -4,6 +4,7 @@ using System.Threading;
 using Frog.Domain;
 using Frog.Domain.Integration;
 using Frog.Domain.Integration.ProjectRepository;
+using Frog.Support;
 using Lokad.Cqrs.AtomicStorage;
 using Lokad.Cqrs.Build;
 using NSubstitute;
@@ -46,7 +47,7 @@ namespace Frog.System.Specs.Underware
 
         public TestSystem SetupProjections()
         {
-            env = Program.BuildEnvironment(true, @"c:/lokad/system_tests", "Server=172.16.161.1;Database=lokad_eventstore;User Id=petar;");
+            env = Program.BuildEnvironment(true, @"c:/lokad/system_tests", Config.Env.connection_string);
             eventStore = env.Store;
             cts = new CancellationTokenSource();
             env.ExecuteStartupTasks(cts.Token);

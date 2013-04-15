@@ -10,6 +10,7 @@ namespace Frog.Support
     public class Config : DynamicObject
     {
         private readonly List<JObject> cfg  = new List<JObject>();
+        private static dynamic _env;
 
         public Config(string app_home)
         {
@@ -25,6 +26,18 @@ namespace Frog.Support
         Config(JObject cfg)
         {
             this.cfg = new List<JObject>(){cfg};
+        }
+
+        public static dynamic Env
+        {
+            get { return _env; }
+        }
+
+        static Config()
+        {
+            dynamic config = new Config(AppDomain.CurrentDomain.BaseDirectory);
+            var env = config.RUNZ_ENV;
+            _env = config[env];
         }
 
         private void AddConfigIfPresent(string directory)

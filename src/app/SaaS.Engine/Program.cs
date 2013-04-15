@@ -15,7 +15,7 @@ namespace SaaS.Engine
         static void Main()
         {
             var bus = SetupBus();
-            using (var env = BuildEnvironment(false, OSHelpers.LokadStorePath(), "Server=166.78.137.91;Database=lokad_eventstore;User Id=store_appender;Password=showmethemoney"))
+            using (var env = BuildEnvironment(false, OSHelpers.LokadStorePath(), Config.Env.connection_string))
             using (var cts = new CancellationTokenSource())
             {
                 env.ExecuteStartupTasks(cts.Token);
