@@ -36,14 +36,26 @@ namespace Frog.Support
 
         public override bool TryGetMember(GetMemberBinder binder, out object result)
         {
+            GetSetingValue(binder.Name, out result);
+            return true;
+        }
+
+        private void GetSetingValue(string settingName, out object result)
+        {
             JToken val;
-            var setting_values = cfg.Where(o => o.TryGetValue(binder.Name, out val)).ToList();
+            var setting_values = cfg.Where(o => o.TryGetValue(settingName, out val)).ToList();
             if (!setting_values.Any()) throw new SettingNotDefined();
-            setting_values.First().TryGetValue(binder.Name, out val);
-            if (val.HasValues) 
+            setting_values.First().TryGetValue(settingName, out val);
+            if (val.HasValues)
                 result = new Config((JObject) val);
-            else 
+            else
                 result = val.Value<object>();
+        }
+
+        public override bool TryGetIndex(GetIndexBinder binder, object[] indexes, out object result)
+        {
+            var name = (string) indexes[0];
+            GetSetingValue(name, out result);
             return true;
         }
     }

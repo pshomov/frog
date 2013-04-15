@@ -22,9 +22,15 @@ namespace Frog.Domain.IntegrationTests.Configuration
         }
 
         [Test]
-        public void should_read_the_value_from_the_config()
+        public void should_read_the_value_from_the_config_when_accessed_as_property()
         {
             Assert.That(config.setting1, Is.EqualTo("v1"));
+        }
+
+        [Test]
+        public void should_read_the_value_from_the_config_when_accessed_as_index()
+        {
+            Assert.That(config["setting1"], Is.EqualTo("v1"));
         }
 
         [Test]
