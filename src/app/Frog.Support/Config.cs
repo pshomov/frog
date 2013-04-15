@@ -40,6 +40,12 @@ namespace Frog.Support
             return true;
         }
 
+        public override bool TryGetIndex(GetIndexBinder binder, object[] indexes, out object result)
+        {
+            GetSetingValue((string) indexes[0], out result);
+            return true;
+        }
+
         private void GetSetingValue(string settingName, out object result)
         {
             JToken val;
@@ -50,13 +56,6 @@ namespace Frog.Support
                 result = new Config((JObject) val);
             else
                 result = val.Value<object>();
-        }
-
-        public override bool TryGetIndex(GetIndexBinder binder, object[] indexes, out object result)
-        {
-            var name = (string) indexes[0];
-            GetSetingValue(name, out result);
-            return true;
         }
     }
 
