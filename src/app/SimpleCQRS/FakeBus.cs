@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using Newtonsoft.Json;
 
@@ -18,18 +19,18 @@ namespace SimpleCQRS
 
     public class FakeBus : IBus, IBusDebug
     {
-        private readonly Dictionary<Type, List<Action<Message>>> _routes = new Dictionary<Type, List<Action<Message>>>();
+        private readonly Dictionary<Type, Dictionary<string, Action<Message>>> _routes = new Dictionary<Type, Dictionary<string, Action<Message>>>();
         Action<string, string> _all_handler = (s, s1) => {};
 
         public void RegisterHandler<T>(Action<T> handler, string handlerId) where T : Message
         {
-            List<Action<Message>> handlers;
+            Dictionary<string, Action<Message>> handlers;
             if(!_routes.TryGetValue(typeof(T), out handlers))
             {
-                handlers = new List<Action<Message>>();
+                handlers = new Dictionary<string, Action<Message>>();
                 _routes.Add(typeof(T), handlers);
             }
-            handlers.Add(DelegateAdjuster.CastArgument<Message, T>(x => handler(x)));
+            handlers.Add(handlerId, DelegateAdjuster.CastArgument<Message, T>(x => handler(x)));
         }
 
         public void RegisterAll(Action<string, string> handler)
@@ -40,11 +41,23 @@ namespace SimpleCQRS
         public void Send<T>(T command) where T : Command
         {
             OnMessage(command);
-            List<Action<Message>> handlers; 
+            Dictionary<string, Action<Message>> handlers; 
             if (_routes.TryGetValue(typeof(T), out handlers))
             {
                 if (handlers.Count != 1) throw new InvalidOperationException("cannot send to more than one handler");
-                handlers[0](command);
+                handlers.Values.First()(command);
+            }
+            var serialized = JsonConvert.SerializeObject(command);
+            _all_handler(serialized, typeof(T).Name);
+        }
+
+        public void Send<T>(T command, string handlerId) where T : Command
+        {
+            OnMessage(command);
+            Dictionary<string, Action<Message>> handlers;
+            if (_routes.TryGetValue(typeof(T), out handlers))
+            {
+                handlers[handlerId](command);
             }
             var serialized = JsonConvert.SerializeObject(command);
             _all_handler(serialized, typeof(T).Name);
@@ -53,10 +66,10 @@ namespace SimpleCQRS
         public void Publish<T>(T @event) where T : Event
         {
             OnMessage(@event);
-            List<Action<Message>> handlers; 
+            Dictionary<string, Action<Message>> handlers; 
             if (_routes.TryGetValue(@event.GetType(), out handlers))
             {
-                foreach(var handler in handlers)
+                foreach(var handler in handlers.Values)
                 {
                     var handler1 = handler;
 //                    ThreadPool.QueueUserWorkItem(state => handler1(@event));
@@ -79,7 +92,7 @@ namespace SimpleCQRS
     public interface ICommandSender
     {
         void Send<T>(T command) where T : Command;
-
+        void Send<T>(T command, string handlerId) where T : Command;
     }
     public interface IEventPublisher
     {

@@ -161,6 +161,11 @@ namespace Frog.Domain.Integration
             SendMessage(command);
         }
 
+        public void Send<T>(T command, string handlerId) where T : Command
+        {
+            throw new NotImplementedException();
+        }
+
         public void UnregisterHandler<T>(string handlerId)
         {
             using(IModel channel = connection.CreateModel())
