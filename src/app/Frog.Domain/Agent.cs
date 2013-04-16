@@ -1,15 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using SimpleCQRS;
 
 namespace Frog.Domain
 {
     public class Agent : Handles<Build>
     {
-        public Agent(IBus theBus, Worker worker, SourceRepoDriverFactory repoDriverFactory)
+        public Agent(IBus theBus, Worker worker, SourceRepoDriverFactory repoDriverFactory, string[] capabilities)
         {
             this.theBus = theBus;
             this.worker = worker;
             this.repoDriverFactory = repoDriverFactory;
+            this.capabilities = capabilities;
         }
 
         public void Handle(Build message)
@@ -64,12 +66,13 @@ namespace Frog.Domain
         public void JoinTheParty()
         {
             theBus.RegisterHandler<Build>(Handle, "Agent");
-            theBus.Publish(new AgentJoined());
+            theBus.Publish(new AgentJoined(){Capabilities = new List<string>(capabilities)});
         }
 
         readonly IBus theBus;
         readonly Worker worker;
         readonly SourceRepoDriverFactory repoDriverFactory;
+        private readonly string[] capabilities;
 
         int nextEventId;
 
@@ -82,6 +85,7 @@ namespace Frog.Domain
 
     public class AgentJoined : Event
     {
+        public List<string> Capabilities { get; set; }
     }
 
 }

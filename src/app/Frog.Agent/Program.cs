@@ -20,7 +20,7 @@ namespace Frog.Agent
             var worker = new Worker(GetPipeline(), SetupWorkingAreaGovernor());
             var bus = SetupBus();
             SourceRepoDriverFactory sourceRepoDriverFactory = url => new GitDriver(url);
-            var agent = new Domain.Agent(bus, worker, sourceRepoDriverFactory);
+            var agent = new Domain.Agent(bus, worker, sourceRepoDriverFactory, new string[] { });
             var revisionChecker = new RevisionChecker(bus, sourceRepoDriverFactory);
 
             agent.JoinTheParty();

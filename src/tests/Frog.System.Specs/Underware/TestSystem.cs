@@ -98,10 +98,10 @@ namespace Frog.System.Specs.Underware
             return new FakeBus();
         }
 
-        public TestSystem SetupAgent(SourceRepoDriverFactory sourceRepoDriverFactory, WorkingAreaGoverner governer)
+        public TestSystem SetupAgent(SourceRepoDriverFactory sourceRepoDriverFactory, WorkingAreaGoverner governer, params string[] capabilities)
         {
             var worker = new Worker(GetPipeline(), governer);
-            var agent = new Agent(TheBus, worker, sourceRepoDriverFactory);
+            var agent = new Agent(TheBus, worker, sourceRepoDriverFactory, capabilities);
             agent.JoinTheParty();
             
             return this;

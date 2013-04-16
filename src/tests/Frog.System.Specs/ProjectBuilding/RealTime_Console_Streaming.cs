@@ -30,7 +30,7 @@ namespace Frog.System.Specs.ProjectBuilding
             var testSystem = new TestSystem()
                 .WithRepositoryTracker()
                 .WithRevisionChecker(url => sourceRepoDriver)
-                .SetupAgent(url => sourceRepoDriver, workingAreaGoverner)
+                .SetupAgent(url => sourceRepoDriver, workingAreaGoverner, new string[] {})
                 .SetupProjections();
 
             bool shouldStop;

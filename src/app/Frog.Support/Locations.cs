@@ -39,6 +39,14 @@ namespace Frog.Support
         }
     }
 
+    public static class Lists
+    {
+        public static bool AreEqual<T>(IEnumerable<T> coll1, IEnumerable<T> coll2)
+        {
+            return coll1.Count() == coll2.Count() && coll1.SequenceEqual(coll2);
+        }
+    }
+
     public class Empty
     {
         public static List<T> ListOf<T>(T itemExample)

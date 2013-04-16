@@ -87,6 +87,11 @@ namespace Frog.Support
         {
             return settingName + ", Seetings" +cfgs.Select(o => o.ToString()).Aggregate((s, s1) => s + ", " + s1);
         }
+
+        public override string Message
+        {
+            get { return this.ToString(); }
+        }
     }
 
 }
