@@ -63,7 +63,7 @@ namespace Frog.Support
         {
             JToken val;
             var setting_values = cfg.Where(o => o.TryGetValue(settingName, out val)).ToList();
-            if (!setting_values.Any()) throw new SettingNotDefined();
+            if (!setting_values.Any()) throw new SettingNotDefined(settingName, cfg);
             setting_values.First().TryGetValue(settingName, out val);
             if (val.HasValues)
                 result = new Config((JObject) val);
@@ -74,6 +74,19 @@ namespace Frog.Support
 
     public class SettingNotDefined : Exception
     {
+        private readonly string settingName;
+        private readonly IEnumerable<JObject> cfgs;
+
+        public SettingNotDefined(string settingName, IEnumerable<JObject> cfgs)
+        {
+            this.settingName = settingName;
+            this.cfgs = cfgs;
+        }
+
+        public override string ToString()
+        {
+            return settingName + ", Seetings" +cfgs.Select(o => o.ToString()).Aggregate((s, s1) => s + ", " + s1);
+        }
     }
 
 }
