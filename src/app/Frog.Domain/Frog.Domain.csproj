@@ -47,6 +47,7 @@
     <Compile Include="Agent\SourceDrop.cs" />
     <Compile Include="Agent\Pipeline\TaskInfo.cs" />
     <Compile Include="Agent\Pipeline\TerminalUpdateInfo.cs" />
+    <Compile Include="BuildDispatcher.cs" />
     <Compile Include="Underware\BuildEvent.cs" />
     <Compile Include="Agent\Events\BuildStarted.cs" />
     <Compile Include="Agent\Events\BuildUpdated.cs" />

@@ -113,6 +113,13 @@ namespace Frog.System.Specs.Underware
             repositoryTracker.JoinTheMessageParty();
             return this;
         }
+
+        public TestSystem AddBuildDispatcher()
+        {
+            var build_dispatcher = new BuildDispatcher(TheBus);
+            build_dispatcher.JoinTheParty();
+            return this;
+        }
     }
 
     public class SystemDriver
@@ -166,5 +173,11 @@ namespace Frog.System.Specs.Underware
             if (view == null) throw new Exception(string.Format("Could not get entity of type {0} with id {1}", typeof(TEntity).Name, id));
             return view;
         }
+
+        public void BuildRequest(string repoUrl, RevisionInfo revisionInfo, Guid buildId, params string[] capabilities)
+        {
+            theTestSystem.TheBus.Send(new BuildRequest { RepoUrl = repoUrl, Revision = revisionInfo, Id = buildId, CapabilitiesNeeded = capabilities });
+        }
     }
+
 }
