@@ -12,6 +12,7 @@ namespace Frog.Domain
             this.worker = worker;
             this.repoDriverFactory = repoDriverFactory;
             this.capabilities = capabilities;
+            agentId = Guid.NewGuid();
         }
 
         public void Handle(Build message)
@@ -22,7 +23,7 @@ namespace Frog.Domain
             Pipeline.BuildStartedDelegate onBuildStarted =
                 started =>
                 theBus.Publish(new BuildStarted(buildId: message.Id, status: started, repoUrl: message.RepoUrl,
-                                                sequenceId: NextEventId));
+                                                sequenceId: NextEventId, agentId : agentId));
             Action<int, Guid, TaskInfo.TaskStatus> onBuildUpdated =
                 (i, terminalId, status) =>
                 theBus.Publish(new BuildUpdated(buildId: message.Id, repoUrl:message.RepoUrl, taskIndex: i, newStatus: status,
@@ -65,8 +66,8 @@ namespace Frog.Domain
 
         public void JoinTheParty()
         {
-            theBus.RegisterHandler<Build>(Handle, "Agent");
-            theBus.Publish(new AgentJoined(){Capabilities = new List<string>(capabilities)});
+            theBus.RegisterHandler<Build>(Handle, agentId.ToString());
+            theBus.Publish(new AgentJoined(){Capabilities = new List<string>(capabilities), AgentId = agentId});
         }
 
         readonly IBus theBus;
@@ -75,6 +76,7 @@ namespace Frog.Domain
         private readonly string[] capabilities;
 
         int nextEventId;
+        private Guid agentId;
 
         private int NextEventId
         {
@@ -86,6 +88,7 @@ namespace Frog.Domain
     public class AgentJoined : Event
     {
         public List<string> Capabilities { get; set; }
+        public Guid AgentId;
     }
 
 }

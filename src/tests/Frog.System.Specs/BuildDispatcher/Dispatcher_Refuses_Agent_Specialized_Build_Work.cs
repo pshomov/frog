@@ -1,28 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using Frog.Domain;
-using Frog.Specs.Support;
-using Frog.Support;
 using Frog.System.Specs.Underware;
 using NSubstitute;
 using NUnit.Framework;
-using SaaS.Client.Projections.Frog.Projects;
-using SaaS.Engine;
-using SimpleCQRS;
 using xray;
 using Build = Frog.Domain.Build;
-using BuildEnded = Frog.Domain.BuildEnded;
-using BuildStarted = Frog.Domain.BuildStarted;
-using BuildTotalEndStatus = Frog.Domain.BuildTotalEndStatus;
-using BuildUpdated = Frog.Domain.BuildUpdated;
 using CheckoutInfo = Frog.Domain.CheckoutInfo;
-using ProjectCheckedOut = Frog.Domain.ProjectCheckedOut;
-using TaskInfo = Frog.Domain.TaskInfo;
 
 namespace Frog.System.Specs.ProjectBuilding
 {
     [TestFixture]
-    public class Dispatcher_Gives_Agent_Work : SystemBDD
+    public class Dispatcher_Refuses_Agent_Specialized_Build_Work : SystemBDD
     {
         private const string RepoUrl = "123";
         private Guid buildId;
@@ -37,6 +25,7 @@ namespace Frog.System.Specs.ProjectBuilding
             workingAreaGoverner.AllocateWorkingArea().Returns("fake location");
 
             testSystem
+                .SetupProjections()
                 .AddBuildDispatcher()
                 .SetupAgent(url => sourceRepoDriver, workingAreaGoverner);
             system = new SystemDriver(testSystem);
@@ -45,13 +34,14 @@ namespace Frog.System.Specs.ProjectBuilding
         protected override void When()
         {
             buildId = Guid.NewGuid();
-            system.BuildRequest(RepoUrl, new RevisionInfo {Revision = "123"}, buildId, new string[] {});
+            system.BuildRequest(RepoUrl, new RevisionInfo {Revision = "123"}, buildId, "special");
         }
 
+
         [Test]
-        public void should_send_build_command_to_agent()
+        public void should_not_send_build_command_to_agent_when_special_capabilities_required()
         {
-            Assert.True(EventStoreCheck(ES => ES.Has(A.Command<Build>(
+            Assert.False(EventStoreCheck(ES => ES.Has(A.Command<Build>(
                                                            ev =>
                                                            ev.Id == buildId && ev.RepoUrl == RepoUrl &&
                                                            ev.Revision.Revision == "123"))));

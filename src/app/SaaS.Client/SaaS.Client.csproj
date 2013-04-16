@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Projections\Frog\Agents\AgentsStatusesProjection.cs" />
     <Compile Include="Projections\Frog\Projects\BuildProjection.cs" />
     <Compile Include="Projections\Frog\Projects\BuildViewProjection.cs" />
     <Compile Include="Projections\Frog\Projects\ProjectHistoryProjectionView.cs" />

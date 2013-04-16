@@ -4,6 +4,7 @@ using System.Threading;
 using Frog.Domain;
 using Frog.Domain.Integration;
 using Frog.Domain.Integration.ProjectRepository;
+using Frog.Domain.Integration.Projections;
 using Frog.Support;
 using Lokad.Cqrs.AtomicStorage;
 using Lokad.Cqrs.Build;
@@ -37,6 +38,8 @@ namespace Frog.System.Specs.Underware
             TheBus = SetupBus();
             messages = new List<Message>();
             SetupAllEventLogging();
+            env = Program.BuildEnvironment(true, @"c:/lokad/system_tests", Config.Env.connection_string);
+            eventStore = env.Store;
         }
 
         public TestSystem WithRevisionChecker(SourceRepoDriverFactory sourceRepoDriverFactory)
@@ -47,8 +50,6 @@ namespace Frog.System.Specs.Underware
 
         public TestSystem SetupProjections()
         {
-            env = Program.BuildEnvironment(true, @"c:/lokad/system_tests", Config.Env.connection_string);
-            eventStore = env.Store;
             cts = new CancellationTokenSource();
             env.ExecuteStartupTasks(cts.Token);
             engine = env.BuildEngine(cts.Token);
@@ -116,7 +117,7 @@ namespace Frog.System.Specs.Underware
 
         public TestSystem AddBuildDispatcher()
         {
-            var build_dispatcher = new BuildDispatcher(TheBus);
+            var build_dispatcher = new BuildDispatcher(TheBus, new AgentStatuses(Store));
             build_dispatcher.JoinTheParty();
             return this;
         }

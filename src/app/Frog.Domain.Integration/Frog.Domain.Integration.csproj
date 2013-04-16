@@ -34,6 +34,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\libs\CorrugatedIron\CorrugatedIron.dll</HintPath>
     </Reference>
+    <Reference Include="Lokad.Cqrs.Portable">
+      <HintPath>..\..\tests\Frog.System.Specs\bin\Debug\Lokad.Cqrs.Portable.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.0.2.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\libs\CorrugatedIron\Newtonsoft.Json.dll</HintPath>
@@ -53,6 +56,7 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="ExecTaskFactory.cs" />
     <Compile Include="ExecutableTaskGenerator.cs" />
+    <Compile Include="Projections\AgentStatuses.cs" />
     <Compile Include="TaskSources\BuildSystems\PathFinder.cs" />
     <Compile Include="ProjectRepository\ProjectsRepositoryTestSupport.cs" />
     <Compile Include="TaskSources\BuildSystems\Custom\CustomFileFinder.cs" />
@@ -82,6 +86,14 @@
     <ProjectReference Include="..\Frog.Support\Frog.Support.csproj">
       <Project>{893935D3-935A-418F-A656-5D6A203D87ED}</Project>
       <Name>Frog.Support</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SaaS.Client\SaaS.Client.csproj">
+      <Project>{F31841AC-CA87-4441-B906-6D4502307E97}</Project>
+      <Name>SaaS.Client</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SaaS.Contracts\SaaS.Contracts.csproj">
+      <Project>{2A4A9A2C-5D8D-4078-B118-02A1D386A9FA}</Project>
+      <Name>SaaS.Contracts</Name>
     </ProjectReference>
     <ProjectReference Include="..\SimpleCQRS\SimpleCQRS.csproj">
       <Project>{9FAA6168-F131-420F-81C1-2228FD151BC7}</Project>

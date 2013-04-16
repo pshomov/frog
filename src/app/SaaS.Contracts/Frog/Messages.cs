@@ -72,13 +72,15 @@ public partial class BuildStarted : IEvent<BuildId>
         [DataMember(Order = 1)] public BuildId Id { get; private set; }
         [DataMember(Order = 2)] public ProjectId ProjectId { get; private set; }
         [DataMember(Order = 3)] public PipelineStatus Status { get; private set; }
+        [DataMember(Order = 4)] public AgentId AgentId { get; private set; }
         
         BuildStarted () {}
-        public BuildStarted (BuildId id, ProjectId projectId, PipelineStatus status)
+        public BuildStarted (BuildId id, ProjectId projectId, PipelineStatus status, AgentId agentId)
         {
             Id = id;
             ProjectId = projectId;
             Status = status;
+            AgentId = agentId;
         }
     }
     [DataContract(Namespace = "Frog.Stuff")]
@@ -144,6 +146,27 @@ public partial class ProjectRegistered : IEvent<ProjectId>
             Id = id;
             RepoUrl = repoUrl;
         }
+    }
+    [DataContract(Namespace = "Frog.Stuff")]
+public partial class AgentJoined : IEvent<AgentId>
+    {
+        [DataMember(Order = 1)] public AgentId Id { get; private set; }
+        [DataMember(Order = 2)] public string[] Capabilities { get; private set; }
+        
+        AgentJoined () 
+{
+            Capabilities = new string[0];
+        }
+        public AgentJoined (AgentId id, string[] capabilities)
+        {
+            Id = id;
+            Capabilities = capabilities;
+        }
+    }
+    
+    public interface IAgentState
+    {
+        void When(AgentJoined e);
     }
     
     public interface IProjectState

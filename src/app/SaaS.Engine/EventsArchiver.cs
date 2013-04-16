@@ -22,7 +22,7 @@ namespace SaaS.Engine
 
         readonly IBus bus;
         readonly EventStore store;
-        readonly Type[] eventsToTranslate = new[] { typeof(Frog.Domain.ProjectCheckedOut), typeof(RepositoryRegistered), typeof(Frog.Domain.BuildStarted), typeof(Frog.Domain.BuildEnded), typeof(Frog.Domain.BuildUpdated), typeof(TerminalUpdate) };
+        readonly Type[] eventsToTranslate = new[] { typeof(Frog.Domain.ProjectCheckedOut), typeof(Frog.Domain.AgentJoined), typeof(RepositoryRegistered), typeof(Frog.Domain.BuildStarted), typeof(Frog.Domain.BuildEnded), typeof(Frog.Domain.BuildUpdated), typeof(TerminalUpdate) };
 
         void Handle(string message, string exchange)
         {
@@ -46,7 +46,7 @@ namespace SaaS.Engine
                                                         ev.Status.Tasks.Select(
                                                             info =>
                                                             new TaskInfo(new TerminalId(info.TerminalId), info.Name,
-                                                                         (TaskStatus)info.Status)).ToArray()));
+                                                                         (TaskStatus)info.Status)).ToArray()), new AgentId(ev.AgentId));
                         store.AppendEventsToStream(conv.Id, ev.SequenceId, new[] { conv });
 
                     }
@@ -81,6 +81,13 @@ namespace SaaS.Engine
                                         var conv = new ProjectRegistered(new ProjectId(ev.RepoUrl), ev.RepoUrl);
                                         store.AppendEventsToStream(conv.Id, 0, new[] { conv });
                                     }
+                                    else
+                                        if (targetType == typeof(Frog.Domain.AgentJoined))
+                                        {
+                                            var ev = (Frog.Domain.AgentJoined)msg;
+                                            var conv = new SaaS.Engine.AgentJoined(new AgentId(ev.AgentId), ev.Capabilities.ToArray() );
+                                            store.AppendEventsToStream(conv.Id, 0, new[] { conv });
+                                        }
             }
         }
     }

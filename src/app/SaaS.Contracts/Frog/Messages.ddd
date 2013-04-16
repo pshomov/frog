@@ -10,7 +10,7 @@ interface Build(BuildId id)
 	if ! = IEvent<BuildId>;
 
 	ProjectCheckedOut! (ProjectId projectId, string repoUrl, CheckoutInfo info)
-    BuildStarted! (ProjectId projectId, PipelineStatus status)
+    BuildStarted! (ProjectId projectId, PipelineStatus status, AgentId agentId)
     BuildEnded! (ProjectId projectId, BuildTotalEndStatus status)
     BuildUpdated! (ProjectId projectId, int taskIndex, TaskStatus taskStatus)
 }
@@ -25,4 +25,10 @@ interface Project(ProjectId id)
 {
 	if ! = IEvent<ProjectId>;
 	ProjectRegistered! (string repoUrl)
+}
+
+interface Agent(AgentId id)
+{
+	if ! = IEvent<AgentId>;
+	AgentJoined! (string[] capabilities)
 }
