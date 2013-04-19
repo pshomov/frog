@@ -28,7 +28,6 @@ namespace Frog.System.Specs.ProjectBuilding
                 .SetupProjections()
                 .AddBuildDispatcher()
                 .SetupAgent(url => sourceRepoDriver, workingAreaGoverner);
-            system = new SystemDriver(testSystem);
         }
 
         protected override void When()

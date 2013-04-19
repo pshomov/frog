@@ -1,6 +1,7 @@
 using System.Linq;
 using Frog.Domain;
 using Frog.Specs.Support;
+using Frog.System.Specs.ProjectBuilding;
 using Frog.System.Specs.Underware;
 using NSubstitute;
 using NUnit.Framework;
@@ -9,18 +10,16 @@ using xray;
 namespace Frog.System.Specs.GetLatestRevision
 {
     [TestFixture]
-    public class CheckingForUpdates : BDD
+    public class CheckingForUpdates : SystemBDD
     {
-        private SystemDriver system;
-
         protected override void Given()
         {
+            base.Given();
             var source_repo_driver = Substitute.For<SourceRepoDriver>();
-            source_repo_driver.GetLatestRevision().Returns(new RevisionInfo { Revision = "12" });
-            var testSystem = new TestSystem().
-                WithRepositoryTracker().
-                WithRevisionChecker(url => source_repo_driver);
-            system = new SystemDriver(testSystem);
+            source_repo_driver.GetLatestRevision().Returns(new RevisionInfo {Revision = "12"});
+            testSystem
+                .WithRepositoryTracker()
+                .WithRevisionChecker(url => source_repo_driver);
             system.RegisterNewProject("http://123");
         }
 
@@ -29,46 +28,41 @@ namespace Frog.System.Specs.GetLatestRevision
             system.CheckProjectsForUpdates();
         }
 
-        protected override void GivenCleanup()
-        {
-            system.Stop();
-        }
-
         [Test]
         public void should_check_for_new_revision_and_request_a_build_of_it()
         {
-            var prober = new PollingProber(3000, 100);
-            Assert.True(prober.check(Take.Snapshot(() => system.GetEventsSnapshot())
-                                         .Has(x => x,
-                                              A.Command<CheckRevision>(
-                                                  ev =>
-                                                  ev.RepoUrl == "http://123"))
-                                         .Has(x => x,
+            Assert.True(EventStoreCheck(ES =>
+                                        ES.Has(
+                                            A.Command<CheckRevision>(
+                                                ev =>
+                                                ev.RepoUrl == "http://123"))
+                                          .Has(
                                               An.Event<UpdateFound>(
-                                                  found => found.RepoUrl == "http://123" && found.Revision.Revision == "12"))
-                                         .Has(x => x,
+                                                  found =>
+                                                  found.RepoUrl == "http://123" && found.Revision.Revision == "12"))
+                                          .Has(
                                               A.Command<Build>(
-                                                  found => found.RepoUrl == "http://123" && found.Revision.Revision == "12"))
+                                                  found =>
+                                                  found.RepoUrl == "http://123" && found.Revision.Revision == "12"))
                             ));
         }
 
         [Test]
         public void should_send_UPDATE_FOUND_message_and_update_the_last_build_revision()
         {
-            var prober = new PollingProber(3000, 100);
             var messageCheckpoint = system.GetEventsSnapshot().Count;
             system.CheckProjectsForUpdates();
-            Assert.True(prober.check(Take.Snapshot(() => system.GetEventsSnapshot())
-                                         .Has(x => x.Skip(messageCheckpoint).ToList(),
-                                              A.Command<CheckRevision>(
-                                                  ev =>
-                                                  ev.RepoUrl == "http://123"))
-                            ));
-            Assert.False(prober.check(Take.Snapshot(() => system.GetEventsSnapshot())
-                                          .Has(x => x.Skip(messageCheckpoint).ToList(),
-                                               A.Command<Build>(
+            Assert.True(EventStoreCheck(ES =>
+                                        ES.Has(x => x.Skip(messageCheckpoint).ToList(),
+                                               A.Command<CheckRevision>(
                                                    ev =>
                                                    ev.RepoUrl == "http://123"))
+                            ));
+            Assert.False(EventStoreCheck(ES =>
+                                         ES.Has(x => x.Skip(messageCheckpoint).ToList(),
+                                                A.Command<Build>(
+                                                    ev =>
+                                                    ev.RepoUrl == "http://123"))
                              ));
         }
     }

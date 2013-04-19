@@ -20,19 +20,15 @@ namespace Frog.System.Specs.ProjectBuilding
         [Test]
         public void should_announce_the_project_has_been_checked_out()
         {
-            Assert.True(EventStoreCheck(ES => ES.Has(x => x,
-                                                       An.Event<AgentJoined>(
-                                                           ))));
+            Assert.True(EventStoreCheck(ES => ES.Has(An.Event<AgentJoined>())));
         }
 
         [Test]
         public void should_provide_agent_capabilites()
         {
-            Assert.True(EventStoreCheck(ES => ES.Has(x => x,
-                                                       An.Event<AgentJoined>(
-                                                           ev =>
-                                                           Lists.AreEqual(ev.Capabilities, As.List("tag1", "tag2"))
-                                                           ))));
+            Assert.True(
+                EventStoreCheck(
+                    ES => ES.Has(An.Event<AgentJoined>(ev => Lists.AreEqual(ev.Capabilities, As.List("tag1", "tag2"))))));
         }
     }
 }

@@ -62,7 +62,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Agent\AgentComingOnline.cs" />
-    <Compile Include="Agent\SystemBDD.cs" />
     <Compile Include="BuildDispatcher\Dispatcher_Gives_Agent_Vanilla_Build_Work.cs" />
     <Compile Include="BuildDispatcher\Dispatcher_Refuses_Agent_Specialized_Build_Work.cs" />
     <Compile Include="ProjectBuilding\Building_A_Project.cs" />
@@ -71,6 +70,7 @@
     <Compile Include="GetLatestRevision\CheckingForUpdatesTwiceInARowWhileAgentIsNotRunning.cs" />
     <Compile Include="GetLatestRevision\CheckingForUpdatesTwiceInARowWithErrorResponseInBetween.cs" />
     <Compile Include="ProjectBuilding\RealTime_Console_Streaming.cs" />
+    <Compile Include="SystemBDD.cs" />
     <Compile Include="Underware\An.cs" />
     <Compile Include="Underware\TestSystem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

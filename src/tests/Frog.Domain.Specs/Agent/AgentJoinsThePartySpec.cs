@@ -15,7 +15,7 @@ namespace Frog.Domain.Specs.Agent
             Agent = new Domain.Agent(Bus, Worker, url => Repo, new string[] { });
             Agent.JoinTheParty();
         }
-
+         
         [Test]
         public void should_listen_for_BUILD_message()
         {

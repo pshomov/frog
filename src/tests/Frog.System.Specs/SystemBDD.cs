@@ -1,11 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Frog.Specs.Support;
 using Frog.System.Specs.Underware;
 using SimpleCQRS;
 using xray;
 
-namespace Frog.System.Specs.ProjectBuilding
+namespace Frog.System.Specs
 {
     public abstract class SystemBDD : BDD
     {

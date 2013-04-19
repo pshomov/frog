@@ -13,54 +13,51 @@ using CheckoutInfo = Frog.Domain.CheckoutInfo;
 namespace Frog.System.Specs.ProjectBuilding
 {
     [TestFixture]
-    public class Multiple_Builds_Of_The_Same_Project : BDD
+    public class Multiple_Builds_Of_The_Same_Project : SystemBDD
     {
         private const string RepoUrl = "http://123";
-        private SystemDriver system;
-        private Guid newGuid;
-        private Guid oldGuid;
+        private Guid buildId1;
+        private Guid buildId2;
 
         protected override void Given()
         {
+            base.Given();
+
             var sourceRepoDriver = Substitute.For<SourceRepoDriver>();
             sourceRepoDriver.GetSourceRevision(Arg.Any<string>(), Arg.Any<string>()).Returns(new CheckoutInfo{Comment = "comment 1"}, new CheckoutInfo {Comment = "comment 2"});
             var workingAreaGoverner = Substitute.For<WorkingAreaGoverner>();
             workingAreaGoverner.AllocateWorkingArea().Returns("fake location");
-            var testSystem = new TestSystem()
+
+            testSystem
                 .WithRepositoryTracker()
                 .WithRevisionChecker(url => sourceRepoDriver)
                 .SetupAgent(url => sourceRepoDriver, workingAreaGoverner, new string[] {})
                 .SetupProjections();
+
             bool shouldStop;
             testSystem.TasksSource.Detect(Arg.Any<string>(), out shouldStop).Returns(
                 As.List(
                     (TaskDescription)
                     new FakeTaskDescription("fle")));
-            system = new SystemDriver(testSystem);
+
             system.RegisterNewProject(RepoUrl);
         }
 
         protected override void When()
         {
-            newGuid = Guid.NewGuid();
-            system.Build(RepoUrl, new RevisionInfo { Revision = "123" }, newGuid);
-            oldGuid = newGuid;
-            newGuid = Guid.NewGuid();
-            system.Build(RepoUrl, new RevisionInfo { Revision = "123" }, newGuid);
+            buildId1 = Guid.NewGuid();
+            system.Build(RepoUrl, new RevisionInfo { Revision = "123" }, buildId1);
+            buildId2 = Guid.NewGuid();
+            system.Build(RepoUrl, new RevisionInfo { Revision = "123" }, buildId2);
         }
 
-        protected override void GivenCleanup()
-        {
-            system.Stop();
-        }
 
         [Test]
         public void should_make_the_last_build_the_current_one()
         {
             var prober = new PollingProber(5000, 100);
             Assert.True(prober.check(Take.Snapshot(() => system.GetView<ProjectId, ProjectHistory>(new ProjectId(RepoUrl)))
-                                         .Has(x => x,
-                                              A.Check<ProjectHistory>(view => view.Current.buildId == new BuildId(newGuid)))));
+                                         .Has(A.Check<ProjectHistory>(view => view.Current.buildId == new BuildId(buildId2)))));
         }
 
         [Test]
@@ -68,10 +65,8 @@ namespace Frog.System.Specs.ProjectBuilding
         {
             var prober = new PollingProber(5000, 100);
             Assert.True(prober.check(Take.Snapshot(() => system.GetView<ProjectId, ProjectHistory>(new ProjectId(RepoUrl)))
-                                         .Has(x => x,
-                                              A.Check<ProjectHistory>(view => view.Current.buildId == new BuildId(newGuid)))
-                                         .Has(x => x,
-                                              A.Check<ProjectHistory>(view => view.Items.Count == 1 && view.Items[0].BuildId == new BuildId(oldGuid)))));
+                                         .Has(A.Check<ProjectHistory>(view => view.Current.buildId == new BuildId(buildId2)))
+                                         .Has(A.Check<ProjectHistory>(view => view.Items.Count == 1 && view.Items[0].BuildId == new BuildId(buildId1)))));
         }
 
         [Test]
@@ -79,10 +74,8 @@ namespace Frog.System.Specs.ProjectBuilding
         {
             var prober = new PollingProber(5000, 100);
             Assert.True(prober.check(Take.Snapshot(() => system.GetView<ProjectId, ProjectHistory>(new ProjectId(RepoUrl)))
-                                         .Has(x => x,
-                                              A.Check<ProjectHistory>(view => view.CurrentHistory.RevisionComment == "comment 2"))
-                                         .Has(x => x,
-                                              A.Check<ProjectHistory>(view => view.Items.Count == 1 && view.Items[0].RevisionComment == "comment 1"))));
+                                         .Has(A.Check<ProjectHistory>(view => view.CurrentHistory.RevisionComment == "comment 2"))
+                                         .Has(A.Check<ProjectHistory>(view => view.Items.Count == 1 && view.Items[0].RevisionComment == "comment 1"))));
         }
     }
 
