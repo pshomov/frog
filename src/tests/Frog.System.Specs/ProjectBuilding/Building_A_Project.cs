@@ -23,12 +23,12 @@ namespace Frog.System.Specs.ProjectBuilding
     {
         private const string RepoUrl = "123";
         private Guid buildId;
-        private Guid taskGuid;
+        private Guid taskId;
 
         protected override void Given()
         {
             base.Given();
-            taskGuid = Guid.NewGuid();
+            taskId = Guid.NewGuid();
             var sourceRepoDriver = Substitute.For<SourceRepoDriver>();
             sourceRepoDriver.GetSourceRevision(Arg.Any<string>(), Arg.Any<string>()).Returns(new CheckoutInfo(){Comment = "Fle", Revision = "123"});
             var workingAreaGoverner = Substitute.For<WorkingAreaGoverner>();
@@ -96,7 +96,7 @@ namespace Frog.System.Specs.ProjectBuilding
                                                      if (ev.TaskIndex == 0 && ev.BuildId == buildId &&
                                                          ev.TaskStatus == TaskInfo.TaskStatus.Started)
                                                      {
-                                                         taskGuid = ev.TerminalId;
+                                                         taskId = ev.TerminalId;
                                                          return true;
                                                      }
                                                      return false;
@@ -105,7 +105,7 @@ namespace Frog.System.Specs.ProjectBuilding
                                                   ev =>
                                                   ev.BuildId == buildId &&
                                                   ev.TaskIndex == 0 &&
-                                                  ev.TerminalId == taskGuid &&
+                                                  ev.TerminalId == taskId &&
                                                   ev.ContentSequenceIndex == 0 &&
                                                   ev.Content.Contains(TerminalOutput3) &&
                                                   ev.SequenceId == 0
@@ -123,7 +123,7 @@ namespace Frog.System.Specs.ProjectBuilding
                                                  if (ev.TaskIndex == 0 && ev.BuildId == buildId &&
                                                      ev.TaskStatus == TaskInfo.TaskStatus.Started)
                                                  {
-                                                     taskGuid = ev.TerminalId;
+                                                     taskId = ev.TerminalId;
                                                      return true;
                                                  }
                                                  return false;
@@ -131,7 +131,7 @@ namespace Frog.System.Specs.ProjectBuilding
                                          .Has(An.Event<BuildUpdated>(
                                                   ev =>
                                                   ev.BuildId == buildId &&
-                                                  ev.TerminalId == taskGuid &&
+                                                  ev.TerminalId == taskId &&
                                                   ev.TaskStatus == TaskInfo.TaskStatus.FinishedSuccess && 
                                                   ev.TaskIndex == 0 &&
                                                   ev.SequenceId == 3
