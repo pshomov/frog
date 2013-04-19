@@ -14,7 +14,7 @@ namespace Frog.System.Specs.ProjectBuilding
         {
             var sourceRepoDriver = Substitute.For<SourceRepoDriver>();
             var workingAreaGoverner = Substitute.For<WorkingAreaGoverner>();
-            testSystem.SetupAgent(url => sourceRepoDriver, workingAreaGoverner, "tag1", "tag2");
+            testSystem.AddAgent(url => sourceRepoDriver, workingAreaGoverner, "tag1", "tag2");
         }
 
         [Test]

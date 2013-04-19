@@ -29,8 +29,8 @@ namespace Frog.System.Specs.ProjectBuilding
             testSystem
                 .WithRepositoryTracker()
                 .WithRevisionChecker(url => sourceRepoDriver)
-                .SetupAgent(url => sourceRepoDriver, workingAreaGoverner, new string[] {})
-                .SetupProjections();
+                .AddAgent(url => sourceRepoDriver, workingAreaGoverner, new string[] {})
+                .WithProjections();
 
             bool shouldStop;
             testSystem.TasksSource.Detect(Arg.Any<string>(), out shouldStop).Returns(

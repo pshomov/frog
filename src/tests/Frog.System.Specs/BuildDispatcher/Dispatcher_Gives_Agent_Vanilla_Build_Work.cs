@@ -25,9 +25,9 @@ namespace Frog.System.Specs.ProjectBuilding
             workingAreaGoverner.AllocateWorkingArea().Returns("fake location");
 
             testSystem
-                .SetupProjections()
+                .WithProjections()
                 .AddBuildDispatcher()
-                .SetupAgent(url => sourceRepoDriver, workingAreaGoverner);
+                .AddAgent(url => sourceRepoDriver, workingAreaGoverner);
         }
 
         protected override void When()
