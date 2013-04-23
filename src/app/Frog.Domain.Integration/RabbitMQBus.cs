@@ -39,6 +39,11 @@ namespace Frog.Domain.Integration
 
         public Func<bool> StopHandling { get; set; }
 
+        public void UnRegisterHandler<T>(Action<T> handler, string handlerId) where T : Message
+        {
+            throw new NotImplementedException();
+        }
+
         public void RegisterHandler<T>(Action<T> handler, string handlerId) where T : Message
         {
             var jsonSerializer = new JavaScriptSerializer();
@@ -148,6 +153,11 @@ namespace Frog.Domain.Integration
             });
             job.Start();
             threads.Add(job);
+        }
+
+        public void UnRegisterAll()
+        {
+            throw new NotImplementedException();
         }
 
 

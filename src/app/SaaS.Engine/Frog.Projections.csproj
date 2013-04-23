@@ -69,7 +69,7 @@
   <ItemGroup>
     <Reference Include="Lokad.Cqrs.Portable, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\libs\Lokad.CQRS\Lokad.Cqrs.Portable.dll</HintPath>
+      <HintPath>..\Frog.UI.Web2\bin\Debug\Lokad.Cqrs.Portable.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Mono.Cecil, Version=0.9.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">

@@ -36,7 +36,7 @@
     </Reference>
     <Reference Include="Lokad.Cqrs.Portable, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\libs\Lokad.CQRS\Lokad.Cqrs.Portable.dll</HintPath>
+      <HintPath>..\Frog.UI.Web2\bin\Debug\Lokad.Cqrs.Portable.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.0.2.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using Frog.Domain;
 using Frog.System.Specs.Underware;
 using NSubstitute;
@@ -28,6 +29,7 @@ namespace Frog.System.Specs.ProjectBuilding
                 .WithProjections()
                 .AddBuildDispatcher()
                 .AddAgent(url => sourceRepoDriver, workingAreaGoverner);
+            Thread.Sleep(700);
         }
 
         protected override void When()

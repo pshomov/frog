@@ -21,7 +21,7 @@ namespace Frog.System.Specs.Underware
     {
         List<Message> messages;
         public IBus TheBus;
-        List<Agent> agent = new List<Agent>();
+        List<Agent> agents = new List<Agent>();
 
         public TaskSource TasksSource;
         Container env;
@@ -83,13 +83,27 @@ namespace Frog.System.Specs.Underware
         {
             if (cts != null)
             {
-                cts.Cancel();
-                if (!task.Wait(5000))
+                eventsArchiver.LeaveTheParty();
+                agents.ForEach(agent => agent.LeaveTheParty());
+                using (cts)
                 {
-                    Console.WriteLine(@"Terminating");
+                    cts.Cancel();
+                    using (task)
+                    {
+                        if (!task.Wait(5000))
+                        {
+                            Console.WriteLine(@"Terminating");
+                        }
+                        using (env)
+                        using (engine)
+                        {
+                            engine = null;
+                            env = null;
+                        }
+                        task = null;
+                    }
+                    cts = null;
                 }
-                engine.Dispose();
-                env.Dispose();
             }
             messages.Clear();
         }
@@ -104,6 +118,7 @@ namespace Frog.System.Specs.Underware
             var worker = new Worker(GetPipeline(), governer);
             var agent = new Agent(TheBus, worker, sourceRepoDriverFactory, capabilities);
             agent.JoinTheParty();
+            agents.Add(agent);
             
             return this;
         }

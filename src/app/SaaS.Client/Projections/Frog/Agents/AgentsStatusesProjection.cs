@@ -43,6 +43,7 @@ namespace SaaS.Client.Projections.Frog.Agents
         }
 
     }
+
     public class AgentsStatusesProjection
     {
         readonly IDocumentWriter<unit, AgentsStatus> writer;
@@ -50,6 +51,7 @@ namespace SaaS.Client.Projections.Frog.Agents
         public AgentsStatusesProjection(IDocumentWriter<unit, AgentsStatus> writer)
         {
             this.writer = writer;
+            writer.AddOrUpdate(unit.it, () => new AgentsStatus(), status => { });
         }
 
         public void When(AgentJoined e)
@@ -85,7 +87,7 @@ namespace SaaS.Client.Projections.Frog.Agents
         {
             writer.UpdateOrThrow(unit.it, status =>
                 {
-                    var agent_status = status.Available.First(agentStatus => agentStatus.Id == status.BuildId2AgentId[e.Id]);
+                    var agent_status = status.Busy.First(agentStatus => agentStatus.Id == status.BuildId2AgentId[e.Id]);
                     status.Available.Add(agent_status);
                     status.Busy.Remove(agent_status);
                 });

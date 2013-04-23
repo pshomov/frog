@@ -29,10 +29,10 @@ namespace Frog.System.Specs.ProjectBuilding
             workingAreaGoverner.AllocateWorkingArea().Returns("fake location");
 
             testSystem
+                .WithProjections()
                 .WithRepositoryTracker()
                 .WithRevisionChecker(url => sourceRepoDriver)
-                .AddAgent(url => sourceRepoDriver, workingAreaGoverner, new string[] {})
-                .WithProjections();
+                .AddAgent(url => sourceRepoDriver, workingAreaGoverner, new string[] {});
 
             bool shouldStop;
             testSystem.TasksSource.Detect(Arg.Any<string>(), out shouldStop).Returns(

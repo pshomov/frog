@@ -66,8 +66,8 @@ namespace Frog.Domain
 
         public void JoinTheParty()
         {
-            theBus.RegisterHandler<Build>(Handle, agentId.ToString());
             theBus.Publish(new AgentJoined(){Capabilities = new List<string>(capabilities), AgentId = agentId});
+            theBus.RegisterHandler<Build>(Handle, agentId.ToString());
         }
 
         readonly IBus theBus;
@@ -82,6 +82,11 @@ namespace Frog.Domain
         {
             get { return nextEventId++; }
             set { nextEventId = value; }
+        }
+
+        public void LeaveTheParty()
+        {
+            theBus.UnRegisterHandler<Build>(Handle, agentId.ToString());
         }
     }
 

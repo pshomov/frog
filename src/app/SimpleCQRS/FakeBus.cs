@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using Newtonsoft.Json;
 
 namespace SimpleCQRS
 {
     public interface IBus : ICommandSender, IEventPublisher
     {
+        void UnRegisterHandler<T>(Action<T> handler, string handlerId) where T : Message;
         void RegisterHandler<T>(Action<T> handler, string handlerId) where T : Message;
         void RegisterAll(Action<string, string> handler);
+        void UnRegisterAll();
     }
 
     public interface IBusDebug
@@ -21,6 +22,11 @@ namespace SimpleCQRS
     {
         private readonly Dictionary<Type, Dictionary<string, Action<Message>>> _routes = new Dictionary<Type, Dictionary<string, Action<Message>>>();
         Action<string, string> _all_handler = (s, s1) => {};
+
+        public void UnRegisterHandler<T>(Action<T> handler, string handlerId) where T : Message
+        {
+            _routes[typeof (T)].Remove(handlerId);
+        }
 
         public void RegisterHandler<T>(Action<T> handler, string handlerId) where T : Message
         {
@@ -36,6 +42,11 @@ namespace SimpleCQRS
         public void RegisterAll(Action<string, string> handler)
         {
             _all_handler = handler;
+        }
+
+        public void UnRegisterAll()
+        {
+            _all_handler = (s, s1) => { };
         }
 
         public void Send<T>(T command) where T : Command

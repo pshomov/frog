@@ -119,7 +119,7 @@ namespace Lokad.Cqrs
                 {
                     // we messed up, roll back
                     currentPosition = null;
-                    Trace.WriteLine(ex);
+                    SystemObserver.Notify("Publishing of some event went bad: {0}",ex);
                     token.WaitHandle.WaitOne(5000);
                 }
             }

@@ -90,5 +90,10 @@ namespace SaaS.Engine
                                         }
             }
         }
+
+        public void LeaveTheParty()
+        {
+            this.bus.UnRegisterAll();
+        }
     }
 }
