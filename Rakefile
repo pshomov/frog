@@ -159,7 +159,7 @@ def copy_web_artifact(web_project, destination)
   mkdir web_output_path unless File.directory?(web_output_path)
   cp_r Dir.glob("#{web_project}/*"), web_output_path
   rmtree Dir.glob("#{web_output_path}/**/obj")+(Dir.glob("#{web_output_path}/**/AutoTest.Net"))+Dir.glob("#{web_output_path}/**/_ReSharper.*")+Dir.glob("#{web_output_path}/**/.svn")
-  rm all_except(web_output_path, %w(*.swf *.dll *.gif *.jpg *.png *.jpeg *.css *.html *.js *.asmx *.aspx *.master *.xsd *.xml *.config *.cshtml Global.asax *.ashx *.ico *.resx *.pdb *.svc _empty.txt *.py *.rb *.sh *.mdb)), :force => true
+  rm all_except(web_output_path, %w(*.swf *.dll *.gif *.jpg *.png *.jpeg *.css *.html *.js *.asmx *.aspx *.master *.xsd *.xml *.config *.cshtml Global.asax *.ashx *.ico *.resx *.pdb *.svc _empty.txt *.py *.rb *.sh *.mdb *.json)), :force => true
   rm only(web_output_path, %w(packages.config *.Publish.xml bin/*.xml)), :force => true
   remove_empty_folders(web_output_path)
 end
@@ -169,7 +169,7 @@ def copy_bin_artifact(bin_project, destination)
   mkdir bin_output_path unless File.directory?(bin_output_path)
   cp_r Dir.glob("#{bin_project}/bin/#{BUILD_MODE}/*"), "#{bin_output_path}"
   rmtree Dir.glob("#{bin_output_path}/**/obj")+(Dir.glob("#{bin_output_path}/**/AutoTest.Net"))+Dir.glob("#{bin_output_path}/**/_ReSharper.*")+Dir.glob("#{bin_output_path}/**/.svn *.mdb")
-  rm all_except(bin_output_path, %w(*.exe *.dll *.xsd *.xml *.config *.mustache *.prn _empty.txt  *.py *.rb *.sh)), :force => true
+  rm all_except(bin_output_path, %w(*.exe *.dll *.xsd *.xml *.config *.mustache *.prn _empty.txt  *.py *.rb *.sh *.json)), :force => true
   rm only(bin_output_path, %w(*.Publish.xml)), :force => true
   remove_empty_folders(bin_output_path)
 

@@ -32,10 +32,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Lokad.Cqrs.Portable, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\libs\Lokad.CQRS\Lokad.Cqrs.Portable.dll</HintPath>
-    </Reference>
     <Reference Include="Nancy">
       <HintPath>..\..\..\packages\Nancy.0.16.1\lib\net40\Nancy.dll</HintPath>
     </Reference>
@@ -82,6 +78,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Cqrs.Portable\Cqrs.Portable.csproj">
+      <Project>{4e2e749c-4d6f-4ef8-8e9d-96d467306997}</Project>
+      <Name>Cqrs.Portable</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Frog.Domain.Integration\Frog.Domain.Integration.csproj">
       <Project>{34D94FDA-6971-43A3-ABDE-B97CEA82CF26}</Project>
       <Name>Frog.Domain.Integration</Name>

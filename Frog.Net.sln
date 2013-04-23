@@ -48,6 +48,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frog.Runner", "src\app\Frog
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frog.UI.Web2", "src\app\Frog.UI.Web2\Frog.UI.Web2.csproj", "{60EA6A4E-9AA9-4585-877F-7407DE4392D5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cqrs.Portable", "src\app\Cqrs.Portable\Cqrs.Portable.csproj", "{4E2E749C-4D6F-4EF8-8E9D-96D467306997}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -250,6 +252,16 @@ Global
 		{60EA6A4E-9AA9-4585-877F-7407DE4392D5}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{60EA6A4E-9AA9-4585-877F-7407DE4392D5}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{60EA6A4E-9AA9-4585-877F-7407DE4392D5}.Release|x86.ActiveCfg = Release|Any CPU
+		{4E2E749C-4D6F-4EF8-8E9D-96D467306997}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E2E749C-4D6F-4EF8-8E9D-96D467306997}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E2E749C-4D6F-4EF8-8E9D-96D467306997}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{4E2E749C-4D6F-4EF8-8E9D-96D467306997}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{4E2E749C-4D6F-4EF8-8E9D-96D467306997}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4E2E749C-4D6F-4EF8-8E9D-96D467306997}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E2E749C-4D6F-4EF8-8E9D-96D467306997}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4E2E749C-4D6F-4EF8-8E9D-96D467306997}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{4E2E749C-4D6F-4EF8-8E9D-96D467306997}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{4E2E749C-4D6F-4EF8-8E9D-96D467306997}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -269,6 +281,7 @@ Global
 		{F31841AC-CA87-4441-B906-6D4502307E97} = {9F4DA869-EFBA-471A-937A-DF6D856616AA}
 		{2A4A9A2C-5D8D-4078-B118-02A1D386A9FA} = {9F4DA869-EFBA-471A-937A-DF6D856616AA}
 		{A6870FB6-D70D-4C70-81C8-74C191765FBC} = {9F4DA869-EFBA-471A-937A-DF6D856616AA}
+		{4E2E749C-4D6F-4EF8-8E9D-96D467306997} = {9F4DA869-EFBA-471A-937A-DF6D856616AA}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = src\app\Frog.Agent\Frog.Agent.csproj

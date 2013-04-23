@@ -34,10 +34,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\libs\CorrugatedIron\CorrugatedIron.dll</HintPath>
     </Reference>
-    <Reference Include="Lokad.Cqrs.Portable, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Frog.UI.Web2\bin\Debug\Lokad.Cqrs.Portable.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.0.2.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\libs\CorrugatedIron\Newtonsoft.Json.dll</HintPath>
@@ -80,6 +76,10 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
+    <ProjectReference Include="..\Cqrs.Portable\Cqrs.Portable.csproj">
+      <Project>{4e2e749c-4d6f-4ef8-8e9d-96d467306997}</Project>
+      <Name>Cqrs.Portable</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Frog.Domain\Frog.Domain.csproj">
       <Project>{8A446F8C-6B38-4153-A996-CC162DACF795}</Project>
       <Name>Frog.Domain</Name>

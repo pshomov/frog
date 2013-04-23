@@ -31,10 +31,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Lokad.Cqrs.Portable, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Frog.UI.Web2\bin\Debug\Lokad.Cqrs.Portable.dll</HintPath>
-    </Reference>
     <Reference Include="Npgsql">
       <HintPath>..\..\..\libs\PostgreSQL\Npgsql.dll</HintPath>
     </Reference>
@@ -60,6 +56,10 @@
     <Compile Include="TypedMessageSender.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Cqrs.Portable\Cqrs.Portable.csproj">
+      <Project>{4e2e749c-4d6f-4ef8-8e9d-96d467306997}</Project>
+      <Name>Cqrs.Portable</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SaaS.Contracts\SaaS.Contracts.csproj">
       <Project>{2A4A9A2C-5D8D-4078-B118-02A1D386A9FA}</Project>
       <Name>SaaS.Contracts</Name>
