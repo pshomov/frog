@@ -38,7 +38,7 @@ namespace Frog.System.Specs.Underware
             TheBus = SetupBus();
             messages = new List<Message>();
             SetupAllEventLogging();
-            env = Program.BuildEnvironment(true, @"c:/lokad/system_tests", Config.Env.connection_string);
+            env = Program.BuildEnvironment(true, @"c:/lokad/system_tests", Config.Env.connection_string, Guid.NewGuid());
             eventStore = env.Store;
         }
 

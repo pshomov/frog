@@ -12,10 +12,11 @@ namespace SaaS.Engine
 {
     public class Program
     {
+        private static Guid OpensourceCustomer = Guid.Parse("8b4f3240-c41f-4eed-9129-d414d2c01645");
         static void Main()
         {
             var bus = SetupBus();
-            using (var env = BuildEnvironment(false, OSHelpers.LokadStorePath(), Config.Env.connection_string))
+            using (var env = BuildEnvironment(false, OSHelpers.LokadStorePath(), Config.Env.connection_string, OpensourceCustomer))
             using (var cts = new CancellationTokenSource())
             {
                 env.ExecuteStartupTasks(cts.Token);
@@ -49,7 +50,7 @@ namespace SaaS.Engine
             Context.SwapForDebug(s => SystemObserver.Notify(s));
         }
 
-        public static Container BuildEnvironment(bool reset_store, string storePath, string storeConnection)
+        public static Container BuildEnvironment(bool reset_store, string storePath, string eventStoreConnection, Guid customerId)
         {
             ConfigureObserver();
             var setup = new Setup();
@@ -65,7 +66,7 @@ namespace SaaS.Engine
             setup.QueueWriterFactory = config.CreateQueueWriter;
             setup.AppendOnlyStoreFactory = (name) =>
                 {
-                    var sql_event_store = new SqlEventStore(storeConnection);
+                    var sql_event_store = new SqlEventStore(eventStoreConnection, customerId);
                     sql_event_store.Initialize();
                     if (reset_store) sql_event_store.ResetStore();
                     return sql_event_store;

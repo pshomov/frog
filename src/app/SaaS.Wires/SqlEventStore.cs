@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Lokad.Cqrs.TapeStorage;
 using Npgsql;
@@ -14,12 +15,13 @@ namespace Sample.Storage.Sql
     public sealed class SqlEventStore : IAppendOnlyStore
     {
         readonly string _connectionString;
-        
+        private readonly Guid customerId;
 
-        public SqlEventStore(string connectionString)
+
+        public SqlEventStore(string connectionString, Guid customerId)
         {
             _connectionString = connectionString;
-            
+            this.customerId = customerId;
         }
 
         public void Initialize()
@@ -29,8 +31,9 @@ namespace Sample.Storage.Sql
                 conn.Open();
 
                 const string txt = @"
-CREATE TABLE IF NOT EXISTS ES_Events (
+CREATE TABLE IF NOT EXISTS ES_Events2 (
     Id serial NOT NULL,
+    CustomerId uuid NOT NULL,
     Name varchar(50) NOT NULL,
     Version int NOT NULL,
     Data bytea NOT NULL
@@ -57,14 +60,15 @@ CREATE TABLE IF NOT EXISTS ES_Events (
                     var version = MakeSureLastVersionMatches(name, expectedVersion, conn, tx);
 
                     const string txt =
-                           @"INSERT INTO ES_Events (Name, Version, Data) 
-                                VALUES(:name, :version, :data)";
+                           @"INSERT INTO ES_Events2 (CustomerId, Name, Version, Data) 
+                                VALUES(:customerId, :name, :version, :data)";
 
                     using (var cmd = new NpgsqlCommand(txt, conn, tx))
                     {
                         cmd.Parameters.AddWithValue(":name", name);
                         cmd.Parameters.AddWithValue(":version", version+1);
                         cmd.Parameters.AddWithValue(":data", data);
+                        cmd.Parameters.AddWithValue(":customerId", customerId);
                         cmd.ExecuteNonQuery();
                     }
                     tx.Commit();
@@ -72,17 +76,19 @@ CREATE TABLE IF NOT EXISTS ES_Events (
             }
         }
 
-        private static int MakeSureLastVersionMatches(string name, long expectedVersion, NpgsqlConnection conn,
+        private int MakeSureLastVersionMatches(string name, long expectedVersion, NpgsqlConnection conn,
                                                       NpgsqlTransaction tx)
         {
             const string sql =
                 @"SELECT COALESCE(MAX(Version),0) 
-                            FROM ES_Events 
-                            WHERE Name=:name";
+                            FROM ES_Events2 
+                            WHERE Name=:name AND CustomerId=:customerId";
             int version;
             using (var cmd = new NpgsqlCommand(sql, conn, tx))
             {
-                cmd.Parameters.AddWithValue(":name", name);
+                cmd.Parameters.AddWithValue(":name", name); 
+                cmd.Parameters.AddWithValue(":customerId", customerId);
+
                 version = (int) cmd.ExecuteScalar();
                 if (expectedVersion != -1)
                 {
@@ -101,8 +107,8 @@ CREATE TABLE IF NOT EXISTS ES_Events (
             {
                 conn.Open();
                 const string sql =
-                    @"SELECT Data, Version, Id FROM ES_Events
-                        WHERE Name = :name AND Version > :version
+                    @"SELECT Data, Version, Id FROM ES_Events2
+                        WHERE Name = :name AND Version > :version AND CustomerId = :customerId
                         ORDER BY Version
                         LIMIT :take";
                 using (var cmd = new NpgsqlCommand(sql, conn))
@@ -110,6 +116,8 @@ CREATE TABLE IF NOT EXISTS ES_Events (
                     cmd.Parameters.AddWithValue(":name", name);
                     cmd.Parameters.AddWithValue(":version", afterVersion);
                     cmd.Parameters.AddWithValue(":take", maxCount);
+                    cmd.Parameters.AddWithValue(":customerId", customerId);
+
                     using (var reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
@@ -131,14 +139,15 @@ CREATE TABLE IF NOT EXISTS ES_Events (
             {
                 conn.Open();
                 const string sql =
-                    @"SELECT Data, Name, Version, Id  FROM ES_Events
-                        WHERE Id > :after
+                    @"SELECT Data, Name, Version, Id  FROM ES_Events2
+                        WHERE Id > :after AND CustomerId = :customerId
                         ORDER BY Id
                         LIMIT :take";
                 using (var cmd = new NpgsqlCommand(sql, conn))
                 {
                     cmd.Parameters.AddWithValue(":after", afterVersion);
                     cmd.Parameters.AddWithValue(":take", maxCount);
+                    cmd.Parameters.AddWithValue(":customerId", customerId);
                     using (var reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
@@ -170,10 +179,11 @@ CREATE TABLE IF NOT EXISTS ES_Events (
                 {
 
                     const string txt =
-                        @"DELETE FROM ES_Events";
+                        @"DELETE FROM ES_Events2 WHERE CustomerId = :customerId";
 
                     using (var cmd = new NpgsqlCommand(txt, conn, tx))
                     {
+                        cmd.Parameters.AddWithValue(":customerId", customerId);
                         cmd.ExecuteNonQuery();
                     }
                     tx.Commit();
@@ -184,7 +194,7 @@ CREATE TABLE IF NOT EXISTS ES_Events (
 
         public long GetCurrentVersion()
         {
-            return 0;
+            throw new NotImplementedException();
         }
     }
 }
