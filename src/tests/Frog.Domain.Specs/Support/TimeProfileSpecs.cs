@@ -7,7 +7,7 @@ using NUnit.Framework;
 namespace Frog.Domain.Specs.Support
 {
     [TestFixture]
-    class TimeProfileSpecs
+    public class TimeProfileSpecs
     {
         [Test]
         public void should_report_start_and_end_time_of_measure()

@@ -6,7 +6,7 @@ using SimpleCQRS;
 
 namespace Frog.Domain.Specs.RevisionChecker
 {
-    class JoinsTheParty : BDD
+    public class JoinsTheParty : BDD
     {
         private Domain.RevisionChecker rc;
         private SourceRepoDriver sr;

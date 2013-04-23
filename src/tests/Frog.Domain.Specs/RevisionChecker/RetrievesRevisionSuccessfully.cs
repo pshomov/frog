@@ -9,7 +9,7 @@ using SimpleCQRS;
 
 namespace Frog.Domain.Specs.RevisionChecker
 {
-    class RetrievesRevisionSuccessfully : BDD
+    public class RetrievesRevisionSuccessfully : BDD
     {
         private Domain.RevisionChecker rc;
         private SourceRepoDriver sr;
