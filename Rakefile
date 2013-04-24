@@ -17,8 +17,8 @@ end
 
 OUTPUT_PATH = "output"
 BUILD_MODE = "Debug"
-ACCOUNT = ENV['ACCOUNT']
-PASSWORD = ENV['PASSWORD']
+ACCOUNT = 'EIMDP020\v.aji'
+PASSWORD = 'Er46Hyu7'
 SERVER = "eimreydv02"
 PSEXEC="Libs\\paexec \\\\#{SERVER} -u #{ACCOUNT} -p #{PASSWORD}"
 INSTALLUTIL = 'c:\windows\microsoft.net\framework\v4.0.30319\installutil'
