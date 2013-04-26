@@ -6,6 +6,7 @@ using Frog.Domain.Integration;
 using Frog.Domain.Integration.ProjectRepository;
 using Frog.Domain.Integration.Projections;
 using Frog.Support;
+using Frog.WiredUp;
 using Lokad.Cqrs.AtomicStorage;
 using Lokad.Cqrs.Build;
 using NSubstitute;
@@ -38,7 +39,7 @@ namespace Frog.System.Specs.Underware
             TheBus = SetupBus();
             messages = new List<Message>();
             SetupAllEventLogging();
-            env = Program.BuildEnvironment(true, string.Format(@"c:/lokad/system_tests/{0}", Guid.NewGuid()), Config.Env.connection_string, Guid.NewGuid());
+            env = Setup.BuildEnvironment(true, string.Format(@"c:/lokad/system_tests/{0}", Guid.NewGuid()), Config.Env.connection_string, Guid.NewGuid());
             eventStore = env.Store;
         }
 

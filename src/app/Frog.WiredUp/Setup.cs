@@ -8,13 +8,16 @@ using Lokad.Cqrs;
 using Lokad.Cqrs.AtomicStorage;
 using Lokad.Cqrs.Build;
 using Lokad.Cqrs.Envelope;
+using Lokad.Cqrs.Evil;
 using Lokad.Cqrs.Partition;
 using Lokad.Cqrs.StreamingStorage;
 using Lokad.Cqrs.TapeStorage;
+using SaaS;
 using SaaS.Client;
 using SaaS.Wires;
+using Sample.Storage.Sql;
 
-namespace SaaS.Engine
+namespace Frog.WiredUp
 {
     public sealed class Setup
     {
@@ -29,8 +32,7 @@ namespace SaaS.Engine
 
         public void ConfigureQueues(int serviceQueueCount, int adapterQueueCount)
         {
-            _serviceQueues = Enumerable
-                .Range(0, serviceQueueCount)
+            _serviceQueues = Enumerable.Range(0, serviceQueueCount)
                 .Select((s, i) => Conventions.Prefix + "-handle-cmd-service-" + i)
                 .ToArray();
         }
@@ -161,8 +163,45 @@ namespace SaaS.Engine
                 }
                 throw new InvalidOperationException("Unknown queue format");
             };
+
+
         }
 
+        static void ConfigureObserver()
+        {
+            Trace.Listeners.Add(new ConsoleTraceListener());
+
+            var observer = new ConsoleObserver();
+            SystemObserver.Swap(observer);
+            Context.SwapForDebug(s => SystemObserver.Notify(s));
+        }
+
+        public static Container BuildEnvironment(bool reset_store, string storePath, string eventStoreConnection, Guid customerId)
+        {
+            ConfigureObserver();
+            var setup = new Setup();
+
+            var lokadStorePath = storePath;
+            SystemObserver.Notify("Using store : {0}", lokadStorePath);
+
+            var config = FileStorage.CreateConfig(lokadStorePath, reset: reset_store);
+
+            setup.Streaming = config.CreateStreaming();
+            setup.DocumentStoreFactory = config.CreateDocumentStore;
+            setup.QueueReaderFactory = s => config.CreateInbox(s, DecayEvil.BuildExponentialDecay(500));
+            setup.QueueWriterFactory = config.CreateQueueWriter;
+            setup.AppendOnlyStoreFactory = (name) =>
+            {
+                var sql_event_store = new SqlEventStore(eventStoreConnection, customerId);
+                sql_event_store.Initialize();
+                if (reset_store) sql_event_store.ResetStore();
+                return sql_event_store;
+            };
+
+            setup.ConfigureQueues(1, 1);
+
+            return setup.Build();
+        }
 
 
         /// <summary>
@@ -209,6 +248,8 @@ namespace SaaS.Engine
                 SystemObserver.Notify("[Warn]: {0} took {1:0.0} seconds", content.GetType().Name, seconds);
             }
         }
+
+        public static Guid OpensourceCustomer = Guid.Parse("8b4f3240-c41f-4eed-9129-d414d2c01645");
     }
 
     public sealed class Container : IDisposable

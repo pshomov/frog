@@ -7,12 +7,10 @@ using System.Text;
 using System.Threading;
 using Lokad.Cqrs;
 using Lokad.Cqrs.AtomicStorage;
-using Lokad.Cqrs.TapeStorage;
 using Mono.Cecil;
-using SaaS.Client;
-using SaaS.Wires;
+using SaaS;
 
-namespace SaaS.Engine
+namespace Frog.WiredUp
 {
     public static class StartupProjectionRebuilder
     {

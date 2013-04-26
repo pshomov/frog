@@ -52,6 +52,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cqrs.Portable", "src\app\Cq
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frog.UI.Web", "src\app\Frog.UI.Web\Frog.UI.Web.csproj", "{87D8D4E3-F24A-4452-809C-2E1417B03D3D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frog.WiredUp", "src\app\Frog.WiredUp\Frog.WiredUp.csproj", "{0BAFAF88-B49E-49BF-ADA6-12EA5C03B075}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -274,6 +276,16 @@ Global
 		{87D8D4E3-F24A-4452-809C-2E1417B03D3D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{87D8D4E3-F24A-4452-809C-2E1417B03D3D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{87D8D4E3-F24A-4452-809C-2E1417B03D3D}.Release|x86.ActiveCfg = Release|Any CPU
+		{0BAFAF88-B49E-49BF-ADA6-12EA5C03B075}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0BAFAF88-B49E-49BF-ADA6-12EA5C03B075}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0BAFAF88-B49E-49BF-ADA6-12EA5C03B075}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{0BAFAF88-B49E-49BF-ADA6-12EA5C03B075}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{0BAFAF88-B49E-49BF-ADA6-12EA5C03B075}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{0BAFAF88-B49E-49BF-ADA6-12EA5C03B075}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0BAFAF88-B49E-49BF-ADA6-12EA5C03B075}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0BAFAF88-B49E-49BF-ADA6-12EA5C03B075}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{0BAFAF88-B49E-49BF-ADA6-12EA5C03B075}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{0BAFAF88-B49E-49BF-ADA6-12EA5C03B075}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -7,10 +7,11 @@ using Lokad.Cqrs;
 using Lokad.Cqrs.Envelope;
 using Lokad.Cqrs.Evil;
 using Lokad.Cqrs.StreamingStorage;
+using SaaS;
 using SaaS.Wires;
 using ServiceStack.Text;
 
-namespace SaaS.Engine
+namespace Frog.WiredUp
 {
     public sealed class EnvelopeQuarantine : IEnvelopeQuarantine
     {
@@ -113,7 +114,7 @@ namespace SaaS.Engine
 
             var name = envelope.Message.GetType().Name.Replace("Command", "");
 
-            var subject = string.Format("[Error]: S2 fails '{0}'", name);
+            var subject = string.Format((string) "[Error]: S2 fails '{0}'", (object) name);
 
 
             var builder = new StringBuilder();

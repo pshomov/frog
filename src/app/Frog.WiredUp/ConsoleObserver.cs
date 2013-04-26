@@ -3,9 +3,10 @@ using System.Diagnostics;
 using System.Text;
 using Lokad.Cqrs;
 using Lokad.Cqrs.Envelope.Events;
+using SaaS;
 using ServiceStack.Text;
 
-namespace SaaS.Engine
+namespace Frog.WiredUp
 {
     public sealed class ConsoleObserver : IObserver<ISystemEvent>
     {
