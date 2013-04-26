@@ -177,6 +177,12 @@ namespace Frog.WiredUp
             Context.SwapForDebug(s => SystemObserver.Notify(s));
         }
 
+        public static IDocumentStore GetDocumentStore(string storePath, Guid customerId)
+        {
+            var config = FileStorage.CreateConfig(Path.Combine(storePath, customerId.ToString()), reset: false);
+            return config.CreateDocumentStore(new ViewStrategy());
+        }
+
         public static Container BuildEnvironment(bool reset_store, string storePath, string eventStoreConnection, Guid customerId)
         {
             ConfigureObserver();

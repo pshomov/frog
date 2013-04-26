@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Frog.Domain.Integration;
 using Frog.Support;
 using Frog.UI.Web2;
+using Frog.WiredUp;
 using Lokad.Cqrs;
 using Nancy;
 using Nancy.Bootstrapper;
@@ -35,11 +36,8 @@ namespace Frog.UI.Web2
 
         static void WireUpUIModelInfrastructure()
         {
-            var theBus = new RabbitMQBus(OSHelpers.RabbitHost());
-            var config = FileStorage.CreateConfig(OSHelpers.LokadStorePath());
-
-            ServiceLocator.Bus = theBus;
-            ServiceLocator.Store = config.CreateDocumentStore(new ViewStrategy());
+            ServiceLocator.Bus = new RabbitMQBus(OSHelpers.RabbitHost());
+            ServiceLocator.Store = Setup.GetDocumentStore(OSHelpers.LokadStorePath(), Setup.OpensourceCustomer);
         }
     }
 

@@ -94,6 +94,10 @@
       <Project>{893935D3-935A-418F-A656-5D6A203D87ED}</Project>
       <Name>Frog.Support</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Frog.WiredUp\Frog.WiredUp.csproj">
+      <Project>{0BAFAF88-B49E-49BF-ADA6-12EA5C03B075}</Project>
+      <Name>Frog.WiredUp</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SaaS.Client\SaaS.Client.csproj">
       <Project>{F31841AC-CA87-4441-B906-6D4502307E97}</Project>
       <Name>SaaS.Client</Name>

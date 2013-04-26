@@ -5,6 +5,7 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using Frog.Domain.Integration;
 using Frog.Support;
+using Frog.WiredUp;
 using Lokad.Cqrs;
 using Lokad.Cqrs.AtomicStorage;
 using SaaS.Client.Projections.Releases;
@@ -29,7 +30,7 @@ namespace Frog.UI.Web
         protected void Application_Start()
         {
             serviceArea = Server.MapPath("~/App_Data");
-            Profiler.MeasurementsBridge = new Profiler.LogFileLoggingBridge(Path.Combine(serviceArea, "/runz_web_ui.log"));
+            Profiler.MeasurementsBridge = new Profiler.LogFileLoggingBridge("runz_web_ui.log");
             Directory.CreateDirectory(serviceArea);
             mapPath = Path.Combine(serviceArea, "Crash_");
 
@@ -72,11 +73,8 @@ namespace Frog.UI.Web
 
         void WireUpUIModelInfrastructure()
         {
-            var theBus = new RabbitMQBus(OSHelpers.RabbitHost());
-            var config = FileStorage.CreateConfig(OSHelpers.LokadStorePath());
-
-            ServiceLocator.Bus = theBus;
-            ServiceLocator.Store = config.CreateDocumentStore(new ViewStrategy());
+            ServiceLocator.Bus = new RabbitMQBus(OSHelpers.RabbitHost());
+            ServiceLocator.Store = Setup.GetDocumentStore(OSHelpers.LokadStorePath(), Setup.OpensourceCustomer);
         }
     }
     internal class WebFrontendSetup
