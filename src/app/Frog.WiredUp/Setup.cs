@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -184,7 +185,7 @@ namespace Frog.WiredUp
             var lokadStorePath = storePath;
             SystemObserver.Notify("Using store : {0}", lokadStorePath);
 
-            var config = FileStorage.CreateConfig(lokadStorePath, reset: reset_store);
+            var config = FileStorage.CreateConfig(Path.Combine(lokadStorePath, customerId.ToString()), reset: reset_store);
 
             setup.Streaming = config.CreateStreaming();
             setup.DocumentStoreFactory = config.CreateDocumentStore;
