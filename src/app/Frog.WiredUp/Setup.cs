@@ -69,17 +69,17 @@ namespace Frog.WiredUp
             var builder = new CqrsEngineBuilder(Streamer, quarantine);
 
             var events = new RedirectToDynamicEvent();
-            var commands = new RedirectToCommand();
-            var funcs = new RedirectToCommand();
+//            var commands = new RedirectToCommand();
+//            var funcs = new RedirectToCommand();
             
 
             builder.Handle(QueueReaderFactory(EventProcessingQueue), aem => CallHandlers(events, aem), "watch");
-            builder.Handle(QueueReaderFactory(AggregateHandlerQueue), aem => CallHandlers(commands, aem));
-            builder.Handle(QueueReaderFactory(RouterQueueName), MakeRouter(messageStore), "watch");
+//            builder.Handle(QueueReaderFactory(AggregateHandlerQueue), aem => CallHandlers(commands, aem));
+//            builder.Handle(QueueReaderFactory(RouterQueueName), MakeRouter(messageStore), "watch");
             // multiple service queues
-            _serviceQueues.ForEach(s => builder.Handle(QueueReaderFactory(s), aem => CallHandlers(funcs, aem)));
+//            _serviceQueues.ForEach(s => builder.Handle(QueueReaderFactory(s), aem => CallHandlers(funcs, aem)));
 
-            builder.Handle(QueueReaderFactory(FunctionalRecorderQueueName), aem => RecordFunctionalEvent(aem, messageStore));
+//            builder.Handle(QueueReaderFactory(FunctionalRecorderQueueName), aem => RecordFunctionalEvent(aem, messageStore));
             var viewDocs = DocumentStoreFactory(ViewStrategy);
             var stateDocs = new NuclearStorage(DocumentStoreFactory(DocStrategy));
 

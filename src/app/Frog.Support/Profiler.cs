@@ -46,8 +46,8 @@ namespace Frog.Support
 
             public void Dispose()
             {
-//                if (MeasurementsBridge != null)
-//                MeasurementsBridge.TimePeriod(start, DateTime.Now, message);
+                if (MeasurementsBridge != null)
+                MeasurementsBridge.TimePeriod(start, DateTime.Now, message);
             }
         } 
         public static LoggingBridge MeasurementsBridge;
