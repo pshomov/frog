@@ -188,10 +188,10 @@ namespace Frog.WiredUp
             ConfigureObserver();
             var setup = new Setup();
 
-            var lokadStorePath = storePath;
-            SystemObserver.Notify("Using store : {0}", lokadStorePath);
+            var customer_store_path = Path.Combine(storePath, customerId.ToString());
+            SystemObserver.Notify("Using store : {0}", customer_store_path);
 
-            var config = FileStorage.CreateConfig(Path.Combine(lokadStorePath, customerId.ToString()), reset: reset_store);
+            var config = FileStorage.CreateConfig(customer_store_path, reset: reset_store);
 
             setup.Streaming = config.CreateStreaming();
             setup.DocumentStoreFactory = config.CreateDocumentStore;
