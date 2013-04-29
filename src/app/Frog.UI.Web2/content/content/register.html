@@ -7,7 +7,7 @@
         $(function () {
 
             $('#reg_button').click(function () {
-                $.post("../project/register", { url: $('#url').val() }, function (data) {
+                $.post("/project/register", { url: $('#url').val() }, function (data) {
                     if (typeof(data.error) === 'undefined') {
                         $('#register_panel').html("<a id=\"newly_registered\" href=\"" + data.projectUrl + "\">Status</a>");
                     } else {

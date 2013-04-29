@@ -55,17 +55,17 @@ namespace Lokad.Cqrs.Envelope
             {
                 return;
             }
-            catch (Exception ex)
-            {
-                if (_quarantine.TryToQuarantine(envelope, ex))
-                {
-                    SystemObserver.Notify(new EnvelopeQuarantined(ex,_dispatcherName, envelope));
-                    // message quarantined. Swallow
-                    return;
-                }
-                // if we are on a persistent queue, this will tell to retry
-                throw;
-            }
+//            catch (Exception ex)
+//            {
+//                if (_quarantine.TryToQuarantine(envelope, ex))
+//                {
+//                    SystemObserver.Notify(new EnvelopeQuarantined(ex,_dispatcherName, envelope));
+//                    // message quarantined. Swallow
+//                    return;
+//                }
+//                // if we are on a persistent queue, this will tell to retry
+//                throw;
+//            }
 
         }
 

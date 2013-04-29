@@ -1,6 +1,6 @@
 ﻿{
 	dev_win : {
-		connection_string : 'Server=166.78.137.91;Database=lokad_eventstore_dev;User Id=petar'
+		connection_string : 'Server=172.16.161.1;Database=lokad_eventstore_dev;User Id=petar'
 	},
 	dev_osx : {
 		connection_string : 'Server=127.0.0.1;Database=lokad_eventstore_dev;User Id=petar'
