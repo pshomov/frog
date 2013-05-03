@@ -28,7 +28,7 @@ namespace Frog.System.Specs.ProjectBuilding
             testSystem
                 .WithProjections()
                 .AddBuildDispatcher()
-                .AddAgent(url => sourceRepoDriver, workingAreaGoverner);
+                .AddAgent(url => sourceRepoDriver, workingAreaGoverner, Guid.NewGuid());
             Thread.Sleep(700);
         }
 

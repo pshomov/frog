@@ -1,4 +1,5 @@
-﻿using Frog.Domain;
+﻿using System;
+using Frog.Domain;
 using Frog.Support;
 using Frog.System.Specs.Underware;
 using NSubstitute;
@@ -14,7 +15,7 @@ namespace Frog.System.Specs.ProjectBuilding
         {
             var sourceRepoDriver = Substitute.For<SourceRepoDriver>();
             var workingAreaGoverner = Substitute.For<WorkingAreaGoverner>();
-            testSystem.AddAgent(url => sourceRepoDriver, workingAreaGoverner, "tag1", "tag2");
+            testSystem.AddAgent(url => sourceRepoDriver, workingAreaGoverner, Guid.NewGuid(), "tag1", "tag2");
         }
 
         [Test]

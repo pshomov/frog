@@ -27,7 +27,7 @@ namespace Frog.System.Specs.ProjectBuilding
             testSystem
                 .WithProjections()
                 .AddBuildDispatcher()
-                .AddAgent(url => sourceRepoDriver, workingAreaGoverner);
+                .AddAgent(url => sourceRepoDriver, workingAreaGoverner, Guid.NewGuid());
         }
 
         protected override void When()
@@ -45,5 +45,6 @@ namespace Frog.System.Specs.ProjectBuilding
                                                            ev.Id == buildId && ev.RepoUrl == RepoUrl &&
                                                            ev.Revision.Revision == "123"))));
         }
+
     }
 }

@@ -6,13 +6,13 @@ namespace Frog.Domain
 {
     public class Agent : Handles<Build>
     {
-        public Agent(IBus theBus, Worker worker, SourceRepoDriverFactory repoDriverFactory, string[] capabilities)
+        public Agent(IBus theBus, Worker worker, SourceRepoDriverFactory repoDriverFactory, string[] capabilities, Guid agentId)
         {
             this.theBus = theBus;
             this.worker = worker;
             this.repoDriverFactory = repoDriverFactory;
             this.capabilities = capabilities;
-            agentId = Guid.NewGuid();
+            this.agentId = agentId;
         }
 
         public void Handle(Build message)

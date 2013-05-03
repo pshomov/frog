@@ -1,3 +1,4 @@
+using System;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -10,7 +11,7 @@ namespace Frog.Domain.Specs.Agent
 
         protected override void When()
         {
-            Agent = new Domain.Agent(Bus, Worker, url => Repo, new string[] { });
+            Agent = new Domain.Agent(Bus, Worker, url => Repo, new string[] { }, Guid.NewGuid());
             Agent.JoinTheParty();
             buildMessage = new Build { RepoUrl = "http://fle", Revision = new RevisionInfo { Revision = "2" } };
             Agent.Handle(buildMessage);

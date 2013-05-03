@@ -30,7 +30,7 @@ namespace Frog.System.Specs.ProjectBuilding
                 .WithProjections()
                 .WithRepositoryTracker()
                 .WithRevisionChecker(url => sourceRepoDriver)
-                .AddAgent(url => sourceRepoDriver, workingAreaGoverner, new string[] {});
+                .AddAgent(url => sourceRepoDriver, workingAreaGoverner, Guid.NewGuid(), new string[] {});
 
             bool shouldStop;
             testSystem.TasksSource.Detect(Arg.Any<string>(), out shouldStop).Returns(

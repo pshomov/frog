@@ -12,7 +12,7 @@ namespace Frog.Domain.Specs.Agent
         protected override void When()
         {
             Bus.RegisterHandler(Arg.Any<Action<Build>>(), Arg.Do<string>(s => agentId = s));
-            Agent = new Domain.Agent(Bus, Worker, url => Repo, new string[] { });
+            Agent = new Domain.Agent(Bus, Worker, url => Repo, new string[] { }, Guid.NewGuid());
             Agent.JoinTheParty();
         }
          
