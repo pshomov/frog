@@ -15,7 +15,7 @@ namespace SimpleCQRS
 
     public interface IBusDebug
     {
-        event Action<Message> OnMessage;
+        event Action<Guid,Message> OnMessage;
     }
 
     public class FakeBus : IBus, IBusDebug
@@ -51,7 +51,7 @@ namespace SimpleCQRS
 
         public void Send<T>(T command) where T : Command
         {
-            OnMessage(command);
+            OnMessage(Guid.Empty, command);
             Dictionary<string, Action<Message>> handlers; 
             if (_routes.TryGetValue(typeof(T), out handlers))
             {
@@ -64,7 +64,7 @@ namespace SimpleCQRS
 
         public void Send<T>(T command, string handlerId) where T : Command
         {
-            OnMessage(command);
+            OnMessage(Guid.Parse(handlerId), command);
             Dictionary<string, Action<Message>> handlers;
             if (_routes.TryGetValue(typeof(T), out handlers))
             {
@@ -76,7 +76,7 @@ namespace SimpleCQRS
 
         public void Publish<T>(T @event) where T : Event
         {
-            OnMessage(@event);
+            OnMessage(Guid.Empty, @event);
             Dictionary<string, Action<Message>> handlers; 
             if (_routes.TryGetValue(@event.GetType(), out handlers))
             {
@@ -92,7 +92,7 @@ namespace SimpleCQRS
             _all_handler(serialized, typeof (T).Name);
         }
 
-        public event Action<Message> OnMessage = message => {};
+        public event Action<Guid,Message> OnMessage = (id,message) => {};
     }
 
     public interface Handles<T>

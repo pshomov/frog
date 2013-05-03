@@ -15,6 +15,7 @@ namespace Frog.System.Specs.ProjectBuilding
     {
         private const string RepoUrl = "123";
         private Guid buildId;
+        private Guid agentId;
 
         protected override void Given()
         {
@@ -25,11 +26,12 @@ namespace Frog.System.Specs.ProjectBuilding
             var workingAreaGoverner = Substitute.For<WorkingAreaGoverner>();
             workingAreaGoverner.AllocateWorkingArea().Returns("fake location");
 
+            agentId = Guid.NewGuid();
             testSystem
                 .WithProjections()
                 .AddBuildDispatcher()
-                .AddAgent(url => sourceRepoDriver, workingAreaGoverner, Guid.NewGuid());
-            Thread.Sleep(700);
+                .AddAgent(url => sourceRepoDriver, workingAreaGoverner, agentId);
+            Thread.Sleep(7000);
         }
 
         protected override void When()
@@ -41,7 +43,7 @@ namespace Frog.System.Specs.ProjectBuilding
         [Test]
         public void should_send_build_command_to_agent_when_no_capabilities_required()
         {
-            Assert.True(EventStoreCheck(ES => ES.Has(A.Command<Build>(
+            Assert.True(EventStoreCheck(agentId, ES => ES.Has(A.Command<Build>(
                                                            ev =>
                                                            ev.Id == buildId && ev.RepoUrl == RepoUrl &&
                                                            ev.Revision.Revision == "123"))));

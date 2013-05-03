@@ -195,7 +195,7 @@ namespace Frog.Domain.Integration
             }
         }
 
-        public event Action<Message> OnMessage;
+        public event Action<Guid, Message> OnMessage;
 
         void PublishPendingEventBatch()
         {

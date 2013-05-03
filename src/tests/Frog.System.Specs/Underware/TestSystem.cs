@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using Frog.Domain;
 using Frog.Domain.Integration;
@@ -20,7 +21,7 @@ namespace Frog.System.Specs.Underware
 {
     public class TestSystem
     {
-        List<Message> messages;
+        List<Tuple<Guid,Message>> messages;
         public IBus TheBus;
         List<Agent> agents = new List<Agent>();
 
@@ -37,7 +38,7 @@ namespace Frog.System.Specs.Underware
         public TestSystem()
         {
             TheBus = SetupBus();
-            messages = new List<Message>();
+            messages = new List<Tuple<Guid, Message>>();
             SetupAllEventLogging();
             env = Setup.BuildEnvironment(true, string.Format(@"c:/lokad/system_tests/{0}", Guid.NewGuid()), Config.Env.connection_string, Guid.NewGuid());
             eventStore = env.Store;
@@ -72,12 +73,12 @@ namespace Frog.System.Specs.Underware
         void SetupAllEventLogging()
         {
             var busDebug = (IBusDebug) TheBus;
-            busDebug.OnMessage += msg => messages.Add(msg);
+            busDebug.OnMessage += (id,msg) => messages.Add(new Tuple<Guid, Message>(id,msg));
         }
 
-        public List<Message> GetMessagesSoFar()
+        public List<Tuple<Guid, Message>> GetMessagesSoFar()
         {
-            return new List<Message>(messages);
+            return new List<Tuple<Guid,Message>>(messages);
         }
 
         public void CleanupTestSystem()
@@ -153,9 +154,14 @@ namespace Frog.System.Specs.Underware
             theTestSystem = new TestSystem();
         }
 
+        public List<Message> GetEventsSnapshot(Guid id)
+        {
+            return theTestSystem.GetMessagesSoFar().Where(tuple => id == Guid.Empty || tuple.Item1 == id).Select(tuple => tuple.Item2).ToList();
+        }
+
         public List<Message> GetEventsSnapshot()
         {
-            return theTestSystem.GetMessagesSoFar();
+            return theTestSystem.GetMessagesSoFar().Select(tuple => tuple.Item2).ToList();
         }
 
         public void RegisterNewProject(string repoUrl)

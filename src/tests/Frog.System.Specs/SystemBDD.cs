@@ -27,9 +27,20 @@ namespace Frog.System.Specs
             return prober.check(snapshot_expectations_builder);
         }
 
+        protected bool EventStoreCheck(Guid id,
+            Func<SnapshotExpectationsBuilder<List<Message>>, SnapshotExpectationsBuilder<List<Message>>> expectations)
+        {
+            var prober = new PollingProber(5000, 100);
+            SnapshotExpectationsBuilder<List<Message>> snapshot_expectations_builder =
+                expectations(Take.Snapshot(() => system.GetEventsSnapshot(id)));
+            return prober.check(snapshot_expectations_builder);
+        }
+
         protected override void GivenCleanup()
         {
             system.Stop();
+            system = null;
+            testSystem = null;
         }
     }
 }
