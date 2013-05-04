@@ -52,6 +52,20 @@ namespace Frog.Domain.IntegrationTests.RabbitMQ
             bus2.UnregisterHandler<MyCommand>(q2);
         }
 
+        [Test]
+		public void should_not_deliver_message_to_direct_queues_when_sent_to_all_for_the_type(){
+			var msg = "";
+			bus1.RegisterDirectHandler<MyCommand>(ev =>  msg += "receiver1", q1);
+			bus2.RegisterHandler<MyCommand>(ev =>  msg += "receiver2", q2);
+			bus1.Send(new MyCommand());
+            Thread.Sleep(3000);
+            Assert.That(msg, Is.Not.EqualTo("receiver1receiver2"));
+            Assert.That(msg, Is.Not.EqualTo("receiver2receiver1"));
+            Assert.That(msg, Is.EqualTo("receiver2"));
+            bus1.UnregisterHandler<MyCommand>(q1);
+            bus2.UnregisterHandler<MyCommand>(q2);
+        }
+
 	}
 }
 
