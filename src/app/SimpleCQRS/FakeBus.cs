@@ -62,7 +62,7 @@ namespace SimpleCQRS
             _all_handler(serialized, typeof(T).Name);
         }
 
-        public void Send<T>(T command, string handlerId) where T : Command
+        public void SendDirect<T>(T command, string handlerId) where T : Command
         {
             OnMessage(Guid.Parse(handlerId), command);
             Dictionary<string, Action<Message>> handlers;
@@ -103,7 +103,7 @@ namespace SimpleCQRS
     public interface ICommandSender
     {
         void Send<T>(T command) where T : Command;
-        void Send<T>(T command, string handlerId) where T : Command;
+        void SendDirect<T>(T command, string handlerId) where T : Command;
     }
     public interface IEventPublisher
     {

@@ -36,18 +36,18 @@ namespace Frog.Domain.IntegrationTests.RabbitMQ
 
         public class MyCommand : Command
         {
-            public string Data;
         }
 
         [Test]
 		public void should_send_message_and_only_specified_receiver_receives_it(){
 			var msg = "";
-			bus1.RegisterDirectHandler<MyCommand>(ev =>  msg += ev.Data, q1);
-			bus2.RegisterDirectHandler<MyCommand>(ev =>  msg += ev.Data, q2);
-			bus1.Send(new MyCommand(){Data = "fff"}, q1);
+			bus1.RegisterDirectHandler<MyCommand>(ev =>  msg += "receiver1", q1);
+			bus2.RegisterDirectHandler<MyCommand>(ev =>  msg += "receiver2", q2);
+			bus1.SendDirect(new MyCommand(), q1);
             Thread.Sleep(3000);
-            Assert.That(msg, Is.Not.EqualTo("ffffff"));
-            Assert.That(msg, Is.EqualTo("fff"));
+            Assert.That(msg, Is.Not.EqualTo("receiver1receiver2"));
+            Assert.That(msg, Is.Not.EqualTo("receiver2receiver1"));
+            Assert.That(msg, Is.EqualTo("receiver1"));
             bus1.UnregisterHandler<MyCommand>(q1);
             bus2.UnregisterHandler<MyCommand>(q2);
         }

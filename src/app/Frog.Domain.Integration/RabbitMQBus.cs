@@ -46,14 +46,22 @@ namespace Frog.Domain.Integration
 
         public void RegisterHandler<T>(Action<T> handler, string handlerId) where T : Message
         {
+            RegisterHandlerAndConsumeMessages(handler, handlerId, true);
+        }
+
+        private void RegisterHandlerAndConsumeMessages<T>(Action<T> handler, string handlerId, bool withExchangeBinding) where T : Message
+        {
             var jsonSerializer = new JavaScriptSerializer();
             var topicName = typeof (T).Name;
             var queueName = handlerId;
-            using(var channel = connection.CreateModel())
+            using (var channel = connection.CreateModel())
             {
-                channel.ExchangeDeclare(topicName, ExchangeType.Fanout, true);
                 channel.QueueDeclare(queueName, false, false, false, null);
-                channel.QueueBind(queueName, topicName, "", null);
+                if (withExchangeBinding)
+                {
+                    channel.ExchangeDeclare(topicName, ExchangeType.Fanout, true);
+                    channel.QueueBind(queueName, topicName, "", null);
+                }
                 channel.TxSelect();
             }
             var startThread = false;
@@ -63,49 +71,49 @@ namespace Frog.Domain.Integration
                 startThread = true;
             }
             queueHandlers[queueName][topicName] = eventArgs =>
-                                                       {
-                                                           var message =
-                                                               jsonSerializer.Deserialize<T>(
-                                                                   Encoding.UTF8.GetString(eventArgs.Body));
-                                                           message.Timestamp =
-                                                               eventArgs.BasicProperties.Timestamp.UnixTime;
-                                                           handler(message);
-                                                       };
+                {
+                    var message =
+                        jsonSerializer.Deserialize<T>(
+                            Encoding.UTF8.GetString(eventArgs.Body));
+                    message.Timestamp =
+                        eventArgs.BasicProperties.Timestamp.UnixTime;
+                    handler(message);
+                };
             if (startThread)
             {
                 var job = new Thread(() =>
-                                         {
-                                             using(var channel = connection.CreateModel())
-                                             {
-                                                 channel.BasicQos(0,1,false);
-                                                 var consumer = new QueueingBasicConsumer(channel);
-                                                 channel.BasicConsume(queueName, false, consumer);
-                                                 while (true)
-                                                 {
-                                                     BasicDeliverEventArgs e = null;
-                                                     try
-                                                     {
-                                                         e = (BasicDeliverEventArgs)consumer.Queue.Dequeue();
-                                                         queueHandlers[queueName][e.Exchange](e);
-                                                         channel.BasicAck(e.DeliveryTag, false);
-                                                     }
-                                                     catch (EndOfStreamException)
-                                                     {
-                                                         break;
-                                                     }
-                                                     catch (OperationInterruptedException)
-                                                     {
-                                                         break;
-                                                     }
-                                                     catch (Exception ex)
-                                                     {
-                                                         HandleBadMessage(e, ex);
-                                                         channel.BasicReject(e.DeliveryTag, true);
-                                                     }
-                                                     if (StopHandling()) break;
-                                                 }
-                                             }
-                                         });
+                    {
+                        using (var channel = connection.CreateModel())
+                        {
+                            channel.BasicQos(0, 1, false);
+                            var consumer = new QueueingBasicConsumer(channel);
+                            channel.BasicConsume(queueName, false, consumer);
+                            while (true)
+                            {
+                                BasicDeliverEventArgs e = null;
+                                try
+                                {
+                                    e = (BasicDeliverEventArgs) consumer.Queue.Dequeue();
+                                    queueHandlers[queueName][topicName](e);
+                                    channel.BasicAck(e.DeliveryTag, false);
+                                }
+                                catch (EndOfStreamException)
+                                {
+                                    break;
+                                }
+                                catch (OperationInterruptedException)
+                                {
+                                    break;
+                                }
+                                catch (Exception ex)
+                                {
+                                    HandleBadMessage(e, ex);
+                                    channel.BasicReject(e.DeliveryTag, true);
+                                }
+                                if (StopHandling()) break;
+                            }
+                        }
+                    });
                 job.Start();
                 threads.Add(job);
             }
@@ -171,7 +179,7 @@ namespace Frog.Domain.Integration
             SendMessage(command);
         }
 
-        public void Send<T>(T command, string handlerId) where T : Command
+        public void SendDirect<T>(T command, string handlerId) where T : Command
         {
             using (Profiler.measure("sending message to Rabbit MQ"))
             {
@@ -307,67 +315,7 @@ namespace Frog.Domain.Integration
 
         public void RegisterDirectHandler<T>(Action<T> handler, string handlerId) where T : Message
         {
-            var jsonSerializer = new JavaScriptSerializer();
-            var topicName = typeof(T).Name;
-            var queueName = handlerId;
-            using (var channel = connection.CreateModel())
-            {
-                channel.QueueDeclare(queueName, false, false, false, null);
-                channel.TxSelect();
-            }
-            var startThread = false;
-            if (!queueHandlers.ContainsKey(queueName))
-            {
-                queueHandlers.Add(queueName, new Dictionary<string, Action<BasicDeliverEventArgs>>());
-                startThread = true;
-            }
-            queueHandlers[queueName][topicName] = eventArgs =>
-            {
-                var message =
-                    jsonSerializer.Deserialize<T>(
-                        Encoding.UTF8.GetString(eventArgs.Body));
-                message.Timestamp =
-                    eventArgs.BasicProperties.Timestamp.UnixTime;
-                handler(message);
-            };
-            if (startThread)
-            {
-                var job = new Thread(() =>
-                {
-                    using (var channel = connection.CreateModel())
-                    {
-                        channel.BasicQos(0, 1, false);
-                        var consumer = new QueueingBasicConsumer(channel);
-                        channel.BasicConsume(queueName, false, consumer);
-                        while (true)
-                        {
-                            BasicDeliverEventArgs e = null;
-                            try
-                            {
-                                e = (BasicDeliverEventArgs)consumer.Queue.Dequeue();
-                                queueHandlers[queueName][topicName](e);
-                                channel.BasicAck(e.DeliveryTag, false);
-                            }
-                            catch (EndOfStreamException)
-                            {
-                                break;
-                            }
-                            catch (OperationInterruptedException)
-                            {
-                                break;
-                            }
-                            catch (Exception ex)
-                            {
-                                HandleBadMessage(e, ex);
-                                channel.BasicReject(e.DeliveryTag, true);
-                            }
-                            if (StopHandling()) break;
-                        }
-                    }
-                });
-                job.Start();
-                threads.Add(job);
-            }
+            RegisterHandlerAndConsumeMessages(handler, handlerId, false);
         }
     }
 

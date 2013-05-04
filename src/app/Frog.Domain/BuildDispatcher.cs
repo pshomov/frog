@@ -29,7 +29,7 @@ namespace Frog.Domain
                     buildstatuses.AvailableAgents.FirstOrDefault(
                         agent => message.CapabilitiesNeeded.All(agent.Capabilities.Contains));
                 if (agent_info != null)
-                    theBus.Send(new Build {Id = message.Id, RepoUrl = message.RepoUrl, Revision = message.Revision},
+                    theBus.SendDirect(new Build {Id = message.Id, RepoUrl = message.RepoUrl, Revision = message.Revision},
                                 agent_info.Id);
             }
             else
@@ -37,7 +37,7 @@ namespace Frog.Domain
                 var agent_info =
                     buildstatuses.AvailableAgents.FirstOrDefault();
                 if (agent_info != null)
-                    theBus.Send(new Build { Id = message.Id, RepoUrl = message.RepoUrl, Revision = message.Revision},
+                    theBus.SendDirect(new Build { Id = message.Id, RepoUrl = message.RepoUrl, Revision = message.Revision},
                                 agent_info.Id);
             }
         }
