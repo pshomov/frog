@@ -173,7 +173,26 @@ namespace Frog.Domain.Integration
 
         public void Send<T>(T command, string handlerId) where T : Command
         {
-            throw new NotImplementedException();
+            using (Profiler.measure("sending message to Rabbit MQ"))
+            {
+                string topicName = typeof(T).Name;
+//                using (IModel channel = connection.CreateModel())
+//                {
+//                    channel.TxSelect();
+//                    channel.ExchangeDeclare(topicName, ExchangeType.Fanout, true);
+//                    channel.QueueDeclare("all_messages", false, false, false, null);
+//                    channel.QueueBind("all_messages", topicName, "", null);
+//                    channel.TxCommit();
+//                }
+                using (IModel channel = connection.CreateModel())
+                {
+                    var ser = new JavaScriptSerializer();
+                    string serializedForm = ser.Serialize(command);
+                    IBasicProperties basicProperties = channel.CreateBasicProperties();
+                    channel.BasicPublish("", handlerId, false, false, basicProperties,
+                                         Encoding.UTF8.GetBytes(serializedForm));
+                }
+            }
         }
 
         public void UnregisterHandler<T>(string handlerId)
@@ -284,6 +303,71 @@ namespace Frog.Domain.Integration
         public void WaitForHandlersToFinish(int i)
         {
             threads.ForEach(thread => {if (!thread.Join(i)) throw new TimeoutException("Waiting for message bus handler threads to complete did not finish properly"); });
+        }
+
+        public void RegisterDirectHandler<T>(Action<T> handler, string handlerId) where T : Message
+        {
+            var jsonSerializer = new JavaScriptSerializer();
+            var topicName = typeof(T).Name;
+            var queueName = handlerId;
+            using (var channel = connection.CreateModel())
+            {
+                channel.QueueDeclare(queueName, false, false, false, null);
+                channel.TxSelect();
+            }
+            var startThread = false;
+            if (!queueHandlers.ContainsKey(queueName))
+            {
+                queueHandlers.Add(queueName, new Dictionary<string, Action<BasicDeliverEventArgs>>());
+                startThread = true;
+            }
+            queueHandlers[queueName][topicName] = eventArgs =>
+            {
+                var message =
+                    jsonSerializer.Deserialize<T>(
+                        Encoding.UTF8.GetString(eventArgs.Body));
+                message.Timestamp =
+                    eventArgs.BasicProperties.Timestamp.UnixTime;
+                handler(message);
+            };
+            if (startThread)
+            {
+                var job = new Thread(() =>
+                {
+                    using (var channel = connection.CreateModel())
+                    {
+                        channel.BasicQos(0, 1, false);
+                        var consumer = new QueueingBasicConsumer(channel);
+                        channel.BasicConsume(queueName, false, consumer);
+                        while (true)
+                        {
+                            BasicDeliverEventArgs e = null;
+                            try
+                            {
+                                e = (BasicDeliverEventArgs)consumer.Queue.Dequeue();
+                                queueHandlers[queueName][topicName](e);
+                                channel.BasicAck(e.DeliveryTag, false);
+                            }
+                            catch (EndOfStreamException)
+                            {
+                                break;
+                            }
+                            catch (OperationInterruptedException)
+                            {
+                                break;
+                            }
+                            catch (Exception ex)
+                            {
+                                HandleBadMessage(e, ex);
+                                channel.BasicReject(e.DeliveryTag, true);
+                            }
+                            if (StopHandling()) break;
+                        }
+                    }
+                });
+                job.Start();
+                threads.Add(job);
+            }
         }
     }
 

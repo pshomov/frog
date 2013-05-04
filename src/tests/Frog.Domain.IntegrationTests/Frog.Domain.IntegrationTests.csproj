@@ -57,6 +57,7 @@
     <Compile Include="Git\GitRepositoryGetSourceRev.cs" />
     <Compile Include="PathGoble\GobleTests.cs" />
     <Compile Include="ProcessHandlerSpecs.cs" />
+    <Compile Include="RabbitMQ\RabbitMQBasicSingleHandlerTests.cs" />
     <Compile Include="RabbitMQ\MessageBusChecksIfShouldContinue.cs" />
     <Compile Include="RabbitMQ\RabbitMQBasicMessagingTest.cs" />
     <Compile Include="ProjectRepository\InMemoryProjectsRepositorySpec.cs" />
