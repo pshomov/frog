@@ -4,17 +4,12 @@ using Frog.System.Specs.Underware;
 using NSubstitute;
 using NUnit.Framework;
 using xray;
-using Build = Frog.Domain.Build;
-using CheckoutInfo = Frog.Domain.CheckoutInfo;
 
 namespace Frog.System.Specs.ProjectBuilding
 {
     [TestFixture]
     public class Dispatcher_Refuses_Agent_Specialized_Build_Work : SystemBDD
     {
-        private const string RepoUrl = "123";
-        private Guid buildId;
-
         protected override void Given()
         {
             base.Given();
@@ -46,5 +41,7 @@ namespace Frog.System.Specs.ProjectBuilding
                                                            ev.Revision.Revision == "123"))));
         }
 
+        private const string RepoUrl = "123";
+        private Guid buildId;
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using Frog.Domain;
 using Frog.Domain.Integration;
 using Frog.Domain.Integration.ProjectRepository;
@@ -11,30 +12,13 @@ using Frog.WiredUp;
 using Lokad.Cqrs.AtomicStorage;
 using Lokad.Cqrs.Build;
 using NSubstitute;
-using SaaS.Engine;
 using SimpleCQRS;
 using EventStore = SaaS.Wires.EventStore;
-using ExecutableTaskGenerator = Frog.Domain.Integration.ExecutableTaskGenerator;
-using Task = System.Threading.Tasks.Task;
 
 namespace Frog.System.Specs.Underware
 {
     public class TestSystem
     {
-        List<Tuple<Guid,Message>> messages;
-        public IBus TheBus;
-        List<Agent> agents = new List<Agent>();
-
-        public TaskSource TasksSource;
-        Container env;
-        CancellationTokenSource cts;
-        CqrsEngineHost engine;
-        Task task;
-        EventsArchiver eventsArchiver;
-        EventStore eventStore;
-        public IDocumentStore Store;
-        public RepositoryTracker repositoryTracker { get; private set; }
-
         public TestSystem()
         {
             TheBus = SetupBus();
@@ -43,6 +27,8 @@ namespace Frog.System.Specs.Underware
             env = Setup.BuildEnvironment(true, string.Format(@"c:/lokad/system_tests/{0}", Guid.NewGuid()), Config.Env.connection_string, Guid.NewGuid());
             eventStore = env.Store;
         }
+
+        public RepositoryTracker repositoryTracker { get; private set; }
 
         public TestSystem WithRevisionChecker(SourceRepoDriverFactory sourceRepoDriverFactory)
         {
@@ -138,12 +124,22 @@ namespace Frog.System.Specs.Underware
             build_dispatcher.JoinTheParty();
             return this;
         }
+
+        public IDocumentStore Store;
+        public TaskSource TasksSource;
+        public IBus TheBus;
+        List<Agent> agents = new List<Agent>();
+        CancellationTokenSource cts;
+        CqrsEngineHost engine;
+        Container env;
+        EventStore eventStore;
+        EventsArchiver eventsArchiver;
+        List<Tuple<Guid,Message>> messages;
+        Task task;
     }
 
     public class SystemDriver
     {
-        readonly TestSystem theTestSystem;
-
         public SystemDriver(TestSystem system)
         {
             theTestSystem = system;
@@ -201,6 +197,8 @@ namespace Frog.System.Specs.Underware
         {
             theTestSystem.TheBus.Send(new BuildRequest { RepoUrl = repoUrl, Revision = revisionInfo, Id = buildId, CapabilitiesNeeded = capabilities });
         }
+
+        readonly TestSystem theTestSystem;
     }
 
 }

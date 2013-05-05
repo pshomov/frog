@@ -1,7 +1,5 @@
 using System.Linq;
 using Frog.Domain;
-using Frog.Specs.Support;
-using Frog.System.Specs.ProjectBuilding;
 using Frog.System.Specs.Underware;
 using NSubstitute;
 using NUnit.Framework;

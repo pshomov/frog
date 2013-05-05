@@ -1,6 +1,5 @@
 ﻿using System;
 using Frog.Domain;
-using Frog.Specs.Support;
 using Frog.Support;
 using Frog.System.Specs.Underware;
 using NSubstitute;
@@ -21,10 +20,6 @@ namespace Frog.System.Specs.ProjectBuilding
     [TestFixture]
     public class Building_A_Project : SystemBDD
     {
-        private const string RepoUrl = "123";
-        private Guid buildId;
-        private Guid taskId;
-
         protected override void Given()
         {
             base.Given();
@@ -157,7 +152,11 @@ namespace Frog.System.Specs.ProjectBuilding
                                          .Has(A.Check<ProjectHistory>(view => view.Current.buildId == new BuildId(buildId)))));
         }
 
+        private const string RepoUrl = "123";
+
         private const string TerminalOutput3 = "Terminal output 3";
         private const string TerminalOutput4 = "Terminal output 4";
+        private Guid buildId;
+        private Guid taskId;
     }
 }

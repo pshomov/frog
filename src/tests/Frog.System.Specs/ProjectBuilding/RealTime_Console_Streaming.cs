@@ -15,9 +15,6 @@ namespace Frog.System.Specs.ProjectBuilding
     [TestFixture]
     public class RealTime_Console_Streaming : SystemBDD
     {
-        private Guid agentId;
-        private const string RepoUrl = "123";
-
         protected override void Given()
         {
             base.Given();
@@ -122,9 +119,12 @@ namespace Frog.System.Specs.ProjectBuilding
                             ));
         }
 
+        private const string RepoUrl = "123";
+
         private const string TerminalOutput1 = "Terminal output 1";
         private const string TerminalOutput2 = "Terminal output 2";
         private const string TerminalOutput3 = "Terminal output 3";
         private const string TerminalOutput4 = "Terminal output 4";
+        private Guid agentId;
     }
 }

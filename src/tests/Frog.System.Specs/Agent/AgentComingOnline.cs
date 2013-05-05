@@ -11,8 +11,6 @@ namespace Frog.System.Specs.ProjectBuilding
     [TestFixture]
     public class AgentComingOnline : SystemBDD
     {
-        private Guid agentId;
-
         protected override void When()
         {
             var sourceRepoDriver = Substitute.For<SourceRepoDriver>();
@@ -34,5 +32,7 @@ namespace Frog.System.Specs.ProjectBuilding
                 EventStoreCheck(
                     ES => ES.Has(An.Event<AgentJoined>(ev => Lists.AreEqual(ev.Capabilities, As.List("tag1", "tag2"))))));
         }
+
+        private Guid agentId;
     }
 }

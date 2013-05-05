@@ -1,6 +1,5 @@
 ﻿using System;
 using Frog.Domain;
-using Frog.Specs.Support;
 using Frog.Support;
 using Frog.System.Specs.Underware;
 using NSubstitute;
@@ -15,10 +14,6 @@ namespace Frog.System.Specs.ProjectBuilding
     [TestFixture]
     public class Multiple_Builds_Of_The_Same_Project : SystemBDD
     {
-        private const string RepoUrl = "http://123";
-        private Guid buildId1;
-        private Guid buildId2;
-
         protected override void Given()
         {
             base.Given();
@@ -77,6 +72,10 @@ namespace Frog.System.Specs.ProjectBuilding
                                          .Has(A.Check<ProjectHistory>(view => view.CurrentHistory.RevisionComment == "comment 2"))
                                          .Has(A.Check<ProjectHistory>(view => view.Items.Count == 1 && view.Items[0].RevisionComment == "comment 1"))));
         }
+
+        private const string RepoUrl = "http://123";
+        private Guid buildId1;
+        private Guid buildId2;
     }
 
 }
