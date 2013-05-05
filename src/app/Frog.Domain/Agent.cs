@@ -67,7 +67,7 @@ namespace Frog.Domain
         public void JoinTheParty()
         {
             theBus.Publish(new AgentJoined(){Capabilities = new List<string>(capabilities), AgentId = agentId});
-            theBus.RegisterHandler<Build>(Handle, agentId.ToString());
+            theBus.RegisterDirectHandler<Build>(Handle, agentId.ToString());
         }
 
         readonly IBus theBus;

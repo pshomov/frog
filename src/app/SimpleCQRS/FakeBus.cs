@@ -11,6 +11,7 @@ namespace SimpleCQRS
         void RegisterHandler<T>(Action<T> handler, string handlerId) where T : Message;
         void RegisterAll(Action<string, string> handler);
         void UnRegisterAll();
+        void RegisterDirectHandler<T>(Action<T> handler, string handlerId) where T : Message;
     }
 
     public interface IBusDebug
@@ -47,6 +48,11 @@ namespace SimpleCQRS
         public void UnRegisterAll()
         {
             _all_handler = (s, s1) => { };
+        }
+
+        public void RegisterDirectHandler<T>(Action<T> handler, string handlerId) where T : Message
+        {
+            RegisterHandler(handler, handlerId);
         }
 
         public void Send<T>(T command) where T : Command

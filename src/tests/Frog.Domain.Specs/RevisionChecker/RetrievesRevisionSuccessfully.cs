@@ -19,7 +19,7 @@ namespace Frog.Domain.Specs.RevisionChecker
         {
             sr = Substitute.For<SourceRepoDriver>();
             sr.GetLatestRevision().Returns(new RevisionInfo { Revision = "456" });
-            bus = NSubstitute.Substitute.For<IBus>();
+            bus = Substitute.For<IBus>();
             rc = new Domain.RevisionChecker(bus, url => sr);
         }
 

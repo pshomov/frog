@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using Frog.Domain.Integration;
 using Frog.Domain.Integration.ProjectRepository;
 using Frog.Specs.Support;
 using NSubstitute;
@@ -185,11 +184,12 @@ namespace Frog.Domain.Specs
         }
 
         [Test]
-        public void should_send_a_command_to_build_the_project()
+        public void should_send_a_request_for_build_the_project()
         {
-            bus.Received().Send(Arg.Is<Build>(project => project.RepoUrl == "http://fle" && project.Revision.Revision == "789"));
+            bus.Received().Send(Arg.Is<BuildRequest>(project => project.RepoUrl == "http://fle" && project.Revision.Revision == "789" && project.Id != Guid.Empty && project.CapabilitiesNeeded != null));
         }
     }
+
     [TestFixture]
     public class RepositoryChecksForUpdateButNoNewRevision : RepositoryTrackerSpecsBase
     {

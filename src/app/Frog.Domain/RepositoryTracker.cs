@@ -42,7 +42,7 @@ namespace Frog.Domain
             }
             projectsRepository.UpdateLastKnownRevision(message.RepoUrl, message.Revision.Revision);
             if (currentRev != message.Revision.Revision)
-                bus.Send(new Build {RepoUrl = message.RepoUrl, Revision = message.Revision});
+                bus.Send(new BuildRequest {RepoUrl = message.RepoUrl, Revision = message.Revision, Id = Guid.NewGuid(), CapabilitiesNeeded = new string[]{}});
         }
 
         public void Handle(CheckForUpdateFailed message)

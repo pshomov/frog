@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using Frog.Domain;
 using Frog.Support;
 using Frog.System.Specs.Underware;
@@ -14,6 +15,7 @@ namespace Frog.System.Specs.ProjectBuilding
     [TestFixture]
     public class RealTime_Console_Streaming : SystemBDD
     {
+        private Guid agentId;
         private const string RepoUrl = "123";
 
         protected override void Given()
@@ -26,11 +28,13 @@ namespace Frog.System.Specs.ProjectBuilding
             var workingAreaGoverner = Substitute.For<WorkingAreaGoverner>();
             workingAreaGoverner.AllocateWorkingArea().Returns("fake location");
 
+            agentId = Guid.NewGuid();
             testSystem
                 .WithProjections()
+                .AddBuildDispatcher()
                 .WithRepositoryTracker()
                 .WithRevisionChecker(url => sourceRepoDriver)
-                .AddAgent(url => sourceRepoDriver, workingAreaGoverner, Guid.NewGuid(), new string[] {});
+                .AddAgent(url => sourceRepoDriver, workingAreaGoverner, agentId, new string[] {});
 
             bool shouldStop;
             testSystem.TasksSource.Detect(Arg.Any<string>(), out shouldStop).Returns(
@@ -47,6 +51,7 @@ namespace Frog.System.Specs.ProjectBuilding
 
         protected override void When()
         {
+            Thread.Sleep(5000);
             system.CheckProjectsForUpdates();
         }
 
@@ -54,12 +59,13 @@ namespace Frog.System.Specs.ProjectBuilding
         public void should_send_TERMINAL_UPDATE_messages()
         {
             Guid buildId = Guid.Empty;
-            Assert.True(EventStoreCheck(ES => ES
+            EventStoreCheck(agentId, ES => ES
                                                   .Has(A.Command<Build>(ev =>
                                                       {
                                                           buildId = ev.Id;
                                                           return true;
-                                                      }))
+                                                      })));
+            Assert.True(EventStoreCheck(ES => ES
                                                   .Has(
                                                       An.Event<TerminalUpdate>(
                                                           ev =>

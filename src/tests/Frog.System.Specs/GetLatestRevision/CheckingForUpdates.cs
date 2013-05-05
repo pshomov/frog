@@ -41,7 +41,7 @@ namespace Frog.System.Specs.GetLatestRevision
                                                   found =>
                                                   found.RepoUrl == "http://123" && found.Revision.Revision == "12"))
                                           .Has(
-                                              A.Command<Build>(
+                                              A.Command<BuildRequest>(
                                                   found =>
                                                   found.RepoUrl == "http://123" && found.Revision.Revision == "12"))
                             ));
@@ -60,7 +60,7 @@ namespace Frog.System.Specs.GetLatestRevision
                             ));
             Assert.False(EventStoreCheck(ES =>
                                          ES.Has(x => x.Skip(messageCheckpoint).ToList(),
-                                                A.Command<Build>(
+                                                A.Command<BuildRequest>(
                                                     ev =>
                                                     ev.RepoUrl == "http://123"))
                              ));

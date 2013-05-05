@@ -7,19 +7,19 @@ namespace Frog.Domain.Specs.Agent
     [TestFixture]
     public class AgentJoinsThePartySpec : AgentSpecsBase
     {
-        private string agentId;
+        private Guid agentId;
 
         protected override void When()
         {
-            Bus.RegisterHandler(Arg.Any<Action<Build>>(), Arg.Do<string>(s => agentId = s));
-            Agent = new Domain.Agent(Bus, Worker, url => Repo, new string[] { }, Guid.NewGuid());
+            agentId = Guid.NewGuid();
+            Agent = new Domain.Agent(Bus, Worker, url => Repo, new string[] { }, agentId);
             Agent.JoinTheParty();
         }
          
         [Test]
-        public void should_listen_for_BUILD_message()
+        public void should_listen_for_direct_BUILD_message()
         {
-            Bus.Received().RegisterHandler(Arg.Any<Action<Build>>(), Arg.Any<string>());
+            Bus.Received().RegisterDirectHandler(Arg.Any<Action<Build>>(), Arg.Is<string>(s => s == agentId.ToString()));
         }
 
         [Test]
@@ -31,7 +31,7 @@ namespace Frog.Domain.Specs.Agent
         [Test]
         public void should_use_same_agent_id_when_registering_for_handling_message_and_announcing_presence()
         {
-            Bus.Received().Publish(Arg.Is<AgentJoined>(joined => joined.AgentId.ToString() == agentId));
+            Bus.Received().Publish(Arg.Is<AgentJoined>(joined => joined.AgentId == agentId));
         }
     }
 }
