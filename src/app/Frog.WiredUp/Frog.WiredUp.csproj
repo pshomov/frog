@@ -36,6 +36,10 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\..\libs\CorrugatedIron\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="protobuf-net, Version=2.0.0.470, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\libs\CorrugatedIron\protobuf-net.dll</HintPath>
+    </Reference>
     <Reference Include="ServiceStack.Text">
       <HintPath>..\..\..\libs\ServiceStack\ServiceStack.Text.dll</HintPath>
     </Reference>

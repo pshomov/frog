@@ -8,7 +8,10 @@ namespace Frog.Agent
         static void Main(string[] args)
         {
             using (var agent = new AgentDeploumentWireUp())
+            {
+                agent.Start(Guid.NewGuid());
                 Console.ReadLine();
+            }
         }
 
     }

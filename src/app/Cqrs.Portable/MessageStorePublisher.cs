@@ -140,11 +140,11 @@ namespace Lokad.Cqrs
                 //_sender.SendHashed(new EventStreamStarted());
                 return;
             }
-            if (store.Length == 100)
-            {
-                throw new InvalidOperationException(
-                    "It looks like event stream really went ahead (or storage pointer was reset). Do you REALLY mean to resend all events?");
-            }
+//            if (store.Length == 100)
+//            {
+//                throw new InvalidOperationException(
+//                    "It looks like event stream really went ahead (or storage pointer was reset). Do you REALLY mean to resend all events?");
+//            }
         }
 
         /// <summary>  Storage contract used to persist current position  </summary>

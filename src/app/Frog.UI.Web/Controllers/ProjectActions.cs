@@ -21,11 +21,12 @@ namespace Frog.UI.Web.Controllers
                 ServiceLocator.Store.GetReader<ProjectId, ProjectHistory>()
                               .Load(new ProjectId(projectUrl))
                               .CurrentHistory;
-            ServiceLocator.Bus.Send(new Build
+            ServiceLocator.Bus.Send(new BuildRequest
                 {
                     Id = Guid.NewGuid(),
                     RepoUrl = lastBuild.ProjectUrl,
-                    Revision = new RevisionInfo {Revision = lastBuild.RevisionNr}
+                    Revision = new RevisionInfo {Revision = lastBuild.RevisionNr},
+                    CapabilitiesNeeded = new string[]{},
                 });
         }
 

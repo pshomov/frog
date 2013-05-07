@@ -14,6 +14,20 @@ namespace Frog.Support
 
         public Config(string app_home)
         {
+            var command_line = Environment.GetCommandLineArgs().Skip(1);
+            command_line.Select((s, i) =>
+                {
+                    if (s == "-c") return command_line.ToList()[i + 1];
+                    else return String.Empty;
+                }).Where(s => s != String.Empty).ToList().ForEach(s =>
+                    {
+                        var key_value = s.Split('=');
+                        cfg.Add(new JObject{
+                            {
+                                key_value[0], key_value[1]
+                            }
+                        });
+                    });
             AddConfigIfPresent(app_home);
             var parent = new DirectoryInfo(app_home);
             while((parent = Directory.GetParent(app_home)) != null)
@@ -25,7 +39,7 @@ namespace Frog.Support
 
         Config(JObject cfg)
         {
-            this.cfg = new List<JObject>(){cfg};
+            this.cfg = new List<JObject> {cfg};
         }
 
         public static dynamic Env
@@ -85,7 +99,7 @@ namespace Frog.Support
 
         public override string ToString()
         {
-            return settingName + ", Seetings" +cfgs.Select(o => o.ToString()).Aggregate((s, s1) => s + ", " + s1);
+            return settingName + ", Settings: " +cfgs.Select(o => o.ToString()).Aggregate((s, s1) => s + ", " + s1);
         }
 
         public override string Message

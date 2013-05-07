@@ -56,8 +56,9 @@ namespace Frog.WiredUp
         CancellationTokenSource cts;
         Container env;
         Task task;
+        Thread repotrackingJob;
 
-        public void Start()
+        public void Start(Guid agentId)
         {
             var worker = new Worker(ProductionInfrastructure.GetPipeline(), ProductionInfrastructure.SetupWorkingAreaGovernor());
             var bus = ProductionInfrastructure.SetupBus();
@@ -68,22 +69,35 @@ namespace Frog.WiredUp
             task = engine.Start(cts.Token);
 
             SourceRepoDriverFactory source_repo_driver_factory = url => new GitDriver(url);
-            var agent = new Agent(bus, worker, source_repo_driver_factory, new string[] { }, Guid.NewGuid());
+            var agent = new Agent(bus, worker, source_repo_driver_factory, new string[] { }, agentId);
             var revision_checker = new RevisionChecker(bus, source_repo_driver_factory);
             var repository_tracker = new RepositoryTracker(bus, new RiakProjectRepository(OSHelpers.RiakHost(), OSHelpers.RiakPort(), "projects"));
 
-            var events_archiver = new EventsArchiver(bus, env.Store);
+//            var events_archiver = new EventsArchiver(bus, env.Store);
             var build_dispatcher = new BuildDispatcher(bus, new AgentStatuses(env.ViewDocs));
 
-            events_archiver.JoinTheParty();
+//            events_archiver.JoinTheParty();
             build_dispatcher.JoinTheParty();
             agent.JoinTheParty();
             revision_checker.JoinTheParty();
             repository_tracker.JoinTheMessageParty();
-            
+
+            repotrackingJob = new Thread(() =>
+                {
+                    var sleepPeriod = 60*1000;
+                    string mode = Environment.GetEnvironmentVariable("RUNZ_ACCEPTANCE_MODE");
+                    if (!mode.IsNullOrEmpty() && mode == "ACCEPTANCE") sleepPeriod = 4*1000;
+                    while (true)
+                    {
+                        repository_tracker.CheckForUpdates();
+                        Thread.Sleep(sleepPeriod);
+                    }
+                });
+            repotrackingJob.Start();
         }
         public void Dispose()
         {
+            repotrackingJob.Abort();
             cts.Cancel();
             if (!task.Wait(5000))
             {
