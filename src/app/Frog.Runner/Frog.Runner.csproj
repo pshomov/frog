@@ -36,23 +36,19 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Frog.Agent\Frog.Agent.csproj">
-      <Project>{48FD6257-2F81-4DA0-BCD8-060197691401}</Project>
-      <Name>Frog.Agent</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Frog.Domain\Frog.Domain.csproj">
       <Project>{8A446F8C-6B38-4153-A996-CC162DACF795}</Project>
       <Name>Frog.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Frog.WiredUp\Frog.WiredUp.csproj">
+      <Project>{0BAFAF88-B49E-49BF-ADA6-12EA5C03B075}</Project>
+      <Name>Frog.WiredUp</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -1,12 +1,12 @@
-﻿using System;
-using System.ServiceProcess;
-using Frog.Domain;
-using Frog.Domain.Integration;
+﻿using System.ServiceProcess;
+using Frog.WiredUp;
 
 namespace Frog.Agent.Service
 {
     public partial class AgentService : ServiceBase
     {
+        AgentDeploumentWireUp agent;
+
         public AgentService()
         {
             InitializeComponent();
@@ -14,18 +14,12 @@ namespace Frog.Agent.Service
 
         protected override void OnStart(string[] args)
         {
-            var worker = new Worker(Frog.Agent.Program.GetPipeline(), Frog.Agent.Program.SetupWorkingAreaGovernor());
-            var bus = Frog.Agent.Program.SetupBus();
-            SourceRepoDriverFactory sourceRepoDriverFactory = url => new GitDriver(url);
-            var agent = new Domain.Agent(bus, worker, sourceRepoDriverFactory, new string[] { }, Guid.NewGuid());
-            var revisionChecker = new RevisionChecker(bus, sourceRepoDriverFactory);
-
-            agent.JoinTheParty();
-            revisionChecker.JoinTheParty();
+            agent = new AgentDeploumentWireUp();
         }
 
         protected override void OnStop()
         {
+            agent.Dispose();
         }
     }
 }

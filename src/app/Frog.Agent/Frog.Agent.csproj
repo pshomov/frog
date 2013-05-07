@@ -42,26 +42,17 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Frog.Domain.Integration\Frog.Domain.Integration.csproj">
-      <Project>{34D94FDA-6971-43A3-ABDE-B97CEA82CF26}</Project>
-      <Name>Frog.Domain.Integration</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Frog.Domain\Frog.Domain.csproj">
-      <Project>{8A446F8C-6B38-4153-A996-CC162DACF795}</Project>
-      <Name>Frog.Domain</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Frog.Support\Frog.Support.csproj">
-      <Project>{893935D3-935A-418F-A656-5D6A203D87ED}</Project>
-      <Name>Frog.Support</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SimpleCQRS\SimpleCQRS.csproj">
-      <Project>{9FAA6168-F131-420F-81C1-2228FD151BC7}</Project>
-      <Name>SimpleCQRS</Name>
+    <ProjectReference Include="..\Frog.WiredUp\Frog.WiredUp.csproj">
+      <Project>{0BAFAF88-B49E-49BF-ADA6-12EA5C03B075}</Project>
+      <Name>Frog.WiredUp</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">
       <SubType>Designer</SubType>
+    </None>
+    <None Include="config.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AgentDeploumentWireUp.cs" />
     <Compile Include="ConsoleObserver.cs" />
     <Compile Include="EnvelopeQuarantine.cs" />
     <Compile Include="EventsArchiver.cs" />
@@ -61,9 +62,17 @@
       <Project>{4E2E749C-4D6F-4EF8-8E9D-96D467306997}</Project>
       <Name>Cqrs.Portable</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Frog.Domain.Integration\Frog.Domain.Integration.csproj">
+      <Project>{34D94FDA-6971-43A3-ABDE-B97CEA82CF26}</Project>
+      <Name>Frog.Domain.Integration</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Frog.Domain\Frog.Domain.csproj">
       <Project>{8a446f8c-6b38-4153-a996-cc162dacf795}</Project>
       <Name>Frog.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Frog.Support\Frog.Support.csproj">
+      <Project>{893935D3-935A-418F-A656-5D6A203D87ED}</Project>
+      <Name>Frog.Support</Name>
     </ProjectReference>
     <ProjectReference Include="..\SaaS.Client\SaaS.Client.csproj">
       <Project>{F31841AC-CA87-4441-B906-6D4502307E97}</Project>
