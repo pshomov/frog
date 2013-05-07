@@ -9,7 +9,7 @@ namespace Frog.Agent
         {
             using (var agent = new AgentDeploumentWireUp())
             {
-                agent.Start(Guid.NewGuid());
+                agent.Start(Guid.Parse("38892791-8E48-4B95-90C3-B16CFA9BEFF8"));
                 Console.ReadLine();
             }
         }
