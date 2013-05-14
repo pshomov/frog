@@ -52,5 +52,11 @@ namespace SaaS.Wires
             }
             return stream;
         }
+
+        public void AppendEventsToStream(IIdentity id, ICollection<IEvent> events)
+        {
+            var events_so_far = LoadEventStream(id);
+            AppendEventsToStream(id, events_so_far.StreamVersion, events);
+        }
     }
 }

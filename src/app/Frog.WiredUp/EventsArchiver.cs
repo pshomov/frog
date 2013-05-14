@@ -95,7 +95,7 @@ namespace Frog.WiredUp
                                         {
                                             var ev = (Frog.Domain.AgentJoined)msg;
                                             var conv = new SaaS.Engine.AgentJoined(new AgentId(ev.AgentId), ev.Capabilities.ToArray() );
-                                            store.AppendEventsToStream(conv.Id, 0, new[] { conv });
+                                            store.AppendEventsToStream(conv.Id, new[] { conv });
                                         }
             }
         }
