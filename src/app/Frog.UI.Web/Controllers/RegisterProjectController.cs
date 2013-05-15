@@ -18,7 +18,6 @@ namespace Frog.UI.Web.Controllers
             ServiceLocator.Bus.Send(new RegisterRepository { Repo = url });
             var o = new
                         {
-                            projectUrl = Url.Action("status", "Project", new {user = "u", project = "p"})
                         };
             return MonoBugs.Json(o);
         }
