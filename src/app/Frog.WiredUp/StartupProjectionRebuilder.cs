@@ -68,63 +68,63 @@ namespace Frog.WiredUp
             }
 
 
-            var needRebuild = activeMemoryProjections.Where(x => x.needsRebuild).ToArray();
-
-            if (needRebuild.Length == 0)
-            {
-                return;
-            }
-
-
-            var watch = Stopwatch.StartNew();
-
-            var wire = new RedirectToDynamicEvent();
-            needRebuild.ForEach(x => wire.WireToWhen(x.projection));
-
-
-            var handlersWatch = Stopwatch.StartNew();
-
-
-
-            ObserveWhileCan(stream.EnumerateAllItems(0, int.MaxValue), wire, token);
-
-            if (token.IsCancellationRequested)
-            {
-                SystemObserver.Notify("[warn] Aborting projections before anything was changed");
-                return;
-            }
-
-            var timeTotal = watch.Elapsed.TotalSeconds;
-            var handlerTicks = handlersWatch.ElapsedTicks;
-            var timeInHandlers = Math.Round(TimeSpan.FromTicks(handlerTicks).TotalSeconds, 1);
-            SystemObserver.Notify("Total Elapsed: {0}sec ({1}sec in handlers)", Math.Round(timeTotal, 0), timeInHandlers);
-
-
-            // update projections that need rebuild
-            foreach (var b in needRebuild)
-            {
-                // server might shut down the process soon anyway, but we'll be
-                // in partially consistent mode (not all projections updated)
-                // so at least we blow up between projection buckets
-                token.ThrowIfCancellationRequested();
-
-                var bucketName = b.bucketName;
-                var bucketHash = b.hash;
-
-                // wipe contents
-                targetContainer.Reset(bucketName);
-                // write new versions
-                var contents = memoryContainer.EnumerateContents(bucketName);
-                targetContainer.WriteContents(bucketName, contents);
-
-                // update hash
-                storage.UpdateEntityEnforcingNew<ProjectionHash>(name, x =>
-                {
-                    x.BucketHashes[bucketName] = bucketHash;
-                });
-
-                SystemObserver.Notify("[good] Updated View bucket {0}.{1}", name, bucketName);
-            }
+//            var projections_that_need_rebuild = activeMemoryProjections.Where(x => x.needsRebuild).ToArray();
+//
+//            if (projections_that_need_rebuild.Length == 0)
+//            {
+//                return;
+//            }
+//
+//
+//            var watch = Stopwatch.StartNew();
+//
+//            var wire = new RedirectToDynamicEvent();
+//            projections_that_need_rebuild.ForEach(x => wire.WireToWhen(x.projection));
+//
+//
+//            var handlersWatch = Stopwatch.StartNew();
+//
+//
+//
+//            ObserveWhileCan(stream.EnumerateAllItems(0, int.MaxValue), wire, token);
+//
+//            if (token.IsCancellationRequested)
+//            {
+//                SystemObserver.Notify("[warn] Aborting projections before anything was changed");
+//                return;
+//            }
+//
+//            var timeTotal = watch.Elapsed.TotalSeconds;
+//            var handlerTicks = handlersWatch.ElapsedTicks;
+//            var timeInHandlers = Math.Round(TimeSpan.FromTicks(handlerTicks).TotalSeconds, 1);
+//            SystemObserver.Notify("Total Elapsed: {0}sec ({1}sec in handlers)", Math.Round(timeTotal, 0), timeInHandlers);
+//
+//
+//            // update projections that need rebuild
+//            foreach (var b in projections_that_need_rebuild)
+//            {
+//                // server might shut down the process soon anyway, but we'll be
+//                // in partially consistent mode (not all projections updated)
+//                // so at least we blow up between projection buckets
+//                token.ThrowIfCancellationRequested();
+//
+//                var bucketName = b.bucketName;
+//                var bucketHash = b.hash;
+//
+//                // wipe contents
+//                targetContainer.Reset(bucketName);
+//                // write new versions
+//                var contents = memoryContainer.EnumerateContents(bucketName);
+//                targetContainer.WriteContents(bucketName, contents);
+//
+//                // update hash
+//                storage.UpdateEntityEnforcingNew<ProjectionHash>(name, x =>
+//                {
+//                    x.BucketHashes[bucketName] = bucketHash;
+//                });
+//
+//                SystemObserver.Notify("[good] Updated View bucket {0}.{1}", name, bucketName);
+//            }
 
             // Clean up obsolete views
             var allBuckets = new HashSet<string>(activeMemoryProjections.Select(p => p.bucketName));
