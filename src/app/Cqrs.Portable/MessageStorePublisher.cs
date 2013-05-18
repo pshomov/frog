@@ -112,7 +112,14 @@ namespace Lokad.Cqrs
                     if (!publishResult.HasMoreWork)
                     {
                         // wait for a few ms before polling ES again
-                        token.WaitHandle.WaitOne(400);
+                        try
+                        {
+                            token.WaitHandle.WaitOne(400);
+                        }
+                        catch (ObjectDisposedException)
+                        {
+                            return;
+                        }
                     }
                 }
                 catch (Exception ex)

@@ -28,6 +28,7 @@ namespace SaaS.Engine
                     {
                         Console.WriteLine(@"Terminating");
                     }
+                    Console.WriteLine(@"Ready to die");
                 }
             }
         }
